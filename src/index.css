@@ -1394,6 +1394,21 @@
     margin: 0;
   }
 
+  html,
+  body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+  }
+
+  /* Esconde tudo o que não é o relatório (nav, footer, barra de progresso, etc.) */
+  body.printing-report nav,
+  body.printing-report header:not(.report-head),
+  body.printing-report footer:not(.report-foot) {
+    display: none !important;
+  }
+
   .report-shell {
     background: #ffffff;
     padding: 0;
@@ -1404,20 +1419,26 @@
   }
 
   .report-doc {
+    display: block;
     gap: 0;
   }
 
   .report-page {
     box-shadow: none;
+    height: 209.5mm;
+    margin: 0 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
     break-after: page;
     page-break-after: always;
   }
 
   .report-page:last-child {
-    break-after: auto;
-    page-break-after: auto;
+    break-after: avoid;
+    page-break-after: avoid;
   }
 }
+
 
 /* ---- Relatório: páginas bloqueadas na versão teaser ---- */
 .report-locked {
