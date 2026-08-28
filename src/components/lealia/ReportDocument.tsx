@@ -10,11 +10,13 @@ function Page({
   numero,
   titulo,
   id,
+  empresa,
   children,
 }: {
   numero: number;
   titulo?: string;
   id?: string;
+  empresa?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -25,7 +27,7 @@ function Page({
       </header>
       <div className="report-body">{children}</div>
       <footer className="report-foot">
-        <span>Lealia Advisory Partners · Relatório de avaliação indicativa para {d.empresa} </span>
+        <span>Lealia Advisory Partners · Relatório de avaliação indicativa para {empresa} </span>
         <span>{numero}</span>
       </footer>
     </section>
