@@ -7,7 +7,7 @@ const SECCOES = [
   },
   {
     numero: "02",
-    titulo: "Perfil da empresa e posição financeira",
+    titulo: "Perfil da empresa e outros indicadores",
     texto:
       "Retrato do negócio, evolução de faturação e EBITDA dos últimos exercícios, posição líquida e outros indicadores operacionais relevantes.",
   },

@@ -314,7 +314,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
       </Page>
 
       {/* 3 — Perfil, histórico e posição financeira */}
-      <Page numero={3} titulo="Perfil da empresa e posição financeira">
+      <Page numero={3} titulo="Perfil da empresa e outros indicadores">
         <div className="report-two">
           <div>
             <H>Perfil da empresa</H>
@@ -379,8 +379,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
               </tbody>
             </table>
             <p className="report-small report-normalizacao-nota">
-              Os ajustamentos de normalização aproximam o resultado operacional recorrente que um comprador consegue
-              replicar após a transação.
+              Os ajustamentos de normalização aproximam o resultado operacional recorrente num cenário pós-transação.
             </p>
             <H>Outros Indicadores</H>
             <table className="report-table report-table-compact">
@@ -408,11 +407,11 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   <td>{d.unidades || "Não indicado"}</td>
                 </tr>
                 <tr>
-                  <td>Concentração no maior cliente</td>
+                  <td>% Concentração no maior cliente</td>
                   <td>{d.concentracao_top1 || "Não indicado"}</td>
                 </tr>
                 <tr>
-                  <td>Concentração no top 5 clientes</td>
+                  <td>% Concentração no top 5 clientes</td>
                   <td>{d.concentracao_top5 || "Não indicado"}</td>
                 </tr>
               </tbody>
