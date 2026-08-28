@@ -982,5 +982,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
         </div>
       </Page>
     </article>
+    </EmpresaContext.Provider>
   );
 }
