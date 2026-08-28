@@ -208,7 +208,15 @@ export type ValuationInput = {
   tipo_investidor?: string | null;
 };
 
-export type Ajuste = { label: string; detalhe: string; multiplicador: number; semDados?: boolean };
+export type EfeitoAjuste = "Positivo" | "Neutro" | "Negativo";
+export type Ajuste = {
+  label: string;
+  detalhe: string;
+  multiplicador: number;
+  semDados?: boolean;
+  /** Efeito qualitativo explícito apresentado no relatório (sobrepõe-se ao multiplicador). */
+  efeito?: EfeitoAjuste;
+};
 export type Confianca = "Baixa" | "Média" | "Alta";
 
 export const CONF_EXPLICACAO: Record<Confianca, string> = {
@@ -586,11 +594,28 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
     { label: "EBITDA normalizado", valor: ebitda_normalizado_final, tipo: "total" },
   ];
 
+  // Efeitos qualitativos definidos manualmente (apenas apresentação; multiplicador 1.0).
+  const faturacao_ref = input.faturacao_ano1;
+  const efeito_faturacao: EfeitoAjuste =
+    faturacao_ref < 5_000_000 ? "Negativo" : faturacao_ref < 20_000_000 ? "Neutro" : "Positivo";
+
   const ajustes: Ajuste[] = [
+    {
+      label: "Dimensão (faturação)",
+      detalhe:
+        faturacao_ref < 5_000_000
+          ? "Faturação abaixo de 5M€"
+          : faturacao_ref < 20_000_000
+            ? "Faturação entre 5M€ e 20M€"
+            : "Faturação de 20M€ ou mais",
+      multiplicador: 1.0,
+      efeito: efeito_faturacao,
+    },
     {
       label: "Dimensão (EBITDA)",
       detalhe: ebitda_abaixo_2m ? `EBITDA normalizado abaixo de 2M€` : "EBITDA normalizado de 2M€ ou mais",
-      multiplicador: ebitda_abaixo_2m ? 1.0 : 1.0,
+      multiplicador: 1.0,
+      efeito: ebitda_abaixo_2m ? "Negativo" : "Positivo",
     },
     {
       label: "Idade da empresa",
