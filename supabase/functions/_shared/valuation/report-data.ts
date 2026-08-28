@@ -379,7 +379,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
   const ponte = r
     ? [
         { label: "Enterprise Value base", valor: r.ev_medio, tipo: "base" as const },
-        { label: "Mais: caixa disponível", valor: r.caixa, tipo: "ajuste" as const },
+        { label: "Mais: caixa, depósitos e outros equivalentes", valor: r.caixa, tipo: "ajuste" as const },
         { label: "Menos: dívida total", valor: -r.divida_financeira, tipo: "ajuste" as const },
         ...(r.valor_imovel > 0
           ? [
@@ -568,7 +568,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     },
     {
       prioridade: "Alta",
-      acao: "Confirmar dívida total e caixa disponível à data de referência",
+      acao: "Confirmar dívida total e caixa, depósitos e outros equivalentes disponíveis à data de referência",
       impacto: "Alto",
       esforco: "Baixo",
       prazo: "1-2 semanas",

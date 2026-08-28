@@ -115,7 +115,7 @@ export function ResultCard({
               <dd className="shrink-0 text-right">{formatEUR(result.ev_medio)}</dd>
             </div>
             <div className="flex items-baseline justify-between gap-6 border-b border-border pb-2">
-              <dt className="min-w-0 text-muted-foreground">Mais: caixa disponível</dt>
+              <dt className="min-w-0 text-muted-foreground">Mais: caixa, depósitos e outros equivalentes</dt>
               <dd className="shrink-0 text-right">- {formatEUR(result.caixa)}</dd>
             </div>
             <div className="flex items-baseline justify-between gap-6 border-b border-border pb-2">

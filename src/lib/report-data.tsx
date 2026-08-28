@@ -568,7 +568,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     },
     {
       prioridade: "Alta",
-      acao: "Confirmar dívida total e caixa disponível à data de referência",
+      acao: "Confirmar dívida total e caixa, depósitos e outros equivalentes disponíveis à data de referência",
       impacto: "Alto",
       esforco: "Baixo",
       prazo: "1-2 semanas",

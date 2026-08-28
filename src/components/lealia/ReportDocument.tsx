@@ -673,8 +673,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   </table>
                   <p className="report-small">
                     A tabela mostra como o Enterprise Value reage a variações do EBITDA normalizado e do múltiplo
-                    aplicado. O Equity Value acompanha estas variações, ajustado pela dívida total, caixa disponível e
-                    imóvel indicado na equity bridge.
+                    aplicado. O Equity Value acompanha estas variações, ajustado pela dívida total, caixa, depósitos e
+                    outros equivalentes, e o imóvel indicado na equity bridge.
                   </p>
                 </>
               ) : (
