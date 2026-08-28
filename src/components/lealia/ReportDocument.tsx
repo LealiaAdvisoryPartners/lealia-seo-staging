@@ -288,11 +288,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
         <H>Metodologia de avaliação</H>
         <ol className="report-list report-compact">
           <li>
-            <strong>Determinação do EBITDA normalizado</strong> — EBITDA reportado último exercício de referência (
-            {d.ano_referencia}: {d.ebitda_ano1_formatado}), excluindo o impacto de despesas extraordinárias não
-            recorrentes ({d.despesas_extraordinarias_ano1_formatado})
-            {d.ajuste_imovel_formatado
-              ? ` e deduzindo uma renda teórica de mercado de ${d.ajuste_imovel_formatado} por a empresa operar em imóvel próprio`
+            <strong>Determinação do EBITDA normalizado</strong> — EBITDA reportado último exercício de referência, excluindo o impacto de despesas extraordinárias não recorrentes e, se aplicável, considerando o impacto de uma correção teórica sobre a  renda do imóvel a mercado.`
               : ""}
             . O EBITDA normalizado é de <strong>{d.ebitda_normalizado_formatado}</strong>.
           </li>
