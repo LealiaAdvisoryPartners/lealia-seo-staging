@@ -12,6 +12,9 @@ export const es = {
   "seo.team.title": "Equipo | Lealia Advisory Partners",
   "seo.team.description":
     "Conozca a los Managing Partners de Lealia Advisory Partners — profesionales con amplia experiencia en M&A y más de 30 transacciones en Europa.",
+  "seo.valuation.title": "Valoración de Empresa Gratuita | Lealia Advisory Partners",
+  "seo.valuation.description":
+    "Obtenga una valoración indicativa de su empresa en minutos. Herramienta gratuita y confidencial de Lealia Advisory Partners, asesores de M&A en Iberia.",
   "seo.privacy.title": "Política de Privacidad | Lealia Advisory Partners",
   "seo.privacy.description":
     "Política de privacidad de Lealia Advisory Partners — cómo recopilamos, utilizamos y protegemos su información personal.",
@@ -21,6 +24,7 @@ export const es = {
   "nav.about": "Sobre",
   "nav.services": "Servicios",
   "nav.team": "Equipo",
+  "nav.valuation": "Valoración",
   "nav.contact": "Contacto",
 
   // Hero
@@ -239,4 +243,13 @@ export const es = {
   "servicespage.cta": "¿Listo para Alcanzar sus Objetivos Estratégicos?",
   "servicespage.cta.desc":
     "Hablemos sobre cómo podemos ayudar a su empresa a alcanzar sus objetivos estratégicos y crear valor a largo plazo.",
+  "valuation.eyebrow": "Herramienta",
+  "valuation.title": "Descubra cuánto vale su",
+  "valuation.title.accent": "empresa",
+  "valuation.description":
+    "Responda a unas preguntas sobre su empresa y reciba un rango de valoración indicativo, elaborado con la misma metodología que aplicamos en mandatos reales de M&A. Gratuito, confidencial y sin compromiso.",
+  "valuation.soon.title": "La herramienta de valoración se está finalizando",
+  "valuation.soon.desc":
+    "Estará disponible en esta página muy pronto. Mientras tanto, contáctenos y prepararemos una valoración indicativa para usted.",
+  "valuation.openNewTab": "Abrir la herramienta de valoración en una pestaña nueva",
 };

@@ -19,6 +19,7 @@ const Navigation = () => {
     { name: t("nav.about"), path: "/about" },
     { name: t("nav.services"), path: "/services" },
     { name: t("nav.team"), path: "/team" },
+    { name: t("nav.valuation"), path: "/valuation" },
   ];
 
   // Build language-prefixed paths

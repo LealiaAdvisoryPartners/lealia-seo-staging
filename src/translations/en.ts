@@ -12,6 +12,9 @@ export const en = {
   "seo.team.title": "Our Team | Lealia Advisory Partners",
   "seo.team.description":
     "Meet the Managing Partners of Lealia Advisory Partners — experienced M&A professionals with 30+ transactions across Europe.",
+  "seo.valuation.title": "Free Business Valuation | Lealia Advisory Partners",
+  "seo.valuation.description":
+    "Get an indicative valuation of your company in minutes. A free, confidential valuation tool built by Lealia Advisory Partners, M&A advisors in Iberia.",
   "seo.privacy.title": "Privacy Policy | Lealia Advisory Partners",
   "seo.privacy.description":
     "Lealia Advisory Partners privacy policy — how we collect, use, and protect your personal information.",
@@ -21,6 +24,7 @@ export const en = {
   "nav.about": "About",
   "nav.services": "Services",
   "nav.team": "Team",
+  "nav.valuation": "Valuation",
   "nav.contact": "Contact Us",
 
   // Hero
@@ -238,4 +242,13 @@ export const en = {
   "servicespage.cta": "Ready to Achieve Your Strategic Goals?",
   "servicespage.cta.desc":
     "Let's discuss how we can help you achieve your strategic objectives and create lasting value for your business.",
+  "valuation.eyebrow": "Tool",
+  "valuation.title": "Know what your business is",
+  "valuation.title.accent": "worth",
+  "valuation.description":
+    "Answer a few questions about your company and receive an indicative valuation range, prepared with the same methodology we apply in live M&A mandates. Free, confidential and without obligation.",
+  "valuation.soon.title": "The valuation tool is being finalised",
+  "valuation.soon.desc":
+    "It will be available on this page shortly. In the meantime, reach out and we will prepare an indicative valuation for you directly.",
+  "valuation.openNewTab": "Open the valuation tool in a new tab",
 };

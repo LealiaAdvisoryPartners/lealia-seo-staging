@@ -130,4 +130,30 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+
+  <!-- Valuation -->
+  <url>
+    <loc>https://www.lealiaap.com/en/valuation</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lealiaap.com/en/valuation" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lealiaap.com/pt/valuation" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lealiaap.com/es/valuation" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.lealiaap.com/pt/valuation</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lealiaap.com/en/valuation" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lealiaap.com/pt/valuation" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lealiaap.com/es/valuation" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.lealiaap.com/es/valuation</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.lealiaap.com/en/valuation" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.lealiaap.com/pt/valuation" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.lealiaap.com/es/valuation" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

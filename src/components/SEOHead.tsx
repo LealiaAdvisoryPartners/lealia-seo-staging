@@ -24,6 +24,10 @@ const pageMeta: Record<string, { titleKey: string; descriptionKey: string }> = {
     titleKey: "seo.team.title",
     descriptionKey: "seo.team.description",
   },
+  valuation: {
+    titleKey: "seo.valuation.title",
+    descriptionKey: "seo.valuation.description",
+  },
   privacy: {
     titleKey: "seo.privacy.title",
     descriptionKey: "seo.privacy.description",
