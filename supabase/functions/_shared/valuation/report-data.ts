@@ -395,7 +395,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
             ]
           : []),
         {
-          label: "Equity Value base antes de ajustamentos",
+          label: "Equity Value base",
           valor: Math.round((r.equity_min + r.equity_max) / 2),
           tipo: "total" as const,
         },

@@ -250,7 +250,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
               </strong>
             </div>
             <div>
-              <span>Equity Value antes de ajustamentos de closing</span>
+              <span>Equity Value Indicativo</span>
               <strong>
                 {d.equity_min_formatado} — {d.equity_max_formatado}
               </strong>
