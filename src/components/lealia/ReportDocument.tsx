@@ -541,7 +541,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 <H>Métodos alternativos</H>
                 <div className="report-cards">
                   <div className="report-card">
-                    <strong>DCF — fluxos de caixa descontados</strong>
+                    <strong>DCF - fluxos de caixa descontados</strong>
                     <p>
                       Projeta os fluxos de caixa futuros e desconta-os a uma taxa que reflete o custo do capital (WACC).
                       É o método mais rigoroso quando existe um plano de negócios credível, mas é muito sensível aos
@@ -549,17 +549,20 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     </p>
                   </div>
                   <div className="report-card">
-                    <strong>Transações comparáveis</strong>
+                    <strong>Outros múltiplos de transação</strong>
                     <p>
-                      Analisa múltiplos efetivamente pagos em operações recentes no setor, incluindo prémios de
-                      controlo. Depende da comparabilidade das operações divulgadas.
+                      Para além do EV/EBITDA, podem ser utilizados múltiplos como EV/Receitas, EV/EBIT ou P/E,
+                      dependendo do setor, da maturidade e da rentabilidade da empresa. A sua relevância depende da
+                      comparabilidade das empresas e da qualidade da informação disponível.
                     </p>
                   </div>
                   <div className="report-card">
-                    <strong>Comparáveis cotadas</strong>
+                    <strong>Métricas específicas do setor</strong>
                     <p>
-                      Usa múltiplos de empresas cotadas do setor, ajustados por dimensão e liquidez. Útil como
-                      referência de tendência de mercado.
+                      Complementa os múltiplos financeiros através de métricas operacionais relevantes para cada
+                      negócio, como valor por unidade, cliente, cama, subscritor ou metro quadrado. É particularmente
+                      útil em setores onde estes indicadores explicam de forma mais direta o potencial económico da
+                      empresa.
                     </p>
                   </div>
                   <div className="report-card">
