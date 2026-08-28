@@ -19,8 +19,7 @@ export async function descarregarRelatorioPdf(nomeFicheiro: string) {
       backgroundColor: "#ffffff",
       useCORS: true,
       logging: false,
-size: 0,
-    } as never);
+    });
     const imagem = canvas.toDataURL("image/jpeg", 0.92);
     if (i > 0) pdf.addPage("a4", "landscape");
     pdf.addImage(imagem, "JPEG", 0, 0, A4_LANDSCAPE.width, A4_LANDSCAPE.height, undefined, "FAST");
