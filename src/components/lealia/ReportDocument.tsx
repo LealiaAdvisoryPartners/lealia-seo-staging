@@ -418,6 +418,10 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <td>% Concentração no top 5 clientes</td>
                     <td>{d.concentracao_top5 || "Não indicado"}</td>
                   </tr>
+                  <tr>
+                    <td>Clientes Ativos</td>
+                    <td>{d.clientes_ativos || "Não indicado"}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
