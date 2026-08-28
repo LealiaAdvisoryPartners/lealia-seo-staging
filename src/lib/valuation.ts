@@ -590,19 +590,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
     {
       label: "Dimensão (EBITDA)",
       detalhe: ebitda_abaixo_2m ? `EBITDA normalizado abaixo de 2M€` : "EBITDA normalizado de 2M€ ou mais",
-      multiplicador: ebitda_abaixo_2m ? 0.9 : 1.05,
-    },
-    {
-      label: "Escalão de faturação",
-      detalhe:
-        f < 2_000_000
-          ? "Faturação abaixo de 2M€"
-          : f < 5_000_000
-            ? "Faturação entre 2M€ e 5M€"
-            : f < 20_000_000
-              ? "Faturação entre 5M€ e 20M€"
-              : "Faturação de 20M€ ou mais",
-      multiplicador: f < 2_000_000 ? 0.9 : f < 5_000_000 ? 0.95 : f < 20_000_000 ? 1.05 : 1.1,
+      multiplicador: ebitda_abaixo_2m ? 1.0 : 1.0,
     },
     {
       label: "Idade da empresa",
