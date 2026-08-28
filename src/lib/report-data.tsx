@@ -379,7 +379,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
   const ponte = r
     ? [
         { label: "Enterprise Value base", valor: r.ev_medio, tipo: "base" as const },
-        { label: "Mais: caixa disponível", valor: r.caixa, tipo: "ajuste" as const },
+        { label: "Mais: caixa, depósitos e outros equivalentes", valor: r.caixa, tipo: "ajuste" as const },
         { label: "Menos: dívida total", valor: -r.divida_financeira, tipo: "ajuste" as const },
         ...(r.valor_imovel > 0
           ? [
