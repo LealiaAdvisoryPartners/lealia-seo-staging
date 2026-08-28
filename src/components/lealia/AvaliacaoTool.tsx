@@ -166,13 +166,6 @@ export function AvaliacaoTool() {
               Falar com a equipa
             </button>
           </div>
-          <ul className="mt-16 grid max-w-3xl gap-4 sm:grid-cols-3">
-            {["100% gratuito", "Relatório em poucas horas", "Análise de Managing Partner"].map((b) => (
-              <li key={b} className="card-elegant px-6 py-5 text-sm">
-                {b}
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
