@@ -183,7 +183,7 @@ export function AvaliacaoTool() {
             {
               n: "02",
               t: "Receba o relatório preliminar",
-              d: "A nossa equipa valida e analisa os dados, monta a ponte de valor da sua empresa\ne envia o relatório para o seu e-mail.",
+              d: "A nossa equipa valida e analisa os dados, monta a equity bridge da sua empresa\ne envia o relatório para o seu e-mail.",
             },
             {
               n: "03",

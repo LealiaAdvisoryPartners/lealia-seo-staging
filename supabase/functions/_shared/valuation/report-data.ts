@@ -379,7 +379,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     formatado: `${l.tipo === "ajuste" && l.valor > 0 ? "+" : ""}${eur(l.valor)}`,
   }));
 
-  // --- Ponte Enterprise Value → Equity Value ---
+  // --- Equity Bridge ---
   const ponte = r
     ? [
         { label: "Enterprise Value base", valor: r.ev_medio, tipo: "base" as const },

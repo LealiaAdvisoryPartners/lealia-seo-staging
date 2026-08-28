@@ -78,12 +78,8 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
 
   return (
     <figure className="report-waterfall">
-      <figcaption>Ponte de valor · milhares de €</figcaption>
-      <svg
-        viewBox={`0 0 ${width} 240`}
-        role="img"
-        aria-label="Gráfico waterfall da ponte de Enterprise Value para Equity Value"
-      >
+      <figcaption>Equity Bridge · milhares de €</figcaption>
+      <svg viewBox={`0 0 ${width} 240`} role="img" aria-label="Gráfico waterfall da Equity Bridge">
         <line className="report-waterfall-axis" x1="10" x2={width - 10} y1={y(0)} y2={y(0)} />
         {chartItems.map((item, index) => {
           const x = startX + index * (barWidth + gap);
@@ -150,7 +146,7 @@ const LOCKED_PAGES: { numero: number; titulo: string }[] = [
   { numero: 5, titulo: "Método e alternativas" },
   { numero: 6, titulo: "Ajustes ao múltiplo" },
   { numero: 7, titulo: "Cenários e sensibilidade" },
-  { numero: 8, titulo: "Ponte de valor e contexto da transação" },
+  { numero: 8, titulo: "Equity Bridge e contexto da transação" },
   { numero: 9, titulo: "Drivers de Valor & Riscos" },
   { numero: 10, titulo: "Preparação para o mercado" },
   { numero: 11, titulo: "Processo de M&A" },
@@ -314,8 +310,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             global aplicado ao conjunto dos ajustes.
           </li>
           <li>
-            <strong>Ponte de Enterprise Value para Equity Value</strong> — ao Enterprise Value deduz-se a dívida total,
-            soma-se a caixa disponível
+            <strong>Equity Bridge</strong> — ao Enterprise Value deduz-se a dívida total, soma-se a caixa disponível
             {d.imovel_no_perimetro ? " e soma-se o imóvel incluído no perímetro" : ""}, obtendo-se o Equity Value antes
             de ajustamentos de closing.
           </li>
@@ -677,7 +672,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 <p className="report-small">
                   A tabela mostra como o Enterprise Value reage a variações do EBITDA normalizado e do múltiplo
                   aplicado. O Equity Value acompanha estas variações, ajustado pela dívida total, caixa disponível e
-                  imóvel indicado na ponte de valor.
+                  imóvel indicado na equity bridge.
                 </p>
               </>
             ) : (
@@ -685,11 +680,11 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             )}
           </Page>
 
-          {/* 8 — Ponte de valor e contexto da transação */}
-          <Page numero={8} titulo="Ponte de valor e contexto da transação">
+          {/* 8 — Equity Bridge e contexto da transação */}
+          <Page numero={8} titulo="Equity Bridge e contexto da transação">
             <div className="report-slide-eight">
               <section className="report-slide-eight-section">
-                <H>Ponte de Enterprise Value para Equity Value</H>
+                <H>Equity Bridge</H>
                 <div className="report-slide-eight-bridge">
                   <div>
                     <table className="report-table report-table-compact">
