@@ -333,16 +333,12 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 
   const resumo_textual = r
     ? [
-        `Com base nos dados disponibilizados, estima-se para a <strong>${lead.empresa}</strong>, ` +
-          `empresa que opera no setor de <strong>${lead.industria}</strong>` +
-          `${lead.subindustria ? `, na subindústria de <strong>${lead.subindustria}</strong>` : ""}` +
-          `, um <strong>valor indicativo para os acionistas entre ${eur(r.equity_min)} e ${eur(r.equity_max)}</strong>. ` +
-          `O intervalo resulta de um <strong>Enterprise Value entre ${eur(r.ev_min)} e ${eur(r.ev_max)}</strong>, ` +
-          `calculado sobre um <strong>EBITDA normalizado de ${eur(r.ebitda_base)}</strong> ` +
-          `e um múltiplo ajustado de <strong>${r.multiplo_ajustado_min.toFixed(2)}x–${r.multiplo_ajustado_max.toFixed(2)}x</strong>. ` +
-          `Em ${ano}, a empresa apresentou uma faturação de <strong>${eur(fat1)}</strong>` +
-          `${margem_ebitda_ajustada !== null ? ` e uma margem EBITDA de <strong>${pct1(margem_ebitda_ajustada)}</strong>` : ""}` +
-          `, constituindo estes indicadores a base financeira da avaliação.`,
+        `Com base nos dados disponibilizados, estima-se estima-se um <strong>valor indicativo para os acionistas entre ${eur(r.equity_min)} e ${eur(r.equity_max)}</strong>. ` +
+          `O intervalo resulta de um Enterprise Value entre ${eur(r.ev_min)} e ${eur(r.ev_max)}, ` +
+          `calculado sobre um EBITDA normalizado de ${eur(r.ebitda_base)} ` +
+          `e um múltiplo EV/EBITDA implícito ajustado de ${r.multiplo_ajustado_min.toFixed(2)}x–${r.multiplo_ajustado_max.toFixed(2)}x. ` +
+          `Em ${ano} (${lead.tipo_período}), a empresa apresentou uma faturação de ${eur(fat1)}` +
+          `${margem_ebitda_ajustada !== null ? ` e uma margem EBITDA de ${pct1(margem_ebitda_ajustada)}` : ""}.`,
       ].join("")
     : "Com os dados indicados não é possível apresentar um valor indicativo por múltiplo de EBITDA. " +
       "Este relatório apresenta, ainda assim, o perfil operacional da empresa e as principais recomendações aplicáveis.";
