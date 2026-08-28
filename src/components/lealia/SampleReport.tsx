@@ -43,7 +43,7 @@ const SECCOES = [
   },
   {
     numero: "08",
-    titulo: "Drivers de valor e riscos",
+    titulo: "Drivers de valor",
     texto:
       "Identificação e sugestão de plano de ação sobre os principais fatores que expandem ou comprimem o valor do negócio.",
   },
