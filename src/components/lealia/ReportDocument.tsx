@@ -208,6 +208,7 @@ function LockedPage({ numero, titulo }: { numero: number; titulo: string }) {
 
 export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?: ReportModo }) {
   return (
+    <EmpresaContext.Provider value={d.empresa}>
     <article className="report-doc">
       {/* 1 — Capa */}
       <section className="report-page report-cover">
