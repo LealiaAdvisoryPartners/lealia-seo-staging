@@ -333,7 +333,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 
   const resumo_textual = r
     ? [
-        `Com base nos dados disponibilizados, estima-se estima-se um <strong>valor indicativo para os acionistas entre ${eur(r.equity_min)} e ${eur(r.equity_max)}</strong>. ` +
+        `Com base nos dados disponibilizados, estima-se estima-se um <strong>valor indicativo entre ${eur(r.equity_min)} e ${eur(r.equity_max)}</strong>. ` +
           `O intervalo resulta de um Enterprise Value entre ${eur(r.ev_min)} e ${eur(r.ev_max)}, ` +
           `calculado sobre um EBITDA normalizado de ${eur(r.ebitda_base)} ` +
           `e um múltiplo EV/EBITDA implícito ajustado de ${r.multiplo_ajustado_min.toFixed(2)}x–${r.multiplo_ajustado_max.toFixed(2)}x. ` +
