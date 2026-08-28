@@ -135,12 +135,7 @@ export const TIPOS_PERIODO = [
 
 export const NUM_COLABORADORES = ["1-9", "10-24", "25-49", "50-99", "100-249", "250+"];
 
-export const UNIDADES = [
-  "Localização única",
-  "2-3 localizações",
-  "Mais de 3 localizações",
-  "Não aplicável",
-];
+export const UNIDADES = ["Localização única", "2-3 localizações", "Mais de 3 localizações", "Não aplicável"];
 
 export const NUM_CLIENTES_ATIVOS = ["1-5", "6-20", "21-50", "51-200", "200+"];
 
@@ -365,7 +360,6 @@ export const FATURACAO_MINIMA_MSG =
 export const EQUITY_NEGATIVO_MSG =
   "Com o nível atual de endividamento face ao valor estimado da operação, não é possível apresentar uma avaliação indicativa fiável. Isto não significa que a sua empresa não tenha valor: fale connosco para analisarmos a situação específica e ajudarmos com um processo de avaliação personalizado.";
 
-
 const NOTA_SETOR_GENERICO =
   "Como o seu setor específico não está listado, esta estimativa usa uma média geral de mercado, assim sendo, o valor real pode variar significativamente. Recomendamos agendar uma reunião para uma análise ajustada ao seu setor.";
 
@@ -474,8 +468,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
   const ajuste_crescimento = crescimento === null ? 1.0 : crescimento < 0 ? 0.9 : crescimento > 0.1 ? 1.05 : 1.0;
 
   const unidades = input.unidades || null;
-  const ajuste_unidades =
-    unidades === "Localização única" ? 0.9 : unidades === "Mais de 3 localizações" ? 1.05 : 1.0;
+  const ajuste_unidades = unidades === "Localização única" ? 0.9 : unidades === "Mais de 3 localizações" ? 1.05 : 1.0;
 
   const top5 = input.pct_top5_clientes ?? null;
   const ajuste_concentracao = top5 === null ? 1.0 : top5 < 30 ? 1.0 : top5 <= 60 ? 1.0 : 0.95;
@@ -533,7 +526,6 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
   if (equity_min < 0) {
     return { ok: false, motivo: EQUITY_NEGATIVO_MSG };
   }
-
 
   const cenarios: Cenario[] = [
     {
@@ -610,7 +602,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
 
   const ajustes: Ajuste[] = [
     {
-      label: "Dimensão (faturação)",
+      label: "Volume de negócios",
       detalhe:
         faturacao_ref < 5_000_000
           ? "Faturação abaixo de 5M€"
@@ -621,7 +613,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
       efeito: efeito_faturacao,
     },
     {
-      label: "Dimensão (EBITDA)",
+      label: "Dimensão dos resultados",
       detalhe: ebitda_abaixo_2m ? `EBITDA normalizado abaixo de 2M€` : "EBITDA normalizado de 2M€ ou mais",
       multiplicador: 1.0,
       efeito: ebitda_abaixo_2m ? "Negativo" : "Positivo",
