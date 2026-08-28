@@ -22,8 +22,14 @@ const Relatorio = () => {
   const [searchParams] = useSearchParams();
   const chave = searchParams.get("k");
   const [dados, setDados] = useState<Resposta | null>(null);
+  const [aGerarPdf, setAGerarPdf] = useState(false);
 
   useEffect(() => {
+    document.body.classList.add("printing-report");
+    return () => document.body.classList.remove("printing-report");
+  }, []);
+
+
     let ativo = true;
     (async () => {
       if (!token) {
