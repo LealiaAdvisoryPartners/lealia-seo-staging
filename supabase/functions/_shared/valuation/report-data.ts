@@ -337,7 +337,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
           `O intervalo resulta de um Enterprise Value entre ${eur(r.ev_min)} e ${eur(r.ev_max)}, ` +
           `calculado sobre um EBITDA normalizado de ${eur(r.ebitda_base)} ` +
           `e um múltiplo EV/EBITDA implícito ajustado de ${r.multiplo_ajustado_min.toFixed(2)}x–${r.multiplo_ajustado_max.toFixed(2)}x. ` +
-          `Em ${ano} (${lead.tipo_período}), a empresa apresentou uma faturação de ${eur(fat1)}` +
+          `Em ${ano} (${lead.tipo_periodo}), a empresa apresentou uma faturação de ${eur(fat1)}` +
           `${margem_ebitda_ajustada !== null ? ` e uma margem EBITDA de ${pct1(margem_ebitda_ajustada)}` : ""}.`,
       ].join("")
     : "Com os dados indicados não é possível apresentar um valor indicativo por múltiplo de EBITDA. " +
