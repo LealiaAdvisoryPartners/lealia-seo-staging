@@ -261,7 +261,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
           <Kv label="EBITDA normalizado" value={d.ebitda_normalizado_formatado} />
           <Kv label="Margem EBITDA normalizada" value={d.margem_ebitda_ajustada_formatada} />
           <Kv
-            label="Múltiplo aplicado"
+            label="Múltiplo implícito"
             value={
               d.multiplo_ajustado_min !== null && d.multiplo_ajustado_max !== null
                 ? `${d.multiplo_ajustado_min.toFixed(2)}x — ${d.multiplo_ajustado_max.toFixed(2)}x`

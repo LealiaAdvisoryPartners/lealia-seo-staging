@@ -99,7 +99,7 @@ export function ResultCard({
               </dd>
             </div>
             <div className="flex items-baseline justify-between gap-6 border-b border-border pb-2">
-              <dt className="min-w-0 text-muted-foreground">Múltiplo ajustado aplicado</dt>
+              <dt className="min-w-0 text-muted-foreground">Múltiplo implícito ajustado </dt>
               <dd className="shrink-0 text-right">
                 {result.multiplo_ajustado_min.toFixed(2)}x — {result.multiplo_ajustado_max.toFixed(2)}x
               </dd>
