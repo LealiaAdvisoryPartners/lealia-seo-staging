@@ -28,8 +28,7 @@ const Relatorio = () => {
     document.body.classList.add("printing-report");
     return () => document.body.classList.remove("printing-report");
   }, []);
-
-
+  useEffect(() => {
     let ativo = true;
     (async () => {
       if (!token) {
