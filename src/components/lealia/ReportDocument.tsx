@@ -602,7 +602,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <tr key={`${a.label}-${i}`}>
                       <td>{a.label}</td>
                       <td>{a.detalhe}</td>
-                      <td>{efeitoQualitativo(a.multiplicador, a.semDados)}</td>
+                      <td>{efeitoQualitativo(a.multiplicador, a.semDados, a.efeito)}</td>
                     </tr>
                   ))}
                 </tbody>
