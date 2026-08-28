@@ -115,12 +115,12 @@ export function ResultCard({
               <dd className="shrink-0 text-right">{formatEUR(result.ev_medio)}</dd>
             </div>
             <div className="flex items-baseline justify-between gap-6 border-b border-border pb-2">
-              <dt className="min-w-0 text-muted-foreground">Menos: dívida total</dt>
-              <dd className="shrink-0 text-right">- {formatEUR(result.divida_financeira)}</dd>
+              <dt className="min-w-0 text-muted-foreground">Mais: caixa disponível</dt>
+              <dd className="shrink-0 text-right">- {formatEUR(result.caixa)}</dd>
             </div>
             <div className="flex items-baseline justify-between gap-6 border-b border-border pb-2">
-              <dt className="min-w-0 text-muted-foreground">Mais: caixa disponível</dt>
-              <dd className="shrink-0 text-right">+ {formatEUR(result.caixa)}</dd>
+              <dt className="min-w-0 text-muted-foreground">Menos: dívida total</dt>
+              <dd className="shrink-0 text-right">+ {formatEUR(result.divida_financeira)}</dd>
             </div>
             {result.valor_imovel > 0 && (
               <div className="flex items-baseline justify-between gap-6 border-b border-border pb-2">
