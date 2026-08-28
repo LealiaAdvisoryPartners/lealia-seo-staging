@@ -705,7 +705,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                           ))}
                         </tbody>
                       </table>
-                      <div className="report-note report-slide-eight-note">{d.nota_equity}</div>
                     </div>
                     <WaterfallChart items={d.ponte} />
                   </div>
