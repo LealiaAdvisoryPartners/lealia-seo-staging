@@ -601,7 +601,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
 
   const ajustes: Ajuste[] = [
     {
-      label: "Dimensão (faturação)",
+      label: "Volume de negócios",
       detalhe:
         faturacao_ref < 5_000_000
           ? "Faturação abaixo de 5M€"
@@ -612,7 +612,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
       efeito: efeito_faturacao,
     },
     {
-      label: "Dimensão (EBITDA)",
+      label: "Dimensão dos resultados",
       detalhe: ebitda_abaixo_2m ? `EBITDA normalizado abaixo de 2M€` : "EBITDA normalizado de 2M€ ou mais",
       multiplicador: 1.0,
       efeito: ebitda_abaixo_2m ? "Negativo" : "Positivo",
