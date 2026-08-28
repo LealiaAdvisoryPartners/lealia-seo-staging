@@ -1,3 +1,4 @@
+import * as React from "react";
 import logo from "@/assets/lealia-logo.png";
 import cover from "@/assets/report-cover.png";
 import { FASES } from "@/lib/timeline";
