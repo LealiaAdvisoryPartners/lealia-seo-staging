@@ -114,20 +114,25 @@ const Relatorio = () => {
             <Link to="/valuation" className="text-xs underline underline-offset-4 opacity-80">
               Voltar
             </Link>
-            <a
-              href={dados.pdfUrl ?? undefined}
-              onClick={(e) => {
-                if (!dados.pdfUrl) {
-                  e.preventDefault();
+            <button
+              type="button"
+              disabled={aGerarPdf}
+              onClick={async () => {
+                setAGerarPdf(true);
+                try {
+                  const nome = `Lealia_Valuation_${dados.relatorio.empresa.replace(/[^\p{L}\p{N}]+/gu, "_")}.pdf`;
+                  await descarregarRelatorioPdf(nome);
+                } catch (err) {
+                  console.error(err);
                   window.print();
+                } finally {
+                  setAGerarPdf(false);
                 }
               }}
-              target={dados.pdfUrl ? "_blank" : undefined}
-              rel="noreferrer"
-              className="btn-primary"
+              className="btn-primary disabled:opacity-60"
             >
-              Descarregar PDF
-            </a>
+              {aGerarPdf ? "A gerar PDF…" : "Descarregar PDF"}
+            </button>
           </div>
         </div>
         <ReportDocument d={dados.relatorio} modo={dados.modo} />
