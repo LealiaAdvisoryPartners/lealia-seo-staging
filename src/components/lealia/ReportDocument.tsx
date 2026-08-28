@@ -298,11 +298,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
           </li>
           <li>
             <strong>Múltiplo setorial de base</strong> — definido com referência aos múltiplos praticados em transações
-            recentes e comparáveis no setor e na região
-            {d.multiplo_base_min !== null && d.multiplo_base_max !== null
-              ? `: ${d.multiplo_base_min.toFixed(2)}x — ${d.multiplo_base_max.toFixed(2)}x`
-              : ""}
-            .
+            recentes e comparáveis no setor e na região.
           </li>
           <li>
             <strong>Ajustes de perfil e risco</strong> — dimensão, maturidade, crescimento, recorrência de receita,
