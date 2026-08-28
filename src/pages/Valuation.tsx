@@ -1,15 +1,10 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import SEOHead, { pageMeta } from "@/components/SEOHead";
-import { Button } from "@/components/ui/button";
-import { Magnetic } from "@/components/motion/MagneticButton";
-import { buildValuationUrl, VALUATION_APP_URL } from "@/config/valuation";
-import { buildPath } from "@/lib/routing";
-import { Link } from "react-router-dom";
+import { AvaliacaoTool } from "@/components/lealia/AvaliacaoTool";
 
 const Valuation = () => {
-  const { t, language } = useLanguage();
-  const src = buildValuationUrl(language);
+  const { t } = useLanguage();
 
   return (
     <>
@@ -42,58 +37,16 @@ const Valuation = () => {
         </div>
       </section>
 
-      {/* Embedded tool */}
+      {/* Ferramenta de avaliação */}
       <section className="relative">
         <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pb-16 md:pb-24">
-          {src ? (
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className="rounded-2xl overflow-hidden border border-border/60 shadow-2xl bg-background"
-            >
-              <iframe
-                src={src}
-                title={t("valuation.title")}
-                loading="lazy"
-                className="w-full block"
-                style={{ height: "min(1400px, max(720px, 100vh))", border: 0 }}
-                allow="clipboard-write; fullscreen"
-              />
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className="rounded-2xl border border-border/60 bg-background/70 backdrop-blur p-10 md:p-16 text-center"
-            >
-              <p className="text-lg md:text-xl font-heading font-light text-primary mb-3">
-                {t("valuation.soon.title")}
-              </p>
-              <p className="text-sm md:text-base text-muted-foreground font-body font-light max-w-xl mx-auto mb-8">
-                {t("valuation.soon.desc")}
-              </p>
-              <Magnetic>
-                <Button asChild className="btn-gold">
-                  <Link to={`${buildPath(language, "/")}#contact`}>{t("nav.contact")}</Link>
-                </Button>
-              </Magnetic>
-            </motion.div>
-          )}
-
-          {VALUATION_APP_URL && (
-            <p className="text-center text-xs text-muted-foreground font-body mt-4">
-              <a
-                href={VALUATION_APP_URL}
-                target="_blank"
-                rel="noopener"
-                className="link-underline hover:text-accent"
-              >
-                {t("valuation.openNewTab")}
-              </a>
-            </p>
-          )}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+          >
+            <AvaliacaoTool />
+          </motion.div>
         </div>
       </section>
     </>
