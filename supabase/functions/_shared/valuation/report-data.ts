@@ -361,6 +361,8 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     { label: "Unidades / localizações", valor: lead.unidades || NAO_INDICADO },
     { label: "Anos de atividade", valor: lead.idade_empresa ? `${lead.idade_empresa} anos` : NAO_INDICADO },
     { label: "Colaboradores", valor: lead.num_colaboradores || NAO_INDICADO },
+    { label: "Clientes ativos", valor: lead.num_clientes_ativos || NAO_INDICADO },
+
     { label: "Ano de referência", valor: String(ano) },
     { label: "Período de referência", valor: lead.tipo_periodo || NAO_INDICADO },
   ];
