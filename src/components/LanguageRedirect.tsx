@@ -34,10 +34,12 @@ const LanguageRedirect = () => {
       // Only redirect if the path would actually change
       if (newPath !== location.pathname) {
         hasRedirected.current = true;
-        navigate(newPath, { replace: true });
+        // Preserve query string and hash (e.g. ?k= admin key on report links)
+        navigate(`${newPath}${location.search}${location.hash}`, { replace: true });
       }
     }
-  }, [location.pathname, language, navigate]);
+  }, [location.pathname, location.search, location.hash, language, navigate]);
+
 
   return null;
 };
