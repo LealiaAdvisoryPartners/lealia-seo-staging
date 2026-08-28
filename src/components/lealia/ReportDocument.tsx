@@ -1,4 +1,5 @@
-import logo from "@/assets/logo-header.png";
+import logo from "@/assets/lealia-logo.png";
+import cover from "@/assets/report-cover.png";
 import { FASES } from "@/lib/timeline";
 import type { ReportData } from "@/lib/report-data";
 
@@ -207,7 +208,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
     <article className="report-doc">
       {/* 1 — Capa */}
       <section className="report-page report-cover">
-        <div className="report-cover-side report-cover-side-full">
+        <img src={cover} alt="" className="report-cover-image" />
+        <div className="report-cover-side">
           <img src={logo} alt="Lealia Advisory Partners" className="report-cover-logo" />
           <div className="mt-auto">
             <h1 className="report-title">Preliminary Valuation</h1>
