@@ -17,7 +17,7 @@ Lealia Advisory Partners · Relatório de avaliação indicativa para {empresa}
 Passa a existir uma linha dedicada à faturação, com leitura e efeito definidos manualmente pela faturação do ano de referência:
 
 - abaixo de 5M€ → Negativo
-- entre 5M€ e 20M€ (inclusive até 20M€) → Neutro
+- entre 5M€ (inclusive 5M€) e INFERIOR A 20M€ → Neutro
 - igual ou superior a 20M€ → Positivo
 
 Nenhum coeficiente automático de inflação/deflação influencia esta coluna.

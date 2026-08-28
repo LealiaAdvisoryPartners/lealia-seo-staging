@@ -1,3 +1,4 @@
+import * as React from "react";
 import logo from "@/assets/lealia-logo.png";
 import cover from "@/assets/report-cover.png";
 import { FASES } from "@/lib/timeline";
@@ -5,6 +6,8 @@ import type { ReportData } from "@/lib/report-data";
 
 const DISCLAIMER =
   "O presente relatório constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração deste documento.";
+
+const EmpresaContext = React.createContext<string>("");
 
 function Page({
   numero,
@@ -17,6 +20,7 @@ function Page({
   id?: string;
   children: React.ReactNode;
 }) {
+  const empresa = React.useContext(EmpresaContext);
   return (
     <section className="report-page" id={id}>
       <header className="report-head">
@@ -25,14 +29,17 @@ function Page({
       </header>
       <div className="report-body">{children}</div>
       <footer className="report-foot">
-        <span>Lealia Advisory Partners · Relatório de avaliação indicativa</span>
+        <span>
+          Lealia Advisory Partners · Relatório de avaliação indicativa{empresa ? ` para ${empresa}` : ""}
+        </span>
         <span>{numero}</span>
       </footer>
     </section>
   );
 }
 
-function efeitoQualitativo(multiplicador: number, semDados?: boolean) {
+function efeitoQualitativo(multiplicador: number, semDados?: boolean, efeito?: string) {
+  if (efeito) return efeito;
   if (semDados) return "Neutro";
   if (multiplicador > 0.995) return "Positivo";
   if (multiplicador < 0.995) return "Negativo";
@@ -201,6 +208,7 @@ function LockedPage({ numero, titulo }: { numero: number; titulo: string }) {
 
 export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?: ReportModo }) {
   return (
+    <EmpresaContext.Provider value={d.empresa}>
     <article className="report-doc">
       {/* 1 — Capa */}
       <section className="report-page report-cover">
@@ -594,7 +602,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <tr key={`${a.label}-${i}`}>
                       <td>{a.label}</td>
                       <td>{a.detalhe}</td>
-                      <td>{efeitoQualitativo(a.multiplicador, a.semDados)}</td>
+                      <td>{efeitoQualitativo(a.multiplicador, a.semDados, a.efeito)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -974,5 +982,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
         </div>
       </Page>
     </article>
+    </EmpresaContext.Provider>
   );
 }
