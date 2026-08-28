@@ -71,6 +71,11 @@ const App = () => (
                   <Route path="/en/relatorio/:token" element={<Relatorio />} />
                   <Route path="/pt/relatorio/:token" element={<Relatorio />} />
                   <Route path="/es/relatorio/:token" element={<Relatorio />} />
+
+                  {/* Link curto do relatório: lealiaap.com/empresa-abcd */}
+                  <Route path="/:token" element={<Relatorio />} />
+
+
                   
                   
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
