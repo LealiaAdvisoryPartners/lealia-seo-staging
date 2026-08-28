@@ -17,6 +17,7 @@ import Services from "./pages/Services";
 import Team from "./pages/Team";
 import Privacy from "./pages/Privacy";
 import Valuation from "./pages/Valuation";
+import Relatorio from "./pages/Relatorio";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,13 @@ const App = () => (
                   <Route path="/team" element={<Team />} />
                   <Route path="/valuation" element={<Valuation />} />
                   <Route path="/privacy" element={<Privacy />} />
+
+                  {/* Relatório de avaliação (link privado, sem prefixo de idioma) */}
+                  <Route path="/relatorio/:token" element={<Relatorio />} />
+                  <Route path="/en/relatorio/:token" element={<Relatorio />} />
+                  <Route path="/pt/relatorio/:token" element={<Relatorio />} />
+                  <Route path="/es/relatorio/:token" element={<Relatorio />} />
+                  
                   
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
