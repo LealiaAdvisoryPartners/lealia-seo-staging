@@ -66,7 +66,11 @@ Deno.serve(async (req: Request) => {
 
   let slug: string | null = null;
   for (let tentativa = 0; tentativa < 5 && !slug; tentativa++) {
-    const candidato = gerarSlugRelatorio(String(lead.empresa ?? ""));
+    // 1ª tentativa: sufixo determinístico (últimos 4 caracteres do id do lead).
+    const candidato = gerarSlugRelatorio(
+      String(lead.empresa ?? ""),
+      tentativa === 0 ? String(inserido.id) : null,
+    );
     const { error: slugError } = await supabaseAdmin
       .from("leads")
       .update({ relatorio_slug: candidato, relatorio_dados: relatorioDados as never })
@@ -82,7 +86,8 @@ Deno.serve(async (req: Request) => {
 
   const origin = typeof origemBruta === "string" && origemBruta ? origemBruta : req.headers.get("origin") ?? "";
   const base = origin.replace(/\/$/, "");
-  const relatorioUrl = base ? `${base}/relatorio/${identificador}` : null;
+  // Link limpo, na raiz do domínio: lealiaap.com/empresa-abcd
+  const relatorioUrl = base ? `${base}/${identificador}` : null;
   const relatorioAdminUrl = relatorioUrl ? `${relatorioUrl}?k=${linha["relatorio_token_admin"] as string}` : null;
 
   // Geração opcional do PDF (só quando existe serviço de conversão configurado).

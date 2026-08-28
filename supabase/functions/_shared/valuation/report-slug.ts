@@ -6,7 +6,7 @@ function sufixo(n = 4) {
   return Array.from(bytes, (b) => ALFABETO[b % ALFABETO.length]).join("");
 }
 
-export function gerarSlugRelatorio(empresa: string): string {
+export function gerarSlugRelatorio(empresa: string, sufixoFixo?: string | null): string {
   const base =
     empresa
       .normalize("NFD")
@@ -16,5 +16,6 @@ export function gerarSlugRelatorio(empresa: string): string {
       .replace(/^-+|-+$/g, "")
       .slice(0, 40)
       .replace(/-+$/, "") || "relatorio";
-  return `${base}-${sufixo()}`;
+  const marca = (sufixoFixo ?? "").toLowerCase().replace(/[^a-z0-9]/g, "").slice(-4);
+  return `${base}-${marca.length === 4 ? marca : sufixo()}`;
 }
