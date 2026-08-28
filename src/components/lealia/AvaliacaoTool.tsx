@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { ValuationForm, type FormState } from "@/components/lealia/ValuationForm";
-import { ResultCard } from "@/components/lealia/ResultCard";
 import { ThankYouCard } from "@/components/lealia/ThankYouCard";
 import { SampleReport } from "@/components/lealia/SampleReport";
 import { CalendlyInline } from "@/components/lealia/CalendlyInline";
@@ -148,42 +147,91 @@ export function AvaliacaoTool() {
 
   return (
     <div>
-      <section ref={formRef} className="scroll-mt-24 border-y border-border bg-secondary/50 rounded-2xl">
-        <div className="px-4 py-16 sm:px-8 md:py-20">
+      {/* Hero */}
+      <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+          <h1 className="section-title mt-6 max-w-4xl text-4xl leading-[1.08] md:text-6xl lg:text-7xl">
+            Quanto vale a sua empresa?{" "}
+            <span className="serif-accent text-accent">Peça uma análise indicativa gratuita.</span>
+          </h1>
+          <p className="body-justified mt-8 max-w-2xl text-base leading-relaxed font-light text-muted-foreground md:text-lg">
+            Submeta os dados da sua PME. A nossa equipa valida a informação, analisa os indicadores e prepara um
+            relatório completo em poucas horas.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <button className="btn-primary" onClick={() => scrollTo(formRef)}>
+              Avaliar a minha empresa agora
+            </button>
+            <button className="btn-outline" onClick={() => scrollTo(agendarRef)}>
+              Falar com a equipa
+            </button>
+          </div>
+          <ul className="mt-16 grid max-w-3xl gap-4 sm:grid-cols-3">
+            {["100% gratuito", "Relatório em poucas horas", "Análise de Managing Partner"].map((b) => (
+              <li key={b} className="card-elegant px-6 py-5 text-sm">
+                {b}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Como funciona */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+        <p className="eyebrow">Como funciona</p>
+        <h2 className="section-title mt-5 text-3xl md:text-5xl">Três passos, uma análise de valor</h2>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {[
+            {
+              n: "01",
+              t: "Preencha o questionário de sete passos",
+              d: "Sete passos curtos sobre setor, histórico financeiro e contexto. Realizado em menos de 5 minutos.",
+            },
+            {
+              n: "02",
+              t: "Receba o relatório preliminar",
+              d: "A nossa equipa valida e analisa os dados, monta a ponte de valor da sua empresa\ne envia o relatório para o seu e-mail.",
+            },
+            {
+              n: "03",
+              t: "Reveja o relatório completo connosco",
+              d: "Agende uma reunião de 20 minutos com a nossa equipa para aceder ao relatório completo e conhecer as suas opções.",
+            },
+          ].map((s) => (
+            <div key={s.n} className="card-elegant p-8">
+              <span className="num-index">{s.n}</span>
+              <h3 className="mt-4 text-2xl">{s.t}</h3>
+              <p className="body-justified mt-3 text-sm leading-relaxed font-light text-muted-foreground">{s.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Formulário */}
+      <section ref={formRef} className="scroll-mt-24 border-y border-border bg-secondary/50">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
           <ValuationForm onSubmit={handleSubmit} />
         </div>
       </section>
 
+      {/* Confirmação */}
       {(loading || result) && (
         <section ref={resultRef} className="scroll-mt-24">
-          <div className="px-4 py-16 sm:px-8 md:py-20">
+          <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
             {loading ? (
               <p className="serif-accent text-center text-2xl text-muted-foreground">A registar a sua submissão…</p>
             ) : (
               result && (
-                <>
-                  <ResultCard
-                    empresa={empresa}
-                    result={result}
-                    onSample={() => scrollTo(sampleRef)}
-                    onAgendar={() => scrollTo(agendarRef)}
-                  />
-                  <div className="mt-16">
-                    <ThankYouCard
-                      empresa={empresa}
-                      calculoPossivel={result.ok}
-                      onAgendar={() => scrollTo(agendarRef)}
-                    />
-                  </div>
-                </>
+                <ThankYouCard empresa={empresa} calculoPossivel={result.ok} onAgendar={() => scrollTo(agendarRef)} />
               )
             )}
           </div>
         </section>
       )}
 
+      {/* Sample report */}
       <section ref={sampleRef} className="scroll-mt-24 border-t border-border">
-        <div className="px-4 py-16 sm:px-8 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
           <p className="eyebrow">Relatório completo</p>
           <h2 className="section-title mt-5 max-w-2xl text-3xl md:text-5xl">O que recebe numa análise Lealia</h2>
           <div className="mt-12">
@@ -192,8 +240,9 @@ export function AvaliacaoTool() {
         </div>
       </section>
 
+      {/* Agendamento */}
       <section ref={agendarRef} className="scroll-mt-24 border-t border-border">
-        <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-8 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 md:py-28 lg:px-8">
           <h2 className="section-title text-3xl md:text-5xl">Fale connosco e aceda ao relatório completo</h2>
           <p className="body-justified mx-auto mt-6 max-w-xl leading-relaxed font-light text-muted-foreground">
             Numa reunião de 20 minutos, apresentamos os detalhes completos da avaliação, respondemos a todas as suas
