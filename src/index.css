@@ -415,6 +415,23 @@
   }
 }
 
+
+/* ---------------------------------------------------------------
+ * Tokens locais do relatório (cores completas, como no projeto de origem)
+ * --------------------------------------------------------------- */
+.report-shell,
+.report-doc,
+.report-toolbar {
+  --primary: hsl(220 50% 11%);
+  --primary-foreground: hsl(30 30% 98%);
+  --accent: hsl(36 55% 52%);
+  --gold: hsl(36 55% 52%);
+  --color-gold-foreground: hsl(220 50% 11%);
+  --font-body: "Raleway", system-ui, sans-serif;
+  --radius: 0.875rem;
+  --gradient-gold: linear-gradient(135deg, hsl(36 55% 52%) 0%, hsl(40 70% 65%) 100%);
+  --shadow-gold: 0 10px 40px -10px hsl(36 55% 52% / 0.45);
+}
 /* ---------------------------------------------------------------
  * Relatório de avaliação — layout A4 (ecrã + impressão/PDF)
  * --------------------------------------------------------------- */
@@ -432,8 +449,8 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   border-radius: var(--radius);
   padding: 1rem 1.25rem;
 }
@@ -456,7 +473,7 @@
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 10px 30px hsl(220 30% 12% / 0.12);
-  font-family: 'Raleway', system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 9.5pt;
   line-height: 1.45;
 }
@@ -515,11 +532,19 @@
   color: hsl(220 12% 50%);
 }
 
+/* Capa em duas metades: imagem à esquerda, identidade à direita */
 .report-cover {
   padding: 0;
   flex-direction: row;
   color: #022341;
   background: #ffffff;
+}
+
+.report-cover-image {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .report-cover-side {
@@ -528,10 +553,6 @@
   display: flex;
   flex-direction: column;
   padding: 14mm 16mm;
-}
-
-.report-cover-side-full {
-  width: 100%;
 }
 
 .report-cover-logo {
@@ -549,19 +570,21 @@
 }
 
 .report-title {
+  font-family: var(--font-body);
   font-size: 28pt;
   line-height: 1.1;
   margin: 3mm 0 1mm;
   font-weight: 700;
-  color: hsl(var(--primary));
+  color: var(--primary);
   letter-spacing: -0.01em;
 }
 
 .report-title-company {
+  font-family: var(--font-body);
   font-style: italic;
   font-weight: 700;
   font-size: 20pt;
-  color: hsl(var(--primary));
+  color: var(--primary);
   margin: 0;
 }
 
@@ -605,6 +628,7 @@
 }
 
 .report-h2 {
+  font-family: var(--font-body);
   font-size: 13pt;
   font-weight: 700;
   margin: 0 0 4mm;
@@ -614,8 +638,25 @@
   margin-top: 9mm;
 }
 
+.report-h3 {
+  font-family: var(--font-body);
+  font-size: 9pt;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: hsl(36 45% 42%);
+  margin: 0 0 2mm;
+  padding-bottom: 1.5mm;
+  border-bottom: 1px solid hsl(220 15% 88%);
+}
+
 .report-block + .report-block {
   margin-top: 6mm;
+}
+
+.report-two-divided > div:first-child {
+  padding-right: 9mm;
+  border-right: 1px solid hsl(220 15% 88%);
 }
 
 .report-two > div {
@@ -718,7 +759,7 @@
 
 .report-waterfall-base,
 .report-waterfall-total {
-  fill: hsl(var(--primary));
+  fill: var(--primary);
 }
 
 .report-waterfall-positive {
@@ -778,6 +819,7 @@
 }
 
 .report-highlight strong {
+  font-family: var(--font-body);
   font-size: 13pt;
   font-weight: 400;
 }
@@ -787,10 +829,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 0 8mm;
   margin: 3mm 0;
-}
-
-.report-grid-1 {
-  grid-template-columns: 1fr;
 }
 
 .report-kv {
@@ -807,6 +845,12 @@
   color: #022341;
   font-weight: 500;
   text-align: right;
+}
+
+.report-kv-composed {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2.5mm;
 }
 
 .report-kv-hint {
@@ -831,6 +875,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 8.5pt;
+  font-family: var(--font-body);
   margin: 3mm 0 5mm;
 }
 
@@ -865,6 +910,10 @@
   gap: 4mm;
 }
 
+.report-cards-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
 .report-phases-2 {
   grid-template-columns: 1fr 1fr;
   gap: 4mm 10mm;
@@ -872,7 +921,7 @@
 
 .report-card {
   border: 1px solid hsl(220 15% 88%);
-  border-left: 2px solid hsl(var(--gold));
+  border-left: 2px solid var(--gold);
   border-radius: 2mm;
   padding: 4mm 5mm;
 }
@@ -906,7 +955,7 @@
 }
 
 .report-phase-head span {
-  color: hsl(var(--gold));
+  color: var(--gold);
   font-size: 9pt;
   letter-spacing: 0.1em;
 }
@@ -932,13 +981,71 @@
 }
 
 .report-note {
-  border-left: 2px solid hsl(var(--gold));
+  border-left: 2px solid var(--gold);
   background: hsl(36 55% 52% / 0.07);
   padding: 3.5mm 4mm;
   font-size: 8.5pt;
   margin: 4mm 0;
   text-align: justify;
   text-align-last: left;
+}
+
+.report-contact {
+  margin-top: 6mm;
+  border-top: 1px solid hsl(220 15% 88%);
+  padding-top: 4mm;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9pt;
+}
+
+/* --- Próximo passo no slide de processo de M&A --- */
+.report-next-step {
+  margin-top: 5mm;
+  padding-top: 4mm;
+  border-top: 1px solid hsl(220 15% 88%);
+}
+
+.report-next-step > .report-h2 {
+  margin-top: 0;
+  margin-bottom: 2.5mm;
+}
+
+.report-next-step-desc {
+  font-size: 9pt;
+  line-height: 1.4;
+  color: hsl(220 12% 35%);
+  margin: 0 0 4mm;
+  text-align: justify;
+}
+
+.report-next-step-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5mm;
+  align-items: center;
+}
+
+.report-next-step-card {
+  border: 1px solid hsl(220 15% 88%);
+  border-left: 2px solid var(--gold);
+  border-radius: 2mm;
+  padding: 3.5mm 5mm;
+  background: hsl(36 55% 52% / 0.05);
+}
+
+.report-next-step-card strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1.5mm;
+  font-size: 10pt;
+  color: var(--primary);
+}
+
+.report-next-step-card p {
+  margin: 0;
+  font-size: 9pt;
+  color: hsl(220 12% 35%);
 }
 
 .report-next-step-btn {
@@ -952,32 +1059,16 @@
   font-weight: 500;
   letter-spacing: 0.02em;
   background: var(--gradient-gold);
-  color: hsl(var(--gold-foreground));
+  color: var(--color-gold-foreground);
   box-shadow: var(--shadow-gold);
   text-decoration: none;
   white-space: nowrap;
 }
 
-.report-next-step-card {
-  border: 1px solid hsl(220 15% 88%);
-  border-left: 2px solid hsl(var(--gold));
-  border-radius: 2mm;
-  padding: 3.5mm 5mm;
-  background: hsl(36 55% 52% / 0.05);
-}
-
-.report-next-step-card strong {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 1.5mm;
-  font-size: 10pt;
-  color: hsl(var(--primary));
-}
-
-.report-next-step-card p {
-  margin: 0;
-  font-size: 9pt;
-  color: hsl(220 12% 35%);
+.report-next-step-flush {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .report-phases-tall .report-phase {
@@ -989,6 +1080,7 @@
   margin-bottom: 1.2mm;
 }
 
+/* --- Slide final: agradecimento e contactos --- */
 .report-final {
   flex: 1 1 auto;
   min-height: 0;
@@ -1011,9 +1103,10 @@
 }
 
 .report-closing-title {
+  font-family: var(--font-body);
   font-size: 26pt;
   font-weight: 700;
-  color: hsl(var(--primary));
+  color: var(--primary);
   margin: 0 0 3mm;
   letter-spacing: -0.01em;
 }
@@ -1064,7 +1157,7 @@
 
 .report-contact-card {
   border: 1px solid hsl(220 15% 88%);
-  border-left: 2px solid hsl(var(--gold));
+  border-left: 2px solid var(--gold);
   border-radius: 2mm;
   padding: 4mm 5mm;
   margin-bottom: 5mm;
@@ -1074,7 +1167,7 @@
   display: block;
   font-size: 10.5pt;
   font-weight: 600;
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .report-contact-card > span {
@@ -1102,7 +1195,7 @@
 }
 
 .report-contact-list a:hover {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .report-closing-note {
@@ -1110,6 +1203,11 @@
   font-size: 7.5pt;
   line-height: 1.45;
   color: hsl(220 12% 50%);
+}
+
+/* --- Elementos analíticos --- */
+.report-grid-1 {
+  grid-template-columns: 1fr;
 }
 
 .report-row-total td {
@@ -1172,6 +1270,91 @@
   color: hsl(150 45% 28%);
 }
 
+.report-checklist {
+  margin: 0;
+  padding-left: 4.5mm;
+  list-style: disc;
+  font-size: 8.5pt;
+  color: hsl(220 12% 35%);
+}
+
+.report-checklist li {
+  text-align: justify;
+  text-align-last: left;
+}
+
+.report-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6mm;
+  height: 34mm;
+  border-bottom: 1px solid hsl(220 15% 85%);
+  margin: 4mm 0 2mm;
+  position: relative;
+  padding-left: 2mm;
+}
+
+.report-chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 1.5mm;
+}
+
+.report-chart-col > span {
+  font-size: 8pt;
+  color: hsl(220 12% 45%);
+}
+
+.report-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5mm;
+  height: 100%;
+}
+
+.report-bar {
+  width: 7mm;
+  border-radius: 0.8mm 0.8mm 0 0;
+}
+
+.report-bar-fat {
+  background: var(--primary);
+}
+
+.report-bar-ebitda {
+  background: var(--gold);
+}
+
+.report-chart-legend {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  gap: 4mm;
+  font-size: 8pt;
+  color: hsl(220 12% 45%);
+}
+
+.report-chart-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 2.5mm;
+  height: 2.5mm;
+  margin-right: 1.2mm;
+  border-radius: 0.5mm;
+}
+
+.report-legend-fat::before {
+  background: var(--primary);
+}
+
+.report-legend-ebitda::before {
+  background: var(--gold);
+}
+
 .report-conf {
   display: flex;
   flex-direction: column;
@@ -1194,7 +1377,15 @@
 
 .report-conf-fill {
   height: 100%;
-  background: hsl(var(--gold));
+  background: var(--gold);
+}
+
+.report-conf-missing {
+  margin: 1.2mm 0 0;
+  font-size: 8pt;
+  color: hsl(220 12% 50%);
+  text-align: justify;
+  text-align-last: left;
 }
 
 @media print {
