@@ -10,7 +10,7 @@ import {
   CONF_EXPLICACAO,
   OUTRO,
   OUTRA_INDUSTRIA,
-} from "./valuation";
+} from "./valuation.ts";
 
 /** Subconjunto de campos do lead necessários ao relatório. */
 export type ReportLead = {
