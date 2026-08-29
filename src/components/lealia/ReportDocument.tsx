@@ -770,23 +770,20 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 <table className="report-table report-table-text">
                   <thead>
                     <tr>
-                      <th>Driver</th>
-                      <th>Evidência disponível</th>
-                      <th>Impacto</th>
-                      <th>Estado</th>
+                      <th style={{ width: "26%" }}>Driver</th>
+                      <th>Descrição</th>
                     </tr>
                   </thead>
                   <tbody>
                     {d.drivers.map((dr) => (
                       <tr key={dr.driver}>
                         <td>{dr.driver}</td>
-                        <td>{dr.evidencia}</td>
-                        <td>{dr.impacto}</td>
-                        <td>{dr.estado}</td>
+                        <td>{dr.descricao}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+
               ) : (
                 <p className="report-p">
                   Não foram identificados drivers de valor específicos com base na informação disponibilizada.
