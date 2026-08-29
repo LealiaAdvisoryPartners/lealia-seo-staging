@@ -197,97 +197,125 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     tem_anos_anteriores: historico.length > 1,
   };
 
-  // --- Drivers de valor — apenas com evidência efetivamente preenchida ---
-  type Driver = { driver: string; evidencia: string; impacto: string; estado: string };
+  // --- Drivers de valor — apenas fatores efetivamente favoráveis ---
+  // Regra: um candidato só entra na tabela quando a evidência disponível é
+  // positiva. Situações desfavoráveis (concentração, dependência, capex
+  // elevado, contração) nunca aparecem aqui — pertencem à secção de riscos.
+  type Driver = { driver: string; descricao: string };
   const margemFmt = margem_ebitda_ajustada !== null ? pct1(margem_ebitda_ajustada) : null;
   const capexRacio = r && typeof capex === "number" && r.ebitda_base > 0 ? capex / r.ebitda_base : null;
+  const top1 = lead.pct_top1_clientes;
+  const ebitdaBase = r?.ebitda_base ?? null;
+  const caixa = lead.caixa_e_depositos;
+  const divida = lead.divida_financeira;
+  const posicaoLiquida =
+    typeof caixa === "number" || typeof divida === "number" ? (caixa ?? 0) - (divida ?? 0) : null;
+  const backlog = lead.backlog_contratado;
+  const backlogRacio = typeof backlog === "number" && fat1 > 0 ? backlog / fat1 : null;
+  const geografiaInternacional =
+    !!lead.geografia_clientes && !lead.geografia_clientes.startsWith("Nacional");
+  const multiUnidade =
+    !!lead.unidades && lead.unidades !== "Localização única" && lead.unidades !== "Não aplicável";
+  const imovelAvaliadoExternamente =
+    imovelNoPerimetro &&
+    typeof lead.valorizacao_imovel === "number" &&
+    (lead.metodo_avaliacao_imovel === "Avaliação independente recente" ||
+      lead.metodo_avaliacao_imovel === "Avaliação bancária");
 
+  // Ordenados por relevância para o comprador: primeiro o que move o múltiplo.
   const driversCandidatos: Array<[boolean, Driver]> = [
     [
-      !!lead.unidades && lead.unidades !== "Não aplicável",
+      flags.crescimento_forte,
       {
-        driver: "Presença operacional",
-        evidencia: `Unidades / localizações: ${lead.unidades}`,
-        impacto:
-          lead.unidades === "Localização única"
-            ? "A concentração numa única localização limita a escala e aumenta o risco operacional"
-            : "A presença multi-unidade demonstra replicabilidade do modelo e suporta um múltiplo superior",
-        estado: "Confirmado",
+        driver: "Crescimento sustentado",
+        descricao:
+          "A faturação evoluiu positivamente no período analisado. Trajetórias de crescimento demonstradas suportam o topo do intervalo de múltiplos e reduzem o peso relativo do risco de execução na negociação.",
       },
     ],
     [
-      typeof top5 === "number",
+      (typeof fat1 === "number" && fat1 >= 20_000_000) || (ebitdaBase !== null && ebitdaBase >= 2_000_000),
       {
-        driver: "Diversificação de clientes",
-        evidencia: `Cinco maiores clientes: ${top5}% da faturação`,
-        impacto:
-          typeof top5 === "number" && top5 < 40
-            ? "Menor concentração reduz o risco de dependência comercial"
-            : "A concentração indicada tende a ser refletida no múltiplo e no desenho de garantias",
-        estado: "Confirmado",
+        driver: "Dimensão relevante",
+        descricao: `Com faturação de ${eur(fat1)} e EBITDA normalizado de ${eur(ebitdaBase)}, a empresa situa-se acima do limiar de dimensão a partir do qual investidores institucionais e compradores estratégicos internacionais competem ativamente, alargando o universo de contrapartes.`,
       },
     ],
     [
-      !!depGest,
+      margem_ebitda_ajustada !== null && margem_ebitda_ajustada >= 15,
       {
-        driver: "Autonomia da gestão",
-        evidencia: `Dependência do acionista na gestão: ${depGest}`,
-        impacto:
-          depGest === "Baixa"
-            ? "Uma operação menos dependente do acionista reduz o risco de transição"
-            : "A transferibilidade da gestão será um tema central na negociação e na due diligence",
-        estado: "Confirmado",
+        driver: "Rendibilidade acima da média",
+        descricao: `A margem EBITDA normalizada de ${margemFmt} evidencia poder de fixação de preço e disciplina de custos, atributos que os compradores remuneram com múltiplos superiores aos de referência setorial.`,
       },
     ],
     [
-      !!margemFmt,
+      capexRacio !== null && capexRacio <= 0.15,
       {
-        driver: "Rendibilidade operacional",
-        evidencia: `Margem EBITDA normalizada de ${margemFmt}`,
-        impacto: "Margens mais elevadas e sustentáveis tendem a aumentar a atratividade do negócio",
-        estado: "Confirmado",
+        driver: "Forte conversão de EBITDA em caixa",
+        descricao: `O CAPEX recorrente representa apenas ${capexRacio !== null ? pct1(capexRacio * 100) : "—"} do EBITDA normalizado. Um modelo pouco intensivo em investimento liberta caixa para serviço de dívida de aquisição, o que é determinante para compradores financeiros.`,
       },
     ],
     [
-      capexRacio !== null,
+      flags.dependencia_gestao_baixa,
       {
-        driver: "Intensidade de investimento",
-        evidencia: `CAPEX recorrente equivalente a ${capexRacio !== null ? pct1(capexRacio * 100) : "—"} do EBITDA normalizado`,
-        impacto:
-          capexRacio !== null && capexRacio <= 0.3
-            ? "Menor necessidade de investimento recorrente favorece a conversão de EBITDA em caixa"
-            : "A necessidade de investimento recorrente pode limitar a conversão de EBITDA em caixa",
-        estado: "Confirmado",
+        driver: "Gestão autónoma do acionista",
+        descricao:
+          "A operação funciona com baixa dependência do acionista na gestão corrente. A existência de uma segunda linha capaz de assegurar continuidade reduz o risco de transição e encurta períodos de permanência exigidos pelo comprador.",
       },
     ],
     [
-      typeof lead.idade_empresa === "number" && lead.idade_empresa > 0,
+      !!depFat?.startsWith("Baixa"),
       {
-        driver: "Histórico operacional",
-        evidencia: `${lead.idade_empresa} anos de atividade`,
-        impacto:
-          typeof lead.idade_empresa === "number" && lead.idade_empresa >= 10
-            ? "Um histórico prolongado tende a reduzir o risco operacional percebido"
-            : "Um histórico mais curto exige maior suporte documental na avaliação",
-        estado: "Confirmado",
+        driver: "Relações comerciais transferíveis",
+        descricao:
+          "A faturação não depende materialmente da relação pessoal do acionista com os clientes, o que reduz a probabilidade de erosão de receita após o closing e limita a necessidade de earn-outs ou garantias adicionais.",
       },
     ],
     [
-      !!lead.geografia_clientes,
+      (typeof top5 === "number" && top5 <= 40) || (typeof top1 === "number" && top1 <= 15),
       {
-        driver: "Diversificação geográfica",
-        evidencia: `Distribuição de clientes: ${lead.geografia_clientes}`,
-        impacto: "Menor dependência de um só mercado pode reduzir o risco comercial",
-        estado: "Confirmado",
+        driver: "Carteira de clientes diversificada",
+        descricao: `${typeof top5 === "number" ? `Os cinco maiores clientes representam ${top5}% da faturação` : `O maior cliente representa ${top1}% da faturação`}, um nível de concentração confortável que reduz o risco comercial percebido e diminui a pressão sobre o pacote de garantias.`,
       },
     ],
     [
-      imovelNoPerimetro && typeof lead.valorizacao_imovel === "number",
+      backlogRacio !== null && backlogRacio >= 0.25,
       {
-        driver: "Imóvel incluído no perímetro",
-        evidencia: `Imóvel próprio valorizado em ${eur(lead.valorizacao_imovel)}`,
-        impacto: "Acresce ao Equity Value, com o EBITDA ajustado por renda teórica para evitar dupla contagem",
-        estado: "Confirmado",
+        driver: "Visibilidade de receita contratada",
+        descricao: `O backlog contratado de ${eur(backlog)} equivale a ${backlogRacio !== null ? pct1(backlogRacio * 100) : "—"} da faturação anual, conferindo previsibilidade ao plano de negócios apresentado ao comprador.`,
+      },
+    ],
+    [
+      multiUnidade,
+      {
+        driver: "Modelo replicável em várias unidades",
+        descricao: `A operação em ${(lead.unidades ?? "").toLowerCase()} demonstra que o modelo de negócio é replicável e não depende de um único ativo ou equipa, suportando teses de consolidação e de expansão pós-aquisição.`,
+      },
+    ],
+    [
+      geografiaInternacional,
+      {
+        driver: "Exposição internacional",
+        descricao: `A distribuição de clientes (${lead.geografia_clientes}) reduz a dependência de um único mercado e torna a empresa relevante para compradores estrangeiros que procuram presença na região.`,
+      },
+    ],
+    [
+      posicaoLiquida !== null && posicaoLiquida > 0,
+      {
+        driver: "Posição líquida de caixa",
+        descricao: `A empresa apresenta uma posição líquida positiva de ${eur(posicaoLiquida)}, o que acresce diretamente ao Equity Value e reforça a capacidade negocial do acionista quanto ao mecanismo de preço.`,
+      },
+    ],
+    [
+      typeof lead.idade_empresa === "number" && lead.idade_empresa >= 10,
+      {
+        driver: "Track record consolidado",
+        descricao: `${lead.idade_empresa} anos de atividade sustentam a leitura de resiliência do modelo de negócio ao longo de diferentes ciclos e reduzem o risco operacional percebido pelo comprador.`,
+      },
+    ],
+    [
+      imovelAvaliadoExternamente,
+      {
+        driver: "Ativo imobiliário valorizado externamente",
+        descricao: `O imóvel próprio incluído no perímetro está suportado por ${(lead.metodo_avaliacao_imovel ?? "").toLowerCase()} (${eur(lead.valorizacao_imovel)}), acrescendo ao Equity Value com um valor defensável em due diligence.`,
       },
     ],
   ];
@@ -295,7 +323,8 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
   const drivers: Driver[] = driversCandidatos
     .filter(([c]) => c)
     .map(([, d]) => d)
-    .slice(0, 4);
+    .slice(0, 6);
+
 
   // Recomendações derivadas dos drivers.
   const recomendacoes: string[] = [];
