@@ -204,6 +204,54 @@ function MapaTabela({ dcf, linhas, head = true }: { dcf: Dcf; linhas: MapaLinha[
   );
 }
 
+function DcfAssumptionsPage({ d, numero }: { d: ReportData; numero: number }) {
+  const dcf = d.dcf;
+  if (!dcf) {
+    return (
+      <Page numero={numero} titulo="DCF Assumptions">
+        <H>Transparência de pressupostos</H>
+        <div className="report-note">{d.dcf_motivo ?? "Sem análise DCF disponível."}</div>
+      </Page>
+    );
+  }
+  return (
+    <Page numero={numero} titulo="DCF Assumptions">
+      <section className="report-dcf-assumptions">
+        <H>Transparência de pressupostos</H>
+        <p className="report-small report-dcf-assumptions-intro">
+          Os pressupostos abaixo combinam a informação introduzida no formulário com referências setoriais de mercado.
+          Os inputs financeiros (EBITDA normalizado, capex e D&A) são convertidos em percentagem da receita do ano de
+          referência e mantidos estáveis no horizonte, por ausência de plano de negócios. As taxas de crescimento, a
+          margem projetada e os parâmetros de custo de capital seguem um critério conservador — na dúvida, adota-se o
+          valor que resulta numa avaliação mais prudente. Os proxies setoriais aplicam-se apenas quando o formulário não
+          recolhe o dado correspondente e estão identificados como Assumption.
+        </p>
+        <table className="report-table report-table-compact report-table-text">
+          <thead>
+            <tr>
+              <th>Parâmetro</th>
+              <th>Valor</th>
+              <th>Origem</th>
+              <th>Método / fonte</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dcf.pressupostos.map((p) => (
+              <tr key={p.label}>
+                <td>{p.label}</td>
+                <td>{p.label.startsWith("EBITDA normalizado") ? formatEUR(Number(p.valor)) : p.valor}</td>
+                <td>{p.origem}</td>
+                <td>{p.nota ?? "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+    </Page>
+  );
+}
+
 function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
   const dcf = d.dcf;
   if (!dcf) {
@@ -484,38 +532,6 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
         A célula destacada corresponde ao cenário base apresentado no slide anterior. As matrizes isolam o efeito de
         cada variável, mantendo constantes os restantes pressupostos.
       </p>
-      <section className="report-dcf-assumptions">
-        <H>Transparência de pressupostos</H>
-        <p className="report-small report-dcf-assumptions-intro">
-          Os pressupostos abaixo combinam a informação introduzida no formulário com referências setoriais de mercado.
-          Os inputs financeiros (EBITDA normalizado, capex e D&A) são convertidos em percentagem da receita do ano de
-          referência e mantidos estáveis no horizonte, por ausência de plano de negócios. As taxas de crescimento, a
-          margem projetada e os parâmetros de custo de capital seguem um critério conservador — na dúvida, adota-se o
-          valor que resulta numa avaliação mais prudente. Os proxies setoriais aplicam-se apenas quando o formulário não
-          recolhe o dado correspondente e estão identificados como Assumption.
-        </p>
-        <table className="report-table report-table-compact report-table-text">
-          <thead>
-            <tr>
-              <th>Parâmetro</th>
-              <th>Valor</th>
-              <th>Origem</th>
-              <th>Método / fonte</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dcf.pressupostos.map((p) => (
-              <tr key={p.label}>
-                <td>{p.label}</td>
-                <td>{p.label.startsWith("EBITDA normalizado") ? formatEUR(Number(p.valor)) : p.valor}</td>
-                <td>{p.origem}</td>
-                <td>{p.nota ?? "—"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
     </Page>
   );
 }
@@ -532,7 +548,8 @@ const LOCKED_PAGES: { numero: number; titulo: string }[] = [
   { numero: 10, titulo: "Preparação para o mercado" },
   { numero: 11, titulo: "DCF Valuation" },
   { numero: 12, titulo: "Sensitivity Analysis" },
-  { numero: 13, titulo: "Processo de M&A" },
+  { numero: 13, titulo: "DCF Assumptions" },
+  { numero: 14, titulo: "Processo de M&A" },
 ];
 
 const irParaAgendamento = () => {
@@ -1256,9 +1273,12 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             {/* 12 — Sensitivity Analysis */}
             <SensitivityPage d={d} numero={12} />
 
-            {/* 13 — Processo de M&A */}
+            {/* 13 — Pressupostos do DCF */}
+            <DcfAssumptionsPage d={d} numero={13} />
 
-            <Page numero={13} titulo="Processo de M&A">
+            {/* 14 — Processo de M&A */}
+
+            <Page numero={14} titulo="Processo de M&A">
               <H>Como decorre um processo de M&amp;A</H>
               <div className="report-phases report-phases-2 report-phases-tall">
                 {FASES.map((f) => (
@@ -1282,8 +1302,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
           LOCKED_PAGES.map((p) => <LockedPage key={p.numero} numero={p.numero} titulo={p.titulo} />)
         )}
 
-        {/* 14 — Próximo passo e contactos */}
-        <Page numero={14} titulo="Próximo passo e contactos" id="agendar">
+        {/* 15 — Próximo passo e contactos */}
+        <Page numero={15} titulo="Próximo passo e contactos" id="agendar">
           <div className="report-final">
             <div className="report-final-left">
               <h2 className="report-closing-title">Obrigado.</h2>
