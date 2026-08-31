@@ -147,7 +147,7 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
 export type ReportModo = "completo" | "teaser";
 
 const LOCKED_PAGES: { numero: number; titulo: string }[] = [
-  { numero: 4, titulo: "Qualidade dos resultados" },
+  { numero: 4, titulo: "Âmbito e limitações" },
   { numero: 5, titulo: "Método e alternativas" },
   { numero: 6, titulo: "Ajustes ao múltiplo" },
   { numero: 7, titulo: "Cenários e sensibilidade" },
@@ -363,6 +363,30 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </tbody>
               </table>
               <p className="report-small">{d.nota_historico}</p>
+
+              <H>Crescimento (CAGR)</H>
+              {d.qualidade.tem_serie ? (
+                <table className="report-table report-table-compact">
+                  <thead>
+                    <tr>
+                      <th>Indicador</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>CAGR da faturação</td>
+                      <td>{d.qualidade.cagr_faturacao ?? "—"}</td>
+                    </tr>
+                    <tr>
+                      <td>CAGR do EBITDA</td>
+                      <td>{d.qualidade.cagr_ebitda ?? "—"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              ) : (
+                <p className="report-small">Sem informação suficiente</p>
+              )}
             </div>
             <div>
               <H>Normalização do EBITDA</H>
@@ -418,6 +442,10 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <td>% Concentração no top 5 clientes</td>
                     <td>{d.concentracao_top5 || "Não indicado"}</td>
                   </tr>
+                  <tr>
+                    <td>Clientes ativos</td>
+                    <td>{d.num_clientes_ativos || "Não indicado"}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -426,83 +454,55 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
 
         {modo === "completo" ? (
           <>
-            {/* 4 — Qualidade dos resultados */}
-            <Page numero={4} titulo="Qualidade dos resultados">
-              <H>Qualidade dos resultados</H>
-              {d.qualidade.apenas_um_ano ? <div className="report-note">{d.qualidade.nota_um_ano}</div> : null}
+            {/* 4 — Âmbito e limitações */}
+            <Page numero={4} titulo="Âmbito e limitações">
+              <H>Âmbito e limitações deste relatório</H>
+              <p className="report-p">{DISCLAIMER}</p>
               <div className="report-two">
                 <div>
-                  {d.qualidade.tem_serie ? (
-                    <>
-                      <div className="report-grid report-grid-1 report-compact">
-                        <Kv label="CAGR da faturação" value={d.qualidade.cagr_faturacao ?? "—"} />
-                        <Kv label="CAGR do EBITDA" value={d.qualidade.cagr_ebitda ?? "—"} />
-                        <Kv label="Margem EBITDA normalizada" value={d.margem_ebitda_ajustada_formatada} />
-                      </div>
-                      <table className="report-table report-table-compact">
-                        <thead>
-                          <tr>
-                            <th>Ano</th>
-                            <th>Faturação</th>
-                            <th>EBITDA</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {d.grafico_evolucao.map((g) => (
-                            <tr key={g.ano}>
-                              <td>{g.ano}</td>
-                              <td>{g.faturacao_formatada}</td>
-                              <td>{g.ebitda_formatado}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                      {d.qualidade.margens.length ? (
-                        <div className="report-conf">
-                          {d.qualidade.margens.map((m) => (
-                            <div key={m.ano} className="report-conf-row">
-                              <div className="report-conf-head">
-                                <span>Margem EBITDA {m.ano}</span>
-                                <strong>{m.margem}</strong>
-                              </div>
-                              <div className="report-conf-track">
-                                <div
-                                  className="report-conf-fill"
-                                  style={{ width: `${Math.max(0, Math.min(100, m.valor * 2))}%` }}
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : null}
-                      {d.qualidade.comentario_margens ? (
-                        <p className="report-small">{d.qualidade.comentario_margens}</p>
-                      ) : null}
-                    </>
-                  ) : (
-                    <p className="report-p">
-                      Não existem períodos financeiros suficientes para analisar crescimento, evolução de margens ou
-                      estabilidade dos resultados. Esta é a principal lacuna de informação a resolver antes de ir a
-                      mercado.
-                    </p>
-                  )}
+                  <H>Natureza do documento</H>
+                  <ul className="report-list report-list-disc report-compact">
+                    <li>
+                      Trata-se de uma avaliação indicativa preliminar, elaborada exclusivamente a partir da informação
+                      fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.
+                    </li>
+                    <li>
+                      Não constitui aconselhamento financeiro, fiscal, contabilístico ou jurídico, nem uma
+                      recomendação de investimento ou desinvestimento.
+                    </li>
+                    <li>
+                      Não configura uma avaliação formal (fairness opinion) para efeitos legais, fiscais,
+                      contabilísticos ou regulatórios, nem uma proposta contratual ou oferta vinculativa.
+                    </li>
+                    <li>
+                      O documento destina-se ao uso exclusivo do destinatário identificado na capa e não deve ser
+                      divulgado a terceiros sem autorização escrita da Lealia Advisory Partners.
+                    </li>
+                  </ul>
                 </div>
                 <div>
-                  <H>Leitura complementar</H>
+                  <H>Limitações e fatores de variação</H>
                   <ul className="report-list report-list-disc report-compact">
-                    <li>{d.qualidade.conversao_caixa}</li>
-                    <li>{d.qualidade.fundo_maneio}</li>
-                    <li>{d.qualidade.ajustamentos}</li>
-                    {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
-                    {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
                     <li>
-                      A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
-                      fase e devem ser preparados antes de um processo formal.
+                      Os valores apresentados dependem da qualidade, exatidão e completude dos dados introduzidos.
+                      Dados incompletos ou incorretos alteram materialmente o resultado.
+                    </li>
+                    <li>
+                      As referências de mercado utilizadas refletem condições vigentes à data de elaboração e podem
+                      variar rapidamente com o contexto macroeconómico, setorial e de financiamento.
+                    </li>
+                    <li>
+                      O preço efetivo de uma transação depende do perfil do comprador, da estrutura do negócio, das
+                      garantias, dos ajustamentos de closing e do processo negocial.
+                    </li>
+                    <li>
+                      Uma avaliação definitiva exige due diligence financeira, fiscal, legal e operacional, bem como a
+                      validação documental dos ajustamentos ao EBITDA.
                     </li>
                   </ul>
                   <div className="report-note">
-                    A qualidade dos resultados é o principal determinante do desconto ou prémio aplicado em due
-                    diligence. Cada ajustamento ao EBITDA deve ter suporte documental.
+                    A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva
+                    neste documento.
                   </div>
                 </div>
               </div>
