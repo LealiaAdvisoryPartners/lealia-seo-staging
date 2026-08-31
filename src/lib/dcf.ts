@@ -159,8 +159,6 @@ const SPREAD_PME = 0.01;
 export const TERMINAL_GROWTH = 0.02;
 export const CRESCIMENTO_ESTABILIZADO = 0.035;
 export const ANO_ESTABILIZACAO = 5;
-/** Teto prudente para o crescimento inicial da receita numa avaliação indicativa. */
-const CRESCIMENTO_INICIAL_MAX = 0.06;
 const HORIZONTE = 8;
 
 export type DcfInput = {
@@ -202,7 +200,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     crescimento_inicial = Math.min(ref.crescimento_ref, CRESCIMENTO_ESTABILIZADO);
     crescimento_inicial_origem = "Assumption";
   }
-  crescimento_inicial = Math.min(Math.max(crescimento_inicial, -0.05), CRESCIMENTO_INICIAL_MAX);
+  crescimento_inicial = Math.max(crescimento_inicial, -0.05);
 
   // --- Margem EBITDA de referência (margem normalizada do último exercício) ---
   const margem_ebitda = input.ebitda_normalizado / receitaBase;
@@ -490,7 +488,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       origem: crescimento_inicial_origem,
       nota:
         crescimento_inicial_origem === "Input"
-          ? `CAGR histórico da receita, limitado por prudência a um máximo de ${pct(CRESCIMENTO_INICIAL_MAX)} para não extrapolar dinâmicas recentes para todo o horizonte.`
+          ? "CAGR histórico da receita, usado como ponto de partida e convergido linearmente para o crescimento estabilizado ao longo do horizonte."
           : "Histórico inferior a três exercícios: aplicada a taxa de crescimento de referência do setor, limitada ao crescimento estabilizado.",
     },
     {

@@ -449,15 +449,10 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
       </Page>
     );
   }
-  // Pressupostos já descritos e explicados nos slides anteriores (mapa de fluxos,
-  // pressupostos do forecast e tabela do WACC) não são repetidos aqui.
-  const PRESSUPOSTOS_JA_DESCRITOS = [
-    "Depreciações & amortizações",
-    "Capex recorrente",
-    "Fundo de maneio",
+  // Lista fechada de pressupostos a apresentar na secção de transparência.
+  const PRESSUPOSTOS_TRANSPARENCIA = [
     "Crescimento inicial da receita",
     "Margem EBITDA projetada",
-    "Taxa de imposto (CIT)",
     "Risk-free rate",
     "Beta unlevered / levered",
     "Equity Risk Premium",
@@ -468,8 +463,11 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
     "Estrutura de capital (D / E)",
     "Crescimento estabilizado (anos 5-8)",
     "Crescimento na perpetuidade",
+    "Convenção de desconto",
   ];
-  const pressupostosExtra = dcf.pressupostos.filter((p) => !PRESSUPOSTOS_JA_DESCRITOS.includes(p.label));
+  const pressupostosExtra = PRESSUPOSTOS_TRANSPARENCIA.map((label) =>
+    dcf.pressupostos.find((p) => p.label === label),
+  ).filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
     <Page numero={numero} titulo="Sensitivity Analysis">
@@ -515,36 +513,32 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
         cada variável, mantendo constantes os restantes pressupostos.
       </p>
 
-      <section className="report-dcf-bottom report-sens-assumptions">
-        <div>
-          <H>Transparência de pressupostos</H>
-          <p className="report-small report-dcf-assumptions-intro">
-            Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
-            mercado, seguindo um critério conservador — na dúvida, adota-se o valor que resulta numa avaliação mais
-            prudente. Os parâmetros já apresentados nos slides anteriores (crescimento, margens, capex, D&amp;A, imposto
-            e componentes do custo de capital) não são aqui repetidos; abaixo ficam apenas os pressupostos adicionais.
-          </p>
-        </div>
-        <div>
-          <table className="report-table report-table-compact report-table-text">
-            <thead>
-              <tr>
-                <th>Parâmetro</th>
-                <th>Valor</th>
-                <th>Método / fonte</th>
+      <section className="report-sens-assumptions">
+        <H>Transparência de pressupostos</H>
+        <p className="report-small report-dcf-assumptions-intro">
+          Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
+          mercado, seguindo um critério conservador — na dúvida, adota-se o valor que resulta numa avaliação mais
+          prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou
+          método de derivação.
+        </p>
+        <table className="report-table report-table-compact report-table-text">
+          <thead>
+            <tr>
+              <th>Parâmetro</th>
+              <th>Valor</th>
+              <th>Método / fonte</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pressupostosExtra.map((p) => (
+              <tr key={p.label}>
+                <td>{p.label}</td>
+                <td>{p.valor}</td>
+                <td>{p.nota ?? "—"}</td>
               </tr>
-            </thead>
-            <tbody>
-              {pressupostosExtra.map((p) => (
-                <tr key={p.label}>
-                  <td>{p.label}</td>
-                  <td>{p.label.startsWith("EBITDA normalizado") ? formatEUR(Number(p.valor)) : p.valor}</td>
-                  <td>{p.nota ?? "—"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </section>
     </Page>
   );
