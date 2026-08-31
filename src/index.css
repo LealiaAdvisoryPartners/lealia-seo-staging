@@ -1244,6 +1244,21 @@
   list-style: disc;
 }
 
+/* Slide 4 — Leitura complementar em duas colunas para caber na página */
+.report-leitura {
+  columns: 2;
+  column-gap: 10mm;
+  font-size: 8.3pt;
+  line-height: 1.35;
+}
+
+.report-leitura li {
+  break-inside: avoid;
+  margin-bottom: 1.6mm;
+  text-align: justify;
+  text-align-last: left;
+}
+
 .report-inline-note {
   display: block;
   font-style: normal;
