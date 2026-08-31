@@ -504,6 +504,23 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   </div>
                 </div>
               </div>
+
+              <H>Leitura complementar</H>
+              <ul className="report-list report-list-disc report-compact">
+                <li>{d.qualidade.conversao_caixa}</li>
+                <li>{d.qualidade.fundo_maneio}</li>
+                <li>{d.qualidade.ajustamentos}</li>
+                {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
+                {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
+                <li>
+                  A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
+                  fase e devem ser preparados antes de um processo formal.
+                </li>
+              </ul>
+              <div className="report-note">
+                A qualidade dos resultados é o principal determinante do desconto ou prémio aplicado em due diligence.
+                Cada ajustamento ao EBITDA deve ter suporte documental.
+              </div>
             </Page>
 
             {/* 5 — Método e alternativas */}
