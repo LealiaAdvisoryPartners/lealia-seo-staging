@@ -25,5 +25,5 @@ const lead = {
 
 export default function DcfPreview() {
   const d = buildReportFromLead(lead);
-  return <ReportDocument data={d} modo="completo" />;
+  return <ReportDocument d={d} modo="completo" />;
 }
