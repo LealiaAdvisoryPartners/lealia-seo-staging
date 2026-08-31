@@ -509,14 +509,16 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </div>
               </div>
 
-              <H style={{ marginTop: "5mm" }}>Leitura complementar</H>
-              <ul className="report-list report-list-disc report-compact">
-                <li>{d.qualidade.conversao_caixa}</li>
-                <li>{d.qualidade.fundo_maneio}</li>
-                <li>{d.qualidade.ajustamentos}</li>
-                {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
-                {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
-                <li>
+              <H style={{ marginTop: "3mm", marginBottom: "2.5mm" }}>Leitura complementar</H>
+              <ul className="report-list report-list-disc report-compact" style={{ lineHeight: 1.35 }}>
+                <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.conversao_caixa}</li>
+                <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.fundo_maneio}</li>
+                <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.ajustamentos}</li>
+                {d.qualidade.concentracao ? (
+                  <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.concentracao}</li>
+                ) : null}
+                {d.qualidade.backlog ? <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.backlog}</li> : null}
+                <li style={{ marginBottom: "0.8mm" }}>
                   A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
                   fase e devem ser preparados antes de um processo formal.
                 </li>
