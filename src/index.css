@@ -1720,3 +1720,13 @@
 .report-dcf-bottom .report-h2 {
   margin-bottom: 0.5mm;
 }
+
+.report-dcf-assumptions .report-table td {
+  padding-top: 0.35mm;
+  padding-bottom: 0.35mm;
+  font-size: 6.1pt;
+}
+
+.report-dcf-assumptions .report-h2 {
+  margin-bottom: 0.5mm;
+}
