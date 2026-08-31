@@ -1655,3 +1655,32 @@
   outline-offset: -0.6mm;
   font-weight: 700;
 }
+
+.report-dcf-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4mm;
+}
+
+.report-dcf-unit {
+  font-size: 6.6pt;
+  color: hsl(220 10% 50%);
+}
+
+.report-dcf-formula {
+  font-size: 6.4pt;
+  color: hsl(220 10% 45%);
+  margin: 0.5mm 0 0;
+  line-height: 1.35;
+}
+
+.report-dcf .report-dcf-map {
+  margin: 1mm 0 0;
+}
+
+.report-dcf-assumptions-intro {
+  margin: 0 0 1mm;
+  font-size: 6.2pt;
+  line-height: 1.35;
+}
