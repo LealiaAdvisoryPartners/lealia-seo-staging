@@ -783,5 +783,5 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
 export const formatEUR = (n: number) => {
   const neg = n < 0;
   const s = Math.abs(Math.round(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
-  return `${neg ? "-\u00a0" : ""}${s}\u00a0€`;
+  return `${neg ? "-" : ""}${s}\u00a0€`;
 };

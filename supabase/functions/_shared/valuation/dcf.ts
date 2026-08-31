@@ -504,7 +504,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     { label: "Risk-free rate", valor: pct(risk_free), origem: "Assumption", nota: fontes[0]!.fonte },
     {
       label: "Beta unlevered / levered",
-      valor: `${ref.beta_unlevered.toFixed(2)} / ${beta_levered.toFixed(2)}`,
+      valor: `${ref.beta_unlevered.toFixed(2).replace(".", ",")} / ${beta_levered.toFixed(2).replace(".", ",")}`,
       origem: "Assumption",
       nota: fontes[3]!.fonte,
     },

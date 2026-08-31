@@ -151,7 +151,7 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
 const grupos = (n: number) => {
   const neg = n < 0;
   const s = Math.abs(Math.round(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
-  return (neg ? "-\u00a0" : "") + s;
+  return (neg ? "-" : "") + s;
 };
 const kEur = (v: number) => grupos(v / 1000);
 
