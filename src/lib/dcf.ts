@@ -500,12 +500,10 @@ export function calcularDCF(input: DcfInput): DcfResult {
     {
       label: "Margem EBITDA projetada",
       valor: pct(margem_ebitda),
-      origem: margemHistorica !== null ? "Input" : "Assumption",
-      nota:
-        margemHistorica !== null
-          ? "Critério conservador: adotada a menor entre a margem média histórica e a margem normalizada do ano de referência, mantida constante no horizonte (sem ganhos de eficiência assumidos)."
-          : "Margem normalizada do ano de referência, mantida constante no horizonte por ausência de histórico suficiente para inferir tendência.",
+      origem: "Input",
+      nota: "Margem EBITDA normalizada do último exercício (EBITDA normalizado sobre a receita do ano de referência), mantida constante ao longo do horizonte (sem ganhos de eficiência assumidos).",
     },
+
     { label: "Taxa de imposto (CIT)", valor: pct(cit), origem: "Assumption", nota: `${input.pais} · ${cit_nota}` },
     { label: "Risk-free rate", valor: pct(risk_free), origem: "Assumption", nota: fontes[0]!.fonte },
     {
