@@ -16,14 +16,18 @@ export type DcfLinhaAno = {
   crescimento: number | null;
   receita: number;
   ebitda: number;
+  margem_ebitda: number;
   ebit: number;
+  imposto: number;
   nopat: number;
   da: number;
   capex: number;
   dnwc: number;
   fcff: number;
+  fator_desconto: number | null;
   pv: number | null;
 };
+
 
 export type DcfMatriz = {
   titulo: string;
