@@ -483,21 +483,14 @@
     padding: 1rem 0.5rem 2.5rem;
   }
   .report-doc {
-    zoom: calc((100vw - 1rem) / 1122.52);
-  }
-  /* Fallback para browsers sem suporte a zoom */
-  @supports not (zoom: 1) {
-    .report-doc {
-      width: 297mm;
-      transform-origin: top left;
-      transform: scale(calc((100vw - 1rem) / 1122.52));
-    }
+    zoom: var(--report-zoom, 1);
   }
   .report-toolbar {
     align-items: flex-start;
     flex-direction: column;
   }
 }
+
 
 
 .report-head {
