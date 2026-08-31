@@ -56,9 +56,14 @@ export type DcfResult =
       wacc: number;
       cit: number;
       cit_nota: string;
+      size_premium: number;
+      premio_especifico: number;
+      fontes: { parametro: string; fonte: string }[];
+      nota_reconciliacao?: string;
       // Forecast
       crescimento_inicial: number;
       crescimento_inicial_origem: OrigemDado;
+
       ano_estabilizacao: number;
       crescimento_estabilizado: number;
       terminal_growth: number;
