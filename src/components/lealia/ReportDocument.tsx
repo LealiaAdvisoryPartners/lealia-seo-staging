@@ -150,12 +150,59 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
 }
 
 
+const nbsp = (t: string) => t.replace(/[\s\u202f\u2009\u00a0]/g, "\u00a0");
 const kEur = (v: number) =>
-  new Intl.NumberFormat("pt-PT", { maximumFractionDigits: 0 }).format(Math.round(v / 1000));
+  nbsp(new Intl.NumberFormat("pt-PT", { maximumFractionDigits: 0 }).format(Math.round(v / 1000)));
 const pctFmt = (v: number, casas = 1) => `${(v * 100).toFixed(casas).replace(".", ",")}%`;
 const xFmt = (v: number | null) => (v === null ? "—" : `${v.toFixed(2).replace(".", ",")}x`);
+const fatorFmt = (v: number) => v.toFixed(3).replace(".", ",");
 
 type Dcf = NonNullable<ReportData["dcf"]>;
+type DcfAno = Dcf["anos"][number];
+type MapaLinha = {
+  label: string;
+  get: (a: DcfAno) => number | null;
+  tv?: number | null;
+  total?: boolean;
+  fmt?: (v: number) => string;
+};
+
+function MapaTabela({ dcf, linhas }: { dcf: Dcf; linhas: MapaLinha[] }) {
+  return (
+    <table className="report-table report-table-compact report-dcf-map">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          {dcf.anos.map((a) => (
+            <th key={a.ano} className={a.tipo === "forecast" ? "report-dcf-fc" : "report-dcf-hist"}>
+              {a.ano}
+              {a.tipo === "forecast" ? "F" : "A"}
+            </th>
+          ))}
+          <th className="report-dcf-tv">TV</th>
+        </tr>
+      </thead>
+      <tbody>
+        {linhas.map((l) => (
+          <tr key={l.label} className={l.total ? "report-row-total" : undefined}>
+            <td>{l.label}</td>
+            {dcf.anos.map((a) => {
+              const v = l.get(a);
+              return (
+                <td key={a.ano} className={a.tipo === "forecast" ? "report-dcf-fc" : "report-dcf-hist"}>
+                  {v === null ? "—" : (l.fmt ?? kEur)(v)}
+                </td>
+              );
+            })}
+            <td className="report-dcf-tv">
+              {l.tv === undefined || l.tv === null ? "—" : (l.fmt ?? kEur)(l.tv)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
   const dcf = d.dcf;
@@ -170,57 +217,43 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
       </Page>
     );
   }
-  const linhas: { label: string; get: (a: Dcf["anos"][number]) => number | null }[] = [
+
+  const fatorTv = 1 / Math.pow(1 + dcf.wacc, dcf.anos.filter((a) => a.tipo === "forecast").length);
+
+  const linhasNopat: MapaLinha[] = [
     { label: "Receita", get: (a) => a.receita },
     { label: "EBITDA", get: (a) => a.ebitda },
-    { label: "EBIT", get: (a) => a.ebit },
-    { label: "NOPAT", get: (a) => a.nopat },
-    { label: "D&A", get: (a) => a.da },
-    { label: "Capex", get: (a) => -a.capex },
-    { label: "Δ NWC", get: (a) => -a.dnwc },
-    { label: "FCFF", get: (a) => a.fcff },
-    { label: "PV do FCFF", get: (a) => a.pv },
+    { label: "Margem EBITDA", get: (a) => a.margem_ebitda, fmt: (v) => pctFmt(v) },
+    { label: "(−) D&A", get: (a) => -a.da },
+    { label: "= EBIT", get: (a) => a.ebit, total: true },
+    { label: "(−) Imposto s/ EBIT", get: (a) => -a.imposto },
+    { label: "= NOPAT", get: (a) => a.nopat, total: true },
   ];
+
+  const linhasFcff: MapaLinha[] = [
+    { label: "NOPAT", get: (a) => a.nopat },
+    { label: "(+) D&A", get: (a) => a.da },
+    { label: "(−) Capex", get: (a) => -a.capex },
+    { label: "= FCFF unlevered", get: (a) => a.fcff, tv: dcf.terminal_value, total: true },
+    { label: "Fator de desconto", get: (a) => a.fator_desconto, tv: fatorTv, fmt: fatorFmt },
+    { label: "= PV do FCFF", get: (a) => a.pv, tv: dcf.pv_terminal_value, total: true },
+  ];
+
   return (
     <Page numero={numero} titulo="DCF Valuation">
       <div className="report-dcf">
         <section className="report-dcf-top">
           <div>
-            <H>Mapa de fluxos de caixa · milhares de €</H>
-            <table className="report-table report-table-compact report-dcf-map">
-              <thead>
-                <tr>
-                  <th>Linha</th>
-                  {dcf.anos.map((a) => (
-                    <th key={a.ano} className={a.tipo === "forecast" ? "report-dcf-fc" : "report-dcf-hist"}>
-                      {a.ano}
-                      {a.tipo === "forecast" ? "F" : "A"}
-                    </th>
-                  ))}
-                  <th className="report-dcf-tv">TV</th>
-                </tr>
-              </thead>
-              <tbody>
-                {linhas.map((l) => (
-                  <tr key={l.label} className={l.label === "FCFF" ? "report-row-total" : undefined}>
-                    <td>{l.label}</td>
-                    {dcf.anos.map((a) => {
-                      const v = l.get(a);
-                      return (
-                        <td key={a.ano} className={a.tipo === "forecast" ? "report-dcf-fc" : "report-dcf-hist"}>
-                          {v === null ? "—" : kEur(v)}
-                        </td>
-                      );
-                    })}
-                    <td className="report-dcf-tv">
-                      {l.label === "FCFF" ? kEur(dcf.terminal_value) : l.label === "PV do FCFF" ? kEur(dcf.pv_terminal_value) : "—"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="report-dcf-title">
+              <H>Mapa de fluxos de caixa</H>
+              <span className="report-dcf-unit">milhares de €</span>
+            </div>
+            <MapaTabela dcf={dcf} linhas={linhasNopat} />
+            <MapaTabela dcf={dcf} linhas={linhasFcff} />
             <p className="report-small">
-              A = exercício histórico · F = ano projetado · TV = valor terminal. Valor terminal calculado pelo modelo de
+              A = exercício histórico · F = ano projetado · TV = valor terminal. O modelo usa fluxo unlevered (FCFF): o
+              efeito do financiamento não é descontado no fluxo, sendo refletido no custo de capital e no ajustamento de
+              dívida líquida que converte o Enterprise Value em Equity Value. Valor terminal calculado pelo modelo de
               perpetuidade sobre o FCFF do ano 8.
             </p>
           </div>
@@ -254,9 +287,11 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
                 </tr>
                 <tr>
                   <td>D&A (% receita)</td>
-                  <td>
-                    {pctFmt(dcf.da_pct_receita)} <em className="report-inline-note">{dcf.da_origem}</em>
-                  </td>
+                  <td>{pctFmt(dcf.da_pct_receita)}</td>
+                </tr>
+                <tr>
+                  <td>Fundo de maneio</td>
+                  <td>Não projetado</td>
                 </tr>
                 <tr>
                   <td>Taxa de imposto (CIT)</td>
@@ -291,40 +326,52 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
         <section className="report-dcf-bottom">
           <div>
             <H>Custo médio ponderado de capital</H>
+            <p className="report-dcf-formula">
+              Ke = Rf + β<sub>L</sub> × ERP + CRP + prémio de dimensão + prémio específico · Kd<sub>pós</sub> = Kd
+              <sub>pré</sub> × (1 − CIT) · WACC = E/(D+E) × Ke + D/(D+E) × Kd<sub>pós</sub>
+            </p>
             <table className="report-table report-table-compact">
               <tbody>
                 <tr>
-                  <td>Risk-free rate</td>
+                  <td>Risk-free rate (Rf)</td>
                   <td>{pctFmt(dcf.risk_free)}</td>
                 </tr>
                 <tr>
-                  <td>Beta unlevered / levered</td>
+                  <td>Beta unlevered / levered (β)</td>
                   <td>
                     {dcf.beta_unlevered.toFixed(2)} / {dcf.beta_levered.toFixed(2)}
                   </td>
                 </tr>
                 <tr>
-                  <td>Equity Risk Premium</td>
+                  <td>Equity Risk Premium (ERP)</td>
                   <td>{pctFmt(dcf.erp)}</td>
                 </tr>
                 <tr>
-                  <td>Country Risk Premium</td>
+                  <td>Country Risk Premium (CRP)</td>
                   <td>{pctFmt(dcf.crp)}</td>
                 </tr>
                 <tr>
-                  <td>Cost of Equity</td>
+                  <td>Prémio de dimensão (PME)</td>
+                  <td>{pctFmt(dcf.size_premium)}</td>
+                </tr>
+                <tr>
+                  <td>Prémio específico (iliquidez)</td>
+                  <td>{pctFmt(dcf.premio_especifico)}</td>
+                </tr>
+                <tr className="report-row-total">
+                  <td>Cost of Equity (Ke)</td>
                   <td>{pctFmt(dcf.cost_of_equity)}</td>
                 </tr>
                 <tr>
-                  <td>Cost of Debt (pré / pós imposto)</td>
+                  <td>Cost of Debt pré / pós imposto (Kd)</td>
                   <td>
                     {pctFmt(dcf.cost_of_debt_pre)} / {pctFmt(dcf.cost_of_debt_pos)}
                   </td>
                 </tr>
                 <tr>
-                  <td>Peso de dívida / equity</td>
+                  <td>Peso de equity / dívida (E / D)</td>
                   <td>
-                    {pctFmt(dcf.peso_divida, 0)} / {pctFmt(dcf.peso_equity, 0)}
+                    {pctFmt(dcf.peso_equity, 0)} / {pctFmt(dcf.peso_divida, 0)}
                   </td>
                 </tr>
                 <tr className="report-row-total">
@@ -371,10 +418,11 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
               </tbody>
             </table>
             <p className="report-small">
-              Notas metodológicas: FCFF = EBIT × (1 − CIT) + D&A − Capex − Δ fundo de maneio, descontado ao WACC em
-              mid-year convention. O valor terminal assume perpetuidade com crescimento de {pctFmt(dcf.terminal_growth)}.
-              Beta, ERP, prémio de risco-país, estrutura de capital e spread de crédito são proxies setoriais de
-              referência; o CIT aplicado corresponde a {d.pais} ({dcf.cit_nota}).
+              O custo de capital é estimado numa ótica prudente: às referências setoriais de mercado acrescem um prémio
+              de dimensão e um prémio específico, porque uma PME não cotada apresenta risco superior ao das empresas
+              cotadas de referência do setor. Beta, ERP, prémio de risco-país, estrutura de capital e spread de crédito
+              são proxies setoriais; o CIT aplicado corresponde a {d.pais} ({dcf.cit_nota})
+              {dcf.nota_reconciliacao ? ` ${dcf.nota_reconciliacao}` : ""}
             </p>
           </div>
         </section>
@@ -382,13 +430,6 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
       </div>
     </Page>
   );
-}
-
-function heatColor(valor: number, min: number, max: number) {
-  if (!Number.isFinite(valor)) return undefined;
-  const ratio = max === min ? 0.5 : (valor - min) / (max - min);
-  const hue = 0 + 120 * Math.min(Math.max(ratio, 0), 1);
-  return { background: `hsl(${hue.toFixed(0)}, 72%, 84%)` };
 }
 
 function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
@@ -405,56 +446,57 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
   }
   return (
     <Page numero={numero} titulo="Sensitivity Analysis">
-      <H>Sensibilidade do Enterprise Value · milhares de €</H>
+      <div className="report-dcf-title">
+        <H>Sensibilidade do Enterprise Value</H>
+        <span className="report-dcf-unit">milhares de €</span>
+      </div>
       <div className="report-sens-grid">
-        {dcf.matrizes.map((m) => {
-          const todos = m.linhas.flatMap((l) => l.valores).filter((v) => Number.isFinite(v));
-          const min = Math.min(...todos);
-          const max = Math.max(...todos);
-          return (
-            <div key={m.titulo} className="report-sens-card">
-              <strong>{m.titulo}</strong>
-              <table className="report-table report-table-compact report-sens-table">
-                <thead>
-                  <tr>
-                    <th>
-                      {m.eixo_y_label} \ {m.eixo_x_label}
+        {dcf.matrizes.map((m) => (
+          <div key={m.titulo} className="report-sens-card">
+            <strong>{m.titulo}</strong>
+            <table className="report-table report-table-compact report-sens-table">
+              <thead>
+                <tr>
+                  <th>
+                    {m.eixo_y_label} \ {m.eixo_x_label}
+                  </th>
+                  {m.colunas.map((c) => (
+                    <th key={c.label} className={c.base ? "report-sens-base" : undefined}>
+                      {c.label}
                     </th>
-                    {m.colunas.map((c) => (
-                      <th key={c.label} className={c.base ? "report-sens-base" : undefined}>
-                        {c.label}
-                      </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {m.linhas.map((l) => (
+                  <tr key={l.label}>
+                    <td className={l.base ? "report-sens-base" : undefined}>{l.label}</td>
+                    {l.valores.map((v, i) => (
+                      <td key={i} className={l.base && m.colunas[i]?.base ? "report-sens-cell-base" : undefined}>
+                        {Number.isFinite(v) ? kEur(v) : "n.a."}
+                      </td>
                     ))}
                   </tr>
-                </thead>
-                <tbody>
-                  {m.linhas.map((l) => (
-                    <tr key={l.label}>
-                      <td className={l.base ? "report-sens-base" : undefined}>{l.label}</td>
-                      {l.valores.map((v, i) => (
-                        <td
-                          key={i}
-                          style={heatColor(v, min, max)}
-                          className={l.base && m.colunas[i]?.base ? "report-sens-cell-base" : undefined}
-                        >
-                          {Number.isFinite(v) ? kEur(v) : "n.a."}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          );
-        })}
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
       <p className="report-small">
-        Escala de cor do vermelho (valor inferior) ao verde (valor superior). A célula destacada corresponde ao cenário
-        base apresentado no slide anterior. As matrizes isolam o efeito de cada variável, mantendo constantes os
-        restantes pressupostos.
+        A célula destacada corresponde ao cenário base apresentado no slide anterior. As matrizes isolam o efeito de
+        cada variável, mantendo constantes os restantes pressupostos.
       </p>
       <section className="report-dcf-assumptions">
         <H>Transparência de pressupostos</H>
+        <p className="report-small report-dcf-assumptions-intro">
+          Os pressupostos abaixo combinam a informação introduzida no formulário com referências setoriais de mercado.
+          Os inputs financeiros (EBITDA normalizado, capex e D&A) são convertidos em percentagem da receita do ano de
+          referência e mantidos estáveis no horizonte, por ausência de plano de negócios. As taxas de crescimento, a
+          margem projetada e os parâmetros de custo de capital seguem um critério conservador — na dúvida, adota-se o
+          valor que resulta numa avaliação mais prudente. Os proxies setoriais aplicam-se apenas quando o formulário não
+          recolhe o dado correspondente e estão identificados como Assumption.
+        </p>
         <table className="report-table report-table-compact report-table-text">
           <thead>
             <tr>
