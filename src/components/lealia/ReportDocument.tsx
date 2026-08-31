@@ -520,7 +520,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 {d.qualidade.backlog ? <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.backlog}</li> : null}
                 <li style={{ marginBottom: "0.8mm" }}>
                   A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
-                  fase e devem ser preparados antes de um processo formal.
+                  fase. Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a
+                  sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou
+                  necessidades estacionais de tesouraria.
                 </li>
               </ul>
             </Page>
