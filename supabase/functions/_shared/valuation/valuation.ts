@@ -534,15 +534,14 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
       ev: ev_min,
       equity: equityDe(ev_min),
       pressuposto:
-        "Comprador financeiro, due diligence exigente e ausência de prémio estratégico; múltiplo no limite inferior do intervalo ajustado.",
+        "Comprador financeiro, ausência de prémio estratégico; múltiplo no limite inferior do intervalo ajustado.",
     },
     {
       nome: "Base",
       multiplo: multiplo_ajustado_medio,
       ev: roundToThousand(ebitda_normalizado_final * multiplo_ajustado_medio),
       equity: equityDe(roundToThousand(ebitda_normalizado_final * multiplo_ajustado_medio)),
-      pressuposto:
-        "Processo competitivo normal, informação financeira preparada e continuidade operacional assegurada.",
+      pressuposto: "Processo normal, informação financeira preparada e continuidade operacional assegurada.",
     },
     {
       nome: "Otimista",
@@ -550,7 +549,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
       ev: ev_max,
       equity: equityDe(ev_max),
       pressuposto:
-        "Comprador estratégico com sinergias identificadas, processo competitivo com múltiplos interessados e preparação prévia do negócio.",
+        "Comprador estratégico com sinergias identificadas, com vários interessados e preparação prévia do negócio.",
     },
   ];
 
