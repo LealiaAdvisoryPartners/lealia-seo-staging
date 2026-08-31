@@ -707,6 +707,8 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
       ano: a.ano,
       faturacao: a.faturacao as number,
       ebitda: typeof a.ebitda === "number" ? a.ebitda : 0,
+      ebitda_normalizado:
+        (typeof a.ebitda === "number" ? a.ebitda : 0) + (typeof a.desp === "number" ? a.desp : 0),
       faturacao_formatada: eur(a.faturacao),
       ebitda_formatado: eur(a.ebitda),
     }));
@@ -719,10 +721,16 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 
   const cagrFaturacao =
     serie.length >= 2 ? cagr(serie[0]!.faturacao, serie[serie.length - 1]!.faturacao, serie.length - 1) : null;
-  const serieEbitda = serie.filter((g) => g.ebitda > 0);
+  // CAGR do EBITDA calculado sobre o EBITDA normalizado (EBITDA + extraordinários),
+  // coerente com a base de avaliação.
+  const serieEbitda = serie.filter((g) => g.ebitda_normalizado > 0);
   const cagrEbitda =
     serieEbitda.length >= 2
-      ? cagr(serieEbitda[0]!.ebitda, serieEbitda[serieEbitda.length - 1]!.ebitda, serieEbitda.length - 1)
+      ? cagr(
+          serieEbitda[0]!.ebitda_normalizado,
+          serieEbitda[serieEbitda.length - 1]!.ebitda_normalizado,
+          serieEbitda.length - 1,
+        )
       : null;
 
   const margensSerie = serie
