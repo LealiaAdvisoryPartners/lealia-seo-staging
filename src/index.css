@@ -1737,3 +1737,24 @@
 .report-dcf-assumptions .report-h2 {
   margin-bottom: 0.5mm;
 }
+
+.report-sens-assumptions {
+  margin-top: 2.5mm;
+  grid-template-columns: 1fr 1.4fr;
+}
+
+.report-sens-assumptions .report-h2 {
+  margin-bottom: 0.5mm;
+}
+
+.report-sens-assumptions .report-table td,
+.report-sens-assumptions .report-table th {
+  padding: 0.35mm 1mm;
+  font-size: 6.1pt;
+  white-space: normal;
+}
+
+.report-sens-assumptions .report-table td:first-child,
+.report-sens-assumptions .report-table th:first-child {
+  width: 24%;
+}
