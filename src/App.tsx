@@ -19,7 +19,6 @@ import Privacy from "./pages/Privacy";
 import Valuation from "./pages/Valuation";
 import Relatorio from "./pages/Relatorio";
 import NotFound from "./pages/NotFound";
-import DevReport from "./pages/DevReport";
 
 const queryClient = new QueryClient();
 
@@ -80,7 +79,6 @@ const App = () => (
                   
                   
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="/dev-report" element={<DevReport />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
