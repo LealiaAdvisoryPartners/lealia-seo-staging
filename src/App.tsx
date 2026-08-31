@@ -18,7 +18,6 @@ import Team from "./pages/Team";
 import Privacy from "./pages/Privacy";
 import Valuation from "./pages/Valuation";
 import Relatorio from "./pages/Relatorio";
-import DcfPreview from "./pages/__DcfPreview";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,7 +59,6 @@ const App = () => (
                   <Route path="/es/privacy" element={<Privacy />} />
                   
                   {/* Legacy routes without language prefix - will be redirected by LanguageRedirect */}
-                  <Route path="/__dcf" element={<DcfPreview />} />
                   <Route path="/" element={<Index />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/services" element={<Services />} />
