@@ -1556,16 +1556,21 @@
 }
 
 .report-dcf .report-h2 {
-  margin-top: 2mm;
+  margin-top: 1.5mm;
+  margin-bottom: 1mm;
 }
 
 .report-dcf .report-table {
   margin: 2mm 0 2mm;
 }
 
+.report-dcf .report-table {
+  font-size: 7.6pt;
+}
+
 .report-dcf .report-table td,
 .report-dcf .report-table th {
-  padding: 1mm 1.2mm;
+  padding: 0.8mm 1.2mm;
 }
 
 .report-dcf .report-small {
@@ -1599,8 +1604,12 @@
   font-weight: 600;
 }
 
+.report-dcf-assumptions {
+  margin-top: 4mm;
+}
+
 .report-dcf-assumptions .report-table {
-  font-size: 6.6pt;
+  font-size: 6.8pt;
 }
 
 .report-dcf-assumptions .report-table td,

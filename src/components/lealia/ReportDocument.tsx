@@ -379,29 +379,6 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
           </div>
         </section>
 
-        <section className="report-dcf-assumptions">
-          <H>Transparência de pressupostos</H>
-          <table className="report-table report-table-compact report-table-text">
-            <thead>
-              <tr>
-                <th>Parâmetro</th>
-                <th>Valor</th>
-                <th>Origem</th>
-                <th>Método / fonte</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dcf.pressupostos.map((p) => (
-                <tr key={p.label}>
-                  <td>{p.label}</td>
-                  <td>{p.label.startsWith("EBITDA normalizado") ? formatEUR(Number(p.valor)) : p.valor}</td>
-                  <td>{p.origem}</td>
-                  <td>{p.nota ?? "—"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
       </div>
     </Page>
   );
@@ -476,6 +453,30 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
         base apresentado no slide anterior. As matrizes isolam o efeito de cada variável, mantendo constantes os
         restantes pressupostos.
       </p>
+      <section className="report-dcf-assumptions">
+        <H>Transparência de pressupostos</H>
+        <table className="report-table report-table-compact report-table-text">
+          <thead>
+            <tr>
+              <th>Parâmetro</th>
+              <th>Valor</th>
+              <th>Origem</th>
+              <th>Método / fonte</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dcf.pressupostos.map((p) => (
+              <tr key={p.label}>
+                <td>{p.label}</td>
+                <td>{p.label.startsWith("EBITDA normalizado") ? formatEUR(Number(p.valor)) : p.valor}</td>
+                <td>{p.origem}</td>
+                <td>{p.nota ?? "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
     </Page>
   );
 }
