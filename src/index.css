@@ -1532,3 +1532,117 @@
 .report-locked-cta:hover {
   opacity: 0.9;
 }
+
+/* ---------- Slides DCF e sensibilidades ---------- */
+.report-dcf {
+  display: flex;
+  flex-direction: column;
+  gap: 1mm;
+}
+
+.report-dcf-top,
+.report-dcf-bottom {
+  display: grid;
+  gap: 0 8mm;
+  align-items: start;
+}
+
+.report-dcf-top {
+  grid-template-columns: 1.85fr 1fr;
+}
+
+.report-dcf-bottom {
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.report-dcf .report-h2 {
+  margin-top: 2mm;
+}
+
+.report-dcf .report-table {
+  margin: 2mm 0 2mm;
+}
+
+.report-dcf .report-table td,
+.report-dcf .report-table th {
+  padding: 1mm 1.2mm;
+}
+
+.report-dcf .report-small {
+  margin-top: 1.5mm;
+  font-size: 7pt;
+}
+
+.report-dcf-map {
+  font-size: 6.4pt;
+  table-layout: fixed;
+}
+
+.report-dcf-map td,
+.report-dcf-map th {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.report-dcf-map td:first-child,
+.report-dcf-map th:first-child {
+  text-align: left;
+  width: 17mm;
+}
+
+.report-dcf-hist {
+  background: hsl(220 20% 96%);
+}
+
+.report-dcf-tv {
+  background: hsl(38 60% 94%);
+  font-weight: 600;
+}
+
+.report-dcf-assumptions .report-table {
+  font-size: 6.6pt;
+}
+
+.report-dcf-assumptions .report-table td,
+.report-dcf-assumptions .report-table th {
+  padding: 0.9mm 1.2mm;
+}
+
+.report-sens-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4mm 8mm;
+}
+
+.report-sens-card > strong {
+  font-size: 8pt;
+  font-family: var(--font-body);
+}
+
+.report-sens-table {
+  font-size: 6.8pt;
+  margin: 1.5mm 0 0;
+  table-layout: fixed;
+}
+
+.report-sens-table td,
+.report-sens-table th {
+  padding: 1mm 0.8mm;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.report-sens-table td:first-child,
+.report-sens-table th:first-child {
+  text-align: left;
+}
+
+.report-sens-base {
+  font-weight: 700;
+}
+
+.report-sens-cell-base {
+  outline: 0.6mm solid hsl(220 45% 25%);
+  outline-offset: -0.6mm;
+  font-weight: 700;
+}
