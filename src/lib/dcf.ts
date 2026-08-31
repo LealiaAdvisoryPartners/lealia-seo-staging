@@ -149,10 +149,18 @@ const RISK_FREE_DEFAULT = 0.035;
 const ERP_BASE = 0.046;
 const CRP: Record<string, number> = { Portugal: 0.0145, Espanha: 0.0119 };
 const CRP_DEFAULT = 0.02;
+/** Prémio de dimensão (PME face às cotadas de referência do setor). */
+const SIZE_PREMIUM = 0.035;
+/** Prémio específico: iliquidez do capital e dependência de pessoas-chave. */
+const PREMIO_ESPECIFICO = 0.015;
+/** Add-on de spread de crédito de PME face ao spread médio do setor. */
+const SPREAD_PME = 0.01;
 
 export const TERMINAL_GROWTH = 0.02;
 export const CRESCIMENTO_ESTABILIZADO = 0.035;
 export const ANO_ESTABILIZACAO = 5;
+/** Teto prudente para o crescimento inicial da receita numa avaliação indicativa. */
+const CRESCIMENTO_INICIAL_MAX = 0.06;
 const HORIZONTE = 8;
 
 export type DcfInput = {
@@ -165,6 +173,8 @@ export type DcfInput = {
   depreciacoes_amortizacoes: number | null;
   divida_liquida: number;
   ativos_nao_operacionais: number;
+  /** Enterprise Value central obtido por múltiplos, para nota de reconciliação. */
+  ev_multiplos?: number | null;
 };
 
 const pct = (v: number) => `${(v * 100).toFixed(1).replace(".", ",")}%`;
@@ -180,7 +190,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     return { ok: false, motivo: "Sem receita ou EBITDA normalizado positivo, não é possível construir uma análise DCF." };
   }
 
-  // --- Crescimento inicial ---
+  // --- Crescimento inicial (prudente) ---
   let crescimento_inicial: number;
   let crescimento_inicial_origem: OrigemDado;
   if (historico.length >= 3) {
@@ -189,18 +199,18 @@ export function calcularDCF(input: DcfInput): DcfResult {
     crescimento_inicial = Math.pow(receitaBase / primeiro, 1 / anos) - 1;
     crescimento_inicial_origem = "Input";
   } else {
-    crescimento_inicial = ref.crescimento_ref;
+    crescimento_inicial = Math.min(ref.crescimento_ref, CRESCIMENTO_ESTABILIZADO);
     crescimento_inicial_origem = "Assumption";
   }
-  crescimento_inicial = Math.min(Math.max(crescimento_inicial, -0.05), 0.25);
+  crescimento_inicial = Math.min(Math.max(crescimento_inicial, -0.05), CRESCIMENTO_INICIAL_MAX);
 
-  // --- Margem EBITDA de referência ---
+  // --- Margem EBITDA de referência (critério conservador) ---
   const margens = historico
     .filter((h) => typeof h.ebitda === "number" && h.receita > 0)
     .map((h) => (h.ebitda as number) / h.receita);
   const margemHistorica = margens.length >= 2 ? margens.reduce((s, m) => s + m, 0) / margens.length : null;
   const margemAtual = input.ebitda_normalizado / receitaBase;
-  const margem_ebitda = margemHistorica !== null ? (margemHistorica + margemAtual) / 2 : margemAtual;
+  const margem_ebitda = margemHistorica !== null ? Math.min(margemHistorica, margemAtual) : margemAtual;
 
   // --- D&A e Capex ---
   const da_origem: OrigemDado = typeof input.depreciacoes_amortizacoes === "number" ? "Input" : "Assumption";
@@ -213,7 +223,8 @@ export function calcularDCF(input: DcfInput): DcfResult {
     typeof input.capex_anual_recorrente === "number" && input.capex_anual_recorrente >= 0
       ? input.capex_anual_recorrente / receitaBase
       : ref.capex_pct_receita;
-  const nwc_pct_receita = ref.nwc_pct_receita;
+  // Sem qualquer pressuposto de fundo de maneio: o modelo não projeta Δ NWC.
+  const nwc_pct_receita = 0;
 
   const { taxa: cit, nota: cit_nota } = citRate(input.pais, input.ano_referencia);
 
@@ -224,8 +235,8 @@ export function calcularDCF(input: DcfInput): DcfResult {
   const peso_equity = 1 - peso_divida;
   const de = peso_divida / peso_equity;
   const beta_levered = ref.beta_unlevered * (1 + (1 - cit) * de);
-  const cost_of_equity = risk_free + beta_levered * ERP_BASE + crp;
-  const cost_of_debt_pre = risk_free + ref.spread;
+  const cost_of_equity = risk_free + beta_levered * ERP_BASE + crp + SIZE_PREMIUM + PREMIO_ESPECIFICO;
+  const cost_of_debt_pre = risk_free + ref.spread + SPREAD_PME;
   const cost_of_debt_pos = cost_of_debt_pre * (1 - cit);
   const wacc = peso_equity * cost_of_equity + peso_divida * cost_of_debt_pos;
 
@@ -243,28 +254,33 @@ export function calcularDCF(input: DcfInput): DcfResult {
       ? CRESCIMENTO_ESTABILIZADO
       : crescimento_inicial + ((CRESCIMENTO_ESTABILIZADO - crescimento_inicial) * (t - 1)) / (ANO_ESTABILIZACAO - 1);
 
-  const anos: DcfLinhaAno[] = historico.map((h, i) => {
-    const ebitda = typeof h.ebitda === "number" ? h.ebitda : h.receita * margem_ebitda;
-    const da = h.receita * da_pct_receita;
-    const ebit = ebitda - da;
-    const capexH = h.receita * capex_pct_receita;
-    const dnwcH = i === 0 ? 0 : (h.receita - historico[i - 1]!.receita) * nwc_pct_receita;
-    const nopat = ebit * (1 - cit);
-    return {
-      ano: h.ano,
+  // Apenas o exercício de referência é apresentado como histórico.
+  const ultimo = historico[historico.length - 1]!;
+  const ebitdaHist = typeof ultimo.ebitda === "number" ? ultimo.ebitda : ultimo.receita * margem_ebitda;
+  const daHist = ultimo.receita * da_pct_receita;
+  const ebitHist = ebitdaHist - daHist;
+  const impostoHist = Math.max(0, ebitHist) * cit;
+  const nopatHist = ebitHist - impostoHist;
+  const capexHist = ultimo.receita * capex_pct_receita;
+  const anos: DcfLinhaAno[] = [
+    {
+      ano: ultimo.ano,
       tipo: "historico",
-      crescimento: i === 0 ? null : h.receita / historico[i - 1]!.receita - 1,
-      receita: h.receita,
-      ebitda,
-      ebit,
-      nopat,
-      da,
-      capex: capexH,
-      dnwc: dnwcH,
-      fcff: nopat + da - capexH - dnwcH,
+      crescimento: null,
+      receita: ultimo.receita,
+      ebitda: ebitdaHist,
+      margem_ebitda: ultimo.receita > 0 ? ebitdaHist / ultimo.receita : 0,
+      ebit: ebitHist,
+      imposto: impostoHist,
+      nopat: nopatHist,
+      da: daHist,
+      capex: capexHist,
+      dnwc: 0,
+      fcff: nopatHist + daHist - capexHist,
+      fator_desconto: null,
       pv: null,
-    };
-  });
+    },
+  ];
 
   let receitaAnterior = receitaBase;
   let pv_explicito = 0;
@@ -275,11 +291,12 @@ export function calcularDCF(input: DcfInput): DcfResult {
     const ebitda = receita * margem_ebitda;
     const da = receita * da_pct_receita;
     const ebit = ebitda - da;
-    const nopat = ebit * (1 - cit);
+    const imposto = Math.max(0, ebit) * cit;
+    const nopat = ebit - imposto;
     const capex = receita * capex_pct_receita;
-    const dnwc = (receita - receitaAnterior) * nwc_pct_receita;
-    const fcff = nopat + da - capex - dnwc;
-    const pv = fcff / Math.pow(1 + wacc, t - 0.5);
+    const fcff = nopat + da - capex;
+    const fator_desconto = 1 / Math.pow(1 + wacc, t - 0.5);
+    const pv = fcff * fator_desconto;
     pv_explicito += pv;
     fcffFinal = fcff;
     anos.push({
@@ -288,12 +305,15 @@ export function calcularDCF(input: DcfInput): DcfResult {
       crescimento: g,
       receita,
       ebitda,
+      margem_ebitda: margem_ebitda,
       ebit,
+      imposto,
       nopat,
       da,
       capex,
-      dnwc,
+      dnwc: 0,
       fcff,
+      fator_desconto,
       pv,
     });
     receitaAnterior = receita;
@@ -304,6 +324,16 @@ export function calcularDCF(input: DcfInput): DcfResult {
   const enterprise_value = pv_explicito + pv_terminal_value;
   const equity_value = enterprise_value - input.divida_liquida + input.ativos_nao_operacionais;
 
+  let nota_reconciliacao: string | undefined;
+  if (typeof input.ev_multiplos === "number" && input.ev_multiplos > 0) {
+    const desvio = (enterprise_value - input.ev_multiplos) / input.ev_multiplos;
+    if (Math.abs(desvio) > 0.35) {
+      nota_reconciliacao = `O Enterprise Value por DCF situa-se ${pct(Math.abs(desvio))} ${desvio > 0 ? "acima" : "abaixo"} do valor central obtido por múltiplos de mercado. A divergência decorre sobretudo dos pressupostos de crescimento e de margem projetados; num contexto transacional, o intervalo relevante é a interseção dos dois métodos.`;
+    } else {
+      nota_reconciliacao = `O Enterprise Value por DCF é consistente com o valor central obtido por múltiplos de mercado (desvio de ${pct(Math.abs(desvio))}).`;
+    }
+  }
+
   // --- Matrizes de sensibilidade (Enterprise Value) ---
   const evPara = (opts: { wacc?: number; g?: number; capexPct?: number; fcffFator?: number }): number => {
     const w = opts.wacc ?? wacc;
@@ -313,19 +343,19 @@ export function calcularDCF(input: DcfInput): DcfResult {
     if (w <= gT) return NaN;
     let rec = receitaBase;
     let pv = 0;
-    let ultimo = 0;
+    let ultimoFcff = 0;
     for (let t = 1; t <= HORIZONTE; t++) {
       const g = crescimentoAno(t);
       const receita = rec * (1 + g);
       const ebitda = receita * margem_ebitda;
       const da = receita * da_pct_receita;
       const nopat = (ebitda - da) * (1 - cit);
-      const fcff = (nopat + da - receita * cx - (receita - rec) * nwc_pct_receita) * fator;
+      const fcff = (nopat + da - receita * cx) * fator;
       pv += fcff / Math.pow(1 + w, t - 0.5);
-      ultimo = fcff;
+      ultimoFcff = fcff;
       rec = receita;
     }
-    const tv = (ultimo * (1 + gT)) / (w - gT);
+    const tv = (ultimoFcff * (1 + gT)) / (w - gT);
     return pv + tv / Math.pow(1 + w, HORIZONTE);
   };
 
@@ -390,6 +420,42 @@ export function calcularDCF(input: DcfInput): DcfResult {
 
   const ebitdaAno1 = anos.find((a) => a.tipo === "forecast")!.ebitda;
 
+  const fontes: { parametro: string; fonte: string }[] = [
+    {
+      parametro: "Risk-free rate",
+      fonte: "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).",
+    },
+    {
+      parametro: "Equity Risk Premium",
+      fonte: "Prémio de risco de mercado maduro (Damodaran, Implied ERP — mercado dos EUA como mercado de referência).",
+    },
+    {
+      parametro: "Country Risk Premium",
+      fonte: "Damodaran, Country Risk Premiums, derivado do spread de default do rating soberano ajustado pela volatilidade relativa do mercado acionista.",
+    },
+    {
+      parametro: "Beta",
+      fonte: "Beta unlevered setorial (Damodaran, Betas by Sector — Europa Ocidental), realavancado à estrutura de capital-alvo do setor pela fórmula de Hamada.",
+    },
+    {
+      parametro: "Prémio de dimensão",
+      fonte: "Prémio de small/micro cap face às cotadas de referência (Damodaran / Kroll Size Premia). Aplicado por prudência: uma PME não transacionada tem custo de capital superior ao das empresas de referência do setor.",
+    },
+    {
+      parametro: "Prémio específico",
+      fonte: "Prémio de iliquidez do capital e de dependência de pessoas-chave, prática corrente em avaliação de PME não cotadas.",
+    },
+    {
+      parametro: "Cost of debt",
+      fonte: "Risk-free acrescido do spread de crédito médio do setor e de um add-on de PME; o formulário não recolhe o custo efetivo da dívida.",
+    },
+    {
+      parametro: "Estrutura de capital",
+      fonte: "Estrutura de capital-alvo de referência do setor (Damodaran, Debt Ratios by Sector), não a estrutura corrente da empresa.",
+    },
+    { parametro: "Taxa de imposto (CIT)", fonte: `Taxa geral aplicável em ${input.pais}. ${cit_nota}` },
+  ];
+
   const pressupostos: DcfPressuposto[] = [
     {
       label: "EBITDA normalizado (ano de referência)",
@@ -403,7 +469,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       origem: da_origem,
       nota:
         da_origem === "Input"
-          ? "Valor introduzido no formulário, convertido em percentagem da receita do ano de referência."
+          ? "Valor introduzido no formulário, convertido em percentagem da receita do ano de referência e mantido constante em percentagem ao longo do horizonte."
           : "Estimado a partir da percentagem média de D&A sobre receita do setor selecionado.",
     },
     {
@@ -412,14 +478,14 @@ export function calcularDCF(input: DcfInput): DcfResult {
       origem: capex_origem,
       nota:
         capex_origem === "Input"
-          ? "Capex anual recorrente indicado no formulário."
+          ? "Capex anual recorrente indicado no formulário, assumido como investimento de manutenção necessário para sustentar o nível de atividade projetado."
           : "Estimado com base na intensidade de investimento média do setor.",
     },
     {
-      label: "Variação do fundo de maneio",
-      valor: pct(nwc_pct_receita) + " da variação de receita",
+      label: "Fundo de maneio",
+      valor: "Não projetado",
       origem: "Assumption",
-      nota: "O formulário não recolhe fundo de maneio; aplicada a necessidade típica do setor sobre o crescimento da receita.",
+      nota: "Não é aplicado qualquer pressuposto de variação de fundo de maneio: o modelo assume necessidades de fundo de maneio estáveis, pelo que o seu efeito é nulo no FCFF.",
     },
     {
       label: "Crescimento inicial da receita",
@@ -427,20 +493,60 @@ export function calcularDCF(input: DcfInput): DcfResult {
       origem: crescimento_inicial_origem,
       nota:
         crescimento_inicial_origem === "Input"
-          ? "CAGR histórico da receita calculado sobre os exercícios disponibilizados."
-          : "Histórico inferior a três exercícios: aplicada a taxa de crescimento de referência do setor.",
+          ? `CAGR histórico da receita, limitado por prudência a um máximo de ${pct(CRESCIMENTO_INICIAL_MAX)} para não extrapolar dinâmicas recentes para todo o horizonte.`
+          : "Histórico inferior a três exercícios: aplicada a taxa de crescimento de referência do setor, limitada ao crescimento estabilizado.",
     },
-    { label: "Margem EBITDA projetada", valor: pct(margem_ebitda), origem: margemHistorica !== null ? "Input" : "Assumption" },
+    {
+      label: "Margem EBITDA projetada",
+      valor: pct(margem_ebitda),
+      origem: margemHistorica !== null ? "Input" : "Assumption",
+      nota:
+        margemHistorica !== null
+          ? "Critério conservador: adotada a menor entre a margem média histórica e a margem normalizada do ano de referência, mantida constante no horizonte (sem ganhos de eficiência assumidos)."
+          : "Margem normalizada do ano de referência, mantida constante no horizonte por ausência de histórico suficiente para inferir tendência.",
+    },
     { label: "Taxa de imposto (CIT)", valor: pct(cit), origem: "Assumption", nota: `${input.pais} · ${cit_nota}` },
-    { label: "Risk-free rate", valor: pct(risk_free), origem: "Assumption", nota: "Yield de referência da dívida soberana a 10 anos do país selecionado." },
-    { label: "Beta unlevered / levered", valor: `${ref.beta_unlevered.toFixed(2)} / ${beta_levered.toFixed(2)}`, origem: "Assumption", nota: "Beta setorial de referência (Damodaran, Europa Ocidental), realavancado à estrutura de capital-alvo do setor." },
-    { label: "Equity Risk Premium", valor: pct(ERP_BASE), origem: "Assumption", nota: "Prémio de risco de mercado maduro." },
-    { label: "Country Risk Premium", valor: pct(crp), origem: "Assumption", nota: "Prémio de risco-país associado ao rating soberano." },
-    { label: "Cost of debt (pré / pós imposto)", valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`, origem: "Assumption", nota: "Risk-free acrescido do spread de crédito médio do setor; o formulário não recolhe custo de dívida efetivo." },
-    { label: "Estrutura de capital (D / E)", valor: `${pct(peso_divida)} / ${pct(peso_equity)}`, origem: "Assumption", nota: "Estrutura de capital-alvo de referência do setor." },
-    { label: "Crescimento estabilizado (anos 5-8)", valor: pct(CRESCIMENTO_ESTABILIZADO), origem: "Assumption" },
-    { label: "Crescimento na perpetuidade", valor: pct(TERMINAL_GROWTH), origem: "Assumption" },
-    { label: "Convenção de desconto", valor: "Mid-year convention", origem: "Assumption" },
+    { label: "Risk-free rate", valor: pct(risk_free), origem: "Assumption", nota: fontes[0]!.fonte },
+    {
+      label: "Beta unlevered / levered",
+      valor: `${ref.beta_unlevered.toFixed(2)} / ${beta_levered.toFixed(2)}`,
+      origem: "Assumption",
+      nota: fontes[3]!.fonte,
+    },
+    { label: "Equity Risk Premium", valor: pct(ERP_BASE), origem: "Assumption", nota: fontes[1]!.fonte },
+    { label: "Country Risk Premium", valor: pct(crp), origem: "Assumption", nota: fontes[2]!.fonte },
+    { label: "Prémio de dimensão (PME)", valor: pct(SIZE_PREMIUM), origem: "Assumption", nota: fontes[4]!.fonte },
+    { label: "Prémio específico (iliquidez)", valor: pct(PREMIO_ESPECIFICO), origem: "Assumption", nota: fontes[5]!.fonte },
+    {
+      label: "Cost of debt (pré / pós imposto)",
+      valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`,
+      origem: "Assumption",
+      nota: fontes[6]!.fonte,
+    },
+    {
+      label: "Estrutura de capital (D / E)",
+      valor: `${pct(peso_divida)} / ${pct(peso_equity)}`,
+      origem: "Assumption",
+      nota: fontes[7]!.fonte,
+    },
+    {
+      label: "Crescimento estabilizado (anos 5-8)",
+      valor: pct(CRESCIMENTO_ESTABILIZADO),
+      origem: "Assumption",
+      nota: "Convergência para um crescimento alinhado com o crescimento nominal de longo prazo da economia, evitando extrapolar taxas elevadas.",
+    },
+    {
+      label: "Crescimento na perpetuidade",
+      valor: pct(TERMINAL_GROWTH),
+      origem: "Assumption",
+      nota: "Alinhado com o objetivo de inflação de médio prazo do BCE; não assume crescimento real perpétuo.",
+    },
+    {
+      label: "Convenção de desconto",
+      valor: "Mid-year convention",
+      origem: "Assumption",
+      nota: "Assume geração de fluxos ao longo do ano e não no seu termo.",
+    },
   ];
 
   return {
@@ -459,6 +565,10 @@ export function calcularDCF(input: DcfInput): DcfResult {
     wacc,
     cit,
     cit_nota,
+    size_premium: SIZE_PREMIUM,
+    premio_especifico: PREMIO_ESPECIFICO,
+    fontes,
+    ...(nota_reconciliacao ? { nota_reconciliacao } : {}),
     crescimento_inicial,
     crescimento_inicial_origem,
     ano_estabilizacao: ANO_ESTABILIZACAO,
