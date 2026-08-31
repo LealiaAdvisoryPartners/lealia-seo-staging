@@ -1282,12 +1282,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             {/* 12 — Sensitivity Analysis */}
             <SensitivityPage d={d} numero={12} />
 
-            {/* 13 — Pressupostos do DCF */}
-            <DcfAssumptionsPage d={d} numero={13} />
+            {/* 13 — Processo de M&A */}
 
-            {/* 14 — Processo de M&A */}
-
-            <Page numero={14} titulo="Processo de M&A">
+            <Page numero={13} titulo="Processo de M&A">
               <H>Como decorre um processo de M&amp;A</H>
               <div className="report-phases report-phases-2 report-phases-tall">
                 {FASES.map((f) => (
