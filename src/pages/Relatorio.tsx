@@ -29,23 +29,6 @@ const Relatorio = () => {
     return () => document.body.classList.remove("printing-report");
   }, []);
 
-  // Ajusta o zoom do documento A4 (297mm ≈ 1122.5px) a ecrãs estreitos
-  useEffect(() => {
-    const A4_LANDSCAPE_PX = 1122.52;
-    const aplicar = () => {
-      const disponivel = document.documentElement.clientWidth - 16;
-      const zoom = Math.min(1, disponivel / A4_LANDSCAPE_PX);
-      document.documentElement.style.setProperty("--report-zoom", String(zoom));
-    };
-    aplicar();
-    window.addEventListener("resize", aplicar);
-    window.addEventListener("orientationchange", aplicar);
-    return () => {
-      window.removeEventListener("resize", aplicar);
-      window.removeEventListener("orientationchange", aplicar);
-      document.documentElement.style.removeProperty("--report-zoom");
-    };
-  }, []);
 
   useEffect(() => {
     let ativo = true;

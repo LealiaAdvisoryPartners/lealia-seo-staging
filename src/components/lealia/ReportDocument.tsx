@@ -849,7 +849,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <th>Ação</th>
                     <th>Impacto esperado</th>
                     <th>Esforço</th>
-                    <th>Prazo</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -863,7 +862,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       <td>{p.acao}</td>
                       <td>{p.impacto}</td>
                       <td>{p.esforco}</td>
-                      <td>{p.prazo}</td>
                     </tr>
                   ))}
                 </tbody>

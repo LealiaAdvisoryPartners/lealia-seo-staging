@@ -477,14 +477,8 @@
   line-height: 1.45;
 }
 
-/* Ecrãs estreitos: reduz o documento A4 inteiro em vez de o espremer */
+/* Ecrãs estreitos: layout fixo de PC/PDF — sem adaptação (utilizador faz zoom no telemóvel) */
 @media screen and (max-width: 1200px) {
-  .report-shell {
-    padding: 1rem 0.5rem 2.5rem;
-  }
-  .report-doc {
-    zoom: var(--report-zoom, 1);
-  }
   .report-toolbar {
     align-items: flex-start;
     flex-direction: column;
