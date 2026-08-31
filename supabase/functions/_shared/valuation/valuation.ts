@@ -2,6 +2,8 @@
 // EBITDA base = ano de referência (mais recente) normalizado. Ajustes combinados
 // com cap global de -40%/+35% sobre o múltiplo base.
 
+import { calcularDCF, type DcfResult } from "./dcf.ts";
+
 export type SectorMultiple = {
   industria: string;
   subindustria: string;
@@ -191,6 +193,7 @@ export type ValuationInput = {
   caixa_e_depositos?: number | null;
   divida_financeira?: number | null;
   capex_anual_recorrente?: number | null;
+  depreciacoes_amortizacoes?: number | null;
   pct_top5_clientes?: number | null;
   pct_top1_clientes?: number | null;
   backlog_contratado?: number | null;
@@ -338,6 +341,7 @@ export type ValuationResult =
       pontos_confianca: number;
       dimensoes_confianca: DimensaoConfianca[];
       anos_preenchidos: number;
+      dcf: DcfResult;
       nota_setor?: string;
       aviso_margem?: string;
     };
@@ -718,6 +722,23 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
 
   const { pontos: pontos_confianca, confianca, dimensoes: dimensoes_confianca } = calcularIndiceConfianca(input);
 
+  // DCF — mesma base de dados e mesmo EBITDA normalizado usados no método de múltiplos.
+  const dcf = calcularDCF({
+    pais: input.pais,
+    industria: input.industria,
+    ano_referencia: input.ano_referencia,
+    ebitda_normalizado: ebitda_normalizado_final,
+    receitas_historicas: [
+      { ano: input.ano_referencia - 2, receita: input.faturacao_ano3 ?? 0, ebitda: input.ebitda_ano3 },
+      { ano: input.ano_referencia - 1, receita: input.faturacao_ano2 ?? 0, ebitda: input.ebitda_ano2 },
+      { ano: input.ano_referencia, receita: input.faturacao_ano1, ebitda: ebitda_normalizado_final },
+    ].filter((h) => h.receita > 0),
+    capex_anual_recorrente: input.capex_anual_recorrente ?? null,
+    depreciacoes_amortizacoes: input.depreciacoes_amortizacoes ?? null,
+    divida_liquida,
+    ativos_nao_operacionais: valor_imovel_a_adicionar,
+  });
+
   return {
     ok: true,
     ebitda_reportado: input.ebitda_ano1,
@@ -751,6 +772,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
     pontos_confianca,
     dimensoes_confianca,
     anos_preenchidos,
+    dcf,
     ...(base.nota ? { nota_setor: base.nota } : {}),
     ...(ebitda_normalizado_final > input.faturacao_ano1 * 0.7 ? { aviso_margem: AVISO_MARGEM } : {}),
   };
