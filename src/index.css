@@ -1684,3 +1684,29 @@
   font-size: 6.2pt;
   line-height: 1.35;
 }
+
+.report-dcf .report-dcf-map {
+  table-layout: fixed;
+}
+
+.report-dcf .report-dcf-map th:first-child,
+.report-dcf .report-dcf-map td:first-child {
+  width: 24mm;
+}
+
+.report-dcf-head-hidden {
+  visibility: hidden;
+}
+
+.report-dcf-head-hidden th {
+  height: 0;
+  padding: 0;
+  line-height: 0;
+  font-size: 0;
+  border: 0;
+}
+
+.report-dcf-bottom .report-table-compact td {
+  padding-top: 0.7mm;
+  padding-bottom: 0.7mm;
+}

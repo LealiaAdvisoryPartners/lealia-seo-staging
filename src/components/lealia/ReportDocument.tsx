@@ -167,10 +167,10 @@ type MapaLinha = {
   fmt?: (v: number) => string;
 };
 
-function MapaTabela({ dcf, linhas }: { dcf: Dcf; linhas: MapaLinha[] }) {
+function MapaTabela({ dcf, linhas, head = true }: { dcf: Dcf; linhas: MapaLinha[]; head?: boolean }) {
   return (
     <table className="report-table report-table-compact report-dcf-map">
-      <thead>
+      <thead className={head ? undefined : "report-dcf-head-hidden"}>
         <tr>
           <th>Linha</th>
           {dcf.anos.map((a) => (
@@ -249,12 +249,10 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
               <span className="report-dcf-unit">milhares de €</span>
             </div>
             <MapaTabela dcf={dcf} linhas={linhasNopat} />
-            <MapaTabela dcf={dcf} linhas={linhasFcff} />
+            <MapaTabela dcf={dcf} linhas={linhasFcff} head={false} />
             <p className="report-small">
-              A = exercício histórico · F = ano projetado · TV = valor terminal. O modelo usa fluxo unlevered (FCFF): o
-              efeito do financiamento não é descontado no fluxo, sendo refletido no custo de capital e no ajustamento de
-              dívida líquida que converte o Enterprise Value em Equity Value. Valor terminal calculado pelo modelo de
-              perpetuidade sobre o FCFF do ano 8.
+              A = exercício histórico · F = ano projetado · TV = valor terminal. Fluxo unlevered: o financiamento é
+              refletido no custo de capital e na dívida líquida. TV por perpetuidade sobre o FCFF do ano 8.
             </p>
           </div>
           <div>
@@ -418,10 +416,9 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
               </tbody>
             </table>
             <p className="report-small">
-              O custo de capital é estimado numa ótica prudente: às referências setoriais de mercado acrescem um prémio
-              de dimensão e um prémio específico, porque uma PME não cotada apresenta risco superior ao das empresas
-              cotadas de referência do setor. Beta, ERP, prémio de risco-país, estrutura de capital e spread de crédito
-              são proxies setoriais; o CIT aplicado corresponde a {d.pais} ({dcf.cit_nota})
+              Custo de capital estimado numa ótica prudente: às referências setoriais acrescem prémios de dimensão e
+              de iliquidez, porque uma PME não cotada tem risco superior ao das cotadas do setor. Beta, ERP, CRP,
+              estrutura de capital e spread são proxies setoriais; CIT de {d.pais} ({dcf.cit_nota})
               {dcf.nota_reconciliacao ? ` ${dcf.nota_reconciliacao}` : ""}
             </p>
           </div>
