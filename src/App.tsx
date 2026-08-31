@@ -18,6 +18,7 @@ import Team from "./pages/Team";
 import Privacy from "./pages/Privacy";
 import Valuation from "./pages/Valuation";
 import Relatorio from "./pages/Relatorio";
+import ReportTest from "./pages/__ReportTest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

@@ -1,4 +1,4 @@
-import ReportDocument from "@/components/lealia/ReportDocument";
+import { ReportDocument } from "@/components/lealia/ReportDocument";
 import { buildReportFromLead } from "@/lib/report-data";
 
 const lead = {
