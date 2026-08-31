@@ -1803,22 +1803,36 @@
 }
 
 .report-sens-assumptions {
-  margin-top: 2.5mm;
-  grid-template-columns: 1fr 1.4fr;
+  margin-top: 2mm;
 }
 
 .report-sens-assumptions .report-h2 {
   margin-bottom: 0.5mm;
 }
 
+.report-sens-assumptions .report-dcf-assumptions-intro {
+  max-width: 170mm;
+}
+
+.report-sens-assumptions .report-table {
+  table-layout: fixed;
+}
+
 .report-sens-assumptions .report-table td,
 .report-sens-assumptions .report-table th {
-  padding: 0.35mm 1mm;
-  font-size: 6.1pt;
+  padding: 0.3mm 1mm;
+  font-size: 5.9pt;
+  line-height: 1.25;
   white-space: normal;
 }
 
 .report-sens-assumptions .report-table td:first-child,
 .report-sens-assumptions .report-table th:first-child {
-  width: 24%;
+  width: 34mm;
+}
+
+.report-sens-assumptions .report-table td:nth-child(2),
+.report-sens-assumptions .report-table th:nth-child(2) {
+  width: 26mm;
+  white-space: nowrap;
 }

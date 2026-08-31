@@ -513,36 +513,32 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
         cada variável, mantendo constantes os restantes pressupostos.
       </p>
 
-      <section className="report-dcf-bottom report-sens-assumptions">
-        <div>
-          <H>Transparência de pressupostos</H>
-          <p className="report-small report-dcf-assumptions-intro">
-            Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
-            mercado, seguindo um critério conservador — na dúvida, adota-se o valor que resulta numa avaliação mais
-            prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou
-            método de derivação.
-          </p>
-        </div>
-        <div>
-          <table className="report-table report-table-compact report-table-text">
-            <thead>
-              <tr>
-                <th>Parâmetro</th>
-                <th>Valor</th>
-                <th>Método / fonte</th>
+      <section className="report-sens-assumptions">
+        <H>Transparência de pressupostos</H>
+        <p className="report-small report-dcf-assumptions-intro">
+          Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
+          mercado, seguindo um critério conservador — na dúvida, adota-se o valor que resulta numa avaliação mais
+          prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou
+          método de derivação.
+        </p>
+        <table className="report-table report-table-compact report-table-text">
+          <thead>
+            <tr>
+              <th>Parâmetro</th>
+              <th>Valor</th>
+              <th>Método / fonte</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pressupostosExtra.map((p) => (
+              <tr key={p.label}>
+                <td>{p.label}</td>
+                <td>{p.valor}</td>
+                <td>{p.nota ?? "—"}</td>
               </tr>
-            </thead>
-            <tbody>
-              {pressupostosExtra.map((p) => (
-                <tr key={p.label}>
-                  <td>{p.label}</td>
-                  <td>{p.label.startsWith("EBITDA normalizado") ? formatEUR(Number(p.valor)) : p.valor}</td>
-                  <td>{p.nota ?? "—"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </section>
     </Page>
   );
