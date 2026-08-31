@@ -1605,16 +1605,16 @@
 }
 
 .report-dcf-assumptions {
-  margin-top: 2.5mm;
+  margin-top: 1.5mm;
 }
 
 .report-dcf-assumptions .report-table {
-  font-size: 6.2pt;
+  font-size: 6pt;
 }
 
 .report-dcf-assumptions .report-table td,
 .report-dcf-assumptions .report-table th {
-  padding: 0.45mm 1.2mm;
+  padding: 0.3mm 1.2mm;
 }
 
 .report-sens-grid {
@@ -1636,7 +1636,7 @@
 
 .report-sens-table td,
 .report-sens-table th {
-  padding: 0.6mm 0.8mm;
+  padding: 0.45mm 0.8mm;
   text-align: right;
   white-space: nowrap;
 }
