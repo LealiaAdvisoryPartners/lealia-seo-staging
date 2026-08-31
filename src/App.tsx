@@ -17,7 +17,6 @@ import Services from "./pages/Services";
 import Team from "./pages/Team";
 import Privacy from "./pages/Privacy";
 import Valuation from "./pages/Valuation";
-import DcfPreview from "./pages/DcfPreview";
 import Relatorio from "./pages/Relatorio";
 import NotFound from "./pages/NotFound";
 
@@ -40,7 +39,6 @@ const App = () => (
               <main className="flex-1 pt-16">
                 <Routes>
                   {/* Language-prefixed routes */}
-                  <Route path="/__dcf" element={<DcfPreview />} />
                   <Route path="/en" element={<Index />} />
                   <Route path="/pt" element={<Index />} />
                   <Route path="/es" element={<Index />} />
