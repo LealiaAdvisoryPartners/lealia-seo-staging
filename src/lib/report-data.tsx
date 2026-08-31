@@ -929,6 +929,10 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     limitacoes,
     grafico_evolucao,
     grafico_max: maxGrafico,
+
+    // --- DCF (mesma engine, mesmos dados) ---
+    dcf: r && r.dcf.ok ? r.dcf : null,
+    dcf_motivo: r && !r.dcf.ok ? r.dcf.motivo : null,
     ...flags,
   };
 }
@@ -947,6 +951,8 @@ export function buildReportFromLead(lead: ReportLead) {
 export function redigirRelatorioTeaser(d: ReportData): ReportData {
   return {
     ...d,
+    dcf: null,
+    dcf_motivo: null,
     qualidade: {
       ...d.qualidade,
       tem_serie: false,
