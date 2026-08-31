@@ -749,21 +749,22 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
             : "As margens EBITDA apresentam variação relevante no período analisado, o que exige explicação documentada em due diligence.",
     conversao_caixa:
       r && typeof capex === "number" && r.ebitda_base > 0
-        ? `Após CAPEX recorrente de ${eur(capex)}, a conversão indicativa de EBITDA em caixa operacional é de ${pct1(((r.ebitda_base - capex) / r.ebitda_base) * 100)}, antes de fundo de maneio, juros e impostos.`
-        : "Não foi indicado CAPEX recorrente, pelo que não é possível estimar a conversão de EBITDA em caixa.",
-    fundo_maneio: "O fundo de maneio não foi analisado; poderá originar ajustamentos de closing.",
+        ? `Após CAPEX recorrente de ${eur(capex)}, a conversão indicativa de EBITDA em caixa operacional é de ${pct1(((r.ebitda_base - capex) / r.ebitda_base) * 100)}, antes de fundo de maneio, juros e impostos. Limitação: sem a desagregação entre CAPEX de manutenção e de crescimento, o fluxo de caixa livre subjacente à avaliação fica sujeito a correção em due diligence.`
+        : "Não foi indicado CAPEX recorrente. Limitação: sem este dado não é possível estimar a conversão de EBITDA em caixa, o que reduz a fiabilidade do valor calculado e tende a traduzir-se em desconto por parte de um comprador.",
+    fundo_maneio:
+      "O fundo de maneio não foi analisado nesta fase. Limitação: sem a normalização do fundo de maneio não é possível fixar com precisão a ponte entre Enterprise Value e Equity Value, podendo originar ajustamentos de closing euro-a-euro no preço final.",
     backlog:
       typeof lead.backlog_contratado === "number"
-        ? `Backlog contratado de ${eur(lead.backlog_contratado)}, que dá visibilidade adicional à faturação futura.`
+        ? `Foi indicado backlog contratado de ${eur(lead.backlog_contratado)}. Limitação: sem detalhe das margens, prazos de execução e condições de cancelamento, a visibilidade de receita não foi incorporada quantitativamente na avaliação — apenas considerada de forma qualitativa.`
         : null,
     concentracao:
       typeof top5 === "number"
-        ? `Concentração comercial: os cinco maiores clientes representam ${top5}% da faturação${typeof lead.pct_top1_clientes === "number" ? ` e o maior cliente ${lead.pct_top1_clientes}%` : ""}.`
+        ? `Concentração comercial: os cinco maiores clientes representam ${top5}% da faturação${typeof lead.pct_top1_clientes === "number" ? ` e o maior cliente ${lead.pct_top1_clientes}%` : ""}. Limitação: a dependência de poucos clientes aumenta o risco percebido da receita e condiciona diretamente o múltiplo aplicável na avaliação.`
         : null,
     ajustamentos:
       typeof lead.despesas_extraordinarias_ano1 === "number" && lead.despesas_extraordinarias_ano1 !== 0
-        ? `Foram declarados ajustamentos não recorrentes de ${eur(lead.despesas_extraordinarias_ano1)}, a validar documentalmente.`
-        : "Não foram declarados ajustamentos não recorrentes ao EBITDA.",
+        ? `Foram declarados ajustamentos não recorrentes de ${eur(lead.despesas_extraordinarias_ano1)}. Limitação: até serem validados documentalmente, o EBITDA ajustado — e, por consequência, o intervalo de avaliação apresentado — fica sujeito a revisão.`
+        : "Não foram declarados ajustamentos não recorrentes ao EBITDA. Limitação: qualquer normalização identificada em due diligence (remunerações de sócios, rendas fora de mercado, proveitos não recorrentes) poderá alterar o EBITDA base e o valor calculado.",
   };
 
   // --- Alertas automáticos ---
