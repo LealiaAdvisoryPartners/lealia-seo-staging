@@ -932,7 +932,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 
     // --- DCF (mesma engine, mesmos dados) ---
     dcf: r && r.dcf.ok ? r.dcf : null,
-    dcf_motivo: r && !r.dcf.ok ? r.dcf.motivo : null,
+    dcf_motivo: r && !r.dcf.ok ? (r.dcf as { ok: false; motivo: string }).motivo : null,
     ...flags,
   };
 }
