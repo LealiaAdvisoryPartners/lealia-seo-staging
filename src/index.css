@@ -1244,19 +1244,68 @@
   list-style: disc;
 }
 
-/* Slide 4 — Leitura complementar em duas colunas para caber na página */
-.report-leitura {
-  columns: 2;
-  column-gap: 10mm;
-  font-size: 8.3pt;
-  line-height: 1.35;
+/* Slide 4 — composição editorial uniforme e previsível */
+.report-disclaimer-slide {
+  --disclaimer-body-size: 8.35pt;
+  --disclaimer-line-height: 1.38;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
 }
 
-.report-leitura li {
-  break-inside: avoid;
-  margin-bottom: 1.6mm;
-  text-align: justify;
-  text-align-last: left;
+.report-disclaimer-slide .report-h2 {
+  margin-bottom: 2.5mm;
+}
+
+.report-disclaimer-slide .report-h3 {
+  margin-bottom: 2mm;
+}
+
+.report-disclaimer-slide .report-p,
+.report-disclaimer-slide .report-list,
+.report-disclaimer-note {
+  font-size: var(--disclaimer-body-size);
+  line-height: var(--disclaimer-line-height);
+}
+
+.report-disclaimer-intro {
+  margin: 0 0 3.5mm;
+}
+
+.report-disclaimer-grid,
+.report-disclaimer-reading-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 10mm;
+}
+
+.report-disclaimer-grid > section:first-child,
+.report-disclaimer-reading-grid > .report-list:first-child {
+  border-right: 1px solid hsl(220 15% 88%);
+  padding-right: 10mm;
+}
+
+.report-disclaimer-slide .report-list {
+  margin: 0;
+}
+
+.report-disclaimer-slide .report-list li {
+  margin-bottom: 1.4mm;
+  text-align: left;
+}
+
+.report-disclaimer-note {
+  margin: 2mm 0 0;
+  padding-top: 2mm;
+  border-top: 1px solid hsl(220 15% 88%);
+  color: hsl(220 12% 45%);
+}
+
+.report-disclaimer-reading {
+  margin-top: 3mm;
+  padding-top: 3mm;
+  border-top: 1px solid hsl(36 55% 52% / 0.55);
 }
 
 .report-inline-note {
