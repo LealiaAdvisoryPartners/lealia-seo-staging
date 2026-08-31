@@ -505,7 +505,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </div>
               </div>
 
-              <H>Leitura complementar</H>
+              <H style={{ marginTop: "5mm" }}>Leitura complementar</H>
               <ul className="report-list report-list-disc report-compact">
                 <li>{d.qualidade.conversao_caixa}</li>
                 <li>{d.qualidade.fundo_maneio}</li>
@@ -517,10 +517,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   fase e devem ser preparados antes de um processo formal.
                 </li>
               </ul>
-              <div className="report-note">
-                A qualidade dos resultados é o principal determinante do desconto ou prémio aplicado em due diligence.
-                Cada ajustamento ao EBITDA deve ter suporte documental.
-              </div>
             </Page>
 
             {/* 5 — Método e alternativas */}
