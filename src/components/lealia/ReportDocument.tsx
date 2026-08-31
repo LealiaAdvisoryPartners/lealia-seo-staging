@@ -81,10 +81,7 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
   const gap = 34;
   const startX = 26;
   const width = startX * 2 + chartItems.length * barWidth + Math.max(0, chartItems.length - 1) * gap;
-  const label = (value: number) =>
-    new Intl.NumberFormat("pt-PT", { maximumFractionDigits: 0, useGrouping: true })
-      .format(Math.round(value / 1000))
-      .replace(/[\s\u202f\u2009\u00a0]/g, "\u00a0");
+  const label = (value: number) => kEur(value);
 
   return (
     <figure className="report-waterfall">
@@ -150,9 +147,14 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
 }
 
 
-const nbsp = (t: string) => t.replace(/[\s\u202f\u2009\u00a0]/g, "\u00a0");
-const kEur = (v: number) =>
-  nbsp(new Intl.NumberFormat("pt-PT", { maximumFractionDigits: 0 }).format(Math.round(v / 1000)));
+/** Agrupamento de milhares consistente (espaço inquebrável), inclusive para números de 4 dígitos. */
+const grupos = (n: number) => {
+  const neg = n < 0;
+  const s = Math.abs(Math.round(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
+  return (neg ? "-" : "") + s;
+};
+const kEur = (v: number) => grupos(v / 1000);
+
 const pctFmt = (v: number, casas = 1) => `${(v * 100).toFixed(casas).replace(".", ",")}%`;
 const xFmt = (v: number | null) => (v === null ? "—" : `${v.toFixed(2).replace(".", ",")}x`);
 const fatorFmt = (v: number) => v.toFixed(3).replace(".", ",");

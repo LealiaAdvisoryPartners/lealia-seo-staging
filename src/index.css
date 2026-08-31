@@ -1644,7 +1644,14 @@
 .report-sens-table td:first-child,
 .report-sens-table th:first-child {
   text-align: left;
+  width: 30%;
 }
+
+.report-sens-table th:first-child {
+  font-size: 5.8pt;
+  letter-spacing: 0.04em;
+}
+
 
 .report-sens-base {
   font-weight: 700;
