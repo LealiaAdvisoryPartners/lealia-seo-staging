@@ -362,9 +362,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   ))}
                 </tbody>
               </table>
-              <p className="report-small">{d.nota_historico}</p>
 
-              <H>Crescimento (CAGR)</H>
               {d.qualidade.tem_serie ? (
                 <table className="report-table report-table-compact">
                   <thead>
