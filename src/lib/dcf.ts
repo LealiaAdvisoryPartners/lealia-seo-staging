@@ -204,13 +204,14 @@ export function calcularDCF(input: DcfInput): DcfResult {
   }
   crescimento_inicial = Math.min(Math.max(crescimento_inicial, -0.05), CRESCIMENTO_INICIAL_MAX);
 
-  // --- Margem EBITDA de referência (critério conservador) ---
+  // --- Margem EBITDA de referência (margem normalizada do último exercício) ---
   const margens = historico
     .filter((h) => typeof h.ebitda === "number" && h.receita > 0)
     .map((h) => (h.ebitda as number) / h.receita);
   const margemHistorica = margens.length >= 2 ? margens.reduce((s, m) => s + m, 0) / margens.length : null;
   const margemAtual = input.ebitda_normalizado / receitaBase;
-  const margem_ebitda = margemHistorica !== null ? Math.min(margemHistorica, margemAtual) : margemAtual;
+  const margem_ebitda = margemAtual;
+
 
   // --- D&A e Capex ---
   const da_origem: OrigemDado = typeof input.depreciacoes_amortizacoes === "number" ? "Input" : "Assumption";
