@@ -781,7 +781,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       <td>{d.qualidade.cagr_faturacao ?? "—"}</td>
                     </tr>
                     <tr>
-                      <td>CAGR do EBITDA</td>
+                      <td>CAGR do EBITDA normalizado</td>
                       <td>{d.qualidade.cagr_ebitda ?? "—"}</td>
                     </tr>
                   </tbody>
