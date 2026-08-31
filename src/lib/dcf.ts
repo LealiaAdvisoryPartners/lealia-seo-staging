@@ -335,22 +335,24 @@ export function calcularDCF(input: DcfInput): DcfResult {
   }
 
   // --- Matrizes de sensibilidade (Enterprise Value) ---
-  const evPara = (opts: { wacc?: number; g?: number; capexPct?: number; fcffFator?: number }): number => {
+  const cagr_visivel = Math.pow(receitaAnterior / receitaBase, 1 / HORIZONTE) - 1;
+
+  const evPara = (opts: { wacc?: number; g?: number; capexPct?: number; cagr?: number; margem?: number }): number => {
     const w = opts.wacc ?? wacc;
     const gT = opts.g ?? TERMINAL_GROWTH;
     const cx = opts.capexPct ?? capex_pct_receita;
-    const fator = opts.fcffFator ?? 1;
+    const mg = opts.margem ?? margem_ebitda;
     if (w <= gT) return NaN;
     let rec = receitaBase;
     let pv = 0;
     let ultimoFcff = 0;
     for (let t = 1; t <= HORIZONTE; t++) {
-      const g = crescimentoAno(t);
+      const g = opts.cagr !== undefined ? opts.cagr : crescimentoAno(t);
       const receita = rec * (1 + g);
-      const ebitda = receita * margem_ebitda;
+      const ebitda = receita * mg;
       const da = receita * da_pct_receita;
       const nopat = (ebitda - da) * (1 - cit);
-      const fcff = (nopat + da - receita * cx) * fator;
+      const fcff = nopat + da - receita * cx;
       pv += fcff / Math.pow(1 + w, t - 0.5);
       ultimoFcff = fcff;
       rec = receita;
@@ -369,31 +371,28 @@ export function calcularDCF(input: DcfInput): DcfResult {
   const waccEixo = eixo(wacc, 0.01);
   const gEixo = eixo(TERMINAL_GROWTH, 0.005);
   const capexEixo = eixo(capex_pct_receita, Math.max(0.005, capex_pct_receita * 0.25));
-  const fcffEixo = [-2, -1, 0, 1, 2].map((k) => ({
-    valor: 1 + k * 0.05,
-    label: `${k === 0 ? "Base" : `${k > 0 ? "+" : "−"}${Math.abs(k * 5)}%`}`,
-    base: k === 0,
-  }));
+  const cagrEixo = eixo(cagr_visivel, 0.025);
+  const margemEixo = eixo(margem_ebitda, 0.025).filter((m) => m.valor > 0);
 
   const matrizes: DcfMatriz[] = [
     {
-      titulo: "WACC vs. crescimento na perpetuidade",
-      eixo_x_label: "g terminal",
-      eixo_y_label: "WACC",
-      colunas: gEixo,
-      linhas: waccEixo.map((w) => ({
-        ...w,
-        valores: gEixo.map((g) => evPara({ wacc: w.valor, g: g.valor })),
+      titulo: "CAGR da faturação (período explícito) vs. WACC",
+      eixo_x_label: "WACC",
+      eixo_y_label: "CAGR receita",
+      colunas: waccEixo,
+      linhas: cagrEixo.map((c) => ({
+        ...c,
+        valores: waccEixo.map((w) => evPara({ wacc: w.valor, cagr: c.valor })),
       })),
     },
     {
-      titulo: "Crescimento do FCFF vs. WACC",
+      titulo: "Margem EBITDA média (período explícito) vs. WACC",
       eixo_x_label: "WACC",
-      eixo_y_label: "FCFF",
+      eixo_y_label: "Margem EBITDA",
       colunas: waccEixo,
-      linhas: fcffEixo.map((f) => ({
-        ...f,
-        valores: waccEixo.map((w) => evPara({ wacc: w.valor, fcffFator: f.valor })),
+      linhas: margemEixo.map((m) => ({
+        ...m,
+        valores: waccEixo.map((w) => evPara({ wacc: w.valor, margem: m.valor })),
       })),
     },
     {
@@ -417,6 +416,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       })),
     },
   ];
+
 
   const ebitdaAno1 = anos.find((a) => a.tipo === "forecast")!.ebitda;
 
