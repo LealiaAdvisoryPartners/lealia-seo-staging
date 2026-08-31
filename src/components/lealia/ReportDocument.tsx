@@ -44,7 +44,11 @@ function efeitoQualitativo(multiplicador: number, semDados?: boolean, efeito?: s
   return "Neutro";
 }
 
-const H = ({ children }: { children: React.ReactNode }) => <h2 className="report-h2">{children}</h2>;
+const H = ({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) => (
+  <h2 className={`report-h2${className ? ` ${className}` : ""}`} style={style}>
+    {children}
+  </h2>
+);
 
 const Kv = ({ label, value }: { label: React.ReactNode; value: React.ReactNode }) => (
   <div className="report-kv">
