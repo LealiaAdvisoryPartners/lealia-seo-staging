@@ -750,8 +750,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <th>Ano</th>
                     <th>Faturação</th>
                     <th>EBITDA</th>
-                    <th>Margem normalizada</th>
                     <th>Extraordinários</th>
+                    <th>Margem normalizada</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -760,8 +760,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       <td>{l.ano}</td>
                       <td>{l.faturacao}</td>
                       <td>{l.ebitda}</td>
-                      <td>{l.margem}</td>
                       <td>{l.despesas}</td>
+                      <td>{l.margem}</td>
                     </tr>
                   ))}
                 </tbody>
