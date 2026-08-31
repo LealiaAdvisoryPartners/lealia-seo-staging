@@ -363,6 +363,30 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </tbody>
               </table>
               <p className="report-small">{d.nota_historico}</p>
+
+              <H>Crescimento (CAGR)</H>
+              {d.qualidade.tem_serie ? (
+                <table className="report-table report-table-compact">
+                  <thead>
+                    <tr>
+                      <th>Indicador</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>CAGR da faturação</td>
+                      <td>{d.qualidade.cagr_faturacao ?? "—"}</td>
+                    </tr>
+                    <tr>
+                      <td>CAGR do EBITDA</td>
+                      <td>{d.qualidade.cagr_ebitda ?? "—"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              ) : (
+                <p className="report-small">Sem informação suficiente</p>
+              )}
             </div>
             <div>
               <H>Normalização do EBITDA</H>
@@ -417,6 +441,10 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   <tr>
                     <td>% Concentração no top 5 clientes</td>
                     <td>{d.concentracao_top5 || "Não indicado"}</td>
+                  </tr>
+                  <tr>
+                    <td>Clientes ativos</td>
+                    <td>{d.num_clientes_ativos || "Não indicado"}</td>
                   </tr>
                 </tbody>
               </table>
