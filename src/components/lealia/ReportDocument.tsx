@@ -45,7 +45,15 @@ function efeitoQualitativo(multiplicador: number, semDados?: boolean, efeito?: s
   return "Neutro";
 }
 
-const H = ({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) => (
+const H = ({
+  children,
+  className,
+  style,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}) => (
   <h2 className={`report-h2${className ? ` ${className}` : ""}`} style={style}>
     {children}
   </h2>
@@ -146,11 +154,12 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
   );
 }
 
-
 /** Agrupamento de milhares consistente (espaço inquebrável), inclusive para números de 4 dígitos. */
 const grupos = (n: number) => {
   const neg = n < 0;
-  const s = Math.abs(Math.round(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
+  const s = Math.abs(Math.round(n))
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
   return (neg ? "-" : "") + s;
 };
 const kEur = (v: number) => grupos(v / 1000);
@@ -196,16 +205,13 @@ function MapaTabela({ dcf, linhas, head = true }: { dcf: Dcf; linhas: MapaLinha[
                 </td>
               );
             })}
-            <td className="report-dcf-tv">
-              {l.tv === undefined || l.tv === null ? "—" : (l.fmt ?? kEur)(l.tv)}
-            </td>
+            <td className="report-dcf-tv">{l.tv === undefined || l.tv === null ? "—" : (l.fmt ?? kEur)(l.tv)}</td>
           </tr>
         ))}
       </tbody>
     </table>
   );
 }
-
 
 function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
   const dcf = d.dcf;
@@ -419,14 +425,13 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
               </tbody>
             </table>
             <p className="report-small">
-              Custo de capital estimado numa ótica prudente: às referências setoriais acrescem prémios de dimensão e
-              de iliquidez, porque uma PME não cotada tem risco superior ao das cotadas do setor. Beta, ERP, CRP,
-              estrutura de capital e spread são proxies setoriais; CIT de {d.pais} ({dcf.cit_nota})
+              Custo de capital estimado numa ótica prudente: às referências setoriais acrescem prémios de dimensão e de
+              iliquidez, porque uma PME não cotada tem risco superior ao das cotadas do setor. Beta, ERP, CRP, estrutura
+              de capital e spread são proxies setoriais; CIT de {d.pais} ({dcf.cit_nota})
               {dcf.nota_reconciliacao ? ` ${dcf.nota_reconciliacao}` : ""}
             </p>
           </div>
         </section>
-
       </div>
     </Page>
   );
@@ -516,9 +521,8 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
           <p className="report-small report-dcf-assumptions-intro">
             Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
             mercado, seguindo um critério conservador — na dúvida, adota-se o valor que resulta numa avaliação mais
-            prudente. Os parâmetros já apresentados nos slides anteriores (crescimento, margens, capex, D&amp;A,
-            imposto e componentes do custo de capital) não são aqui repetidos; abaixo ficam apenas os pressupostos
-            adicionais.
+            prudente. Os parâmetros já apresentados nos slides anteriores (crescimento, margens, capex, D&amp;A, imposto
+            e componentes do custo de capital) não são aqui repetidos; abaixo ficam apenas os pressupostos adicionais.
           </p>
         </div>
         <div>
@@ -751,7 +755,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <th>Faturação</th>
                     <th>EBITDA</th>
                     <th>Extraordinários</th>
-                    <th>Margem normalizada</th>
+                    <th>Margem norm.</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -858,20 +862,19 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
           <>
             {/* 4 — Âmbito e limitações */}
             <Page numero={4} titulo="Âmbito e limitações">
-              <div className="report-disclaimer-slide">
-                <H>Âmbito e limitações deste relatório</H>
-                <p className="report-p report-disclaimer-intro">{DISCLAIMER}</p>
-                <div className="report-disclaimer-grid">
-                  <section>
+              <H>Âmbito e limitações deste relatório</H>
+              <p className="report-p">{DISCLAIMER}</p>
+              <div className="report-two">
+                <div>
                   <H>Natureza do documento</H>
-                  <ul className="report-list report-list-disc">
+                  <ul className="report-list report-list-disc report-compact">
                     <li>
                       Trata-se de uma avaliação indicativa preliminar, elaborada exclusivamente a partir da informação
                       fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.
                     </li>
                     <li>
-                      Não constitui aconselhamento financeiro, fiscal, contabilístico ou jurídico, nem uma
-                      recomendação de investimento ou desinvestimento.
+                      Não constitui aconselhamento financeiro, fiscal, contabilístico ou jurídico, nem uma recomendação
+                      de investimento ou desinvestimento.
                     </li>
                     <li>
                       Não configura uma avaliação formal (fairness opinion) para efeitos legais, fiscais,
@@ -882,13 +885,13 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       divulgado a terceiros sem autorização escrita da Lealia Advisory Partners.
                     </li>
                   </ul>
-                  </section>
-                  <section>
+                </div>
+                <div>
                   <H>Limitações e fatores de variação</H>
-                  <ul className="report-list report-list-disc">
+                  <ul className="report-list report-list-disc report-compact">
                     <li>
-                      Os valores apresentados dependem da qualidade, exatidão e completude dos dados introduzidos.
-                      Dados incompletos ou incorretos alteram materialmente o resultado.
+                      Os valores apresentados dependem da qualidade, exatidão e completude dos dados introduzidos. Dados
+                      incompletos ou incorretos alteram materialmente o resultado.
                     </li>
                     <li>
                       As referências de mercado utilizadas refletem condições vigentes à data de elaboração e podem
@@ -903,34 +906,27 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       validação documental dos ajustamentos ao EBITDA.
                     </li>
                   </ul>
-                  <p className="report-disclaimer-note">
-                    A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva
-                    neste documento.
-                  </p>
-                  </section>
-                </div>
-
-                <section className="report-disclaimer-reading">
-                  <H>Leitura complementar</H>
-                  <div className="report-disclaimer-reading-grid">
-                    <ul className="report-list report-list-disc">
-                      <li>{d.qualidade.conversao_caixa}</li>
-                      <li>{d.qualidade.fundo_maneio}</li>
-                      <li>{d.qualidade.ajustamentos}</li>
-                    </ul>
-                    <ul className="report-list report-list-disc">
-                      {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
-                      {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
-                      <li>
-                        A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
-                        fase. Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a
-                        sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou
-                        necessidades estacionais de tesouraria.
-                      </li>
-                    </ul>
+                  <div className="report-note">
+                    A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva neste
+                    documento.
                   </div>
-                </section>
+                </div>
               </div>
+
+              <H style={{ marginTop: "2.5mm", marginBottom: "2mm" }}>Leitura complementar</H>
+              <ul className="report-list report-list-disc report-leitura">
+                <li>{d.qualidade.conversao_caixa}</li>
+                <li>{d.qualidade.fundo_maneio}</li>
+                <li>{d.qualidade.ajustamentos}</li>
+                {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
+                {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
+                <li>
+                  A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta fase.
+                  Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a
+                  sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou
+                  necessidades estacionais de tesouraria.
+                </li>
+              </ul>
             </Page>
 
             {/* 5 — Método e alternativas */}
@@ -1208,7 +1204,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     ))}
                   </tbody>
                 </table>
-
               ) : (
                 <p className="report-p">
                   Não foram identificados drivers de valor específicos com base na informação disponibilizada.
