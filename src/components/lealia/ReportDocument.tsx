@@ -750,8 +750,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <th>Ano</th>
                     <th>Faturação</th>
                     <th>EBITDA</th>
-                    <th>Margem normalizada</th>
                     <th>Extraordinários</th>
+                    <th>Margem normalizada</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -760,8 +760,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       <td>{l.ano}</td>
                       <td>{l.faturacao}</td>
                       <td>{l.ebitda}</td>
-                      <td>{l.margem}</td>
                       <td>{l.despesas}</td>
+                      <td>{l.margem}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -781,7 +781,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       <td>{d.qualidade.cagr_faturacao ?? "—"}</td>
                     </tr>
                     <tr>
-                      <td>CAGR do EBITDA</td>
+                      <td>CAGR do EBITDA normalizado</td>
                       <td>{d.qualidade.cagr_ebitda ?? "—"}</td>
                     </tr>
                   </tbody>
@@ -909,16 +909,14 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </div>
               </div>
 
-              <H style={{ marginTop: "3mm", marginBottom: "2.5mm" }}>Leitura complementar</H>
-              <ul className="report-list report-list-disc report-compact" style={{ lineHeight: 1.35 }}>
-                <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.conversao_caixa}</li>
-                <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.fundo_maneio}</li>
-                <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.ajustamentos}</li>
-                {d.qualidade.concentracao ? (
-                  <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.concentracao}</li>
-                ) : null}
-                {d.qualidade.backlog ? <li style={{ marginBottom: "0.8mm" }}>{d.qualidade.backlog}</li> : null}
-                <li style={{ marginBottom: "0.8mm" }}>
+              <H style={{ marginTop: "2.5mm", marginBottom: "2mm" }}>Leitura complementar</H>
+              <ul className="report-list report-list-disc report-leitura">
+                <li>{d.qualidade.conversao_caixa}</li>
+                <li>{d.qualidade.fundo_maneio}</li>
+                <li>{d.qualidade.ajustamentos}</li>
+                {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
+                {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
+                <li>
                   A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
                   fase. Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a
                   sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou
