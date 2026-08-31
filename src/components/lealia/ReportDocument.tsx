@@ -858,12 +858,13 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
           <>
             {/* 4 — Âmbito e limitações */}
             <Page numero={4} titulo="Âmbito e limitações">
-              <H>Âmbito e limitações deste relatório</H>
-              <p className="report-p">{DISCLAIMER}</p>
-              <div className="report-two">
-                <div>
+              <div className="report-disclaimer-slide">
+                <H>Âmbito e limitações deste relatório</H>
+                <p className="report-p report-disclaimer-intro">{DISCLAIMER}</p>
+                <div className="report-disclaimer-grid">
+                  <section>
                   <H>Natureza do documento</H>
-                  <ul className="report-list report-list-disc report-compact">
+                  <ul className="report-list report-list-disc">
                     <li>
                       Trata-se de uma avaliação indicativa preliminar, elaborada exclusivamente a partir da informação
                       fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.
@@ -881,10 +882,10 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       divulgado a terceiros sem autorização escrita da Lealia Advisory Partners.
                     </li>
                   </ul>
-                </div>
-                <div>
+                  </section>
+                  <section>
                   <H>Limitações e fatores de variação</H>
-                  <ul className="report-list report-list-disc report-compact">
+                  <ul className="report-list report-list-disc">
                     <li>
                       Os valores apresentados dependem da qualidade, exatidão e completude dos dados introduzidos.
                       Dados incompletos ou incorretos alteram materialmente o resultado.
@@ -902,27 +903,34 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       validação documental dos ajustamentos ao EBITDA.
                     </li>
                   </ul>
-                  <div className="report-note">
+                  <p className="report-disclaimer-note">
                     A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva
                     neste documento.
-                  </div>
+                  </p>
+                  </section>
                 </div>
-              </div>
 
-              <H style={{ marginTop: "2.5mm", marginBottom: "2mm" }}>Leitura complementar</H>
-              <ul className="report-list report-list-disc report-leitura">
-                <li>{d.qualidade.conversao_caixa}</li>
-                <li>{d.qualidade.fundo_maneio}</li>
-                <li>{d.qualidade.ajustamentos}</li>
-                {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
-                {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
-                <li>
-                  A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
-                  fase. Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a
-                  sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou
-                  necessidades estacionais de tesouraria.
-                </li>
-              </ul>
+                <section className="report-disclaimer-reading">
+                  <H>Leitura complementar</H>
+                  <div className="report-disclaimer-reading-grid">
+                    <ul className="report-list report-list-disc">
+                      <li>{d.qualidade.conversao_caixa}</li>
+                      <li>{d.qualidade.fundo_maneio}</li>
+                      <li>{d.qualidade.ajustamentos}</li>
+                    </ul>
+                    <ul className="report-list report-list-disc">
+                      {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
+                      {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
+                      <li>
+                        A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta
+                        fase. Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a
+                        sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou
+                        necessidades estacionais de tesouraria.
+                      </li>
+                    </ul>
+                  </div>
+                </section>
+              </div>
             </Page>
 
             {/* 5 — Método e alternativas */}
