@@ -750,7 +750,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                     <th>Ano</th>
                     <th>Faturação</th>
                     <th>EBITDA</th>
-                    <th>Margem</th>
+                    <th>Margem normalizada</th>
                     <th>Extraordinários</th>
                   </tr>
                 </thead>
