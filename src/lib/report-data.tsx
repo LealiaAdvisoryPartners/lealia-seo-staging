@@ -155,7 +155,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     ebitda: eur(a.ebitda),
     margem:
       typeof a.faturacao === "number" && a.faturacao > 0 && typeof a.ebitda === "number"
-        ? pct1((a.ebitda / a.faturacao) * 100)
+        ? pct1(((a.ebitda + (typeof a.desp === "number" ? a.desp : 0)) / a.faturacao) * 100)
         : "—",
     despesas: typeof a.desp === "number" && a.desp !== 0 ? eur(a.desp) : "—",
   }));
