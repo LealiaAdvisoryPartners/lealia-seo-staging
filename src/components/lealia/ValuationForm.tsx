@@ -309,6 +309,7 @@ export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => voi
   if (step === 2) {
     if (!filled(form.caixa_e_depositos)) errors.caixa_e_depositos = "Campo obrigatório";
     if (!filled(form.divida_financeira)) errors.divida_financeira = "Campo obrigatório";
+    if (!filled(form.depreciacoes_amortizacoes)) errors.depreciacoes_amortizacoes = "Campo obrigatório";
     if (!form.num_colaboradores) errors.num_colaboradores = "Selecione uma opção";
   }
   if (step === 3) {
@@ -613,8 +614,8 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
           </Field>
           <Field
             label="Depreciações & Amortizações anuais (total)"
-            hint="opcional"
             tooltip={TOOLTIP_DA}
+            error={err("depreciacoes_amortizacoes")}
             htmlFor="damortizacoes"
           >
             <MoneyInput

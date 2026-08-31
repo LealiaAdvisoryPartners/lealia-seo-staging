@@ -1655,3 +1655,78 @@
   outline-offset: -0.6mm;
   font-weight: 700;
 }
+
+.report-dcf-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4mm;
+}
+
+.report-dcf-unit {
+  font-size: 6.6pt;
+  color: hsl(220 10% 50%);
+}
+
+.report-dcf-formula {
+  font-size: 6.4pt;
+  color: hsl(220 10% 45%);
+  margin: 0.5mm 0 0;
+  line-height: 1.35;
+}
+
+.report-dcf .report-dcf-map {
+  margin: 1mm 0 0;
+}
+
+.report-dcf-assumptions-intro {
+  margin: 0 0 1mm;
+  font-size: 6.2pt;
+  line-height: 1.35;
+}
+
+.report-dcf .report-dcf-map {
+  table-layout: fixed;
+}
+
+.report-dcf .report-dcf-map th:first-child,
+.report-dcf .report-dcf-map td:first-child {
+  width: 24mm;
+}
+
+.report-dcf-head-hidden {
+  visibility: hidden;
+}
+
+.report-dcf-head-hidden th {
+  height: 0;
+  padding: 0;
+  line-height: 0;
+  font-size: 0;
+  border: 0;
+}
+
+.report-dcf-bottom .report-table-compact td {
+  padding-top: 0.7mm;
+  padding-bottom: 0.7mm;
+}
+
+.report-dcf-bottom .report-table-compact td {
+  padding-top: 0.35mm;
+  padding-bottom: 0.35mm;
+  font-size: 6.6pt;
+}
+
+.report-dcf-bottom .report-h2 {
+  margin-bottom: 0.5mm;
+}
+
+.report-dcf-assumptions .report-table td {
+  padding-top: 0.35mm;
+  padding-bottom: 0.35mm;
+  font-size: 6.1pt;
+}
+
+.report-dcf-assumptions .report-h2 {
+  margin-bottom: 0.5mm;
+}

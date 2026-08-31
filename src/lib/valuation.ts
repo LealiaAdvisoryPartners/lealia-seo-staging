@@ -737,6 +737,8 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
     depreciacoes_amortizacoes: input.depreciacoes_amortizacoes ?? null,
     divida_liquida,
     ativos_nao_operacionais: valor_imovel_a_adicionar,
+    ev_multiplos: (ev_min + ev_max) / 2,
+
   });
 
   return {
