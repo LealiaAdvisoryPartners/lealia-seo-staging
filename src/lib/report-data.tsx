@@ -40,6 +40,7 @@ export type ReportLead = {
   caixa_e_depositos?: number | null;
   divida_financeira?: number | null;
   capex_anual_recorrente?: number | null;
+  depreciacoes_amortizacoes?: number | null;
   pct_top5_clientes?: number | null;
   pct_top1_clientes?: number | null;
   backlog_contratado?: number | null;
@@ -87,6 +88,7 @@ export function valuationInputFromLead(lead: ReportLead): ValuationInput {
     caixa_e_depositos: lead.caixa_e_depositos ?? 0,
     divida_financeira: lead.divida_financeira ?? 0,
     capex_anual_recorrente: lead.capex_anual_recorrente ?? null,
+    depreciacoes_amortizacoes: lead.depreciacoes_amortizacoes ?? null,
     pct_top5_clientes: lead.pct_top5_clientes ?? null,
     pct_top1_clientes: lead.pct_top1_clientes ?? null,
     backlog_contratado: lead.backlog_contratado ?? null,

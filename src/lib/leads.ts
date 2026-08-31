@@ -23,6 +23,7 @@ export type LeadPayload = {
   caixa_e_depositos?: number | null;
   divida_financeira?: number | null;
   capex_anual_recorrente?: number | null;
+  depreciacoes_amortizacoes?: number | null;
   divida_liquida?: number | null;
   pct_top5_clientes?: number | null;
   geografia_clientes?: string | null;
