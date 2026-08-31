@@ -11,19 +11,29 @@ export async function descarregarRelatorioPdf(nomeFicheiro: string) {
   const paginas = Array.from(document.querySelectorAll<HTMLElement>(".report-doc .report-page"));
   if (!paginas.length) throw new Error("Relatório não encontrado na página");
 
-  const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4", compress: true });
+  // Garante escala 1:1 durante a captura (em mobile o documento está reduzido)
+  const zoomAtual = document.documentElement.style.getPropertyValue("--report-zoom");
+  document.documentElement.style.setProperty("--report-zoom", "1");
 
-  for (let i = 0; i < paginas.length; i += 1) {
-    const canvas = await html2canvas(paginas[i], {
-      scale: 2,
-      backgroundColor: "#ffffff",
-      useCORS: true,
-      logging: false,
-    });
-    const imagem = canvas.toDataURL("image/jpeg", 0.92);
-    if (i > 0) pdf.addPage("a4", "landscape");
-    pdf.addImage(imagem, "JPEG", 0, 0, A4_LANDSCAPE.width, A4_LANDSCAPE.height, undefined, "FAST");
+  try {
+    const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4", compress: true });
+
+    for (let i = 0; i < paginas.length; i += 1) {
+      const canvas = await html2canvas(paginas[i], {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        logging: false,
+      });
+      const imagem = canvas.toDataURL("image/jpeg", 0.92);
+      if (i > 0) pdf.addPage("a4", "landscape");
+      pdf.addImage(imagem, "JPEG", 0, 0, A4_LANDSCAPE.width, A4_LANDSCAPE.height, undefined, "FAST");
+    }
+
+    pdf.save(nomeFicheiro);
+  } finally {
+    if (zoomAtual) document.documentElement.style.setProperty("--report-zoom", zoomAtual);
+    else document.documentElement.style.removeProperty("--report-zoom");
   }
-
-  pdf.save(nomeFicheiro);
 }
+

@@ -465,7 +465,6 @@
 .report-page {
   width: 297mm;
   height: 210mm;
-  max-width: 100%;
   background: #ffffff;
   color: #022341;
   padding: 11mm 14mm 9mm;
@@ -477,6 +476,22 @@
   font-size: 9.5pt;
   line-height: 1.45;
 }
+
+/* Ecrãs estreitos: reduz o documento A4 inteiro em vez de o espremer */
+@media screen and (max-width: 1200px) {
+  .report-shell {
+    padding: 1rem 0.5rem 2.5rem;
+  }
+  .report-doc {
+    zoom: var(--report-zoom, 1);
+  }
+  .report-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+
 
 .report-head {
   display: flex;
