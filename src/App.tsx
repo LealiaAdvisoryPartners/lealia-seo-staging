@@ -69,6 +69,7 @@ const App = () => (
 
                   {/* Relatório de avaliação (link privado, sem prefixo de idioma) */}
                   <Route path="/relatorio/:token" element={<Relatorio />} />
+                  <Route path="/__report-test" element={<ReportTest />} />
                   <Route path="/en/relatorio/:token" element={<Relatorio />} />
                   <Route path="/pt/relatorio/:token" element={<Relatorio />} />
                   <Route path="/es/relatorio/:token" element={<Relatorio />} />
