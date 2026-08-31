@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import DevReportTest from "@/pages/DevReportTest";
+
 import { LanguageProvider } from "./contexts/LanguageContext";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
@@ -68,7 +68,6 @@ const App = () => (
                   <Route path="/privacy" element={<Privacy />} />
 
                   {/* Relatório de avaliação (link privado, sem prefixo de idioma) */}
-                  <Route path="/dev-report-test" element={<DevReportTest />} />
                   <Route path="/relatorio/:token" element={<Relatorio />} />
                   <Route path="/en/relatorio/:token" element={<Relatorio />} />
                   <Route path="/pt/relatorio/:token" element={<Relatorio />} />
