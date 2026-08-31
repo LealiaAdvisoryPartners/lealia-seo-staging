@@ -28,7 +28,6 @@ export type DcfLinhaAno = {
   pv: number | null;
 };
 
-
 export type DcfMatriz = {
   titulo: string;
   eixo_x_label: string;
@@ -100,16 +99,96 @@ type RefSetor = {
 };
 
 const REF_SETOR: Record<string, RefSetor> = {
-  Agricultura: { beta_unlevered: 0.72, peso_divida: 0.35, spread: 0.028, capex_pct_receita: 0.055, da_pct_receita: 0.045, nwc_pct_receita: 0.18, crescimento_ref: 0.03 },
-  Construção: { beta_unlevered: 0.95, peso_divida: 0.35, spread: 0.032, capex_pct_receita: 0.03, da_pct_receita: 0.025, nwc_pct_receita: 0.15, crescimento_ref: 0.035 },
-  Energia: { beta_unlevered: 0.78, peso_divida: 0.4, spread: 0.026, capex_pct_receita: 0.07, da_pct_receita: 0.06, nwc_pct_receita: 0.08, crescimento_ref: 0.045 },
-  "Hotelaria e Turismo": { beta_unlevered: 0.95, peso_divida: 0.4, spread: 0.033, capex_pct_receita: 0.06, da_pct_receita: 0.055, nwc_pct_receita: 0.02, crescimento_ref: 0.035 },
-  Logística: { beta_unlevered: 0.9, peso_divida: 0.35, spread: 0.03, capex_pct_receita: 0.05, da_pct_receita: 0.045, nwc_pct_receita: 0.1, crescimento_ref: 0.035 },
-  "Manufatura/Indústria": { beta_unlevered: 0.9, peso_divida: 0.32, spread: 0.03, capex_pct_receita: 0.04, da_pct_receita: 0.035, nwc_pct_receita: 0.18, crescimento_ref: 0.03 },
-  Retalho: { beta_unlevered: 0.85, peso_divida: 0.3, spread: 0.031, capex_pct_receita: 0.025, da_pct_receita: 0.022, nwc_pct_receita: 0.08, crescimento_ref: 0.03 },
-  Saúde: { beta_unlevered: 0.8, peso_divida: 0.3, spread: 0.028, capex_pct_receita: 0.04, da_pct_receita: 0.035, nwc_pct_receita: 0.06, crescimento_ref: 0.05 },
-  "Serviços B2B": { beta_unlevered: 0.88, peso_divida: 0.22, spread: 0.029, capex_pct_receita: 0.015, da_pct_receita: 0.015, nwc_pct_receita: 0.12, crescimento_ref: 0.04 },
-  "Tecnologia/Software": { beta_unlevered: 1.05, peso_divida: 0.15, spread: 0.032, capex_pct_receita: 0.02, da_pct_receita: 0.03, nwc_pct_receita: 0.05, crescimento_ref: 0.07 },
+  Agricultura: {
+    beta_unlevered: 0.72,
+    peso_divida: 0.35,
+    spread: 0.028,
+    capex_pct_receita: 0.055,
+    da_pct_receita: 0.045,
+    nwc_pct_receita: 0.18,
+    crescimento_ref: 0.03,
+  },
+  Construção: {
+    beta_unlevered: 0.95,
+    peso_divida: 0.35,
+    spread: 0.032,
+    capex_pct_receita: 0.03,
+    da_pct_receita: 0.025,
+    nwc_pct_receita: 0.15,
+    crescimento_ref: 0.035,
+  },
+  Energia: {
+    beta_unlevered: 0.78,
+    peso_divida: 0.4,
+    spread: 0.026,
+    capex_pct_receita: 0.07,
+    da_pct_receita: 0.06,
+    nwc_pct_receita: 0.08,
+    crescimento_ref: 0.045,
+  },
+  "Hotelaria e Turismo": {
+    beta_unlevered: 0.95,
+    peso_divida: 0.4,
+    spread: 0.033,
+    capex_pct_receita: 0.06,
+    da_pct_receita: 0.055,
+    nwc_pct_receita: 0.02,
+    crescimento_ref: 0.035,
+  },
+  Logística: {
+    beta_unlevered: 0.9,
+    peso_divida: 0.35,
+    spread: 0.03,
+    capex_pct_receita: 0.05,
+    da_pct_receita: 0.045,
+    nwc_pct_receita: 0.1,
+    crescimento_ref: 0.035,
+  },
+  "Manufatura/Indústria": {
+    beta_unlevered: 0.9,
+    peso_divida: 0.32,
+    spread: 0.03,
+    capex_pct_receita: 0.04,
+    da_pct_receita: 0.035,
+    nwc_pct_receita: 0.18,
+    crescimento_ref: 0.03,
+  },
+  Retalho: {
+    beta_unlevered: 0.85,
+    peso_divida: 0.3,
+    spread: 0.031,
+    capex_pct_receita: 0.025,
+    da_pct_receita: 0.022,
+    nwc_pct_receita: 0.08,
+    crescimento_ref: 0.03,
+  },
+  Saúde: {
+    beta_unlevered: 0.8,
+    peso_divida: 0.3,
+    spread: 0.028,
+    capex_pct_receita: 0.04,
+    da_pct_receita: 0.035,
+    nwc_pct_receita: 0.06,
+    crescimento_ref: 0.05,
+  },
+  "Serviços B2B": {
+    beta_unlevered: 0.88,
+    peso_divida: 0.22,
+    spread: 0.029,
+    capex_pct_receita: 0.015,
+    da_pct_receita: 0.015,
+    nwc_pct_receita: 0.12,
+    crescimento_ref: 0.04,
+  },
+  "Tecnologia/Software": {
+    beta_unlevered: 1.05,
+    peso_divida: 0.15,
+    spread: 0.032,
+    capex_pct_receita: 0.02,
+    da_pct_receita: 0.03,
+    nwc_pct_receita: 0.05,
+    crescimento_ref: 0.07,
+  },
 };
 
 const REF_DEFAULT: RefSetor = {
@@ -185,7 +264,10 @@ export function calcularDCF(input: DcfInput): DcfResult {
 
   const receitaBase = historico.length ? historico[historico.length - 1]!.receita : 0;
   if (receitaBase <= 0 || input.ebitda_normalizado <= 0) {
-    return { ok: false, motivo: "Sem receita ou EBITDA normalizado positivo, não é possível construir uma análise DCF." };
+    return {
+      ok: false,
+      motivo: "Sem receita ou EBITDA normalizado positivo, não é possível construir uma análise DCF.",
+    };
   }
 
   // --- Crescimento inicial (prudente) ---
@@ -204,8 +286,6 @@ export function calcularDCF(input: DcfInput): DcfResult {
 
   // --- Margem EBITDA de referência (margem normalizada do último exercício) ---
   const margem_ebitda = input.ebitda_normalizado / receitaBase;
-
-
 
   // --- D&A e Capex ---
   const da_origem: OrigemDado = typeof input.depreciacoes_amortizacoes === "number" ? "Input" : "Assumption";
@@ -412,13 +492,13 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
   ];
 
-
   const ebitdaAno1 = anos.find((a) => a.tipo === "forecast")!.ebitda;
 
   const fontes: { parametro: string; fonte: string }[] = [
     {
       parametro: "Risk-free rate",
-      fonte: "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).",
+      fonte:
+        "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).",
     },
     {
       parametro: "Equity Risk Premium",
@@ -426,27 +506,33 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
     {
       parametro: "Country Risk Premium",
-      fonte: "Damodaran, Country Risk Premiums, derivado do spread de default do rating soberano ajustado pela volatilidade relativa do mercado acionista.",
+      fonte:
+        "Damodaran, Country Risk Premiums, derivado do spread de default do rating soberano ajustado pela volatilidade relativa do mercado acionista.",
     },
     {
       parametro: "Beta",
-      fonte: "Beta unlevered setorial (Damodaran, Betas by Sector — Europa Ocidental), realavancado à estrutura de capital-alvo do setor pela fórmula de Hamada.",
+      fonte:
+        "Beta unlevered setorial (Damodaran, Betas by Sector — Europa Ocidental), realavancado à estrutura de capital-alvo do setor pela fórmula de Hamada.",
     },
     {
       parametro: "Prémio de dimensão",
-      fonte: "Prémio de small/micro cap face às cotadas de referência (Damodaran / Kroll Size Premia). Aplicado por prudência: uma PME não transacionada tem custo de capital superior ao das empresas de referência do setor.",
+      fonte:
+        "Prémio de small/micro cap face às cotadas de referência (Damodaran / Kroll Size Premia). Aplicado por prudência: uma PME tem custo de capital superior ao das empresas de referência do setor.",
     },
     {
       parametro: "Prémio específico",
-      fonte: "Prémio de iliquidez do capital e de dependência de pessoas-chave, prática corrente em avaliação de PME não cotadas.",
+      fonte:
+        "Prémio de iliquidez do capital e de dependência de pessoas-chave, prática corrente em avaliação de PME não cotadas.",
     },
     {
       parametro: "Cost of debt",
-      fonte: "Risk-free acrescido do spread de crédito médio do setor e de um add-on de PME; o formulário não recolhe o custo efetivo da dívida.",
+      fonte:
+        "Risk-free acrescido do spread de crédito médio do setor e de um add-on de PME; o formulário não recolhe o custo efetivo da dívida.",
     },
     {
       parametro: "Estrutura de capital",
-      fonte: "Estrutura de capital-alvo de referência do setor (Damodaran, Debt Ratios by Sector), não a estrutura corrente da empresa.",
+      fonte:
+        "Estrutura de capital-alvo de referência do setor (Damodaran, Debt Ratios by Sector), não a estrutura corrente da empresa.",
     },
     { parametro: "Taxa de imposto (CIT)", fonte: `Taxa geral aplicável em ${input.pais}. ${cit_nota}` },
   ];
@@ -509,7 +595,12 @@ export function calcularDCF(input: DcfInput): DcfResult {
     { label: "Equity Risk Premium", valor: pct(ERP_BASE), origem: "Assumption", nota: fontes[1]!.fonte },
     { label: "Country Risk Premium", valor: pct(crp), origem: "Assumption", nota: fontes[2]!.fonte },
     { label: "Prémio de dimensão (PME)", valor: pct(SIZE_PREMIUM), origem: "Assumption", nota: fontes[4]!.fonte },
-    { label: "Prémio específico (iliquidez)", valor: pct(PREMIO_ESPECIFICO), origem: "Assumption", nota: fontes[5]!.fonte },
+    {
+      label: "Prémio específico (iliquidez)",
+      valor: pct(PREMIO_ESPECIFICO),
+      origem: "Assumption",
+      nota: fontes[5]!.fonte,
+    },
     {
       label: "Cost of debt (pré / pós imposto)",
       valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`,
@@ -523,7 +614,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       nota: fontes[7]!.fonte,
     },
     {
-      label: "Crescimento estabilizado (anos 5-8)",
+      label: "Crescimento estabilizado",
       valor: pct(CRESCIMENTO_ESTABILIZADO),
       origem: "Assumption",
       nota: "Convergência para um crescimento alinhado com o crescimento nominal de longo prazo da economia, evitando extrapolar taxas elevadas.",
