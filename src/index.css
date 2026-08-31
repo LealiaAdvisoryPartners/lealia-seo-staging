@@ -1710,3 +1710,13 @@
   padding-top: 0.7mm;
   padding-bottom: 0.7mm;
 }
+
+.report-dcf-bottom .report-table-compact td {
+  padding-top: 0.35mm;
+  padding-bottom: 0.35mm;
+  font-size: 6.6pt;
+}
+
+.report-dcf-bottom .report-h2 {
+  margin-bottom: 0.5mm;
+}
