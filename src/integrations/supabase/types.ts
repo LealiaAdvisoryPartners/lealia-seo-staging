@@ -31,6 +31,7 @@ export type Database = {
           created_at: string
           dependencia_acionista_faturacao: string | null
           dependencia_acionista_gestao: string | null
+          depreciacoes_amortizacoes: number | null
           despesas_extraordinarias_ano1: number | null
           despesas_extraordinarias_ano2: number | null
           despesas_extraordinarias_ano3: number | null
@@ -113,6 +114,7 @@ export type Database = {
           created_at?: string
           dependencia_acionista_faturacao?: string | null
           dependencia_acionista_gestao?: string | null
+          depreciacoes_amortizacoes?: number | null
           despesas_extraordinarias_ano1?: number | null
           despesas_extraordinarias_ano2?: number | null
           despesas_extraordinarias_ano3?: number | null
@@ -195,6 +197,7 @@ export type Database = {
           created_at?: string
           dependencia_acionista_faturacao?: string | null
           dependencia_acionista_gestao?: string | null
+          depreciacoes_amortizacoes?: number | null
           despesas_extraordinarias_ano1?: number | null
           despesas_extraordinarias_ano2?: number | null
           despesas_extraordinarias_ano3?: number | null

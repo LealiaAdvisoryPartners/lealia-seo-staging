@@ -45,6 +45,7 @@ export type FormState = {
   caixa_e_depositos: string;
   divida_financeira: string;
   capex_anual_recorrente: string;
+  depreciacoes_amortizacoes: string;
   pct_top5_clientes: string;
   pct_top1_clientes: string;
   backlog_contratado: string;
@@ -95,6 +96,7 @@ export const emptyForm: FormState = {
   caixa_e_depositos: "",
   divida_financeira: "",
   capex_anual_recorrente: "",
+  depreciacoes_amortizacoes: "",
   pct_top5_clientes: "",
   pct_top1_clientes: "",
   backlog_contratado: "",
@@ -145,6 +147,8 @@ const TOOLTIP_DIVIDA =
   " Dívida financeira (inc. IRC vencido e não pago, empréstimos bancários, leasings, factorings, etc.), dívida a fornecedores de CapEx, e dívida associada a receitas antecipadas.";
 const TOOLTIP_CAPEX =
   "Investimento anual médio necessário para manter a operação atual (excluindo investimentos de expansão/crescimento).";
+const TOOLTIP_DA =
+  "Total anual de depreciações e amortizações registadas na demonstração de resultados. Se não for indicado, é estimado a partir da percentagem média de D&A sobre a receita do setor selecionado e assinalado no relatório como pressuposto.";
 const TOOLTIP_ACRESCIMO_RENDA =
   "Diferença anual entre a renda atualmente paga e uma renda equivalente a preços de mercado atuais.";
 const TOOLTIP_VALORIZACAO_IMOVEL =
@@ -605,6 +609,18 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               id="capex"
               value={form.capex_anual_recorrente}
               onChange={(v) => set("capex_anual_recorrente", v)}
+            />
+          </Field>
+          <Field
+            label="Depreciações & Amortizações anuais (total)"
+            hint="opcional"
+            tooltip={TOOLTIP_DA}
+            htmlFor="damortizacoes"
+          >
+            <MoneyInput
+              id="damortizacoes"
+              value={form.depreciacoes_amortizacoes}
+              onChange={(v) => set("depreciacoes_amortizacoes", v)}
             />
           </Field>
           <Field label="Número de colaboradores" error={err("num_colaboradores")} htmlFor="colaboradores">

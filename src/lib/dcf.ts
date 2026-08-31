@@ -1,0 +1,477 @@
+// Motor de DCF (fluxos de caixa descontados) — usa exclusivamente os dados já
+// recolhidos pelo simulador. Puro: sem I/O, partilhado entre cliente e servidor.
+
+export type OrigemDado = "Input" | "Assumption";
+
+export type DcfPressuposto = {
+  label: string;
+  valor: string;
+  origem: OrigemDado;
+  nota?: string;
+};
+
+export type DcfLinhaAno = {
+  ano: number;
+  tipo: "historico" | "forecast";
+  crescimento: number | null;
+  receita: number;
+  ebitda: number;
+  ebit: number;
+  nopat: number;
+  da: number;
+  capex: number;
+  dnwc: number;
+  fcff: number;
+  pv: number | null;
+};
+
+export type DcfMatriz = {
+  titulo: string;
+  eixo_x_label: string;
+  eixo_y_label: string;
+  colunas: { valor: number; label: string; base: boolean }[];
+  linhas: { valor: number; label: string; base: boolean; valores: number[] }[];
+};
+
+export type DcfResult =
+  | { ok: false; motivo: string }
+  | {
+      ok: true;
+      anos: DcfLinhaAno[];
+      // WACC
+      risk_free: number;
+      beta_unlevered: number;
+      beta_levered: number;
+      erp: number;
+      crp: number;
+      cost_of_equity: number;
+      cost_of_debt_pre: number;
+      cost_of_debt_pos: number;
+      peso_divida: number;
+      peso_equity: number;
+      wacc: number;
+      cit: number;
+      cit_nota: string;
+      // Forecast
+      crescimento_inicial: number;
+      crescimento_inicial_origem: OrigemDado;
+      ano_estabilizacao: number;
+      crescimento_estabilizado: number;
+      terminal_growth: number;
+      margem_ebitda: number;
+      capex_pct_receita: number;
+      da_pct_receita: number;
+      nwc_pct_receita: number;
+      da_origem: OrigemDado;
+      capex_origem: OrigemDado;
+      // Outputs
+      terminal_value: number;
+      pv_terminal_value: number;
+      pv_explicito: number;
+      enterprise_value: number;
+      equity_value: number;
+      divida_liquida: number;
+      ativos_nao_operacionais: number;
+      peso_terminal: number;
+      ev_ebitda_implicito: number | null;
+      ev_receita_implicito: number | null;
+      pressupostos: DcfPressuposto[];
+      matrizes: DcfMatriz[];
+    };
+
+/** Referências setoriais (proxies de mercado, tipo Damodaran Europa Ocidental). */
+type RefSetor = {
+  beta_unlevered: number;
+  peso_divida: number;
+  spread: number;
+  capex_pct_receita: number;
+  da_pct_receita: number;
+  nwc_pct_receita: number;
+  crescimento_ref: number;
+};
+
+const REF_SETOR: Record<string, RefSetor> = {
+  Agricultura: { beta_unlevered: 0.72, peso_divida: 0.35, spread: 0.028, capex_pct_receita: 0.055, da_pct_receita: 0.045, nwc_pct_receita: 0.18, crescimento_ref: 0.03 },
+  Construção: { beta_unlevered: 0.95, peso_divida: 0.35, spread: 0.032, capex_pct_receita: 0.03, da_pct_receita: 0.025, nwc_pct_receita: 0.15, crescimento_ref: 0.035 },
+  Energia: { beta_unlevered: 0.78, peso_divida: 0.4, spread: 0.026, capex_pct_receita: 0.07, da_pct_receita: 0.06, nwc_pct_receita: 0.08, crescimento_ref: 0.045 },
+  "Hotelaria e Turismo": { beta_unlevered: 0.95, peso_divida: 0.4, spread: 0.033, capex_pct_receita: 0.06, da_pct_receita: 0.055, nwc_pct_receita: 0.02, crescimento_ref: 0.035 },
+  Logística: { beta_unlevered: 0.9, peso_divida: 0.35, spread: 0.03, capex_pct_receita: 0.05, da_pct_receita: 0.045, nwc_pct_receita: 0.1, crescimento_ref: 0.035 },
+  "Manufatura/Indústria": { beta_unlevered: 0.9, peso_divida: 0.32, spread: 0.03, capex_pct_receita: 0.04, da_pct_receita: 0.035, nwc_pct_receita: 0.18, crescimento_ref: 0.03 },
+  Retalho: { beta_unlevered: 0.85, peso_divida: 0.3, spread: 0.031, capex_pct_receita: 0.025, da_pct_receita: 0.022, nwc_pct_receita: 0.08, crescimento_ref: 0.03 },
+  Saúde: { beta_unlevered: 0.8, peso_divida: 0.3, spread: 0.028, capex_pct_receita: 0.04, da_pct_receita: 0.035, nwc_pct_receita: 0.06, crescimento_ref: 0.05 },
+  "Serviços B2B": { beta_unlevered: 0.88, peso_divida: 0.22, spread: 0.029, capex_pct_receita: 0.015, da_pct_receita: 0.015, nwc_pct_receita: 0.12, crescimento_ref: 0.04 },
+  "Tecnologia/Software": { beta_unlevered: 1.05, peso_divida: 0.15, spread: 0.032, capex_pct_receita: 0.02, da_pct_receita: 0.03, nwc_pct_receita: 0.05, crescimento_ref: 0.07 },
+};
+
+const REF_DEFAULT: RefSetor = {
+  beta_unlevered: 0.9,
+  peso_divida: 0.3,
+  spread: 0.03,
+  capex_pct_receita: 0.035,
+  da_pct_receita: 0.03,
+  nwc_pct_receita: 0.12,
+  crescimento_ref: 0.035,
+};
+
+/** Taxa de imposto sobre o rendimento aplicável por país e ano de análise. */
+const CIT_PORTUGAL: Record<number, number> = { 2025: 0.2, 2026: 0.19, 2027: 0.18, 2028: 0.17 };
+
+function citRate(pais: string, ano: number): { taxa: number; nota: string } {
+  if (pais === "Portugal") {
+    const anos = Object.keys(CIT_PORTUGAL).map(Number);
+    const alvo = Math.min(Math.max(ano, Math.min(...anos)), Math.max(...anos));
+    return {
+      taxa: CIT_PORTUGAL[alvo]!,
+      nota: `Taxa geral de IRC em Portugal para ${alvo} (redução programada até 17% em 2028).`,
+    };
+  }
+  if (pais === "Espanha") {
+    return { taxa: 0.25, nota: "Taxa geral do Impuesto sobre Sociedades em Espanha." };
+  }
+  return {
+    taxa: 0.23,
+    nota: "País não especificado: aplicada uma taxa média de referência da União Europeia. Assumption — deve ser substituída pela taxa efetiva da jurisdição.",
+  };
+}
+
+/** Prémios de risco de mercado e de país (proxies de mercado). */
+const RISK_FREE: Record<string, number> = { Portugal: 0.032, Espanha: 0.032 };
+const RISK_FREE_DEFAULT = 0.035;
+const ERP_BASE = 0.046;
+const CRP: Record<string, number> = { Portugal: 0.0145, Espanha: 0.0119 };
+const CRP_DEFAULT = 0.02;
+
+export const TERMINAL_GROWTH = 0.02;
+export const CRESCIMENTO_ESTABILIZADO = 0.035;
+export const ANO_ESTABILIZACAO = 5;
+const HORIZONTE = 8;
+
+export type DcfInput = {
+  pais: string;
+  industria: string;
+  ano_referencia: number;
+  ebitda_normalizado: number;
+  receitas_historicas: { ano: number; receita: number; ebitda: number | null }[];
+  capex_anual_recorrente: number | null;
+  depreciacoes_amortizacoes: number | null;
+  divida_liquida: number;
+  ativos_nao_operacionais: number;
+};
+
+const pct = (v: number) => `${(v * 100).toFixed(1).replace(".", ",")}%`;
+
+export function calcularDCF(input: DcfInput): DcfResult {
+  const ref = REF_SETOR[input.industria] ?? REF_DEFAULT;
+  const historico = [...input.receitas_historicas]
+    .filter((h) => typeof h.receita === "number" && h.receita > 0)
+    .sort((a, b) => a.ano - b.ano);
+
+  const receitaBase = historico.length ? historico[historico.length - 1]!.receita : 0;
+  if (receitaBase <= 0 || input.ebitda_normalizado <= 0) {
+    return { ok: false, motivo: "Sem receita ou EBITDA normalizado positivo, não é possível construir uma análise DCF." };
+  }
+
+  // --- Crescimento inicial ---
+  let crescimento_inicial: number;
+  let crescimento_inicial_origem: OrigemDado;
+  if (historico.length >= 3) {
+    const primeiro = historico[0]!.receita;
+    const anos = historico.length - 1;
+    crescimento_inicial = Math.pow(receitaBase / primeiro, 1 / anos) - 1;
+    crescimento_inicial_origem = "Input";
+  } else {
+    crescimento_inicial = ref.crescimento_ref;
+    crescimento_inicial_origem = "Assumption";
+  }
+  crescimento_inicial = Math.min(Math.max(crescimento_inicial, -0.05), 0.25);
+
+  // --- Margem EBITDA de referência ---
+  const margens = historico
+    .filter((h) => typeof h.ebitda === "number" && h.receita > 0)
+    .map((h) => (h.ebitda as number) / h.receita);
+  const margemHistorica = margens.length >= 2 ? margens.reduce((s, m) => s + m, 0) / margens.length : null;
+  const margemAtual = input.ebitda_normalizado / receitaBase;
+  const margem_ebitda = margemHistorica !== null ? (margemHistorica + margemAtual) / 2 : margemAtual;
+
+  // --- D&A e Capex ---
+  const da_origem: OrigemDado = typeof input.depreciacoes_amortizacoes === "number" ? "Input" : "Assumption";
+  const da_pct_receita =
+    typeof input.depreciacoes_amortizacoes === "number" && input.depreciacoes_amortizacoes >= 0
+      ? input.depreciacoes_amortizacoes / receitaBase
+      : ref.da_pct_receita;
+  const capex_origem: OrigemDado = typeof input.capex_anual_recorrente === "number" ? "Input" : "Assumption";
+  const capex_pct_receita =
+    typeof input.capex_anual_recorrente === "number" && input.capex_anual_recorrente >= 0
+      ? input.capex_anual_recorrente / receitaBase
+      : ref.capex_pct_receita;
+  const nwc_pct_receita = ref.nwc_pct_receita;
+
+  const { taxa: cit, nota: cit_nota } = citRate(input.pais, input.ano_referencia);
+
+  // --- WACC ---
+  const risk_free = RISK_FREE[input.pais] ?? RISK_FREE_DEFAULT;
+  const crp = CRP[input.pais] ?? CRP_DEFAULT;
+  const peso_divida = ref.peso_divida;
+  const peso_equity = 1 - peso_divida;
+  const de = peso_divida / peso_equity;
+  const beta_levered = ref.beta_unlevered * (1 + (1 - cit) * de);
+  const cost_of_equity = risk_free + beta_levered * ERP_BASE + crp;
+  const cost_of_debt_pre = risk_free + ref.spread;
+  const cost_of_debt_pos = cost_of_debt_pre * (1 - cit);
+  const wacc = peso_equity * cost_of_equity + peso_divida * cost_of_debt_pos;
+
+  if (wacc <= TERMINAL_GROWTH) {
+    return {
+      ok: false,
+      motivo:
+        "O custo médio ponderado de capital estimado não é superior à taxa de crescimento na perpetuidade, pelo que o modelo DCF não produz um resultado válido.",
+    };
+  }
+
+  // --- Projeção ---
+  const crescimentoAno = (t: number) =>
+    t >= ANO_ESTABILIZACAO
+      ? CRESCIMENTO_ESTABILIZADO
+      : crescimento_inicial + ((CRESCIMENTO_ESTABILIZADO - crescimento_inicial) * (t - 1)) / (ANO_ESTABILIZACAO - 1);
+
+  const anos: DcfLinhaAno[] = historico.map((h, i) => {
+    const ebitda = typeof h.ebitda === "number" ? h.ebitda : h.receita * margem_ebitda;
+    const da = h.receita * da_pct_receita;
+    const ebit = ebitda - da;
+    const capexH = h.receita * capex_pct_receita;
+    const dnwcH = i === 0 ? 0 : (h.receita - historico[i - 1]!.receita) * nwc_pct_receita;
+    const nopat = ebit * (1 - cit);
+    return {
+      ano: h.ano,
+      tipo: "historico",
+      crescimento: i === 0 ? null : h.receita / historico[i - 1]!.receita - 1,
+      receita: h.receita,
+      ebitda,
+      ebit,
+      nopat,
+      da,
+      capex: capexH,
+      dnwc: dnwcH,
+      fcff: nopat + da - capexH - dnwcH,
+      pv: null,
+    };
+  });
+
+  let receitaAnterior = receitaBase;
+  let pv_explicito = 0;
+  let fcffFinal = 0;
+  for (let t = 1; t <= HORIZONTE; t++) {
+    const g = crescimentoAno(t);
+    const receita = receitaAnterior * (1 + g);
+    const ebitda = receita * margem_ebitda;
+    const da = receita * da_pct_receita;
+    const ebit = ebitda - da;
+    const nopat = ebit * (1 - cit);
+    const capex = receita * capex_pct_receita;
+    const dnwc = (receita - receitaAnterior) * nwc_pct_receita;
+    const fcff = nopat + da - capex - dnwc;
+    const pv = fcff / Math.pow(1 + wacc, t - 0.5);
+    pv_explicito += pv;
+    fcffFinal = fcff;
+    anos.push({
+      ano: input.ano_referencia + t,
+      tipo: "forecast",
+      crescimento: g,
+      receita,
+      ebitda,
+      ebit,
+      nopat,
+      da,
+      capex,
+      dnwc,
+      fcff,
+      pv,
+    });
+    receitaAnterior = receita;
+  }
+
+  const terminal_value = (fcffFinal * (1 + TERMINAL_GROWTH)) / (wacc - TERMINAL_GROWTH);
+  const pv_terminal_value = terminal_value / Math.pow(1 + wacc, HORIZONTE);
+  const enterprise_value = pv_explicito + pv_terminal_value;
+  const equity_value = enterprise_value - input.divida_liquida + input.ativos_nao_operacionais;
+
+  // --- Matrizes de sensibilidade (Enterprise Value) ---
+  const evPara = (opts: { wacc?: number; g?: number; capexPct?: number; fcffFator?: number }): number => {
+    const w = opts.wacc ?? wacc;
+    const gT = opts.g ?? TERMINAL_GROWTH;
+    const cx = opts.capexPct ?? capex_pct_receita;
+    const fator = opts.fcffFator ?? 1;
+    if (w <= gT) return NaN;
+    let rec = receitaBase;
+    let pv = 0;
+    let ultimo = 0;
+    for (let t = 1; t <= HORIZONTE; t++) {
+      const g = crescimentoAno(t);
+      const receita = rec * (1 + g);
+      const ebitda = receita * margem_ebitda;
+      const da = receita * da_pct_receita;
+      const nopat = (ebitda - da) * (1 - cit);
+      const fcff = (nopat + da - receita * cx - (receita - rec) * nwc_pct_receita) * fator;
+      pv += fcff / Math.pow(1 + w, t - 0.5);
+      ultimo = fcff;
+      rec = receita;
+    }
+    const tv = (ultimo * (1 + gT)) / (w - gT);
+    return pv + tv / Math.pow(1 + w, HORIZONTE);
+  };
+
+  const eixo = (base: number, passo: number, casas = 1) =>
+    [-2, -1, 0, 1, 2].map((k) => ({
+      valor: base + k * passo,
+      label: `${((base + k * passo) * 100).toFixed(casas).replace(".", ",")}%`,
+      base: k === 0,
+    }));
+
+  const waccEixo = eixo(wacc, 0.01);
+  const gEixo = eixo(TERMINAL_GROWTH, 0.005);
+  const capexEixo = eixo(capex_pct_receita, Math.max(0.005, capex_pct_receita * 0.25));
+  const fcffEixo = [-2, -1, 0, 1, 2].map((k) => ({
+    valor: 1 + k * 0.05,
+    label: `${k === 0 ? "Base" : `${k > 0 ? "+" : "−"}${Math.abs(k * 5)}%`}`,
+    base: k === 0,
+  }));
+
+  const matrizes: DcfMatriz[] = [
+    {
+      titulo: "WACC vs. crescimento na perpetuidade",
+      eixo_x_label: "g terminal",
+      eixo_y_label: "WACC",
+      colunas: gEixo,
+      linhas: waccEixo.map((w) => ({
+        ...w,
+        valores: gEixo.map((g) => evPara({ wacc: w.valor, g: g.valor })),
+      })),
+    },
+    {
+      titulo: "Crescimento do FCFF vs. WACC",
+      eixo_x_label: "WACC",
+      eixo_y_label: "FCFF",
+      colunas: waccEixo,
+      linhas: fcffEixo.map((f) => ({
+        ...f,
+        valores: waccEixo.map((w) => evPara({ wacc: w.valor, fcffFator: f.valor })),
+      })),
+    },
+    {
+      titulo: "Crescimento na perpetuidade vs. WACC",
+      eixo_x_label: "WACC",
+      eixo_y_label: "g terminal",
+      colunas: waccEixo,
+      linhas: gEixo.map((g) => ({
+        ...g,
+        valores: waccEixo.map((w) => evPara({ wacc: w.valor, g: g.valor })),
+      })),
+    },
+    {
+      titulo: "Capex (% da receita) vs. WACC",
+      eixo_x_label: "WACC",
+      eixo_y_label: "Capex",
+      colunas: waccEixo,
+      linhas: capexEixo.map((c) => ({
+        ...c,
+        valores: waccEixo.map((w) => evPara({ wacc: w.valor, capexPct: c.valor })),
+      })),
+    },
+  ];
+
+  const ebitdaAno1 = anos.find((a) => a.tipo === "forecast")!.ebitda;
+
+  const pressupostos: DcfPressuposto[] = [
+    {
+      label: "EBITDA normalizado (ano de referência)",
+      valor: String(Math.round(input.ebitda_normalizado)),
+      origem: "Input",
+      nota: "Proveniente do formulário, após normalização de extraordinários e renda teórica.",
+    },
+    {
+      label: "Depreciações & amortizações",
+      valor: pct(da_pct_receita) + " da receita",
+      origem: da_origem,
+      nota:
+        da_origem === "Input"
+          ? "Valor introduzido no formulário, convertido em percentagem da receita do ano de referência."
+          : "Estimado a partir da percentagem média de D&A sobre receita do setor selecionado.",
+    },
+    {
+      label: "Capex recorrente",
+      valor: pct(capex_pct_receita) + " da receita",
+      origem: capex_origem,
+      nota:
+        capex_origem === "Input"
+          ? "Capex anual recorrente indicado no formulário."
+          : "Estimado com base na intensidade de investimento média do setor.",
+    },
+    {
+      label: "Variação do fundo de maneio",
+      valor: pct(nwc_pct_receita) + " da variação de receita",
+      origem: "Assumption",
+      nota: "O formulário não recolhe fundo de maneio; aplicada a necessidade típica do setor sobre o crescimento da receita.",
+    },
+    {
+      label: "Crescimento inicial da receita",
+      valor: pct(crescimento_inicial),
+      origem: crescimento_inicial_origem,
+      nota:
+        crescimento_inicial_origem === "Input"
+          ? "CAGR histórico da receita calculado sobre os exercícios disponibilizados."
+          : "Histórico inferior a três exercícios: aplicada a taxa de crescimento de referência do setor.",
+    },
+    { label: "Margem EBITDA projetada", valor: pct(margem_ebitda), origem: margemHistorica !== null ? "Input" : "Assumption" },
+    { label: "Taxa de imposto (CIT)", valor: pct(cit), origem: "Assumption", nota: `${input.pais} · ${cit_nota}` },
+    { label: "Risk-free rate", valor: pct(risk_free), origem: "Assumption", nota: "Yield de referência da dívida soberana a 10 anos do país selecionado." },
+    { label: "Beta unlevered / levered", valor: `${ref.beta_unlevered.toFixed(2)} / ${beta_levered.toFixed(2)}`, origem: "Assumption", nota: "Beta setorial de referência (Damodaran, Europa Ocidental), realavancado à estrutura de capital-alvo do setor." },
+    { label: "Equity Risk Premium", valor: pct(ERP_BASE), origem: "Assumption", nota: "Prémio de risco de mercado maduro." },
+    { label: "Country Risk Premium", valor: pct(crp), origem: "Assumption", nota: "Prémio de risco-país associado ao rating soberano." },
+    { label: "Cost of debt (pré / pós imposto)", valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`, origem: "Assumption", nota: "Risk-free acrescido do spread de crédito médio do setor; o formulário não recolhe custo de dívida efetivo." },
+    { label: "Estrutura de capital (D / E)", valor: `${pct(peso_divida)} / ${pct(peso_equity)}`, origem: "Assumption", nota: "Estrutura de capital-alvo de referência do setor." },
+    { label: "Crescimento estabilizado (anos 5-8)", valor: pct(CRESCIMENTO_ESTABILIZADO), origem: "Assumption" },
+    { label: "Crescimento na perpetuidade", valor: pct(TERMINAL_GROWTH), origem: "Assumption" },
+    { label: "Convenção de desconto", valor: "Mid-year convention", origem: "Assumption" },
+  ];
+
+  return {
+    ok: true,
+    anos,
+    risk_free,
+    beta_unlevered: ref.beta_unlevered,
+    beta_levered,
+    erp: ERP_BASE,
+    crp,
+    cost_of_equity,
+    cost_of_debt_pre,
+    cost_of_debt_pos,
+    peso_divida,
+    peso_equity,
+    wacc,
+    cit,
+    cit_nota,
+    crescimento_inicial,
+    crescimento_inicial_origem,
+    ano_estabilizacao: ANO_ESTABILIZACAO,
+    crescimento_estabilizado: CRESCIMENTO_ESTABILIZADO,
+    terminal_growth: TERMINAL_GROWTH,
+    margem_ebitda,
+    capex_pct_receita,
+    da_pct_receita,
+    nwc_pct_receita,
+    da_origem,
+    capex_origem,
+    terminal_value,
+    pv_terminal_value,
+    pv_explicito,
+    enterprise_value,
+    equity_value,
+    divida_liquida: input.divida_liquida,
+    ativos_nao_operacionais: input.ativos_nao_operacionais,
+    peso_terminal: enterprise_value > 0 ? pv_terminal_value / enterprise_value : 0,
+    ev_ebitda_implicito: ebitdaAno1 > 0 ? enterprise_value / ebitdaAno1 : null,
+    ev_receita_implicito: receitaBase > 0 ? enterprise_value / receitaBase : null,
+    pressupostos,
+    matrizes,
+  };
+}
