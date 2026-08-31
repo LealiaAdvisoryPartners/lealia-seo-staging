@@ -1605,22 +1605,22 @@
 }
 
 .report-dcf-assumptions {
-  margin-top: 4mm;
+  margin-top: 2.5mm;
 }
 
 .report-dcf-assumptions .report-table {
-  font-size: 6.8pt;
+  font-size: 6.2pt;
 }
 
 .report-dcf-assumptions .report-table td,
 .report-dcf-assumptions .report-table th {
-  padding: 0.9mm 1.2mm;
+  padding: 0.45mm 1.2mm;
 }
 
 .report-sens-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4mm 8mm;
+  gap: 2.5mm 8mm;
 }
 
 .report-sens-card > strong {
@@ -1636,7 +1636,7 @@
 
 .report-sens-table td,
 .report-sens-table th {
-  padding: 1mm 0.8mm;
+  padding: 0.6mm 0.8mm;
   text-align: right;
   white-space: nowrap;
 }
