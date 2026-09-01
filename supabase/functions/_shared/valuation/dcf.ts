@@ -370,7 +370,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     const nopat = ebit - imposto;
     const capex = receita * capex_pct_receita;
     const fcff = nopat + da - capex;
-    const fator_desconto = 1 / Math.pow(1 + wacc, t - 0.5);
+    const fator_desconto = 1 / Math.pow(1 + wacc, t);
     const pv = fcff * fator_desconto;
     pv_explicito += pv;
     fcffFinal = fcff;
@@ -428,7 +428,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       const da = receita * da_pct_receita;
       const nopat = (ebitda - da) * (1 - cit);
       const fcff = nopat + da - receita * cx;
-      pv += fcff / Math.pow(1 + w, t - 0.5);
+      pv += fcff / Math.pow(1 + w, t);
       ultimoFcff = fcff;
       rec = receita;
     }
@@ -627,9 +627,9 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
     {
       label: "Convenção de desconto",
-      valor: "Mid-year convention",
+      valor: "End of period convention",
       origem: "Assumption",
-      nota: "Assume geração de fluxos ao longo do ano e não no seu termo.",
+      nota: "Assume que os fluxos de caixa são gerados no final de cada período (ano), sendo descontados pelo número inteiro de anos.",
     },
   ];
 
