@@ -416,7 +416,7 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
                 </tr>
                 {dcf.ativos_nao_operacionais > 0 ? (
                   <tr>
-                    <td>Ativos não operacionais</td>
+                    <td>Imóvel</td>
                     <td>{formatEUR(Math.round(dcf.ativos_nao_operacionais))}</td>
                   </tr>
                 ) : null}
