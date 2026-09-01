@@ -553,9 +553,9 @@ const LOCKED_PAGES: { numero: number; titulo: string }[] = [
   { numero: 7, titulo: "Cenários e sensibilidade" },
   { numero: 8, titulo: "Equity Bridge e contexto da transação" },
   { numero: 9, titulo: "Drivers de Valor & Riscos" },
-  { numero: 10, titulo: "Preparação para o mercado" },
-  { numero: 11, titulo: "DCF Valuation" },
-  { numero: 12, titulo: "Sensitivity Analysis" },
+  { numero: 10, titulo: "DCF Valuation" },
+  { numero: 11, titulo: "Sensitivity Analysis" },
+  { numero: 12, titulo: "Preparação para o mercado" },
   { numero: 13, titulo: "Processo de M&A" },
 ];
 
@@ -1236,8 +1236,14 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
               )}
             </Page>
 
-            {/* 10 — Plano de preparação */}
-            <Page numero={10} titulo="Preparação para o mercado">
+            {/* 10 — DCF Valuation */}
+            <DcfPage d={d} numero={10} />
+
+            {/* 11 — Sensitivity Analysis */}
+            <SensitivityPage d={d} numero={11} />
+
+            {/* 12 — Plano de preparação */}
+            <Page numero={12} titulo="Preparação para o mercado">
               <H>Plano de preparação priorizado</H>
               <table className="report-table report-table-text">
                 <thead>
@@ -1270,12 +1276,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 ))}
               </ol>
             </Page>
-
-            {/* 11 — DCF Valuation */}
-            <DcfPage d={d} numero={11} />
-
-            {/* 12 — Sensitivity Analysis */}
-            <SensitivityPage d={d} numero={12} />
 
             {/* 13 — Processo de M&A */}
 
