@@ -53,7 +53,7 @@ const Navigation = () => {
               const isValuationLink = getPathWithoutLanguage(link.path) === "/valuation";
               const activeClass = isActive(link.path) ? "text-accent" : "text-foreground/80";
               const linkClass = isValuationLink
-                ? `text-sm tracking-wide font-body transition-colors hover:text-accent glass border border-accent/60 rounded-full px-3 py-1 shadow-sm ${activeClass}`
+                ? `text-sm tracking-wide font-body transition-colors hover:text-accent border border-accent rounded-full px-3 py-1 bg-transparent ${activeClass}`
                 : `text-sm tracking-wide font-body link-underline transition-colors hover:text-accent ${activeClass}`;
               return (
                 <Link
