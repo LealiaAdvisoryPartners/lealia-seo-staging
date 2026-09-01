@@ -554,7 +554,6 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
   ];
 
-  const ebitdaAno1 = anos.find((a) => a.tipo === "forecast")!.ebitda;
 
   const fontes: { parametro: string; fonte: string }[] = [
     {
@@ -746,7 +745,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     divida_liquida: input.divida_liquida,
     ativos_nao_operacionais: input.ativos_nao_operacionais,
     peso_terminal: enterprise_value > 0 ? pv_terminal_value / enterprise_value : 0,
-    ev_ebitda_implicito: ebitdaAno1 > 0 ? enterprise_value / ebitdaAno1 : null,
+    ev_ebitda_implicito: input.ebitda_normalizado > 0 ? enterprise_value / input.ebitda_normalizado : null,
     ev_receita_implicito: receitaBase > 0 ? enterprise_value / receitaBase : null,
     pressupostos,
     matrizes,
