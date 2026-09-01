@@ -57,6 +57,7 @@ export type DcfResult =
       cit_nota: string;
       size_premium: number;
       premio_especifico: number;
+      premio_ativo_especifico: number;
       fontes: { parametro: string; fonte: string }[];
       nota_reconciliacao?: string;
       // Forecast
@@ -232,6 +233,11 @@ const CRP_DEFAULT = 0.02;
 const SIZE_PREMIUM = 0.035;
 /** Prémio específico: iliquidez do capital e dependência de pessoas-chave. */
 const PREMIO_ESPECIFICO = 0.015;
+/** Prémio específico do ativo: escalões e tolerância de convergência entre metodologias. */
+const PREMIO_ATIVO_MIN = 0.01;
+const PREMIO_ATIVO_MAX = 0.035;
+const PREMIO_ATIVO_STEP = 0.005;
+const PREMIO_ATIVO_TOLERANCIA = 0.05;
 /** Add-on de spread de crédito de PME face ao spread médio do setor. */
 const SPREAD_PME = 0.01;
 
@@ -254,6 +260,8 @@ export type DcfInput = {
   ativos_nao_operacionais: number;
   /** Enterprise Value central obtido por múltiplos, para nota de reconciliação. */
   ev_multiplos?: number | null;
+  /** Enterprise Value máximo obtido por múltiplos, usado no ajuste de convergência. */
+  ev_multiplos_max?: number | null;
 };
 
 const pct = (v: number) => `${(v * 100).toFixed(1).replace(".", ",")}%`;
@@ -311,6 +319,11 @@ export function calcularDCF(input: DcfInput): DcfResult {
 
   const { taxa: cit, nota: cit_nota } = citRate(input.pais, input.ano_referencia);
 
+  const gAno = (t: number) =>
+    t >= ANO_ESTABILIZACAO
+      ? crescimento_estabilizado
+      : crescimento_inicial + ((crescimento_estabilizado - crescimento_inicial) * (t - 1)) / (ANO_ESTABILIZACAO - 1);
+
   // --- WACC ---
   const risk_free = RISK_FREE[input.pais] ?? RISK_FREE_DEFAULT;
   const crp = CRP[input.pais] ?? CRP_DEFAULT;
@@ -318,10 +331,54 @@ export function calcularDCF(input: DcfInput): DcfResult {
   const peso_equity = 1 - peso_divida;
   const de = peso_divida / peso_equity;
   const beta_levered = ref.beta_unlevered * (1 + (1 - cit) * de);
-  const cost_of_equity = risk_free + beta_levered * ERP_BASE + crp + SIZE_PREMIUM + PREMIO_ESPECIFICO;
+  const cost_of_equity_base = risk_free + beta_levered * ERP_BASE + crp + SIZE_PREMIUM + PREMIO_ESPECIFICO;
   const cost_of_debt_pre = risk_free + ref.spread + SPREAD_PME;
   const cost_of_debt_pos = cost_of_debt_pre * (1 - cit);
-  const wacc = peso_equity * cost_of_equity + peso_divida * cost_of_debt_pos;
+  const waccCom = (premio: number) => peso_equity * (cost_of_equity_base + premio) + peso_divida * cost_of_debt_pos;
+
+  // Enterprise Value implícito para um dado WACC (mesma mecânica da projeção principal).
+  const evComWacc = (w: number): number => {
+    if (w <= TERMINAL_GROWTH) return NaN;
+    let rec = receitaBase;
+    let pv = 0;
+    let ultimoFcff = 0;
+    for (let t = 1; t <= HORIZONTE; t++) {
+      const receita = rec * (1 + gAno(t));
+      const ebitda = receita * margem_ebitda;
+      const da = receita * da_pct_receita;
+      const ebit = ebitda - da;
+      const nopat = ebit - Math.max(0, ebit) * cit;
+      const fcff = nopat + da - receita * capex_pct_receita;
+      pv += fcff / Math.pow(1 + w, t);
+      ultimoFcff = fcff;
+      rec = receita;
+    }
+    const tv = (ultimoFcff * (1 + TERMINAL_GROWTH)) / (w - TERMINAL_GROWTH);
+    return pv + tv / Math.pow(1 + w, HORIZONTE);
+  };
+
+  // Prémio específico do ativo: calibra o custo de capital de modo a que o EV por DCF
+  // não exceda em mais de 5% o limite superior do intervalo obtido por múltiplos.
+  let premio_ativo_especifico = 0;
+  const evMaxMultiplos =
+    typeof input.ev_multiplos_max === "number" && input.ev_multiplos_max > 0 ? input.ev_multiplos_max : null;
+  if (evMaxMultiplos) {
+    const limite = evMaxMultiplos * (1 + PREMIO_ATIVO_TOLERANCIA);
+    const evBase = evComWacc(waccCom(0));
+    if (Number.isFinite(evBase) && evBase > limite) {
+      premio_ativo_especifico = PREMIO_ATIVO_MAX;
+      for (let p = PREMIO_ATIVO_MIN; p <= PREMIO_ATIVO_MAX + 1e-9; p += PREMIO_ATIVO_STEP) {
+        const ev = evComWacc(waccCom(p));
+        if (Number.isFinite(ev) && ev <= limite) {
+          premio_ativo_especifico = Math.round(p * 1000) / 1000;
+          break;
+        }
+      }
+    }
+  }
+
+  const cost_of_equity = cost_of_equity_base + premio_ativo_especifico;
+  const wacc = waccCom(premio_ativo_especifico);
 
   if (wacc <= TERMINAL_GROWTH) {
     return {
@@ -332,10 +389,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
   }
 
   // --- Projeção ---
-  const crescimentoAno = (t: number) =>
-    t >= ANO_ESTABILIZACAO
-      ? crescimento_estabilizado
-      : crescimento_inicial + ((crescimento_estabilizado - crescimento_inicial) * (t - 1)) / (ANO_ESTABILIZACAO - 1);
+  const crescimentoAno = gAno;
 
   // Apenas o exercício de referência é apresentado como histórico.
   const ultimo = historico[historico.length - 1]!;
@@ -533,6 +587,11 @@ export function calcularDCF(input: DcfInput): DcfResult {
         "Prémio de iliquidez do capital e de dependência de pessoas-chave, prática corrente em avaliação de PME não cotadas.",
     },
     {
+      parametro: "Prémio específico do ativo",
+      fonte:
+        "Prémio de risco específico do ativo, calibrado em função do perfil de risco da empresa e da consistência dos pressupostos de longo prazo face às referências de mercado.",
+    },
+    {
       parametro: "Cost of debt",
       fonte:
         "Risk-free acrescido do spread de crédito médio do setor e de um add-on de PME; o formulário não recolhe o custo efetivo da dívida.",
@@ -610,6 +669,12 @@ export function calcularDCF(input: DcfInput): DcfResult {
       nota: fontes[5]!.fonte,
     },
     {
+      label: "Prémio específico do ativo",
+      valor: pct(premio_ativo_especifico),
+      origem: "Assumption",
+      nota: "Prémio adicional ao custo de capital que reflete o risco específico do ativo — perfil de risco não capturado pelos parâmetros setoriais e pelo prémio de dimensão (concentração operacional, sensibilidade dos pressupostos de longo prazo e menor previsibilidade dos fluxos).",
+    },
+    {
       label: "Cost of debt (pre / post tax)",
       valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`,
       origem: "Assumption",
@@ -660,6 +725,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     cit_nota,
     size_premium: SIZE_PREMIUM,
     premio_especifico: PREMIO_ESPECIFICO,
+    premio_ativo_especifico,
     fontes,
     ...(nota_reconciliacao ? { nota_reconciliacao } : {}),
     crescimento_inicial,
