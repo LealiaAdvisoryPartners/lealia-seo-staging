@@ -738,6 +738,7 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
     divida_liquida,
     ativos_nao_operacionais: valor_imovel_a_adicionar,
     ev_multiplos: (ev_min + ev_max) / 2,
+    ev_multiplos_max: ev_max,
 
   });
 
