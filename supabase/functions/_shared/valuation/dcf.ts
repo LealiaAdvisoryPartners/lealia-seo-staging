@@ -327,7 +327,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
   // --- WACC ---
   const risk_free = RISK_FREE[input.pais] ?? RISK_FREE_DEFAULT;
   const crp = CRP[input.pais] ?? CRP_DEFAULT;
-  const peso_divida = ref.peso_divida;
+  const peso_divida = Math.min(ref.peso_divida, 0.3);
   const peso_equity = 1 - peso_divida;
   const de = peso_divida / peso_equity;
   const beta_levered = ref.beta_unlevered * (1 + (1 - cit) * de);
