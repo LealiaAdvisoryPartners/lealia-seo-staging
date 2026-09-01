@@ -554,7 +554,6 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
   ];
 
-
   const fontes: { parametro: string; fonte: string }[] = [
     {
       parametro: "Risk-free rate",
@@ -671,26 +670,25 @@ export function calcularDCF(input: DcfInput): DcfResult {
       label: "Prémio específico do ativo",
       valor: pct(premio_ativo_especifico),
       origem: "Assumption",
-      nota: "Prémio adicional ao custo de capital que reflete o risco específico do ativo — perfil de risco não capturado pelos parâmetros setoriais e pelo prémio de dimensão (concentração operacional, sensibilidade dos pressupostos de longo prazo e menor previsibilidade dos fluxos).",
+      nota: fontes[6]!.fonte,
     },
     {
       label: "Cost of debt (pre / post tax)",
       valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`,
       origem: "Assumption",
-      nota: fontes[6]!.fonte,
+      nota: fontes[7]!.fonte,
     },
     {
       label: "Estrutura de capital (D / E)",
       valor: `${pct(peso_divida)} / ${pct(peso_equity)}`,
       origem: "Assumption",
-      nota: fontes[7]!.fonte,
+      nota: fontes[8]!.fonte,
     },
     {
       label: "Crescimento estabilizado (anos 4-8)",
       valor: pct(crescimento_estabilizado),
       origem: crescimento_inicial_origem,
-      nota:
-        "Convergência até ao ano 4 para o crescimento estabilizado: se o CAGR histórico estiver entre 2% e 3,5%, mantém-se; abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%, alinhado com o crescimento nominal de longo prazo da economia.",
+      nota: "Convergência até ao ano 4 para o crescimento estabilizado: se o CAGR histórico estiver entre 2% e 3,5%, mantém-se; abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%, alinhado com o crescimento nominal de longo prazo da economia.",
     },
     {
       label: "Crescimento na perpetuidade",

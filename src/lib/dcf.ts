@@ -554,7 +554,6 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
   ];
 
-
   const fontes: { parametro: string; fonte: string }[] = [
     {
       parametro: "Risk-free rate",
@@ -671,19 +670,19 @@ export function calcularDCF(input: DcfInput): DcfResult {
       label: "Prémio específico do ativo",
       valor: pct(premio_ativo_especifico),
       origem: "Assumption",
-      nota: "Prémio adicional ao custo de capital que reflete o risco específico do ativo — perfil de risco não capturado pelos parâmetros setoriais e pelo prémio de dimensão (concentração operacional, sensibilidade dos pressupostos de longo prazo e menor previsibilidade dos fluxos).",
+      nota: fontes[6]!.fonte,
     },
     {
       label: "Cost of debt (pre / post tax)",
       valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`,
       origem: "Assumption",
-      nota: fontes[6]!.fonte,
+      nota: fontes[7]!.fonte,
     },
     {
       label: "Estrutura de capital (D / E)",
       valor: `${pct(peso_divida)} / ${pct(peso_equity)}`,
       origem: "Assumption",
-      nota: fontes[7]!.fonte,
+      nota: fontes[8]!.fonte,
     },
     {
       label: "Crescimento estabilizado (anos 4-8)",
