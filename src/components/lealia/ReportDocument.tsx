@@ -365,6 +365,12 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
                   <td>Prémio específico (iliquidez)</td>
                   <td>{pctFmt(dcf.premio_especifico)}</td>
                 </tr>
+                {dcf.premio_ativo_especifico > 0 ? (
+                  <tr>
+                    <td>Prémio específico do ativo</td>
+                    <td>{pctFmt(dcf.premio_ativo_especifico)}</td>
+                  </tr>
+                ) : null}
                 <tr className="report-row-total">
                   <td>Cost of Equity (Ke)</td>
                   <td>{pctFmt(dcf.cost_of_equity)}</td>
@@ -459,6 +465,7 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
     "Country Risk Premium",
     "Prémio de dimensão (PME)",
     "Prémio específico (iliquidez)",
+    "Prémio específico do ativo",
     "Cost of debt (pre / post tax)",
     "Estrutura de capital (D / E)",
     "Crescimento estabilizado (anos 5-8)",
