@@ -1249,7 +1249,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             <Page numero={12} titulo="Preparação para o mercado">
               <H>Plano de preparação priorizado</H>
               <div className="report-note report-disclaimer-inline">
-                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A.
+                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A. A nossa equipa pode
+                ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial
+                sem compromisso.
               </div>
               <table className="report-table report-table-text">
                 <thead>
@@ -1288,7 +1290,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             <Page numero={13} titulo="Processo de M&A">
               <H>Como decorre um processo de M&amp;A</H>
               <div className="report-note report-disclaimer-inline">
-                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A.
+                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A. A nossa equipa pode
+                ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial
+                sem compromisso.
               </div>
               <div className="report-phases report-phases-2 report-phases-tall">
                 {FASES.map((f) => (
