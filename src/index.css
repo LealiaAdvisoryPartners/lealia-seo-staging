@@ -1068,6 +1068,62 @@
 }
 
 
+/* --- Slide 9: Drivers de Valor & Riscos --- */
+.report-drivers .report-body {
+  padding-top: 4.5mm;
+  padding-bottom: 3mm;
+}
+
+.report-drivers .report-body > .report-h2:first-child {
+  margin-top: 0;
+  margin-bottom: 2.5mm;
+}
+
+.report-drivers .report-body > .report-h2 + table {
+  margin-bottom: 0;
+}
+
+.report-drivers .report-body > .report-h2:not(:first-child) {
+  margin-top: 5mm;
+  margin-bottom: 2.5mm;
+}
+
+.report-drivers .report-table {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 8.2pt;
+  line-height: 1.32;
+}
+
+.report-drivers .report-table th,
+.report-drivers .report-table td {
+  padding: 1.5mm 1.8mm;
+  text-align: left;
+  vertical-align: top;
+}
+
+.report-drivers .report-drivers-table th:first-child {
+  width: 52mm;
+}
+
+.report-drivers .report-risks-table th:nth-child(1) {
+  width: 42mm;
+}
+.report-drivers .report-risks-table th:nth-child(2) {
+  width: 58mm;
+}
+.report-drivers .report-risks-table th:nth-child(3) {
+  width: 62mm;
+}
+
+.report-drivers .report-inline-note {
+  display: block;
+  font-size: 7.4pt;
+  font-style: normal;
+  color: hsl(220 12% 48%);
+  margin-top: 0.4mm;
+}
+
 .report-contact {
   margin-top: 6mm;
   border-top: 1px solid hsl(220 15% 88%);

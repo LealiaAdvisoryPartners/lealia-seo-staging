@@ -1184,13 +1184,13 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             </Page>
 
             {/* 9 — Drivers de Valor & Riscos */}
-            <Page numero={9} titulo="Drivers de Valor & Riscos">
+            <Page numero={9} titulo="Drivers de Valor & Riscos" className="report-drivers">
               <H>Drivers de Valor</H>
               {d.drivers.length ? (
-                <table className="report-table report-table-text">
+                <table className="report-table report-table-text report-drivers-table">
                   <thead>
                     <tr>
-                      <th style={{ width: "26%" }}>Driver</th>
+                      <th>Driver</th>
                       <th>Descrição</th>
                     </tr>
                   </thead>
@@ -1211,7 +1211,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
 
               <H>Riscos e mitigantes</H>
               {d.riscos.length ? (
-                <table className="report-table report-table-text">
+                <table className="report-table report-table-text report-risks-table">
                   <thead>
                     <tr>
                       <th>Risco</th>
