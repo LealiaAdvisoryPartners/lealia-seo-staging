@@ -370,7 +370,7 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
                   <td>{pctFmt(dcf.cost_of_equity)}</td>
                 </tr>
                 <tr>
-                  <td>Cost of Debt pré / pós imposto (Kd)</td>
+                  <td>Cost of Debt pre / post tax (Kd)</td>
                   <td>
                     {pctFmt(dcf.cost_of_debt_pre)} / {pctFmt(dcf.cost_of_debt_pos)}
                   </td>
@@ -459,7 +459,7 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
     "Country Risk Premium",
     "Prémio de dimensão (PME)",
     "Prémio específico (iliquidez)",
-    "Cost of debt (pré / pós imposto)",
+    "Cost of debt (pre / post tax)",
     "Estrutura de capital (D / E)",
     "Crescimento estabilizado (anos 5-8)",
     "Crescimento na perpetuidade",
@@ -518,8 +518,8 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
         <p className="report-small report-dcf-assumptions-intro">
           Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
           mercado, seguindo um critério conservador — na dúvida, adota-se o valor que resulta numa avaliação mais
-          prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou
-          método de derivação.
+          prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou método
+          de derivação.
         </p>
         <table className="report-table report-table-compact report-table-text">
           <thead>

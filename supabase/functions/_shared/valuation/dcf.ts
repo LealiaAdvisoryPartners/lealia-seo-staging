@@ -602,7 +602,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       nota: fontes[5]!.fonte,
     },
     {
-      label: "Cost of debt (pré / pós imposto)",
+      label: "Cost of debt (pre / post tax)",
       valor: `${pct(cost_of_debt_pre)} / ${pct(cost_of_debt_pos)}`,
       origem: "Assumption",
       nota: fontes[6]!.fonte,
