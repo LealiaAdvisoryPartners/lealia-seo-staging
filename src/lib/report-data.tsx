@@ -149,10 +149,11 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     },
   ].filter((a) => typeof a.faturacao === "number" || typeof a.ebitda === "number");
 
-  const normalizacaoRenda =
-    lead.renda_reflete_mercado === "Não" && typeof lead.acrescimo_renda_anual === "number" && lead.acrescimo_renda_anual > 0
-      ? eur(lead.acrescimo_renda_anual)
-      : "—";
+  // Impacto da normalização da renda em cada período (recorrente e anual):
+  // é o mesmo ajuste que entra no EBITDA normalizado, com sinal negativo.
+  const impactoRenda = r && r.ajuste_ebitda_imovel !== 0 ? r.ajuste_ebitda_imovel : null;
+  const normalizacaoRenda = impactoRenda !== null ? `−${eur(Math.abs(impactoRenda))}` : "—";
+
 
   const historico: LinhaHistorico[] = anosBrutos.map((a) => ({
     ano: a.ano,
