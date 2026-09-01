@@ -1011,6 +1011,62 @@
   border-radius: 1.5mm;
 }
 
+/* Slide 12 — composição compacta para manter plano e recomendações equilibrados */
+.report-preparation .report-body {
+  padding-top: 4mm;
+  padding-bottom: 2mm;
+}
+
+.report-preparation .report-body > .report-h2:first-child {
+  margin-bottom: 1.5mm;
+}
+
+.report-preparation .report-disclaimer-inline {
+  margin: 0 0 2mm;
+  padding: 1.8mm 3mm;
+  font-size: 7.8pt;
+  line-height: 1.3;
+}
+
+.report-preparation .report-table {
+  table-layout: fixed;
+  margin: 0 0 2mm;
+  font-size: 8pt;
+  line-height: 1.25;
+}
+
+.report-preparation .report-table th,
+.report-preparation .report-table td {
+  padding: 1.15mm 1.5mm;
+}
+
+.report-preparation .report-table th:first-child {
+  width: 25mm;
+}
+
+.report-preparation .report-table th:nth-child(2) {
+  width: 92mm;
+}
+
+.report-preparation .report-table th:nth-child(4) {
+  width: 22mm;
+}
+
+.report-preparation .report-body > .report-h2.report-h2-tight {
+  margin-top: 1mm;
+  margin-bottom: 1.5mm;
+}
+
+.report-preparation .report-list {
+  margin-bottom: 0;
+  font-size: 8.2pt;
+  line-height: 1.28;
+}
+
+.report-preparation .report-list li {
+  margin-bottom: 0.8mm;
+}
+
 .report-contact {
   margin-top: 6mm;
   border-top: 1px solid hsl(220 15% 88%);
