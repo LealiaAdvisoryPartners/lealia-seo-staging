@@ -236,8 +236,10 @@ const PREMIO_ESPECIFICO = 0.015;
 const SPREAD_PME = 0.01;
 
 export const TERMINAL_GROWTH = 0.02;
-export const CRESCIMENTO_ESTABILIZADO = 0.035;
-export const ANO_ESTABILIZACAO = 5;
+export const CRESCIMENTO_ESTABILIZADO_MAX = 0.035;
+export const CRESCIMENTO_ESTABILIZADO_MIN = 0.02;
+export const CRESCIMENTO_INICIAL_CAP = 0.1;
+export const ANO_ESTABILIZACAO = 4;
 const HORIZONTE = 8;
 
 export type DcfInput = {
@@ -279,10 +281,16 @@ export function calcularDCF(input: DcfInput): DcfResult {
     crescimento_inicial = Math.pow(receitaBase / primeiro, 1 / anos) - 1;
     crescimento_inicial_origem = "Input";
   } else {
-    crescimento_inicial = Math.min(ref.crescimento_ref, CRESCIMENTO_ESTABILIZADO);
+    crescimento_inicial = Math.min(ref.crescimento_ref, CRESCIMENTO_ESTABILIZADO_MAX);
     crescimento_inicial_origem = "Assumption";
   }
-  crescimento_inicial = Math.max(crescimento_inicial, -0.05);
+  crescimento_inicial = Math.min(Math.max(crescimento_inicial, -0.05), CRESCIMENTO_INICIAL_CAP);
+  // Crescimento estabilizado: mantém o CAGR se estiver entre 2% e 3,5%;
+  // abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%.
+  const crescimento_estabilizado = Math.min(
+    Math.max(crescimento_inicial, CRESCIMENTO_ESTABILIZADO_MIN),
+    CRESCIMENTO_ESTABILIZADO_MAX,
+  );
 
   // --- Margem EBITDA de referência (margem normalizada do último exercício) ---
   const margem_ebitda = input.ebitda_normalizado / receitaBase;
@@ -326,8 +334,8 @@ export function calcularDCF(input: DcfInput): DcfResult {
   // --- Projeção ---
   const crescimentoAno = (t: number) =>
     t >= ANO_ESTABILIZACAO
-      ? CRESCIMENTO_ESTABILIZADO
-      : crescimento_inicial + ((CRESCIMENTO_ESTABILIZADO - crescimento_inicial) * (t - 1)) / (ANO_ESTABILIZACAO - 1);
+      ? crescimento_estabilizado
+      : crescimento_inicial + ((crescimento_estabilizado - crescimento_inicial) * (t - 1)) / (ANO_ESTABILIZACAO - 1);
 
   // Apenas o exercício de referência é apresentado como histórico.
   const ultimo = historico[historico.length - 1]!;
@@ -614,10 +622,11 @@ export function calcularDCF(input: DcfInput): DcfResult {
       nota: fontes[7]!.fonte,
     },
     {
-      label: "Crescimento estabilizado",
-      valor: pct(CRESCIMENTO_ESTABILIZADO),
-      origem: "Assumption",
-      nota: "Convergência para um crescimento alinhado com o crescimento nominal de longo prazo da economia, evitando extrapolar taxas elevadas.",
+      label: "Crescimento estabilizado (anos 4-8)",
+      valor: pct(crescimento_estabilizado),
+      origem: crescimento_inicial_origem,
+      nota:
+        "Convergência até ao ano 4 para o crescimento estabilizado: se o CAGR histórico estiver entre 2% e 3,5%, mantém-se; abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%, alinhado com o crescimento nominal de longo prazo da economia.",
     },
     {
       label: "Crescimento na perpetuidade",
@@ -656,7 +665,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     crescimento_inicial,
     crescimento_inicial_origem,
     ano_estabilizacao: ANO_ESTABILIZACAO,
-    crescimento_estabilizado: CRESCIMENTO_ESTABILIZADO,
+    crescimento_estabilizado,
     terminal_growth: TERMINAL_GROWTH,
     margem_ebitda,
     capex_pct_receita,
