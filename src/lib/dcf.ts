@@ -622,10 +622,11 @@ export function calcularDCF(input: DcfInput): DcfResult {
       nota: fontes[7]!.fonte,
     },
     {
-      label: "Crescimento estabilizado (anos 5-8)",
-      valor: pct(CRESCIMENTO_ESTABILIZADO),
-      origem: "Assumption",
-      nota: "Convergência para um crescimento alinhado com o crescimento nominal de longo prazo da economia, evitando extrapolar taxas elevadas.",
+      label: "Crescimento estabilizado (anos 4-8)",
+      valor: pct(crescimento_estabilizado),
+      origem: crescimento_inicial_origem,
+      nota:
+        "Convergência até ao ano 4 para o crescimento estabilizado: se o CAGR histórico estiver entre 2% e 3,5%, mantém-se; abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%, alinhado com o crescimento nominal de longo prazo da economia.",
     },
     {
       label: "Crescimento na perpetuidade",
@@ -664,7 +665,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     crescimento_inicial,
     crescimento_inicial_origem,
     ano_estabilizacao: ANO_ESTABILIZACAO,
-    crescimento_estabilizado: CRESCIMENTO_ESTABILIZADO,
+    crescimento_estabilizado,
     terminal_growth: TERMINAL_GROWTH,
     margem_ebitda,
     capex_pct_receita,
