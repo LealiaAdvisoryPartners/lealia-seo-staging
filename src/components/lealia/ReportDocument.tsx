@@ -772,12 +772,6 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
 
               {d.qualidade.tem_serie ? (
                 <table className="report-table report-table-compact">
-                  <thead>
-                    <tr>
-                      <th>Indicador</th>
-                      <th>Valor</th>
-                    </tr>
-                  </thead>
                   <tbody>
                     <tr>
                       <td>CAGR da faturação</td>
