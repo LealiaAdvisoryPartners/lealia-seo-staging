@@ -647,6 +647,11 @@
   margin-top: 9mm;
 }
 
+.report-body > .report-h2.report-h2-tight {
+  margin-top: 3mm;
+}
+
+
 .report-h3 {
   font-family: var(--font-body);
   font-size: 9pt;
