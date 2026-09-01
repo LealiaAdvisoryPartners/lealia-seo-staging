@@ -517,7 +517,7 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
         <H>Transparência de pressupostos</H>
         <p className="report-small report-dcf-assumptions-intro">
           Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
-          mercado, seguindo um critério conservador — na dúvida, adota-se o valor que resulta numa avaliação mais
+          mercado, seguindo um critério conservador - na dúvida, adota-se o valor que resulta numa avaliação mais
           prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou método
           de derivação.
         </p>

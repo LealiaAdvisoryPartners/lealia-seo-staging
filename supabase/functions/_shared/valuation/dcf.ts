@@ -502,7 +502,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
     {
       parametro: "Equity Risk Premium",
-      fonte: "Prémio de risco de mercado maduro (Damodaran, Implied ERP — mercado dos EUA como mercado de referência).",
+      fonte: "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).",
     },
     {
       parametro: "Country Risk Premium",
@@ -512,7 +512,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     {
       parametro: "Beta",
       fonte:
-        "Beta unlevered setorial (Damodaran, Betas by Sector — Europa Ocidental), realavancado à estrutura de capital-alvo do setor pela fórmula de Hamada.",
+        "Beta unlevered setorial (Damodaran, Betas by Sector - Europa Ocidental), realavancado à estrutura de capital-alvo do setor pela fórmula de Hamada.",
     },
     {
       parametro: "Prémio de dimensão",
