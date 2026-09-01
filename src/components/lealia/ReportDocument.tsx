@@ -1245,6 +1245,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             {/* 12 — Plano de preparação */}
             <Page numero={12} titulo="Preparação para o mercado">
               <H>Plano de preparação priorizado</H>
+              <div className="report-note report-disclaimer-inline">
+                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A.
+              </div>
               <table className="report-table report-table-text">
                 <thead>
                   <tr>
@@ -1281,6 +1284,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
 
             <Page numero={13} titulo="Processo de M&A">
               <H>Como decorre um processo de M&amp;A</H>
+              <div className="report-note report-disclaimer-inline">
+                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A.
+              </div>
               <div className="report-phases report-phases-2 report-phases-tall">
                 {FASES.map((f) => (
                   <div key={f.numero} className="report-phase">
