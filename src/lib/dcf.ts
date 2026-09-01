@@ -484,7 +484,9 @@ export function calcularDCF(input: DcfInput): DcfResult {
     let pv = 0;
     let ultimoFcff = 0;
     for (let t = 1; t <= HORIZONTE; t++) {
-      const g = opts.cagr !== undefined ? opts.cagr : crescimentoAno(t);
+      // Sensibilidade ao CAGR: desloca a curva de crescimento em paralelo, de modo a que
+      // o cenário central reproduza exatamente a projeção base do modelo.
+      const g = opts.cagr !== undefined ? crescimentoAno(t) + (opts.cagr - cagr_visivel) : crescimentoAno(t);
       const receita = rec * (1 + g);
       const ebitda = receita * mg;
       const da = receita * da_pct_receita;
