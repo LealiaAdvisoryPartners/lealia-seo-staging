@@ -14,16 +14,18 @@ function Page({
   numero,
   titulo,
   id,
+  className,
   children,
 }: {
   numero: number;
   titulo?: string;
   id?: string;
+  className?: string;
   children: React.ReactNode;
 }) {
   const empresa = React.useContext(EmpresaContext);
   return (
-    <section className="report-page" id={id}>
+    <section className={`report-page${className ? ` ${className}` : ""}`} id={id}>
       <header className="report-head">
         <img src={logo} alt="Lealia Advisory Partners" className="h-6 w-auto" />
         {titulo ? <span className="report-head-title">{titulo}</span> : null}
@@ -1246,7 +1248,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             <SensitivityPage d={d} numero={11} />
 
             {/* 12 — Plano de preparação */}
-            <Page numero={12} titulo="Preparação para o mercado">
+            <Page numero={12} titulo="Preparação para o mercado" className="report-preparation">
               <H>Plano de preparação priorizado</H>
               <div className="report-note report-disclaimer-inline">
                 Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A. A nossa equipa pode
