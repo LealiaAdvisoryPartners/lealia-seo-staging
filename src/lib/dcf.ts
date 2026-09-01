@@ -554,7 +554,6 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
   ];
 
-  const ebitdaAno1 = anos.find((a) => a.tipo === "forecast")!.ebitda;
 
   const fontes: { parametro: string; fonte: string }[] = [
     {
