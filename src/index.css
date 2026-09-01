@@ -999,6 +999,13 @@
   text-align-last: left;
 }
 
+.report-disclaimer-inline {
+  padding: 2.5mm 3.5mm;
+  font-size: 8.2pt;
+  margin: 2.5mm 0 4mm;
+  border-radius: 1.5mm;
+}
+
 .report-contact {
   margin-top: 6mm;
   border-top: 1px solid hsl(220 15% 88%);
