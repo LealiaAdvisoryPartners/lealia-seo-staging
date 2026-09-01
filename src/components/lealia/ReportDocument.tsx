@@ -1277,7 +1277,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   ))}
                 </tbody>
               </table>
-              <H>Recomendações imediatas</H>
+              <H className="report-h2-tight">Recomendações imediatas</H>
               <ol className="report-list report-compact">
                 {d.recomendacoes.slice(0, 5).map((rec, i) => (
                   <li key={i}>{rec}</li>
