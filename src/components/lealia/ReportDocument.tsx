@@ -1184,7 +1184,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             </Page>
 
             {/* 9 — Drivers de Valor & Riscos */}
-            <Page numero={9} titulo="Drivers de Valor & Riscos">
+            <Page numero={9} titulo="Drivers de Valor & Riscos" className="report-drivers">
               <H>Drivers de Valor</H>
               {d.drivers.length ? (
                 <table className="report-table report-table-text">
