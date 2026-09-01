@@ -14,6 +14,12 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json({ ok: false, error: "Method not allowed" }, 405);
 
+  // Só o agendador (pg_cron) pode disparar este lote.
+  const chave = Deno.env.get("RELATORIOS_CRON_KEY");
+  const auth = req.headers.get("authorization") ?? "";
+  if (!chave || auth !== `Bearer ${chave}`) return json({ ok: false, error: "Unauthorized" }, 401);
+
+
   const supabaseAdmin = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
