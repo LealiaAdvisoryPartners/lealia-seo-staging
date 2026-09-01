@@ -564,7 +564,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     },
     {
       parametro: "Equity Risk Premium",
-      fonte: "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).",
+      fonte: "Prémio de risco de mercado maduro (Damodaran).",
     },
     {
       parametro: "Country Risk Premium",
@@ -589,7 +589,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
     {
       parametro: "Prémio específico do ativo",
       fonte:
-        "Prémio de risco específico do ativo, calibrado em função do perfil de risco da empresa e da consistência dos pressupostos de longo prazo face às referências de mercado.",
+        "Prémio de risco calibrado em função do perfil da empresa e da consistência dos pressupostos de longo prazo.",
     },
     {
       parametro: "Cost of debt",
@@ -690,8 +690,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       label: "Crescimento estabilizado (anos 4-8)",
       valor: pct(crescimento_estabilizado),
       origem: crescimento_inicial_origem,
-      nota:
-        "Convergência até ao ano 4 para o crescimento estabilizado: se o CAGR histórico estiver entre 2% e 3,5%, mantém-se; abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%, alinhado com o crescimento nominal de longo prazo da economia.",
+      nota: "Convergência até ao ano 4 para o crescimento estabilizado: se o CAGR histórico estiver entre 2% e 3,5%, mantém-se; abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%, alinhado com o crescimento nominal de longo prazo da economia.",
     },
     {
       label: "Crescimento na perpetuidade",
