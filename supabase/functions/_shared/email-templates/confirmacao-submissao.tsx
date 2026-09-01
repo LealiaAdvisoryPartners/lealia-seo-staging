@@ -32,7 +32,7 @@ const Email = ({
   <Html lang="pt" dir="ltr">
     <Head />
 
-    <Preview>Recebemos a sua submissão — enviamos o relatório assim que estiver finalizado.</Preview>
+    <Preview>Recebemos a sua submissão. Enviamos o relatório assim que estiver finalizado.</Preview>
 
     <Body style={main}>
       <Container style={container}>
