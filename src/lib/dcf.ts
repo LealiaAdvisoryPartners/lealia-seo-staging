@@ -629,7 +629,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
       label: "Convenção de desconto",
       valor: "End of period convention",
       origem: "Assumption",
-      nota: "Assume geração de fluxos ao longo do ano e não no seu termo.",
+      nota: "Assume que os fluxos de caixa são gerados no final de cada período (ano), sendo descontados pelo número inteiro de anos.",
     },
   ];
 
