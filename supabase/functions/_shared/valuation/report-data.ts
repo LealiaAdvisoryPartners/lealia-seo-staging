@@ -111,7 +111,7 @@ export type LinhaHistorico = {
   ano: number;
   faturacao: string;
   ebitda: string;
-  margem: string;
+  normalizacoes: string;
   despesas: string;
 };
 
@@ -149,14 +149,16 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     },
   ].filter((a) => typeof a.faturacao === "number" || typeof a.ebitda === "number");
 
+  const normalizacaoRenda =
+    lead.renda_reflete_mercado === "Não" && typeof lead.acrescimo_renda_anual === "number" && lead.acrescimo_renda_anual > 0
+      ? eur(lead.acrescimo_renda_anual)
+      : "—";
+
   const historico: LinhaHistorico[] = anosBrutos.map((a) => ({
     ano: a.ano,
     faturacao: eur(a.faturacao),
     ebitda: eur(a.ebitda),
-    margem:
-      typeof a.faturacao === "number" && a.faturacao > 0 && typeof a.ebitda === "number"
-        ? pct1(((a.ebitda + (typeof a.desp === "number" ? a.desp : 0)) / a.faturacao) * 100)
-        : "—",
+    normalizacoes: normalizacaoRenda,
     despesas: typeof a.desp === "number" && a.desp !== 0 ? eur(a.desp) : "—",
   }));
 
