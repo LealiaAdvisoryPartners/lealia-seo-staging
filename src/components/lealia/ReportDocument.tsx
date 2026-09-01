@@ -333,10 +333,6 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
         <section className="report-dcf-bottom">
           <div>
             <H>Custo médio ponderado de capital</H>
-            <p className="report-dcf-formula">
-              Ke = Rf + β<sub>L</sub> × ERP + CRP + prémio de dimensão + prémio específico · Kd<sub>pós</sub> = Kd
-              <sub>pré</sub> × (1 − CIT) · WACC = E/(D+E) × Ke + D/(D+E) × Kd<sub>pós</sub>
-            </p>
             <table className="report-table report-table-compact">
               <tbody>
                 <tr>
