@@ -968,7 +968,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   <H>Métodos alternativos</H>
                   <div className="report-cards">
                     <div className="report-card">
-                      <strong>DCF - fluxos de caixa descontados</strong>
+                      <strong>
+                        DCF - fluxos de caixa descontados <em>(ver slides 10 & 11)</em>
+                      </strong>
                       <p>
                         Projeta os fluxos de caixa futuros e desconta-os a uma taxa que reflete o custo do capital
                         (WACC). É o método mais rigoroso quando existe um plano de negócios credível, mas é muito
