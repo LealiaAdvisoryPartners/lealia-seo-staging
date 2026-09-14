@@ -105,10 +105,10 @@ export const pt = {
   // Política de Privacidade
   "privacy.title": "Política de Privacidade",
   "privacy.lastUpdated": "Última atualização: Setembro de 2026",
-  "privacy.section1.title": "1. Introdução",
+  "privacy.section1.title": "Introdução",
   "privacy.section1.p1":
     "A Lealia Advisory Partners, Lda. (NIF/NIPC 519187334), com sede em Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa ('nós', 'nosso', ou 'nossa'), é a responsável pelo tratamento dos seus dados pessoais e está comprometida com a proteção da sua privacidade. Esta Política de Privacidade explica como recolhemos, armazenamos, usamos, divulgamos e protegemos as suas informações quando visita o nosso site (lealiaap.com), utiliza os nossos serviços ou efetua pagamentos através da nossa plataforma.",
-  "privacy.section2.title": "2. Informação que Recolhemos",
+  "privacy.section2.title": "Informação que Recolhemos",
   "privacy.section2.p1": "Recolhemos informações que nos fornece diretamente, incluindo:",
   "privacy.section2.item1": "Nome, endereço de email e informações de contacto",
   "privacy.section2.item2": "Nome da empresa e detalhes profissionais",
@@ -118,7 +118,7 @@ export const pt = {
   "privacy.section2.item5":
     "Dados de navegação recolhidos automaticamente através de cookies e tecnologias semelhantes (ver secção 7)",
   "privacy.section2.item6": "Quaisquer outras informações que escolha fornecer",
-  "privacy.section3.title": "3. Como Utilizamos a sua Informação",
+  "privacy.section3.title": "Como Utilizamos a sua Informação",
   "privacy.section3.p1": "Utilizamos as informações recolhidas para:",
   "privacy.section3.item1": "Fornecer, manter e melhorar os nossos serviços",
   "privacy.section3.item2": "Processar pagamentos e gerir a faturação",
@@ -127,7 +127,7 @@ export const pt = {
   "privacy.section3.item5": "Prevenir fraude e garantir a segurança das transações",
   "privacy.section3.item6":
     "Cumprir obrigações legais e fiscais (ex.: emissão de faturas, registos contabilísticos)",
-  "privacy.section4.title": "4. Armazenamento e Retenção de Dados",
+  "privacy.section4.title": "Armazenamento e Retenção de Dados",
   "privacy.section4.p1":
     "Os seus dados pessoais são armazenados em servidores seguros, geridos por nós ou por prestadores de serviços de confiança. Conservamos os seus dados apenas durante o tempo necessário para:",
   "privacy.section4.item1": "Cumprir a finalidade para a qual foram recolhidos",
@@ -136,7 +136,7 @@ export const pt = {
   "privacy.section4.item3": "Resolver eventuais litígios e fazer cumprir os nossos acordos",
   "privacy.section4.p2":
     "Após esse período, os dados são eliminados ou anonimizados de forma segura.",
-  "privacy.section5.title": "5. Pagamentos",
+  "privacy.section5.title": "Pagamentos",
   "privacy.section5.p1":
     "Ao efetuar um pagamento através do nosso site, o processamento é realizado pela ifthenpay, uma Instituição de Pagamento portuguesa autorizada e supervisionada pelo Banco de Portugal (licença n.º 8707), que atua como intermediária no processamento de pagamentos por Referência Multibanco, MB WAY, cartão de crédito/débito, entre outros métodos disponibilizados.",
   "privacy.section5.item1":
@@ -147,23 +147,23 @@ export const pt = {
     "Mantemos registos das transações (valor, data, serviço adquirido, estado do pagamento) para efeitos de faturação, contabilidade e apoio ao cliente",
   "privacy.section5.item4":
     "Para mais informações sobre como a ifthenpay trata os dados durante o processamento do pagamento, consulte a política de privacidade da ifthenpay em ifthenpay.com",
-  "privacy.section6.title": "6. Partilha de Informação",
+  "privacy.section6.title": "Partilha de Informação",
   "privacy.section6.p1":
     "Não vendemos, trocamos ou alugamos os seus dados pessoais a terceiros. Podemos partilhar os seus dados com:",
   "privacy.section6.item1":
     "Prestadores de serviços de confiança que nos auxiliam na gestão do site, do negócio e do processamento de pagamentos, sujeitos a obrigações de confidencialidade",
   "privacy.section6.item2": "Autoridades competentes, quando exigido por lei",
-  "privacy.section7.title": "7. Cookies e Tecnologias Semelhantes",
+  "privacy.section7.title": "Cookies e Tecnologias Semelhantes",
   "privacy.section7.p1":
     "O nosso site utiliza apenas cookies estritamente necessários ao seu funcionamento e à segurança do processo de pagamento - nomeadamente cookies de sessão e cookies exigidos pelo nosso prestador de serviços de pagamento (ifthenpay) para processar a transação em segurança.",
   "privacy.section7.p2":
     "Não utilizamos cookies de análise (analytics), publicidade ou marketing de terceiros. Por esse motivo, e nos termos da legislação aplicável (Lei n.º 41/2004 e RGPD), estes cookies não requerem o seu consentimento prévio, uma vez que são indispensáveis ao funcionamento do site e à prestação do serviço solicitado. Caso no futuro passemos a utilizar cookies de análise ou marketing, esta política será atualizada e será apresentado um mecanismo de consentimento adequado.",
   "privacy.section7.p3":
     "Pode gerir ou eliminar cookies a qualquer momento através das definições do seu navegador — note que desativar cookies estritamente necessários pode afetar o funcionamento do site, incluindo o processo de pagamento.",
-  "privacy.section8.title": "8. Segurança dos Dados",
+  "privacy.section8.title": "Segurança dos Dados",
   "privacy.section8.p1":
     "Implementamos medidas técnicas e organizacionais adequadas para proteger os seus dados pessoais — incluindo dados de pagamento — contra acesso, alteração, divulgação ou destruição não autorizados. Porém, nenhum método de transmissão na Internet ou de armazenamento eletrónico é 100% seguro.",
-  "privacy.section9.title": "9. Os seus Direitos",
+  "privacy.section9.title": "Os seus Direitos",
   "privacy.section9.p1":
     "Nos termos do Regulamento Geral sobre a Proteção de Dados (RGPD), tem o direito de:",
   "privacy.section9.item1": "Aceder aos seus dados pessoais",
@@ -176,7 +176,7 @@ export const pt = {
     "Apresentar reclamação junto da Comissão Nacional de Proteção de Dados (CNPD)",
   "privacy.section9.p2":
     "Para exercer estes direitos, contacte-nos através das informações disponibilizadas no nosso site.",
-  "privacy.section10.title": "10. Contacte-nos",
+  "privacy.section10.title": "Contacte-nos",
   "privacy.section10.p1":
     "Lealia Advisory Partners, Lda. — NIF/NIPC: 519187334 — Sede: Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa",
   "privacy.section10.p2":
