@@ -5,7 +5,23 @@ import SEOHead, { pageMeta } from "@/components/SEOHead";
 const Privacy = () => {
   const { t } = useLanguage();
 
-  const sections = [1, 2, 3, 4, 5, 6, 7];
+  const sections = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  // Render a paragraph only if the translation key exists (t() returns the
+  // key itself when missing).
+  const para = (key: string) => {
+    const value = t(key);
+    return value === key ? null : value;
+  };
+
+  const items = (n: number) => {
+    const list: string[] = [];
+    for (let j = 1; j <= 10; j++) {
+      const value = para(`privacy.section${n}.item${j}`);
+      if (value) list.push(value);
+    }
+    return list;
+  };
 
   return (
     <>
