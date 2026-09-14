@@ -78,16 +78,24 @@ const Privacy = () => {
                   </h2>
                 </div>
                 <div className="md:col-span-9 space-y-4 text-foreground/75 font-body font-light leading-relaxed">
-                  <p>{t(`privacy.section${n}.content`)}</p>
-                  {n === 2 && (
+                  {para(`privacy.section${n}.p1`) && (
+                    <p>{para(`privacy.section${n}.p1`)}</p>
+                  )}
+                  {items(n).length > 0 && (
                     <ul className="list-none space-y-2 pl-0 mt-4">
-                      {[1, 2, 3, 4].map((j) => (
+                      {items(n).map((item, j) => (
                         <li key={j} className="flex items-start gap-3">
                           <span className="text-accent mt-2 w-2 h-px bg-accent shrink-0" />
-                          <span>{t(`privacy.section2.item${j}`)}</span>
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
+                  )}
+                  {para(`privacy.section${n}.p2`) && (
+                    <p>{para(`privacy.section${n}.p2`)}</p>
+                  )}
+                  {para(`privacy.section${n}.p3`) && (
+                    <p>{para(`privacy.section${n}.p3`)}</p>
                   )}
                 </div>
               </motion.section>
