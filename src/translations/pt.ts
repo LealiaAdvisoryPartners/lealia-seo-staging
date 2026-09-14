@@ -104,31 +104,83 @@ export const pt = {
 
   // Política de Privacidade
   "privacy.title": "Política de Privacidade",
-  "privacy.lastUpdated": "Última atualização: Novembro de 2025",
+  "privacy.lastUpdated": "Última atualização: Setembro de 2026",
   "privacy.section1.title": "1. Introdução",
-  "privacy.section1.content":
-    "A Lealia Advisory Partners ('nós', 'nosso', ou 'nossa') está comprometida com a proteção da sua privacidade. Esta Política de Privacidade explica como recolhemos, usamos, divulgamos e protegemos as suas informações quando visita o nosso site ou utiliza os nossos serviços.",
+  "privacy.section1.p1":
+    "A Lealia Advisory Partners, Lda. (NIF/NIPC 519187334), com sede em Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa ('nós', 'nosso', ou 'nossa'), é a responsável pelo tratamento dos seus dados pessoais e está comprometida com a proteção da sua privacidade. Esta Política de Privacidade explica como recolhemos, armazenamos, usamos, divulgamos e protegemos as suas informações quando visita o nosso site (lealiaap.com), utiliza os nossos serviços ou efetua pagamentos através da nossa plataforma.",
   "privacy.section2.title": "2. Informação que Recolhemos",
-  "privacy.section2.content": "Recolhemos informações que nos fornece diretamente, incluindo:",
+  "privacy.section2.p1": "Recolhemos informações que nos fornece diretamente, incluindo:",
   "privacy.section2.item1": "Nome, endereço de email e informações de contacto",
   "privacy.section2.item2": "Nome da empresa e detalhes profissionais",
   "privacy.section2.item3": "Preferências de comunicação",
-  "privacy.section2.item4": "Quaisquer outras informações que escolha fornecer",
+  "privacy.section2.item4":
+    "Dados de faturação e pagamento (ex.: nome do titular do cartão, morada de faturação, histórico de transações — os dados sensíveis do cartão são processados diretamente pelo nosso prestador de serviços de pagamento, não por nós)",
+  "privacy.section2.item5":
+    "Dados de navegação recolhidos automaticamente através de cookies e tecnologias semelhantes (ver secção 7)",
+  "privacy.section2.item6": "Quaisquer outras informações que escolha fornecer",
   "privacy.section3.title": "3. Como Utilizamos a sua Informação",
-  "privacy.section3.content":
-    "Utilizamos as informações recolhidas para fornecer, manter e melhorar os nossos serviços, comunicar consigo, responder às suas dúvidas, enviar comunicações de marketing (com o seu consentimento) e cumprir obrigações legais.",
-  "privacy.section4.title": "4. Partilha de Informação",
-  "privacy.section4.content":
-    "Não vendemos, trocamos ou alugamos os seus dados pessoais a terceiros. Podemos partilhar os seus dados com prestadores de serviços de confiança que nos auxiliam na gestão do site e do negócio, sujeitos a obrigações de confidencialidade.",
-  "privacy.section5.title": "5. Segurança dos Dados",
-  "privacy.section5.content":
-    "Implementamos medidas técnicas e organizacionais adequadas para proteger os seus dados pessoais contra acesso, alteração, divulgação ou destruição não autorizados. Porém, nenhum método de transmissão na Internet é 100% seguro.",
-  "privacy.section6.title": "6. Os seus Direitos",
-  "privacy.section6.content":
-    "Tem o direito de aceder, corrigir ou eliminar os seus dados pessoais. Pode também optar por não receber comunicações de marketing em qualquer momento. Para exercer estes direitos, contacte-nos através das informações disponibilizadas no nosso site.",
-  "privacy.section7.title": "7. Contacte-nos",
-  "privacy.section7.content":
-    "Se tiver dúvidas sobre esta Política de Privacidade ou sobre as nossas práticas relacionadas com dados, contacte-nos através do formulário disponível no site.",
+  "privacy.section3.p1": "Utilizamos as informações recolhidas para:",
+  "privacy.section3.item1": "Fornecer, manter e melhorar os nossos serviços",
+  "privacy.section3.item2": "Processar pagamentos e gerir a faturação",
+  "privacy.section3.item3": "Comunicar consigo e responder às suas dúvidas",
+  "privacy.section3.item4": "Enviar comunicações de marketing (com o seu consentimento)",
+  "privacy.section3.item5": "Prevenir fraude e garantir a segurança das transações",
+  "privacy.section3.item6":
+    "Cumprir obrigações legais e fiscais (ex.: emissão de faturas, registos contabilísticos)",
+  "privacy.section4.title": "4. Armazenamento e Retenção de Dados",
+  "privacy.section4.p1":
+    "Os seus dados pessoais são armazenados em servidores seguros, geridos por nós ou por prestadores de serviços de confiança. Conservamos os seus dados apenas durante o tempo necessário para:",
+  "privacy.section4.item1": "Cumprir a finalidade para a qual foram recolhidos",
+  "privacy.section4.item2":
+    "Cumprir obrigações legais e fiscais (nomeadamente prazos de conservação de registos contabilísticos exigidos por lei em Portugal)",
+  "privacy.section4.item3": "Resolver eventuais litígios e fazer cumprir os nossos acordos",
+  "privacy.section4.p2":
+    "Após esse período, os dados são eliminados ou anonimizados de forma segura.",
+  "privacy.section5.title": "5. Pagamentos",
+  "privacy.section5.p1":
+    "Ao efetuar um pagamento através do nosso site, o processamento é realizado pela ifthenpay, uma Instituição de Pagamento portuguesa autorizada e supervisionada pelo Banco de Portugal (licença n.º 8707), que atua como intermediária no processamento de pagamentos por Referência Multibanco, MB WAY, cartão de crédito/débito, entre outros métodos disponibilizados.",
+  "privacy.section5.item1":
+    "Não armazenamos números completos de cartão de crédito/débito nos nossos próprios sistemas — esses dados são geridos diretamente pela ifthenpay, em conformidade com a norma PCI-DSS e a regulamentação aplicável às Instituições de Pagamento em Portugal",
+  "privacy.section5.item2":
+    "Partilhamos com a ifthenpay apenas os dados estritamente necessários para processar a transação (ex.: valor, referência do serviço, dados de contacto para confirmação do pagamento)",
+  "privacy.section5.item3":
+    "Mantemos registos das transações (valor, data, serviço adquirido, estado do pagamento) para efeitos de faturação, contabilidade e apoio ao cliente",
+  "privacy.section5.item4":
+    "Para mais informações sobre como a ifthenpay trata os dados durante o processamento do pagamento, consulte a política de privacidade da ifthenpay em ifthenpay.com",
+  "privacy.section6.title": "6. Partilha de Informação",
+  "privacy.section6.p1":
+    "Não vendemos, trocamos ou alugamos os seus dados pessoais a terceiros. Podemos partilhar os seus dados com:",
+  "privacy.section6.item1":
+    "Prestadores de serviços de confiança que nos auxiliam na gestão do site, do negócio e do processamento de pagamentos, sujeitos a obrigações de confidencialidade",
+  "privacy.section6.item2": "Autoridades competentes, quando exigido por lei",
+  "privacy.section7.title": "7. Cookies e Tecnologias Semelhantes",
+  "privacy.section7.p1":
+    "O nosso site utiliza apenas cookies estritamente necessários ao seu funcionamento e à segurança do processo de pagamento - nomeadamente cookies de sessão e cookies exigidos pelo nosso prestador de serviços de pagamento (ifthenpay) para processar a transação em segurança.",
+  "privacy.section7.p2":
+    "Não utilizamos cookies de análise (analytics), publicidade ou marketing de terceiros. Por esse motivo, e nos termos da legislação aplicável (Lei n.º 41/2004 e RGPD), estes cookies não requerem o seu consentimento prévio, uma vez que são indispensáveis ao funcionamento do site e à prestação do serviço solicitado. Caso no futuro passemos a utilizar cookies de análise ou marketing, esta política será atualizada e será apresentado um mecanismo de consentimento adequado.",
+  "privacy.section7.p3":
+    "Pode gerir ou eliminar cookies a qualquer momento através das definições do seu navegador — note que desativar cookies estritamente necessários pode afetar o funcionamento do site, incluindo o processo de pagamento.",
+  "privacy.section8.title": "8. Segurança dos Dados",
+  "privacy.section8.p1":
+    "Implementamos medidas técnicas e organizacionais adequadas para proteger os seus dados pessoais — incluindo dados de pagamento — contra acesso, alteração, divulgação ou destruição não autorizados. Porém, nenhum método de transmissão na Internet ou de armazenamento eletrónico é 100% seguro.",
+  "privacy.section9.title": "9. Os seus Direitos",
+  "privacy.section9.p1":
+    "Nos termos do Regulamento Geral sobre a Proteção de Dados (RGPD), tem o direito de:",
+  "privacy.section9.item1": "Aceder aos seus dados pessoais",
+  "privacy.section9.item2": "Corrigir dados incorretos ou incompletos",
+  "privacy.section9.item3":
+    "Solicitar a eliminação dos seus dados ('direito ao esquecimento'), sujeito a obrigações legais de conservação (ex.: registos fiscais de pagamentos)",
+  "privacy.section9.item4":
+    "Opor-se ao tratamento dos seus dados para fins de marketing, a qualquer momento",
+  "privacy.section9.item5":
+    "Apresentar reclamação junto da Comissão Nacional de Proteção de Dados (CNPD)",
+  "privacy.section9.p2":
+    "Para exercer estes direitos, contacte-nos através das informações disponibilizadas no nosso site.",
+  "privacy.section10.title": "10. Contacte-nos",
+  "privacy.section10.p1":
+    "Lealia Advisory Partners, Lda. — NIF/NIPC: 519187334 — Sede: Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa",
+  "privacy.section10.p2":
+    "Se tiver dúvidas sobre esta Política de Privacidade ou sobre as nossas práticas relacionadas com dados e pagamentos, contacte-nos através do formulário disponível no site.",
 
   // Página Sobre
   "about.title": "Sobre a Lealia",

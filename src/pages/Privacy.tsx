@@ -5,7 +5,23 @@ import SEOHead, { pageMeta } from "@/components/SEOHead";
 const Privacy = () => {
   const { t } = useLanguage();
 
-  const sections = [1, 2, 3, 4, 5, 6, 7];
+  const sections = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  // Render a paragraph only if the translation key exists (t() returns the
+  // key itself when missing).
+  const para = (key: string) => {
+    const value = t(key);
+    return value === key ? null : value;
+  };
+
+  const items = (n: number) => {
+    const list: string[] = [];
+    for (let j = 1; j <= 10; j++) {
+      const value = para(`privacy.section${n}.item${j}`);
+      if (value) list.push(value);
+    }
+    return list;
+  };
 
   return (
     <>
@@ -55,23 +71,31 @@ const Privacy = () => {
               >
                 <div className="md:col-span-3">
                   <span className="serif-accent text-3xl text-accent">
-                    0{n}
+                    {String(n).padStart(2, "0")}
                   </span>
                   <h2 className="text-xl md:text-2xl font-heading font-light text-primary tracking-tight mt-2">
                     {t(`privacy.section${n}.title`)}
                   </h2>
                 </div>
                 <div className="md:col-span-9 space-y-4 text-foreground/75 font-body font-light leading-relaxed">
-                  <p>{t(`privacy.section${n}.content`)}</p>
-                  {n === 2 && (
+                  {para(`privacy.section${n}.p1`) && (
+                    <p>{para(`privacy.section${n}.p1`)}</p>
+                  )}
+                  {items(n).length > 0 && (
                     <ul className="list-none space-y-2 pl-0 mt-4">
-                      {[1, 2, 3, 4].map((j) => (
+                      {items(n).map((item, j) => (
                         <li key={j} className="flex items-start gap-3">
                           <span className="text-accent mt-2 w-2 h-px bg-accent shrink-0" />
-                          <span>{t(`privacy.section2.item${j}`)}</span>
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
+                  )}
+                  {para(`privacy.section${n}.p2`) && (
+                    <p>{para(`privacy.section${n}.p2`)}</p>
+                  )}
+                  {para(`privacy.section${n}.p3`) && (
+                    <p>{para(`privacy.section${n}.p3`)}</p>
                   )}
                 </div>
               </motion.section>
