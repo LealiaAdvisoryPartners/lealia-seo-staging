@@ -104,31 +104,83 @@ export const en = {
 
   // Privacy Policy
   "privacy.title": "Privacy Policy",
-  "privacy.lastUpdated": "Last Updated: November 2025",
+  "privacy.lastUpdated": "Last updated: September 2026",
   "privacy.section1.title": "1. Introduction",
-  "privacy.section1.content":
-    "Lealia Advisory Partners ('we', 'us', or 'our') is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.",
+  "privacy.section1.p1":
+    "Lealia Advisory Partners, Lda. (NIF/NIPC 519187334), with registered office at Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa, Portugal ('we', 'us', or 'our'), is the controller of your personal data and is committed to protecting your privacy. This Privacy Policy explains how we collect, store, use, disclose and protect your information when you visit our website (lealiaap.com), use our services or make payments through our platform.",
   "privacy.section2.title": "2. Information We Collect",
-  "privacy.section2.content": "We collect information that you provide directly to us, including:",
-  "privacy.section2.item1": "Name, email address, and contact information",
+  "privacy.section2.p1": "We collect information that you provide directly to us, including:",
+  "privacy.section2.item1": "Name, email address and contact information",
   "privacy.section2.item2": "Company name and professional details",
   "privacy.section2.item3": "Communication preferences",
-  "privacy.section2.item4": "Any other information you choose to provide",
+  "privacy.section2.item4":
+    "Billing and payment data (e.g. cardholder name, billing address, transaction history — sensitive card data is processed directly by our payment service provider, not by us)",
+  "privacy.section2.item5":
+    "Browsing data collected automatically through cookies and similar technologies (see section 7)",
+  "privacy.section2.item6": "Any other information you choose to provide",
   "privacy.section3.title": "3. How We Use Your Information",
-  "privacy.section3.content":
-    "We use the information we collect to provide, maintain, and improve our services, communicate with you, respond to your inquiries, send you marketing communications (with your consent), and comply with legal obligations.",
-  "privacy.section4.title": "4. Information Sharing",
-  "privacy.section4.content":
-    "We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted service providers who assist us in operating our website and conducting our business, subject to confidentiality obligations.",
-  "privacy.section5.title": "5. Data Security",
-  "privacy.section5.content":
-    "We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet is 100% secure.",
-  "privacy.section6.title": "6. Your Rights",
-  "privacy.section6.content":
-    "You have the right to access, correct, or delete your personal information. You may also opt-out of marketing communications at any time. To exercise these rights, please contact us using the information provided on our website.",
-  "privacy.section7.title": "7. Contact Us",
-  "privacy.section7.content":
-    "If you have any questions about this Privacy Policy or our data practices, please contact us through the contact form on our website.",
+  "privacy.section3.p1": "We use the information we collect to:",
+  "privacy.section3.item1": "Provide, maintain and improve our services",
+  "privacy.section3.item2": "Process payments and manage billing",
+  "privacy.section3.item3": "Communicate with you and respond to your inquiries",
+  "privacy.section3.item4": "Send marketing communications (with your consent)",
+  "privacy.section3.item5": "Prevent fraud and ensure transaction security",
+  "privacy.section3.item6":
+    "Comply with legal and tax obligations (e.g. issuing invoices, accounting records)",
+  "privacy.section4.title": "4. Data Storage and Retention",
+  "privacy.section4.p1":
+    "Your personal data is stored on secure servers, managed by us or by trusted service providers. We retain your data only for as long as necessary to:",
+  "privacy.section4.item1": "Fulfil the purpose for which it was collected",
+  "privacy.section4.item2":
+    "Comply with legal and tax obligations (in particular the retention periods for accounting records required by law in Portugal)",
+  "privacy.section4.item3": "Resolve any disputes and enforce our agreements",
+  "privacy.section4.p2":
+    "After that period, the data is securely deleted or anonymised.",
+  "privacy.section5.title": "5. Payments",
+  "privacy.section5.p1":
+    "When you make a payment through our website, processing is carried out by ifthenpay, a Portuguese Payment Institution authorised and supervised by Banco de Portugal (licence no. 8707), which acts as an intermediary in processing payments via Multibanco Reference, MB WAY, credit/debit card, among other available methods.",
+  "privacy.section5.item1":
+    "We do not store full credit/debit card numbers on our own systems — that data is managed directly by ifthenpay, in compliance with the PCI-DSS standard and the regulation applicable to Payment Institutions in Portugal",
+  "privacy.section5.item2":
+    "We share with ifthenpay only the data strictly necessary to process the transaction (e.g. amount, service reference, contact details for payment confirmation)",
+  "privacy.section5.item3":
+    "We keep records of transactions (amount, date, service purchased, payment status) for billing, accounting and customer support purposes",
+  "privacy.section5.item4":
+    "For more information on how ifthenpay processes data during payment processing, please see ifthenpay's privacy policy at ifthenpay.com",
+  "privacy.section6.title": "6. Information Sharing",
+  "privacy.section6.p1":
+    "We do not sell, trade or rent your personal data to third parties. We may share your data with:",
+  "privacy.section6.item1":
+    "Trusted service providers who assist us in managing the website, the business and payment processing, subject to confidentiality obligations",
+  "privacy.section6.item2": "Competent authorities, when required by law",
+  "privacy.section7.title": "7. Cookies and Similar Technologies",
+  "privacy.section7.p1":
+    "Our website uses only cookies that are strictly necessary for its operation and for the security of the payment process — namely session cookies and cookies required by our payment service provider (ifthenpay) to process the transaction securely.",
+  "privacy.section7.p2":
+    "We do not use third-party analytics, advertising or marketing cookies. For that reason, and under the applicable legislation (Law no. 41/2004 and the GDPR), these cookies do not require your prior consent, as they are indispensable for the operation of the website and the provision of the requested service. Should we use analytics or marketing cookies in the future, this policy will be updated and an appropriate consent mechanism will be presented.",
+  "privacy.section7.p3":
+    "You can manage or delete cookies at any time through your browser settings — please note that disabling strictly necessary cookies may affect the functioning of the website, including the payment process.",
+  "privacy.section8.title": "8. Data Security",
+  "privacy.section8.p1":
+    "We implement appropriate technical and organisational measures to protect your personal data — including payment data — against unauthorised access, alteration, disclosure or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure.",
+  "privacy.section9.title": "9. Your Rights",
+  "privacy.section9.p1":
+    "Under the General Data Protection Regulation (GDPR), you have the right to:",
+  "privacy.section9.item1": "Access your personal data",
+  "privacy.section9.item2": "Correct inaccurate or incomplete data",
+  "privacy.section9.item3":
+    "Request the deletion of your data ('right to be forgotten'), subject to legal retention obligations (e.g. tax records of payments)",
+  "privacy.section9.item4":
+    "Object to the processing of your data for marketing purposes at any time",
+  "privacy.section9.item5":
+    "Lodge a complaint with the Portuguese Data Protection Authority (CNPD)",
+  "privacy.section9.p2":
+    "To exercise these rights, please contact us using the information provided on our website.",
+  "privacy.section10.title": "10. Contact Us",
+  "privacy.section10.p1":
+    "Lealia Advisory Partners, Lda. — NIF/NIPC: 519187334 — Registered office: Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa, Portugal",
+  "privacy.section10.p2":
+    "If you have any questions about this Privacy Policy or about our data and payment practices, please contact us through the form available on the website.",
 
   // About Page
   "about.title": "About Lealia",
