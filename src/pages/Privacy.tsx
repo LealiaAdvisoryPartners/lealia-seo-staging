@@ -71,7 +71,7 @@ const Privacy = () => {
               >
                 <div className="md:col-span-3">
                   <span className="serif-accent text-3xl text-accent">
-                    0{n}
+                    {String(n).padStart(2, "0")}
                   </span>
                   <h2 className="text-xl md:text-2xl font-heading font-light text-primary tracking-tight mt-2">
                     {t(`privacy.section${n}.title`)}
