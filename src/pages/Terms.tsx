@@ -67,6 +67,7 @@ const Terms = () => {
                       {section.details.map((detail) => <p key={detail}>{linkify(detail)}</p>)}
                     </div>
                   )}
+                  {section.afterDetails?.map((paragraph) => <p key={paragraph}>{linkify(paragraph)}</p>)}
                   {section.privacyLink && (
                     <Link to={buildPath(language, "/privacy")} className="inline-block text-accent underline underline-offset-4 hover:text-accent/75">
                       {language === "pt" ? "Consultar Política de Privacidade" : language === "es" ? "Consultar Política de Privacidad" : "View Privacy Policy"}
