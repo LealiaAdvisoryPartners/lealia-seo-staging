@@ -32,6 +32,10 @@ const pageMeta: Record<string, { titleKey: string; descriptionKey: string }> = {
     titleKey: "seo.privacy.title",
     descriptionKey: "seo.privacy.description",
   },
+  terms: {
+    titleKey: "seo.terms.title",
+    descriptionKey: "seo.terms.description",
+  },
 };
 
 const BASE_URL = "https://www.lealiaap.com";

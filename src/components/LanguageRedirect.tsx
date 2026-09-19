@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { buildPath, getLanguageFromPath, getPathWithoutLanguage } from "@/lib/routing";
 
 /** Páginas reais do site — tudo o resto num único segmento é um link de relatório. */
-const KNOWN_PAGES = ["about", "services", "team", "valuation", "privacy", "relatorio"];
+const KNOWN_PAGES = ["about", "services", "team", "valuation", "privacy", "terms", "relatorio"];
 
 const isReportSlug = (pathname: string) => {
   const segments = getPathWithoutLanguage(pathname).split("/").filter(Boolean);
