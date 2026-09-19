@@ -44,13 +44,18 @@ const Footer = () => {
             © {currentYear} Lealia Advisory Partners. {t("footer.copyright")}
           </p>
 
-          {/* Right: privacy link */}
-          <Link
-            to={buildPath(language, "/privacy")}
-            className="text-sm text-primary-foreground/60 hover:text-accent transition-colors"
-          >
-            {t("footer.privacy")}
-          </Link>
+          {/* Right: legal links */}
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+            <Link to={buildPath(language, "/privacy")} className="text-primary-foreground/60 hover:text-accent transition-colors">
+              {t("footer.privacy")}
+            </Link>
+            <Link to={buildPath(language, "/terms")} className="text-primary-foreground/60 hover:text-accent transition-colors">
+              {t("footer.terms")}
+            </Link>
+            <a href="https://www.livroreclamacoes.pt/Inicio/" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/60 hover:text-accent transition-colors">
+              {t("footer.complaints")}
+            </a>
+          </div>
         </div>
       </div>
     </footer>

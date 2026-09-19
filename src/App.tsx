@@ -17,6 +17,7 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Team from "./pages/Team";
 import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import Valuation from "./pages/Valuation";
 import Relatorio from "./pages/Relatorio";
 import NotFound from "./pages/NotFound";
@@ -58,6 +59,9 @@ const App = () => (
                   <Route path="/en/privacy" element={<Privacy />} />
                   <Route path="/pt/privacy" element={<Privacy />} />
                   <Route path="/es/privacy" element={<Privacy />} />
+                   <Route path="/en/terms" element={<Terms />} />
+                   <Route path="/pt/terms" element={<Terms />} />
+                   <Route path="/es/terms" element={<Terms />} />
                   
                   {/* Legacy routes without language prefix - will be redirected by LanguageRedirect */}
                   <Route path="/" element={<Index />} />
@@ -66,6 +70,7 @@ const App = () => (
                   <Route path="/team" element={<Team />} />
                   <Route path="/valuation" element={<Valuation />} />
                   <Route path="/privacy" element={<Privacy />} />
+                   <Route path="/terms" element={<Terms />} />
 
                   {/* Relatório de avaliação (link privado, sem prefixo de idioma) */}
                   <Route path="/relatorio/:token" element={<Relatorio />} />

@@ -18,6 +18,9 @@ export const es = {
   "seo.privacy.title": "Política de Privacidad | Lealia Advisory Partners",
   "seo.privacy.description":
     "Política de privacidad de Lealia Advisory Partners — cómo recopilamos, utilizamos y protegemos su información personal.",
+  "seo.terms.title": "Términos y Condiciones | Lealia Advisory Partners",
+  "seo.terms.description":
+    "Términos y Condiciones aplicables a los servicios de valoración de empresas prestados por Lealia Advisory Partners.",
 
   // Navigation
   "nav.home": "Inicio",
@@ -102,6 +105,8 @@ export const es = {
   "footer.quicklinks": "Enlaces Rápidos",
   "footer.copyright": "Todos los derechos reservados.",
   "footer.privacy": "Política de Privacidad",
+  "footer.terms": "Términos y Condiciones",
+  "footer.complaints": "Libro de Reclamaciones",
 
   // Privacy Policy
   "privacy.title": "Política de Privacidad",

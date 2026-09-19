@@ -18,6 +18,9 @@ export const en = {
   "seo.privacy.title": "Privacy Policy | Lealia Advisory Partners",
   "seo.privacy.description":
     "Lealia Advisory Partners privacy policy — how we collect, use, and protect your personal information.",
+  "seo.terms.title": "Terms and Conditions | Lealia Advisory Partners",
+  "seo.terms.description":
+    "Terms and Conditions governing the business valuation services provided by Lealia Advisory Partners.",
 
   // Navigation
   "nav.home": "Home",
@@ -101,6 +104,8 @@ export const en = {
   "footer.quicklinks": "Quick Links",
   "footer.copyright": "All rights reserved.",
   "footer.privacy": "Privacy Policy",
+  "footer.terms": "Terms and Conditions",
+  "footer.complaints": "Complaints Book",
 
   // Privacy Policy
   "privacy.title": "Privacy Policy",
