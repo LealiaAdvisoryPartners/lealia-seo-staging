@@ -58,6 +58,7 @@ export type Database = {
           horizonte_temporal: string | null
           id: string
           idade_empresa: number | null
+          idioma: string
           incluir_imovel_perimetro: string | null
           industria: string
           leasing_financeiro: number | null
@@ -141,6 +142,7 @@ export type Database = {
           horizonte_temporal?: string | null
           id?: string
           idade_empresa?: number | null
+          idioma?: string
           incluir_imovel_perimetro?: string | null
           industria: string
           leasing_financeiro?: number | null
@@ -224,6 +226,7 @@ export type Database = {
           horizonte_temporal?: string | null
           id?: string
           idade_empresa?: number | null
+          idioma?: string
           incluir_imovel_perimetro?: string | null
           industria?: string
           leasing_financeiro?: number | null
