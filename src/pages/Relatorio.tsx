@@ -168,7 +168,7 @@ const Relatorio = () => {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/valuation" className="text-xs underline underline-offset-4 opacity-80">
-              Voltar
+              {c.back}
             </Link>
             <button
               type="button"
@@ -187,7 +187,7 @@ const Relatorio = () => {
               }}
               className="btn-primary disabled:opacity-60"
             >
-              {aGerarPdf ? "A gerar PDF…" : "Descarregar PDF"}
+              {aGerarPdf ? c.generating : c.download}
             </button>
           </div>
         </div>
