@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import LanguageToggle from "./LanguageToggle";
 import { buildPath, stripLanguage } from "@/lib/routing";
+import { NAV_PAGES } from "@/pages";
 import { Magnetic } from "@/components/motion/MagneticButton";
 import logoHeader from "@/assets/Logo_text_biggerfont_samesize_2.png";
 
@@ -14,25 +15,14 @@ const Navigation = () => {
   const location = useLocation();
   const { t, language } = useLanguage();
 
-  const basePaths = [
-    { name: t("nav.home"), path: "/" },
-    { name: t("nav.about"), path: "/about" },
-    { name: t("nav.services"), path: "/services" },
-    { name: t("nav.team"), path: "/team" },
-    { name: t("nav.valuation"), path: "/valuation" },
-  ];
-
-  // Build language-prefixed paths
-  const navLinks = basePaths.map((link) => ({
-    ...link,
-    path: buildPath(language, link.path),
+  const navLinks = NAV_PAGES.map(({ slug, navKey }) => ({
+    slug,
+    name: t(navKey!),
+    path: buildPath(language, slug),
   }));
 
-  const isActive = (path: string) => {
-    const currentPath = stripLanguage(location.pathname);
-    const linkPath = stripLanguage(path);
-    return currentPath === linkPath || (currentPath === "" && linkPath === "/");
-  };
+  const actual = stripLanguage(location.pathname).replace(/^\//, "");
+  const isActive = (slug: string) => actual === slug;
 
   const scrollToContact = () => {
     window.location.href = `${buildPath(language, "/")}#contact`;
