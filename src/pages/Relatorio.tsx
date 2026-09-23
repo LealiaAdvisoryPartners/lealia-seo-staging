@@ -162,7 +162,9 @@ const Relatorio = () => {
         <div className="report-toolbar print:hidden">
           <div>
             <p className="text-xs tracking-[0.25em] uppercase opacity-70">Lealia Advisory Partners</p>
-            <p className="font-serif text-lg">Relatório de avaliação — {dados.relatorio.empresa}</p>
+            <p className="font-serif text-lg">
+              {c.reportOf} {dados.relatorio.empresa}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/valuation" className="text-xs underline underline-offset-4 opacity-80">
