@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { FASES } from "@/lib/timeline";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { pageCopy } from "@/translations/valuation-page";
 
 export function Timeline() {
   const [aberta, setAberta] = useState<string | null>("01");
+  const { language } = useLanguage();
+  const c = pageCopy[language].timeline;
 
   return (
     <div>
@@ -27,7 +31,7 @@ export function Timeline() {
       {FASES.filter((f) => f.numero === aberta).map((f) => (
         <div key={f.numero} className="card-elegant mt-6 p-8">
           <p className="eyebrow">
-            Fase {f.numero} — {f.titulo}
+            {c.phasePrefix} {f.numero} — {f.titulo}
           </p>
           <ul className="mt-6 space-y-4">
             {f.etapas.map((e, i) => (
@@ -40,10 +44,7 @@ export function Timeline() {
         </div>
       ))}
 
-      <p className="mt-8 text-sm font-light text-muted-foreground">
-        Um processo de M&amp;A típico demora entre 6 a 7 meses, do mandato ao closing — razão pela
-        qual vale a pena ter a primeira conversa cedo.
-      </p>
+      <p className="mt-8 text-sm font-light text-muted-foreground">{c.footer}</p>
     </div>
   );
 }

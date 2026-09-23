@@ -60,6 +60,7 @@ export type LeadPayload = {
   multiplo_ajustado_max?: number | null;
   confianca?: string | null;
   hp?: string;
+  idioma?: "pt" | "en" | "es" | null;
   /** Origem do browser, usada para construir o link do relatório. */
   origin?: string;
 };

@@ -1,0 +1,763 @@
+import type { Language } from "@/contexts/language-context";
+
+export type FormCopy = {
+  steps: string[];
+  intro: string;
+  stepOf: (current: number, total: number) => string;
+  previous: string;
+  next: string;
+  submit: string;
+  saving: string;
+  websiteLabel: string;
+  selectPlaceholder: string;
+  notApplicable: string;
+  optional: string;
+  yes: string;
+  no: string;
+  tooltips: {
+    unidades: string;
+    tipoPeriodo: string;
+    despesas: string;
+    caixa: string;
+    divida: string;
+    capex: string;
+    da: string;
+    acrescimoRenda: string;
+    valorizacaoImovel: string;
+    backlog: string;
+  };
+  fields: {
+    pais: string;
+    idadeEmpresa: string;
+    idadeHint: string;
+    industria: string;
+    subindustria: string;
+    unidades: string;
+    clientesAtivos: string;
+    atividadePrincipal: string;
+    atividadePlaceholder: string;
+    anoReferencia: string;
+    tipoPeriodo: string;
+    valoresEurosNote: (ano: string) => string;
+    faturacao: string;
+    ebitda: string;
+    despesasExtraordinarias: string;
+    caixaEDepositos: string;
+    divida: string;
+    capex: string;
+    depreciacoesAmortizacoes: string;
+    numColaboradores: string;
+    pctTop5: string;
+    pctTop1: string;
+    backlog: string;
+    geografiaClientes: string;
+    dependenciaFaturacao: string;
+    dependenciaGestao: string;
+    proprietarioImovel: string;
+    rendaReflectMercado: string;
+    acrescimoRendaAnual: string;
+    valorizacaoImovel: string;
+    incluirImovelPerimetro: string;
+    metodoAvaliacaoImovel: string;
+    anoAvaliacaoImovel: string;
+    imovelNota: string;
+    estruturaTransacao: string;
+    motivoInteresse: string;
+    horizonteTemporal: string;
+    pctATransacionar: string;
+    permanenciaPosVenda: string;
+    tipoInvestidor: string;
+    nome: string;
+    email: string;
+    telefone: string;
+    empresa: string;
+    cargo: string;
+    cargoPlaceholder: string;
+    consentimento: string;
+    idiomaRelatorio: string;
+  };
+  errors: {
+    idadeInvalida: string;
+    selecioneIndustria: string;
+    selecioneSubindustria: string;
+    campoObrigatorio: string;
+    maximo100: string;
+    selecioneOpcao: string;
+    selecioneAnoReferencia: string;
+    faltaEbitda: string;
+    faltaFaturacao: string;
+    ebitdaSuperiorFaturacao: string;
+    despesasSuperiorFaturacao: string;
+    percentagemEntre0e100: string;
+    maiorClienteExcede: string;
+    emailInvalido: string;
+    consentimentoNecessario: string;
+  };
+  options: Record<string, string>;
+};
+
+export const formCopy: Record<Language, FormCopy> = {
+  pt: {
+    steps: [
+      "Sobre a empresa",
+      "Dados financeiros",
+      "Balanço e investimento",
+      "Risco e concentração",
+      "Imóvel / Instalações",
+      "Motivação e transação",
+      "Contacto",
+    ],
+    intro:
+      "Este processo demora cerca de 5 minutos. \nQuanto mais completa for a informação, mais precisa será a avaliação.",
+    stepOf: (current, total) => `Passo ${current} de ${total}`,
+    previous: "Anterior",
+    next: "Seguinte",
+    submit: "Calcular avaliação",
+    saving: "A calcular…",
+    websiteLabel: "Website",
+    selectPlaceholder: "Selecione…",
+    notApplicable: "Não aplicável",
+    optional: "opcional",
+    yes: "Sim",
+    no: "Não",
+    tooltips: {
+      unidades:
+        "Número de localizações ou unidades operacionais da empresa (lojas, clínicas, fábricas, escritórios).",
+      tipoPeriodo:
+        "Indica se os valores correspondem a contas encerradas, aos últimos 12 meses ou a uma estimativa. Determina o grau de fiabilidade da avaliação.",
+      despesas:
+        "Custos pontuais e não recorrentes, ex: despesas extraordinárias, custos pessoais não-operacionais, indemnizações, bónus não-recorrentes, etc.",
+      caixa: "Saldo de caixa, depósitos bancários e equivalentes de caixa à data mais recente disponível.",
+      divida:
+        " Dívida financeira (inc. IRC vencido e não pago, empréstimos bancários, leasings, factorings, etc.), dívida a fornecedores de CapEx, e dívida associada a receitas antecipadas.",
+      capex:
+        "Investimento anual médio necessário para manter a operação atual (excluindo investimentos de expansão/crescimento).",
+      da: "Total anual de depreciações e amortizações registadas na demonstração de resultados. Se não for indicado, é estimado a partir da percentagem média de D&A sobre a receita do setor selecionado e assinalado no relatório como pressuposto.",
+      acrescimoRenda:
+        "Diferença anual entre a renda atualmente paga e uma renda equivalente a preços de mercado atuais.",
+      valorizacaoImovel:
+        "Use o valor de um relatório de avaliação imobiliária recente, ou a sua melhor estimativa de mercado.",
+      backlog: "Valor de encomendas ou contratos já adjudicados ainda por faturar.",
+    },
+    fields: {
+      pais: "País",
+      idadeEmpresa: "Idade da empresa",
+      idadeHint: "anos",
+      industria: "Indústria",
+      subindustria: "Sub-indústria",
+      unidades: "Unidades / localizações",
+      clientesAtivos: "Clientes ativos",
+      atividadePrincipal: "Atividade principal",
+      atividadePlaceholder: "Ex: produção e instalação de estruturas metálicas para clientes industriais",
+      anoReferencia: "Qual foi o ano mais recente com dados financeiros fechados?",
+      tipoPeriodo: "Tipo de período de referência",
+      valoresEurosNote: (ano) =>
+        `Indique valores em euros. O ano ${ano} é obrigatório; os anos anteriores são opcionais e servem para aferir a tendência de crescimento.`,
+      faturacao: "Faturação",
+      ebitda: "EBITDA",
+      despesasExtraordinarias: "Desp. extraordinárias",
+      caixaEDepositos: "Caixa e depósitos",
+      divida: "Dívida",
+      capex: "Capex anual recorrente",
+      depreciacoesAmortizacoes: "Depreciações & Amortizações anuais (total)",
+      numColaboradores: "Número de colaboradores",
+      pctTop5: "Faturação nos 5 maiores clientes",
+      pctTop1: "Faturação no maior cliente",
+      backlog: "Backlog contratado",
+      geografiaClientes: "Geografia dos clientes",
+      dependenciaFaturacao: "Dependência do acionista na faturação",
+      dependenciaGestao: "Dependência do acionista na gestão",
+      proprietarioImovel: "A empresa é proprietária do imóvel onde opera?",
+      rendaReflectMercado: "A renda atual reflete preços de mercado?",
+      acrescimoRendaAnual: "Qual o acréscimo anual a contabilizar para refletir preços de mercado?",
+      valorizacaoImovel: "Qual a valorização do imóvel?",
+      incluirImovelPerimetro: "Pretende incluir o imóvel no perímetro da transação?",
+      metodoAvaliacaoImovel: "Como foi determinada a valorização?",
+      anoAvaliacaoImovel: "Ano da avaliação do imóvel",
+      imovelNota:
+        "Se a empresa detiver o imóvel, o EBITDA é ajustado para refletir uma renda de mercado teórica. Se optar por incluir o imóvel na transação, o seu valor soma-se ao valor final da empresa; se ficar de fora, esse valor não é contabilizado.",
+      estruturaTransacao: "Estrutura de transação",
+      motivoInteresse: "Motivo do interesse",
+      horizonteTemporal: "Horizonte temporal",
+      pctATransacionar: "Percentagem da empresa a transacionar",
+      permanenciaPosVenda: "Disponibilidade para permanecer após a venda",
+      tipoInvestidor: "Tipo de investidor preferencial",
+      nome: "Nome",
+      email: "Email",
+      telefone: "Telefone",
+      empresa: "Empresa",
+      cargo: "Cargo",
+      cargoPlaceholder: "CEO, Fundador, Sócio-Gerente…",
+      consentimento:
+        "Autorizo a Lealia Advisory Partners a tratar os dados fornecidos para efeitos de contacto comercial e elaboração da avaliação indicativa, nos termos do RGPD.",
+      idiomaRelatorio: "Idioma do relatório e das comunicações",
+    },
+    errors: {
+      idadeInvalida: "Indique um número de anos válido",
+      selecioneIndustria: "Selecione a indústria",
+      selecioneSubindustria: "Selecione a sub-indústria",
+      campoObrigatorio: "Campo obrigatório",
+      maximo100: "Máximo 100 caracteres",
+      selecioneOpcao: "Selecione uma opção",
+      selecioneAnoReferencia: "Selecione o ano de referência",
+      faltaEbitda: "Se preencheu a faturação deste ano, indique também o EBITDA correspondente",
+      faltaFaturacao: "Se preencheu o EBITDA deste ano, indique também a faturação correspondente",
+      ebitdaSuperiorFaturacao: "O EBITDA não pode ser superior à faturação do mesmo ano",
+      despesasSuperiorFaturacao: "A soma do EBITDA com as despesas extraordinárias não pode ser superior à faturação",
+      percentagemEntre0e100: "Percentagem entre 0 e 100",
+      maiorClienteExcede: "O maior cliente não pode pesar mais do que os cinco maiores",
+      emailInvalido: "Introduza um email válido",
+      consentimentoNecessario: "É necessário o seu consentimento",
+    },
+    options: {
+      Portugal: "Portugal",
+      Espanha: "Espanha",
+      Outro: "Outro",
+      "Outro (não listado)": "Outro (não listado)",
+      Agricultura: "Agricultura",
+      Agroindústria: "Agroindústria",
+      "Produção agrícola": "Produção agrícola",
+      Construção: "Construção",
+      "Construção e obras públicas": "Construção e obras públicas",
+      "Produtos de Construção": "Produtos de Construção",
+      "Promoção imobiliária": "Promoção imobiliária",
+      Energia: "Energia",
+      "Distribuição/Retalho energético": "Distribuição/Retalho energético",
+      "Eficiência energética/Serviços": "Eficiência energética/Serviços",
+      "Hotelaria e Turismo": "Hotelaria e Turismo",
+      Hotéis: "Hotéis",
+      Restauração: "Restauração",
+      Logística: "Logística",
+      "Logística/Armazenagem": "Logística/Armazenagem",
+      Transporte: "Transporte",
+      "Manufatura/Indústria": "Manufatura/Indústria",
+      "Alimentar/Agroindústria": "Alimentar/Agroindústria",
+      "Componentes automóvel": "Componentes automóvel",
+      Metalomecânica: "Metalomecânica",
+      "Plásticos/Embalagem": "Plásticos/Embalagem",
+      Têxtil: "Têxtil",
+      "Maquinaria industrial": "Maquinaria industrial",
+      Retalho: "Retalho",
+      "Retalho especializado": "Retalho especializado",
+      "Retalho generalista": "Retalho generalista",
+      Saúde: "Saúde",
+      "Clínicas dentárias": "Clínicas dentárias",
+      "Clínicas médicas gerais": "Clínicas médicas gerais",
+      "Diagnóstico/Imagiologia": "Diagnóstico/Imagiologia",
+      "Farmácias/Distribuição farmacêutica": "Farmácias/Distribuição farmacêutica",
+      "Lares/Cuidados continuados": "Lares/Cuidados continuados",
+      "Clínicas veterinárias": "Clínicas veterinárias",
+      "Serviços B2B": "Serviços B2B",
+      Consultoria: "Consultoria",
+      "Serviços profissionais": "Serviços profissionais",
+      "Tecnologia/Software": "Tecnologia/Software",
+      Cibersegurança: "Cibersegurança",
+      "SaaS B2B": "SaaS B2B",
+      "Serviços de TI/Consultoria tecnológica": "Serviços de TI/Consultoria tecnológica",
+      "Localização única": "Localização única",
+      "2-3 localizações": "2-3 localizações",
+      "Mais de 3 localizações": "Mais de 3 localizações",
+      "Não aplicável": "Não aplicável",
+      "1-5": "1-5",
+      "6-20": "6-20",
+      "21-50": "21-50",
+      "51-200": "51-200",
+      "200+": "200+",
+      "1-9": "1-9",
+      "10-24": "10-24",
+      "25-49": "25-49",
+      "50-99": "50-99",
+      "100-249": "100-249",
+      "250+": "250+",
+      "Exercício encerrado (contas aprovadas)": "Exercício encerrado (contas aprovadas)",
+      "LTM — últimos 12 meses": "LTM — últimos 12 meses",
+      "Ano em curso anualizado": "Ano em curso anualizado",
+      "Estimativa de fecho do ano": "Estimativa de fecho do ano",
+      "Orçamento / plano de negócios": "Orçamento / plano de negócios",
+      "Nacional (<10% exportação)": "Nacional (<10% exportação)",
+      "Maioritariamente nacional (10%-35% exportação)": "Maioritariamente nacional (10%-35% exportação)",
+      "Equilibrado (35%-65% exportação)": "Equilibrado (35%-65% exportação)",
+      "Maioritariamente internacional (65%-90% exportação)": "Maioritariamente internacional (65%-90% exportação)",
+      "Internacional (>90% exportação)": "Internacional (>90% exportação)",
+      "Baixa (0-20%)": "Baixa (0-20%)",
+      "Média (20-50%)": "Média (20-50%)",
+      "Alta (50-100%)": "Alta (50-100%)",
+      Baixa: "Baixa",
+      Média: "Média",
+      Alta: "Alta",
+      Sim: "Sim",
+      Não: "Não",
+      "Venda de capital": "Venda de capital",
+      "Venda de ativos": "Venda de ativos",
+      "Emissão de dívida": "Emissão de dívida",
+      "Não sei / a explorar": "Não sei / a explorar",
+      Sucessão: "Sucessão",
+      Expansão: "Expansão",
+      "Prospeção de mercado": "Prospeção de mercado",
+      "Carve-Out": "Carve-Out",
+      "Rentabilização do investimento": "Rentabilização do investimento",
+      "Imediato (0-6 meses)": "Imediato (0-6 meses)",
+      "1-2 anos": "1-2 anos",
+      "Sem prazo definido": "Sem prazo definido",
+      "Minoritária (<50%)": "Minoritária (<50%)",
+      "Maioritária (50-90%)": "Maioritária (50-90%)",
+      "Totalidade (90-100%)": "Totalidade (90-100%)",
+      "Ainda não decidido": "Ainda não decidido",
+      "Avaliação independente recente": "Avaliação independente recente",
+      "Avaliação bancária": "Avaliação bancária",
+      "Estimativa do acionista": "Estimativa do acionista",
+      "Valor contabilístico": "Valor contabilístico",
+      "Saída imediata": "Saída imediata",
+      "Transição até 12 meses": "Transição até 12 meses",
+      "Permanência 1-3 anos": "Permanência 1-3 anos",
+      "Permanência de longo prazo": "Permanência de longo prazo",
+      "Investidor estratégico (setor)": "Investidor estratégico (setor)",
+      "Private equity / financeiro": "Private equity / financeiro",
+      "Family office": "Family office",
+      "Gestão interna (MBO)": "Gestão interna (MBO)",
+      "Indiferente / a explorar": "Indiferente / a explorar",
+    },
+  },
+  en: {
+    steps: [
+      "About the company",
+      "Financial data",
+      "Balance sheet and investment",
+      "Risk and concentration",
+      "Property / Premises",
+      "Motivation and transaction",
+      "Contact",
+    ],
+    intro:
+      "This process takes around 5 minutes. \nThe more complete the information, the more accurate the valuation will be.",
+    stepOf: (current, total) => `Step ${current} of ${total}`,
+    previous: "Back",
+    next: "Next",
+    submit: "Calculate valuation",
+    saving: "Calculating…",
+    websiteLabel: "Website",
+    selectPlaceholder: "Select…",
+    notApplicable: "Not applicable",
+    optional: "optional",
+    yes: "Yes",
+    no: "No",
+    tooltips: {
+      unidades:
+        "Number of locations or operating units of the company (shops, clinics, factories, offices).",
+      tipoPeriodo:
+        "Indicates whether the figures correspond to closed accounts, the last 12 months, or an estimate. It determines the reliability of the valuation.",
+      despesas:
+        "One-off, non-recurring costs, e.g. extraordinary expenses, non-operational personal costs, severance payments, non-recurring bonuses, etc.",
+      caixa: "Cash balance, bank deposits and cash equivalents as at the most recent available date.",
+      divida:
+        " Financial debt (incl. overdue and unpaid corporate income tax, bank loans, leases, factoring, etc.), amounts owed to CapEx suppliers, and debt associated with deferred revenue.",
+      capex:
+        "Average annual investment required to maintain current operations (excluding expansion/growth investment).",
+      da: "Total annual depreciation and amortisation recognised in the income statement. If not provided, it is estimated from the average D&A percentage of revenue for the selected sector and flagged in the report as an assumption.",
+      acrescimoRenda:
+        "Annual difference between the rent currently paid and an equivalent rent at current market prices.",
+      valorizacaoImovel:
+        "Use the value from a recent property valuation report, or your best market estimate.",
+      backlog: "Value of orders or contracts already awarded but not yet invoiced.",
+    },
+    fields: {
+      pais: "Country",
+      idadeEmpresa: "Company age",
+      idadeHint: "years",
+      industria: "Industry",
+      subindustria: "Sub-industry",
+      unidades: "Units / locations",
+      clientesAtivos: "Active clients",
+      atividadePrincipal: "Main activity",
+      atividadePlaceholder: "E.g. manufacture and installation of steel structures for industrial clients",
+      anoReferencia: "What was the most recent year with closed financial data?",
+      tipoPeriodo: "Reference period type",
+      valoresEurosNote: (ano) =>
+        `State figures in euros. Year ${ano} is mandatory; prior years are optional and help gauge the growth trend.`,
+      faturacao: "Revenue",
+      ebitda: "EBITDA",
+      despesasExtraordinarias: "Extraordinary exp.",
+      caixaEDepositos: "Cash and deposits",
+      divida: "Debt",
+      capex: "Recurring annual capex",
+      depreciacoesAmortizacoes: "Annual depreciation & amortisation (total)",
+      numColaboradores: "Number of employees",
+      pctTop5: "Revenue from the 5 largest clients",
+      pctTop1: "Revenue from the largest client",
+      backlog: "Contracted backlog",
+      geografiaClientes: "Client geography",
+      dependenciaFaturacao: "Shareholder dependency on revenue",
+      dependenciaGestao: "Shareholder dependency on management",
+      proprietarioImovel: "Does the company own the property where it operates?",
+      rendaReflectMercado: "Does the current rent reflect market prices?",
+      acrescimoRendaAnual: "What is the annual increase to account for, to reflect market prices?",
+      valorizacaoImovel: "What is the property valuation?",
+      incluirImovelPerimetro: "Do you intend to include the property within the transaction perimeter?",
+      metodoAvaliacaoImovel: "How was the valuation determined?",
+      anoAvaliacaoImovel: "Year of the property valuation",
+      imovelNota:
+        "If the company owns the property, EBITDA is adjusted to reflect a theoretical market rent. If you choose to include the property in the transaction, its value is added to the company's final value; if it is left out, that value is not counted.",
+      estruturaTransacao: "Transaction structure",
+      motivoInteresse: "Reason for interest",
+      horizonteTemporal: "Time horizon",
+      pctATransacionar: "Percentage of the company to be transacted",
+      permanenciaPosVenda: "Availability to remain after the sale",
+      tipoInvestidor: "Preferred investor type",
+      nome: "Name",
+      email: "Email",
+      telefone: "Phone",
+      empresa: "Company",
+      cargo: "Role",
+      cargoPlaceholder: "CEO, Founder, Managing Partner…",
+      consentimento:
+        "I authorise Lealia Advisory Partners to process the data provided for commercial contact purposes and the preparation of the indicative valuation, in accordance with GDPR.",
+      idiomaRelatorio: "Report and communications language",
+    },
+    errors: {
+      idadeInvalida: "Please enter a valid number of years",
+      selecioneIndustria: "Select the industry",
+      selecioneSubindustria: "Select the sub-industry",
+      campoObrigatorio: "Required field",
+      maximo100: "Maximum 100 characters",
+      selecioneOpcao: "Select an option",
+      selecioneAnoReferencia: "Select the reference year",
+      faltaEbitda: "If you filled in revenue for this year, also provide the corresponding EBITDA",
+      faltaFaturacao: "If you filled in EBITDA for this year, also provide the corresponding revenue",
+      ebitdaSuperiorFaturacao: "EBITDA cannot exceed revenue for the same year",
+      despesasSuperiorFaturacao: "The sum of EBITDA and extraordinary expenses cannot exceed revenue",
+      percentagemEntre0e100: "Percentage between 0 and 100",
+      maiorClienteExcede: "The largest client cannot weigh more than the top five combined",
+      emailInvalido: "Enter a valid email address",
+      consentimentoNecessario: "Your consent is required",
+    },
+    options: {
+      Portugal: "Portugal",
+      Espanha: "Spain",
+      Outro: "Other",
+      "Outro (não listado)": "Other (not listed)",
+      Agricultura: "Agriculture",
+      Agroindústria: "Agro-industry",
+      "Produção agrícola": "Agricultural production",
+      Construção: "Construction",
+      "Construção e obras públicas": "Construction and public works",
+      "Produtos de Construção": "Construction products",
+      "Promoção imobiliária": "Real estate development",
+      Energia: "Energy",
+      "Distribuição/Retalho energético": "Energy distribution/retail",
+      "Eficiência energética/Serviços": "Energy efficiency/services",
+      "Hotelaria e Turismo": "Hospitality and Tourism",
+      Hotéis: "Hotels",
+      Restauração: "Food service",
+      Logística: "Logistics",
+      "Logística/Armazenagem": "Logistics/warehousing",
+      Transporte: "Transport",
+      "Manufatura/Indústria": "Manufacturing/Industry",
+      "Alimentar/Agroindústria": "Food/agro-industry",
+      "Componentes automóvel": "Automotive components",
+      Metalomecânica: "Metalworking",
+      "Plásticos/Embalagem": "Plastics/packaging",
+      Têxtil: "Textiles",
+      "Maquinaria industrial": "Industrial machinery",
+      Retalho: "Retail",
+      "Retalho especializado": "Specialised retail",
+      "Retalho generalista": "General retail",
+      Saúde: "Healthcare",
+      "Clínicas dentárias": "Dental clinics",
+      "Clínicas médicas gerais": "General medical clinics",
+      "Diagnóstico/Imagiologia": "Diagnostics/imaging",
+      "Farmácias/Distribuição farmacêutica": "Pharmacies/pharmaceutical distribution",
+      "Lares/Cuidados continuados": "Care homes/long-term care",
+      "Clínicas veterinárias": "Veterinary clinics",
+      "Serviços B2B": "B2B services",
+      Consultoria: "Consulting",
+      "Serviços profissionais": "Professional services",
+      "Tecnologia/Software": "Technology/Software",
+      Cibersegurança: "Cybersecurity",
+      "SaaS B2B": "B2B SaaS",
+      "Serviços de TI/Consultoria tecnológica": "IT services/technology consulting",
+      "Localização única": "Single location",
+      "2-3 localizações": "2-3 locations",
+      "Mais de 3 localizações": "More than 3 locations",
+      "Não aplicável": "Not applicable",
+      "1-5": "1-5",
+      "6-20": "6-20",
+      "21-50": "21-50",
+      "51-200": "51-200",
+      "200+": "200+",
+      "1-9": "1-9",
+      "10-24": "10-24",
+      "25-49": "25-49",
+      "50-99": "50-99",
+      "100-249": "100-249",
+      "250+": "250+",
+      "Exercício encerrado (contas aprovadas)": "Closed financial year (approved accounts)",
+      "LTM — últimos 12 meses": "LTM — last 12 months",
+      "Ano em curso anualizado": "Current year, annualised",
+      "Estimativa de fecho do ano": "Year-end estimate",
+      "Orçamento / plano de negócios": "Budget / business plan",
+      "Nacional (<10% exportação)": "Domestic (<10% exports)",
+      "Maioritariamente nacional (10%-35% exportação)": "Mostly domestic (10%-35% exports)",
+      "Equilibrado (35%-65% exportação)": "Balanced (35%-65% exports)",
+      "Maioritariamente internacional (65%-90% exportação)": "Mostly international (65%-90% exports)",
+      "Internacional (>90% exportação)": "International (>90% exports)",
+      "Baixa (0-20%)": "Low (0-20%)",
+      "Média (20-50%)": "Medium (20-50%)",
+      "Alta (50-100%)": "High (50-100%)",
+      Baixa: "Low",
+      Média: "Medium",
+      Alta: "High",
+      Sim: "Yes",
+      Não: "No",
+      "Venda de capital": "Equity sale",
+      "Venda de ativos": "Asset sale",
+      "Emissão de dívida": "Debt issuance",
+      "Não sei / a explorar": "Not sure / to be explored",
+      Sucessão: "Succession",
+      Expansão: "Expansion",
+      "Prospeção de mercado": "Market exploration",
+      "Carve-Out": "Carve-out",
+      "Rentabilização do investimento": "Investment monetisation",
+      "Imediato (0-6 meses)": "Immediate (0-6 months)",
+      "1-2 anos": "1-2 years",
+      "Sem prazo definido": "No defined timeframe",
+      "Minoritária (<50%)": "Minority (<50%)",
+      "Maioritária (50-90%)": "Majority (50-90%)",
+      "Totalidade (90-100%)": "Full (90-100%)",
+      "Ainda não decidido": "Not yet decided",
+      "Avaliação independente recente": "Recent independent valuation",
+      "Avaliação bancária": "Bank valuation",
+      "Estimativa do acionista": "Shareholder's estimate",
+      "Valor contabilístico": "Book value",
+      "Saída imediata": "Immediate exit",
+      "Transição até 12 meses": "Transition of up to 12 months",
+      "Permanência 1-3 anos": "Remain for 1-3 years",
+      "Permanência de longo prazo": "Long-term involvement",
+      "Investidor estratégico (setor)": "Strategic (sector) investor",
+      "Private equity / financeiro": "Private equity / financial",
+      "Family office": "Family office",
+      "Gestão interna (MBO)": "Internal management (MBO)",
+      "Indiferente / a explorar": "Indifferent / to be explored",
+    },
+  },
+  es: {
+    steps: [
+      "Sobre la empresa",
+      "Datos financieros",
+      "Balance e inversión",
+      "Riesgo y concentración",
+      "Inmueble / Instalaciones",
+      "Motivación y transacción",
+      "Contacto",
+    ],
+    intro:
+      "Este proceso dura unos 5 minutos. \nCuanto más completa sea la información, más precisa será la valoración.",
+    stepOf: (current, total) => `Paso ${current} de ${total}`,
+    previous: "Anterior",
+    next: "Siguiente",
+    submit: "Calcular valoración",
+    saving: "Calculando…",
+    websiteLabel: "Sitio web",
+    selectPlaceholder: "Seleccione…",
+    notApplicable: "No aplicable",
+    optional: "opcional",
+    yes: "Sí",
+    no: "No",
+    tooltips: {
+      unidades:
+        "Número de ubicaciones o unidades operativas de la empresa (tiendas, clínicas, fábricas, oficinas).",
+      tipoPeriodo:
+        "Indica si los valores corresponden a cuentas cerradas, a los últimos 12 meses o a una estimación. Determina el grado de fiabilidad de la valoración.",
+      despesas:
+        "Costes puntuales y no recurrentes, p. ej. gastos extraordinarios, costes personales no operativos, indemnizaciones, bonificaciones no recurrentes, etc.",
+      caixa: "Saldo de caja, depósitos bancarios y equivalentes de efectivo a la fecha más reciente disponible.",
+      divida:
+        " Deuda financiera (incl. impuesto de sociedades vencido y no pagado, préstamos bancarios, leasings, factorings, etc.), deuda con proveedores de CapEx, y deuda asociada a ingresos anticipados.",
+      capex:
+        "Inversión anual media necesaria para mantener la operación actual (excluyendo inversiones de expansión/crecimiento).",
+      da: "Total anual de depreciaciones y amortizaciones registradas en la cuenta de resultados. Si no se indica, se estima a partir del porcentaje medio de D&A sobre los ingresos del sector seleccionado y se señala en el informe como supuesto.",
+      acrescimoRenda:
+        "Diferencia anual entre la renta pagada actualmente y una renta equivalente a precios de mercado actuales.",
+      valorizacaoImovel:
+        "Utilice el valor de un informe de tasación inmobiliaria reciente, o su mejor estimación de mercado.",
+      backlog: "Valor de pedidos o contratos ya adjudicados y aún por facturar.",
+    },
+    fields: {
+      pais: "País",
+      idadeEmpresa: "Antigüedad de la empresa",
+      idadeHint: "años",
+      industria: "Industria",
+      subindustria: "Subindustria",
+      unidades: "Unidades / ubicaciones",
+      clientesAtivos: "Clientes activos",
+      atividadePrincipal: "Actividad principal",
+      atividadePlaceholder: "Ej.: fabricación e instalación de estructuras metálicas para clientes industriales",
+      anoReferencia: "¿Cuál fue el año más reciente con datos financieros cerrados?",
+      tipoPeriodo: "Tipo de periodo de referencia",
+      valoresEurosNote: (ano) =>
+        `Indique los valores en euros. El año ${ano} es obligatorio; los años anteriores son opcionales y sirven para valorar la tendencia de crecimiento.`,
+      faturacao: "Facturación",
+      ebitda: "EBITDA",
+      despesasExtraordinarias: "Gastos extraordinarios",
+      caixaEDepositos: "Caja y depósitos",
+      divida: "Deuda",
+      capex: "Capex anual recurrente",
+      depreciacoesAmortizacoes: "Depreciaciones y amortizaciones anuales (total)",
+      numColaboradores: "Número de empleados",
+      pctTop5: "Facturación de los 5 mayores clientes",
+      pctTop1: "Facturación del mayor cliente",
+      backlog: "Cartera de pedidos contratada",
+      geografiaClientes: "Geografía de los clientes",
+      dependenciaFaturacao: "Dependencia del accionista en la facturación",
+      dependenciaGestao: "Dependencia del accionista en la gestión",
+      proprietarioImovel: "¿La empresa es propietaria del inmueble donde opera?",
+      rendaReflectMercado: "¿La renta actual refleja precios de mercado?",
+      acrescimoRendaAnual: "¿Cuál es el incremento anual a contabilizar para reflejar precios de mercado?",
+      valorizacaoImovel: "¿Cuál es la tasación del inmueble?",
+      incluirImovelPerimetro: "¿Desea incluir el inmueble en el perímetro de la transacción?",
+      metodoAvaliacaoImovel: "¿Cómo se determinó la tasación?",
+      anoAvaliacaoImovel: "Año de la tasación del inmueble",
+      imovelNota:
+        "Si la empresa es propietaria del inmueble, el EBITDA se ajusta para reflejar una renta de mercado teórica. Si opta por incluir el inmueble en la transacción, su valor se suma al valor final de la empresa; si queda fuera, ese valor no se contabiliza.",
+      estruturaTransacao: "Estructura de la transacción",
+      motivoInteresse: "Motivo del interés",
+      horizonteTemporal: "Horizonte temporal",
+      pctATransacionar: "Porcentaje de la empresa a transaccionar",
+      permanenciaPosVenda: "Disponibilidad para permanecer tras la venta",
+      tipoInvestidor: "Tipo de inversor preferente",
+      nome: "Nombre",
+      email: "Correo electrónico",
+      telefone: "Teléfono",
+      empresa: "Empresa",
+      cargo: "Cargo",
+      cargoPlaceholder: "CEO, Fundador, Socio Director…",
+      consentimento:
+        "Autorizo a Lealia Advisory Partners a tratar los datos facilitados con fines de contacto comercial y elaboración de la valoración indicativa, conforme al RGPD.",
+      idiomaRelatorio: "Idioma del informe y de las comunicaciones",
+    },
+    errors: {
+      idadeInvalida: "Indique un número de años válido",
+      selecioneIndustria: "Seleccione la industria",
+      selecioneSubindustria: "Seleccione la subindustria",
+      campoObrigatorio: "Campo obligatorio",
+      maximo100: "Máximo 100 caracteres",
+      selecioneOpcao: "Seleccione una opción",
+      selecioneAnoReferencia: "Seleccione el año de referencia",
+      faltaEbitda: "Si indicó la facturación de este año, indique también el EBITDA correspondiente",
+      faltaFaturacao: "Si indicó el EBITDA de este año, indique también la facturación correspondiente",
+      ebitdaSuperiorFaturacao: "El EBITDA no puede ser superior a la facturación del mismo año",
+      despesasSuperiorFaturacao: "La suma del EBITDA con los gastos extraordinarios no puede superar la facturación",
+      percentagemEntre0e100: "Porcentaje entre 0 y 100",
+      maiorClienteExcede: "El mayor cliente no puede pesar más que los cinco mayores",
+      emailInvalido: "Introduzca un correo electrónico válido",
+      consentimentoNecessario: "Es necesario su consentimiento",
+    },
+    options: {
+      Portugal: "Portugal",
+      Espanha: "España",
+      Outro: "Otro",
+      "Outro (não listado)": "Otro (no listado)",
+      Agricultura: "Agricultura",
+      Agroindústria: "Agroindustria",
+      "Produção agrícola": "Producción agrícola",
+      Construção: "Construcción",
+      "Construção e obras públicas": "Construcción y obras públicas",
+      "Produtos de Construção": "Productos de construcción",
+      "Promoção imobiliária": "Promoción inmobiliaria",
+      Energia: "Energía",
+      "Distribuição/Retalho energético": "Distribución/venta minorista energética",
+      "Eficiência energética/Serviços": "Eficiencia energética/servicios",
+      "Hotelaria e Turismo": "Hostelería y Turismo",
+      Hotéis: "Hoteles",
+      Restauração: "Restauración",
+      Logística: "Logística",
+      "Logística/Armazenagem": "Logística/almacenamiento",
+      Transporte: "Transporte",
+      "Manufatura/Indústria": "Manufactura/Industria",
+      "Alimentar/Agroindústria": "Alimentación/agroindustria",
+      "Componentes automóvel": "Componentes de automoción",
+      Metalomecânica: "Metalmecánica",
+      "Plásticos/Embalagem": "Plásticos/embalaje",
+      Têxtil: "Textil",
+      "Maquinaria industrial": "Maquinaria industrial",
+      Retalho: "Comercio minorista",
+      "Retalho especializado": "Comercio minorista especializado",
+      "Retalho generalista": "Comercio minorista generalista",
+      Saúde: "Salud",
+      "Clínicas dentárias": "Clínicas dentales",
+      "Clínicas médicas gerais": "Clínicas médicas generales",
+      "Diagnóstico/Imagiologia": "Diagnóstico/imagenología",
+      "Farmácias/Distribuição farmacêutica": "Farmacias/distribución farmacéutica",
+      "Lares/Cuidados continuados": "Residencias/cuidados continuados",
+      "Clínicas veterinárias": "Clínicas veterinarias",
+      "Serviços B2B": "Servicios B2B",
+      Consultoria: "Consultoría",
+      "Serviços profissionais": "Servicios profesionales",
+      "Tecnologia/Software": "Tecnología/Software",
+      Cibersegurança: "Ciberseguridad",
+      "SaaS B2B": "SaaS B2B",
+      "Serviços de TI/Consultoria tecnológica": "Servicios de TI/consultoría tecnológica",
+      "Localização única": "Ubicación única",
+      "2-3 localizações": "2-3 ubicaciones",
+      "Mais de 3 localizações": "Más de 3 ubicaciones",
+      "Não aplicável": "No aplicable",
+      "1-5": "1-5",
+      "6-20": "6-20",
+      "21-50": "21-50",
+      "51-200": "51-200",
+      "200+": "200+",
+      "1-9": "1-9",
+      "10-24": "10-24",
+      "25-49": "25-49",
+      "50-99": "50-99",
+      "100-249": "100-249",
+      "250+": "250+",
+      "Exercício encerrado (contas aprovadas)": "Ejercicio cerrado (cuentas aprobadas)",
+      "LTM — últimos 12 meses": "LTM — últimos 12 meses",
+      "Ano em curso anualizado": "Año en curso anualizado",
+      "Estimativa de fecho do ano": "Estimación de cierre del año",
+      "Orçamento / plano de negócios": "Presupuesto / plan de negocio",
+      "Nacional (<10% exportação)": "Nacional (<10% exportación)",
+      "Maioritariamente nacional (10%-35% exportação)": "Mayoritariamente nacional (10%-35% exportación)",
+      "Equilibrado (35%-65% exportação)": "Equilibrado (35%-65% exportación)",
+      "Maioritariamente internacional (65%-90% exportação)": "Mayoritariamente internacional (65%-90% exportación)",
+      "Internacional (>90% exportação)": "Internacional (>90% exportación)",
+      "Baixa (0-20%)": "Baja (0-20%)",
+      "Média (20-50%)": "Media (20-50%)",
+      "Alta (50-100%)": "Alta (50-100%)",
+      Baixa: "Baja",
+      Média: "Media",
+      Alta: "Alta",
+      Sim: "Sí",
+      Não: "No",
+      "Venda de capital": "Venta de capital",
+      "Venda de ativos": "Venta de activos",
+      "Emissão de dívida": "Emisión de deuda",
+      "Não sei / a explorar": "No lo sé / a explorar",
+      Sucessão: "Sucesión",
+      Expansão: "Expansión",
+      "Prospeção de mercado": "Prospección de mercado",
+      "Carve-Out": "Carve-out",
+      "Rentabilização do investimento": "Rentabilización de la inversión",
+      "Imediato (0-6 meses)": "Inmediato (0-6 meses)",
+      "1-2 anos": "1-2 años",
+      "Sem prazo definido": "Sin plazo definido",
+      "Minoritária (<50%)": "Minoritaria (<50%)",
+      "Maioritária (50-90%)": "Mayoritaria (50-90%)",
+      "Totalidade (90-100%)": "Totalidad (90-100%)",
+      "Ainda não decidido": "Aún no decidido",
+      "Avaliação independente recente": "Tasación independiente reciente",
+      "Avaliação bancária": "Tasación bancaria",
+      "Estimativa do acionista": "Estimación del accionista",
+      "Valor contabilístico": "Valor contable",
+      "Saída imediata": "Salida inmediata",
+      "Transição até 12 meses": "Transición de hasta 12 meses",
+      "Permanência 1-3 anos": "Permanencia 1-3 años",
+      "Permanência de longo prazo": "Permanencia a largo plazo",
+      "Investidor estratégico (setor)": "Inversor estratégico (sector)",
+      "Private equity / financeiro": "Private equity / financiero",
+      "Family office": "Family office",
+      "Gestão interna (MBO)": "Gestión interna (MBO)",
+      "Indiferente / a explorar": "Indiferente / a explorar",
+    },
+  },
+};

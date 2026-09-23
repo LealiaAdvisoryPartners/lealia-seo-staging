@@ -57,14 +57,23 @@ const dadosNotificacao = (lead: Lead) => ({
   confianca: lead.confianca,
 });
 
+export type IdiomaLead = "pt" | "en" | "es";
+
+const idiomaDe = (v: unknown): IdiomaLead => (v === "en" || v === "es" ? v : "pt");
+
 export async function enviarConfirmacaoSubmissao(
   leadId: string,
-  lead: { nome: string; email: string; empresa: string; calculo_possivel: boolean },
+  lead: { nome: string; email: string; empresa: string; calculo_possivel: boolean; idioma?: string | null },
 ): Promise<boolean> {
   try {
     const result = await sendTemplateEmail("confirmacao-submissao", lead.email, {
       idempotencyKey: `confirmacao-submissao-${leadId}`,
-      templateData: { nome: lead.nome, empresa: lead.empresa, calculoPossivel: lead.calculo_possivel },
+      templateData: {
+        nome: lead.nome,
+        empresa: lead.empresa,
+        calculoPossivel: lead.calculo_possivel,
+        lang: idiomaDe(lead.idioma),
+      },
     });
     return result.sent;
   } catch (error) {
@@ -88,6 +97,7 @@ export async function enviarResumoAvaliacao(
         empresa: lead.empresa,
         relatorioUrl: relatorioUrl ?? null,
         pdfUrl: pdfUrl ?? null,
+        lang: idiomaDe(lead.idioma),
       },
     });
 
