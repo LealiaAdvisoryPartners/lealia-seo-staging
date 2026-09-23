@@ -65,7 +65,6 @@ const TeamCard = ({ member, index, role, href }: { member: TeamMember; index: nu
               </a>
             </div>
           </div>
-        </div>
       </div>
     </motion.div>
   );
