@@ -8,9 +8,9 @@ import { isLanguage } from "@/lib/routing";
 import { reportPageCopy } from "@/translations/report-page";
 import type { ReportData } from "@core/report-data";
 
-type Resposta =
-  | { ok: true; modo: "teaser" | "completo"; pdfUrl?: string | null; relatorio: ReportData }
-  | { ok: false; motivo?: string };
+type RespostaOk = { ok: true; modo: "teaser" | "completo"; pdfUrl?: string | null; relatorio: ReportData };
+type RespostaErro = { ok: false; motivo?: string };
+type Resposta = RespostaOk | RespostaErro;
 
 const CALENDLY = "https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report";
 
@@ -78,7 +78,7 @@ const Relatorio = () => {
   }
 
   if (!dados.ok) {
-    const expirado = dados.motivo === "expirado";
+    const expirado = (dados as RespostaErro).motivo === "expirado";
     return (
       <>
         {head}
