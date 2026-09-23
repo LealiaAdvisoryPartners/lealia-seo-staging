@@ -16,7 +16,7 @@ export function formatDecimalLang(v: number, lang: ReportLang = "pt", casas = 1)
  * três idiomas, para que os mesmos números sejam lidos da mesma forma em
  * qualquer versão do relatório.
  */
-export function groupThousandsLang(n: number): string {
+export function groupThousandsLang(n: number, _lang?: ReportLang): string {
   const s = Math.abs(Math.round(n))
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
@@ -24,7 +24,7 @@ export function groupThousandsLang(n: number): string {
 }
 
 /** Montante em euros: "1 250 000 €". */
-export function formatEURLang(n: number): string {
+export function formatEURLang(n: number, _lang?: ReportLang): string {
   return `${groupThousandsLang(n)}\u00a0€`;
 }
 

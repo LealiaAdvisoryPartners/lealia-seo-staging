@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { buildPath, getLanguageFromPath, getPathWithoutLanguage } from "@/lib/routing";
+import { buildPath, getLanguageFromPath, stripLanguage } from "@/lib/routing";
 
 /** Páginas reais do site — tudo o resto num único segmento é um link de relatório. */
 const KNOWN_PAGES = ["about", "services", "team", "valuation", "privacy", "terms", "relatorio"];
 
 const isReportSlug = (pathname: string) => {
-  const segments = getPathWithoutLanguage(pathname).split("/").filter(Boolean);
+  const segments = stripLanguage(pathname).split("/").filter(Boolean);
   return segments.length === 1 && !KNOWN_PAGES.includes(segments[0]);
 };
 
@@ -30,7 +30,7 @@ const LanguageRedirect = () => {
     if (isReportSlug(location.pathname)) {
       if (currentLang) {
         hasRedirected.current = true;
-        navigate(`${getPathWithoutLanguage(location.pathname)}${suffix}`, { replace: true });
+        navigate(`${stripLanguage(location.pathname)}${suffix}`, { replace: true });
       }
       return;
     }
@@ -42,7 +42,7 @@ const LanguageRedirect = () => {
     }
 
     if (!hasRedirected.current && location.pathname !== "/") {
-      const pathWithoutLang = getPathWithoutLanguage(location.pathname);
+      const pathWithoutLang = stripLanguage(location.pathname);
       const newPath = buildPath(language, pathWithoutLang);
 
       if (newPath !== location.pathname) {

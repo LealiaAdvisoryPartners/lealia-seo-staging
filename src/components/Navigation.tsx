@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import LanguageToggle from "./LanguageToggle";
-import { buildPath, getPathWithoutLanguage } from "@/lib/routing";
+import { buildPath, stripLanguage } from "@/lib/routing";
 import { Magnetic } from "@/components/motion/MagneticButton";
 import logoHeader from "@/assets/Logo_text_biggerfont_samesize_2.png";
 
@@ -29,8 +29,8 @@ const Navigation = () => {
   }));
 
   const isActive = (path: string) => {
-    const currentPath = getPathWithoutLanguage(location.pathname);
-    const linkPath = getPathWithoutLanguage(path);
+    const currentPath = stripLanguage(location.pathname);
+    const linkPath = stripLanguage(path);
     return currentPath === linkPath || (currentPath === "" && linkPath === "/");
   };
 
@@ -50,7 +50,7 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => {
-              const isValuationLink = getPathWithoutLanguage(link.path) === "/valuation";
+              const isValuationLink = stripLanguage(link.path) === "/valuation";
               const activeClass = isActive(link.path) ? "text-accent" : "text-foreground/80";
               const linkClass = isValuationLink
                 ? `text-sm tracking-wide font-body transition-colors hover:text-accent border border-accent rounded-full px-3 py-1 bg-transparent ${activeClass}`
