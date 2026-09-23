@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ValuationForm, type FormState } from "@/components/lealia/ValuationForm";
+import { ValuationForm, type FormState } from "@/components/lealia/form";
 import { ThankYouCard } from "@/components/lealia/ThankYouCard";
 import { SampleReport } from "@/components/lealia/SampleReport";
 import { CalendlyInline } from "@/components/lealia/CalendlyInline";
