@@ -21,6 +21,9 @@ import {
   subindustriasDe,
 } from "@/lib/valuation";
 import { formatThousands, digitsOnly, parseMoney } from "@/lib/money";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { formCopy, type FormCopy } from "@/translations/valuation-form";
+import type { Language } from "@/contexts/language-context";
 
 export type FormState = {
   pais: string;
@@ -71,6 +74,7 @@ export type FormState = {
   empresa: string;
   cargo: string;
   consentimento_rgpd: boolean;
+  idioma: "pt" | "en" | "es";
 };
 
 export const emptyForm: FormState = {
@@ -122,37 +126,14 @@ export const emptyForm: FormState = {
   empresa: "",
   cargo: "",
   consentimento_rgpd: false,
+  idioma: "pt",
 };
 
-const STEPS = [
-  "Sobre a empresa",
-  "Dados financeiros",
-  "Balanço e investimento",
-  "Risco e concentração",
-  "Imóvel / Instalações",
-  "Motivação e transação",
-  "Contacto",
-];
-const STORAGE_KEY = "lealia:avaliacao:form:v5";
-
+const STORAGE_KEY = "lealia:avaliacao:form:v6";
 
 const isNum = (v: string) => v.trim() !== "" && !Number.isNaN(Number(v));
 const filled = (v: string) => digitsOnly(v).replace("-", "") !== "";
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim());
-
-const TOOLTIP_DESPESAS =
-  "Custos pontuais e não recorrentes, ex: despesas extraordinárias, custos pessoais não-operacionais, indemnizações, bónus não-recorrentes, etc.";
-const TOOLTIP_CAIXA = "Saldo de caixa, depósitos bancários e equivalentes de caixa à data mais recente disponível.";
-const TOOLTIP_DIVIDA =
-  " Dívida financeira (inc. IRC vencido e não pago, empréstimos bancários, leasings, factorings, etc.), dívida a fornecedores de CapEx, e dívida associada a receitas antecipadas.";
-const TOOLTIP_CAPEX =
-  "Investimento anual médio necessário para manter a operação atual (excluindo investimentos de expansão/crescimento).";
-const TOOLTIP_DA =
-  "Total anual de depreciações e amortizações registadas na demonstração de resultados. Se não for indicado, é estimado a partir da percentagem média de D&A sobre a receita do setor selecionado e assinalado no relatório como pressuposto.";
-const TOOLTIP_ACRESCIMO_RENDA =
-  "Diferença anual entre a renda atualmente paga e uma renda equivalente a preços de mercado atuais.";
-const TOOLTIP_VALORIZACAO_IMOVEL =
-  "Use o valor de um relatório de avaliação imobiliária recente, ou a sua melhor estimativa de mercado.";
 
 function Field({
   label,
@@ -231,20 +212,38 @@ function PercentInput({ id, value, onChange }: { id: string; value: string; onCh
 }
 
 export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => void }) {
+  const { language } = useLanguage();
+  const copy: FormCopy = formCopy[language];
+  const opt = (v: string) => copy.options[v] ?? v;
+
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [touched, setTouched] = useState(false);
   const [honeypot, setHoneypot] = useState("");
+  const [idiomaTocado, setIdiomaTocado] = useState(false);
+
+  const STEPS = copy.steps;
 
   // Recuperar progresso guardado
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setForm({ ...emptyForm, ...(JSON.parse(saved) as Partial<FormState>) });
+      if (saved) {
+        const parsed = JSON.parse(saved) as Partial<FormState>;
+        if (parsed.idioma) setIdiomaTocado(true);
+        setForm({ ...emptyForm, ...parsed });
+      }
     } catch {
       /* ignorar */
     }
   }, []);
+
+  useEffect(() => {
+    if (!idiomaTocado) {
+      setForm((f) => ({ ...f, idioma: language }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language, idiomaTocado]);
 
   useEffect(() => {
     try {
@@ -266,91 +265,87 @@ export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => voi
   const errors: Partial<Record<keyof FormState, string>> = {};
   if (step === 0) {
     if (!isNum(form.idade_empresa) || Number(form.idade_empresa) < 0)
-      errors.idade_empresa = "Indique um número de anos válido";
-    if (!form.industria) errors.industria = "Selecione a indústria";
-    if (subindustrias.length > 0 && !form.subindustria) errors.subindustria = "Selecione a sub-indústria";
-    if (!form.atividade_principal.trim()) errors.atividade_principal = "Campo obrigatório";
+      errors.idade_empresa = copy.errors.idadeInvalida;
+    if (!form.industria) errors.industria = copy.errors.selecioneIndustria;
+    if (subindustrias.length > 0 && !form.subindustria) errors.subindustria = copy.errors.selecioneSubindustria;
+    if (!form.atividade_principal.trim()) errors.atividade_principal = copy.errors.campoObrigatorio;
     else if (form.atividade_principal.trim().length > 100)
-      errors.atividade_principal = "Máximo 100 caracteres";
-    if (!form.unidades) errors.unidades = "Selecione uma opção";
+      errors.atividade_principal = copy.errors.maximo100;
+    if (!form.unidades) errors.unidades = copy.errors.selecioneOpcao;
   }
   if (step === 1) {
-    if (!form.ano_referencia) errors.ano_referencia = "Selecione o ano de referência";
-    if (!form.tipo_periodo) errors.tipo_periodo = "Selecione uma opção";
-    if (!filled(form.faturacao_ano1)) errors.faturacao_ano1 = "Campo obrigatório";
-    if (!filled(form.ebitda_ano1)) errors.ebitda_ano1 = "Campo obrigatório";
+    if (!form.ano_referencia) errors.ano_referencia = copy.errors.selecioneAnoReferencia;
+    if (!form.tipo_periodo) errors.tipo_periodo = copy.errors.selecioneOpcao;
+    if (!filled(form.faturacao_ano1)) errors.faturacao_ano1 = copy.errors.campoObrigatorio;
+    if (!filled(form.ebitda_ano1)) errors.ebitda_ano1 = copy.errors.campoObrigatorio;
     ([2, 3] as const).forEach((ano) => {
       const fatKey = `faturacao_ano${ano}` as "faturacao_ano2";
       const ebiKey = `ebitda_ano${ano}` as "ebitda_ano2";
       const temFat = filled(form[fatKey]);
       const temEbi = filled(form[ebiKey]);
-      if (temFat && !temEbi)
-        errors[ebiKey] = "Se preencheu a faturação deste ano, indique também o EBITDA correspondente";
-      if (temEbi && !temFat)
-        errors[fatKey] = "Se preencheu o EBITDA deste ano, indique também a faturação correspondente";
+      if (temFat && !temEbi) errors[ebiKey] = copy.errors.faltaEbitda;
+      if (temEbi && !temFat) errors[fatKey] = copy.errors.faltaFaturacao;
     });
     ([1, 2, 3] as const).forEach((ano) => {
       const fatKey = `faturacao_ano${ano}` as "faturacao_ano1";
       const ebiKey = `ebitda_ano${ano}` as "ebitda_ano1";
       const fat = parseMoney(form[fatKey]);
       const ebi = parseMoney(form[ebiKey]);
-      if (fat !== null && ebi !== null && ebi > fat)
-        errors[ebiKey] = "O EBITDA não pode ser superior à faturação do mesmo ano";
+      if (fat !== null && ebi !== null && ebi > fat) errors[ebiKey] = copy.errors.ebitdaSuperiorFaturacao;
     });
     {
       const fat = parseMoney(form.faturacao_ano1);
       const ebi = parseMoney(form.ebitda_ano1);
       const despesas = parseMoney(form.despesas_extraordinarias_ano1);
       if (fat !== null && ebi !== null && despesas !== null && ebi + despesas > fat)
-        errors.despesas_extraordinarias_ano1 =
-          "A soma do EBITDA com as despesas extraordinárias não pode ser superior à faturação";
+        errors.despesas_extraordinarias_ano1 = copy.errors.despesasSuperiorFaturacao;
     }
   }
   if (step === 2) {
-    if (!filled(form.caixa_e_depositos)) errors.caixa_e_depositos = "Campo obrigatório";
-    if (!filled(form.divida_financeira)) errors.divida_financeira = "Campo obrigatório";
-    if (!filled(form.depreciacoes_amortizacoes)) errors.depreciacoes_amortizacoes = "Campo obrigatório";
-    if (!form.num_colaboradores) errors.num_colaboradores = "Selecione uma opção";
+    if (!filled(form.caixa_e_depositos)) errors.caixa_e_depositos = copy.errors.campoObrigatorio;
+    if (!filled(form.divida_financeira)) errors.divida_financeira = copy.errors.campoObrigatorio;
+    if (!filled(form.depreciacoes_amortizacoes)) errors.depreciacoes_amortizacoes = copy.errors.campoObrigatorio;
+    if (!form.num_colaboradores) errors.num_colaboradores = copy.errors.selecioneOpcao;
   }
   if (step === 3) {
-    if (!pctOk(form.pct_top5_clientes)) errors.pct_top5_clientes = "Percentagem entre 0 e 100";
-    if (!pctOk(form.pct_top1_clientes)) errors.pct_top1_clientes = "Percentagem entre 0 e 100";
+    if (!pctOk(form.pct_top5_clientes)) errors.pct_top5_clientes = copy.errors.percentagemEntre0e100;
+    if (!pctOk(form.pct_top1_clientes)) errors.pct_top1_clientes = copy.errors.percentagemEntre0e100;
     if (
       form.pct_top1_clientes !== "" &&
       form.pct_top5_clientes !== "" &&
       Number(form.pct_top1_clientes) > Number(form.pct_top5_clientes)
     )
-      errors.pct_top1_clientes = "O maior cliente não pode pesar mais do que os cinco maiores";
+      errors.pct_top1_clientes = copy.errors.maiorClienteExcede;
   }
   if (step === 4) {
     if (!form.proprietario_imovel) {
-      errors.proprietario_imovel = "Selecione uma opção";
+      errors.proprietario_imovel = copy.errors.selecioneOpcao;
     } else if (form.proprietario_imovel === "Não") {
-      if (!form.renda_reflete_mercado) errors.renda_reflete_mercado = "Selecione uma opção";
+      if (!form.renda_reflete_mercado) errors.renda_reflete_mercado = copy.errors.selecioneOpcao;
       else if (form.renda_reflete_mercado === "Não" && !filled(form.acrescimo_renda_anual))
-        errors.acrescimo_renda_anual = "Campo obrigatório";
+        errors.acrescimo_renda_anual = copy.errors.campoObrigatorio;
     } else {
-      if (!filled(form.valorizacao_imovel)) errors.valorizacao_imovel = "Campo obrigatório";
-      if (!form.incluir_imovel_perimetro) errors.incluir_imovel_perimetro = "Selecione uma opção";
-      if (!form.metodo_avaliacao_imovel) errors.metodo_avaliacao_imovel = "Selecione uma opção";
+      if (!filled(form.valorizacao_imovel)) errors.valorizacao_imovel = copy.errors.campoObrigatorio;
+      if (!form.incluir_imovel_perimetro) errors.incluir_imovel_perimetro = copy.errors.selecioneOpcao;
+      if (!form.metodo_avaliacao_imovel) errors.metodo_avaliacao_imovel = copy.errors.selecioneOpcao;
     }
   }
   if (step === 5) {
-    if (!form.estrutura_transacao) errors.estrutura_transacao = "Selecione uma opção";
-    if (!form.motivo_interesse) errors.motivo_interesse = "Selecione uma opção";
-    if (!form.horizonte_temporal) errors.horizonte_temporal = "Selecione uma opção";
-    if (!form.pct_a_transacionar) errors.pct_a_transacionar = "Selecione uma opção";
-    if (!form.permanencia_pos_venda) errors.permanencia_pos_venda = "Selecione uma opção";
-    if (!form.tipo_investidor) errors.tipo_investidor = "Selecione uma opção";
+    if (!form.estrutura_transacao) errors.estrutura_transacao = copy.errors.selecioneOpcao;
+    if (!form.motivo_interesse) errors.motivo_interesse = copy.errors.selecioneOpcao;
+    if (!form.horizonte_temporal) errors.horizonte_temporal = copy.errors.selecioneOpcao;
+    if (!form.pct_a_transacionar) errors.pct_a_transacionar = copy.errors.selecioneOpcao;
+    if (!form.permanencia_pos_venda) errors.permanencia_pos_venda = copy.errors.selecioneOpcao;
+    if (!form.tipo_investidor) errors.tipo_investidor = copy.errors.selecioneOpcao;
   }
 
   if (step === 6) {
-    if (!form.nome.trim()) errors.nome = "Campo obrigatório";
-    if (!emailOk(form.email)) errors.email = "Introduza um email válido";
-    if (!form.telefone.trim()) errors.telefone = "Campo obrigatório";
-    if (!form.empresa.trim()) errors.empresa = "Campo obrigatório";
-    if (!form.cargo.trim()) errors.cargo = "Campo obrigatório";
-    if (!form.consentimento_rgpd) errors.consentimento_rgpd = "É necessário o seu consentimento";
+    if (!form.nome.trim()) errors.nome = copy.errors.campoObrigatorio;
+    if (!emailOk(form.email)) errors.email = copy.errors.emailInvalido;
+    if (!form.telefone.trim()) errors.telefone = copy.errors.campoObrigatorio;
+    if (!form.empresa.trim()) errors.empresa = copy.errors.campoObrigatorio;
+    if (!form.cargo.trim()) errors.cargo = copy.errors.campoObrigatorio;
+    if (!form.consentimento_rgpd) errors.consentimento_rgpd = copy.errors.consentimentoNecessario;
   }
 
   const valid = Object.keys(errors).length === 0;
@@ -375,9 +370,8 @@ export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => voi
 
   return (
     <div className="mx-auto max-w-2xl">
-        <p className="body-justified mb-8 text-sm font-light text-muted-foreground">
-          Este processo demora cerca de 5 minutos. 
-Quanto mais completa for a informação, mais precisa será a avaliação.
+        <p className="body-justified mb-8 whitespace-pre-line text-sm font-light text-muted-foreground">
+          {copy.intro}
         </p>
 
       <div className="mb-10">
@@ -385,9 +379,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
           <span className="num-index">
             0{step + 1} — {STEPS[step]}
           </span>
-          <span className="text-xs text-muted-foreground">
-            Passo {step + 1} de {STEPS.length}
-          </span>
+          <span className="text-xs text-muted-foreground">{copy.stepOf(step + 1, STEPS.length)}</span>
         </div>
         <div className="mt-4 h-px w-full bg-border">
           <div
@@ -399,7 +391,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
 
       {/* honeypot anti-bot */}
       <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
-        <label htmlFor="website-hp">Website</label>
+        <label htmlFor="website-hp">{copy.websiteLabel}</label>
         <input
           id="website-hp"
           name="website"
@@ -412,14 +404,16 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
 
       {step === 0 && (
         <div className="grid gap-6 sm:grid-cols-2">
-          <Field label="País" htmlFor="pais">
+          <Field label={copy.fields.pais} htmlFor="pais">
             <select id="pais" className="field-input" value={form.pais} onChange={(e) => set("pais", e.target.value)}>
               {PAISES.map((p) => (
-                <option key={p}>{p}</option>
+                <option key={p} value={p}>
+                  {opt(p)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Idade da empresa" hint="anos" error={err("idade_empresa")} htmlFor="idade">
+          <Field label={copy.fields.idadeEmpresa} hint={copy.fields.idadeHint} error={err("idade_empresa")} htmlFor="idade">
             <input
               id="idade"
               className="field-input"
@@ -428,7 +422,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               onChange={(e) => set("idade_empresa", e.target.value.replace(/[^\d]/g, ""))}
             />
           </Field>
-          <Field label="Indústria" error={err("industria")} htmlFor="industria">
+          <Field label={copy.fields.industria} error={err("industria")} htmlFor="industria">
             <select
               id="industria"
               className="field-input"
@@ -438,13 +432,15 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                 set("subindustria", "");
               }}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {INDUSTRIAS.map((i) => (
-                <option key={i}>{i}</option>
+                <option key={i} value={i}>
+                  {opt(i)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Sub-indústria" error={err("subindustria")} htmlFor="subindustria">
+          <Field label={copy.fields.subindustria} error={err("subindustria")} htmlFor="subindustria">
             <select
               id="subindustria"
               className="field-input"
@@ -452,15 +448,17 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               disabled={subindustrias.length === 0}
               onChange={(e) => set("subindustria", e.target.value)}
             >
-              <option value="">{subindustrias.length === 0 ? "Não aplicável" : "Selecione…"}</option>
+              <option value="">{subindustrias.length === 0 ? copy.notApplicable : copy.selectPlaceholder}</option>
               {subindustrias.map((s) => (
-                <option key={s}>{s}</option>
+                <option key={s} value={s}>
+                  {opt(s)}
+                </option>
               ))}
             </select>
           </Field>
           <Field
-            label="Unidades / localizações"
-            tooltip="Número de localizações ou unidades operacionais da empresa (lojas, clínicas, fábricas, escritórios)."
+            label={copy.fields.unidades}
+            tooltip={copy.tooltips.unidades}
             error={err("unidades")}
             htmlFor="unidades"
           >
@@ -470,28 +468,32 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               value={form.unidades}
               onChange={(e) => set("unidades", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {UNIDADES.map((n) => (
-                <option key={n}>{n}</option>
+                <option key={n} value={n}>
+                  {opt(n)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Clientes ativos" hint="opcional" htmlFor="clientes">
+          <Field label={copy.fields.clientesAtivos} hint={copy.optional} htmlFor="clientes">
             <select
               id="clientes"
               className="field-input"
               value={form.num_clientes_ativos}
               onChange={(e) => set("num_clientes_ativos", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {NUM_CLIENTES_ATIVOS.map((n) => (
-                <option key={n}>{n}</option>
+                <option key={n} value={n}>
+                  {opt(n)}
+                </option>
               ))}
             </select>
           </Field>
           <div className="sm:col-span-2">
             <Field
-              label="Atividade principal"
+              label={copy.fields.atividadePrincipal}
               hint={`${form.atividade_principal.length}/100`}
               error={err("atividade_principal")}
               htmlFor="atividade"
@@ -500,7 +502,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                 id="atividade"
                 className="field-input"
                 maxLength={100}
-                placeholder="Ex: produção e instalação de estruturas metálicas para clientes industriais"
+                placeholder={copy.fields.atividadePlaceholder}
                 value={form.atividade_principal}
                 onChange={(e) => set("atividade_principal", e.target.value)}
               />
@@ -513,7 +515,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
         <div className="space-y-8">
           <div className="grid gap-6 sm:grid-cols-2">
             <Field
-              label="Qual foi o ano mais recente com dados financeiros fechados?"
+              label={copy.fields.anoReferencia}
               error={err("ano_referencia")}
               htmlFor="anoRef"
             >
@@ -524,13 +526,15 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                 onChange={(e) => set("ano_referencia", e.target.value)}
               >
                 {ANOS_REFERENCIA.map((a) => (
-                  <option key={a}>{a}</option>
+                  <option key={a} value={a}>
+                    {a}
+                  </option>
                 ))}
               </select>
             </Field>
             <Field
-              label="Tipo de período de referência"
-              tooltip="Indica se os valores correspondem a contas encerradas, aos últimos 12 meses ou a uma estimativa. Determina o grau de fiabilidade da avaliação."
+              label={copy.fields.tipoPeriodo}
+              tooltip={copy.tooltips.tipoPeriodo}
               error={err("tipo_periodo")}
               htmlFor="tipoperiodo"
             >
@@ -540,33 +544,32 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                 value={form.tipo_periodo}
                 onChange={(e) => set("tipo_periodo", e.target.value)}
               >
-                <option value="">Selecione…</option>
+                <option value="">{copy.selectPlaceholder}</option>
                 {TIPOS_PERIODO.map((t) => (
-                  <option key={t}>{t}</option>
+                  <option key={t} value={t}>
+                    {opt(t)}
+                  </option>
                 ))}
               </select>
             </Field>
           </div>
 
-          <p className="text-sm text-muted-foreground">
-            Indique valores em euros. O ano {anoLabel(1)} é obrigatório; os anos anteriores são opcionais e servem para
-            aferir a tendência de crescimento.
-          </p>
+          <p className="text-sm text-muted-foreground">{copy.fields.valoresEurosNote(anoLabel(1))}</p>
           {([1, 2, 3] as const).map((ano) => (
             <div key={ano} className="border-t border-border pt-6">
               <p className="eyebrow mb-4">
                 {anoLabel(ano)}
-                {ano > 1 ? " (opcional)" : ""}
+                {ano > 1 ? ` (${copy.optional})` : ""}
               </p>
               <div className="grid gap-6 sm:grid-cols-3">
-                <Field label="Faturação" error={err(`faturacao_ano${ano}` as keyof FormState)} htmlFor={`fat${ano}`}>
+                <Field label={copy.fields.faturacao} error={err(`faturacao_ano${ano}` as keyof FormState)} htmlFor={`fat${ano}`}>
                   <MoneyInput
                     id={`fat${ano}`}
                     value={form[`faturacao_ano${ano}` as "faturacao_ano1"]}
                     onChange={(v) => set(`faturacao_ano${ano}` as "faturacao_ano1", v)}
                   />
                 </Field>
-                <Field label="EBITDA" error={err(`ebitda_ano${ano}` as keyof FormState)} htmlFor={`ebi${ano}`}>
+                <Field label={copy.fields.ebitda} error={err(`ebitda_ano${ano}` as keyof FormState)} htmlFor={`ebi${ano}`}>
                   <MoneyInput
                     id={`ebi${ano}`}
                     value={form[`ebitda_ano${ano}` as "ebitda_ano1"]}
@@ -574,9 +577,9 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                   />
                 </Field>
                 <Field
-                  label="Desp. extraordinárias"
-                  hint="opcional"
-                  tooltip={TOOLTIP_DESPESAS}
+                  label={copy.fields.despesasExtraordinarias}
+                  hint={copy.optional}
+                  tooltip={copy.tooltips.despesas}
                   error={err(`despesas_extraordinarias_ano${ano}` as keyof FormState)}
                   htmlFor={`dex${ano}`}
                 >
@@ -595,17 +598,17 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
       {step === 2 && (
         <div className="grid gap-6 sm:grid-cols-2">
           <Field
-            label="Caixa e depósitos"
-            tooltip={TOOLTIP_CAIXA}
+            label={copy.fields.caixaEDepositos}
+            tooltip={copy.tooltips.caixa}
             error={err("caixa_e_depositos")}
             htmlFor="caixa"
           >
             <MoneyInput id="caixa" value={form.caixa_e_depositos} onChange={(v) => set("caixa_e_depositos", v)} />
           </Field>
-          <Field label="Dívida" tooltip={TOOLTIP_DIVIDA} error={err("divida_financeira")} htmlFor="divida">
+          <Field label={copy.fields.divida} tooltip={copy.tooltips.divida} error={err("divida_financeira")} htmlFor="divida">
             <MoneyInput id="divida" value={form.divida_financeira} onChange={(v) => set("divida_financeira", v)} />
           </Field>
-          <Field label="Capex anual recorrente" hint="opcional" tooltip={TOOLTIP_CAPEX} htmlFor="capex">
+          <Field label={copy.fields.capex} hint={copy.optional} tooltip={copy.tooltips.capex} htmlFor="capex">
             <MoneyInput
               id="capex"
               value={form.capex_anual_recorrente}
@@ -613,8 +616,8 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
             />
           </Field>
           <Field
-            label="Depreciações & Amortizações anuais (total)"
-            tooltip={TOOLTIP_DA}
+            label={copy.fields.depreciacoesAmortizacoes}
+            tooltip={copy.tooltips.da}
             error={err("depreciacoes_amortizacoes")}
             htmlFor="damortizacoes"
           >
@@ -624,16 +627,18 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               onChange={(v) => set("depreciacoes_amortizacoes", v)}
             />
           </Field>
-          <Field label="Número de colaboradores" error={err("num_colaboradores")} htmlFor="colaboradores">
+          <Field label={copy.fields.numColaboradores} error={err("num_colaboradores")} htmlFor="colaboradores">
             <select
               id="colaboradores"
               className="field-input"
               value={form.num_colaboradores}
               onChange={(e) => set("num_colaboradores", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {NUM_COLABORADORES.map((n) => (
-                <option key={n}>{n}</option>
+                <option key={n} value={n}>
+                  {opt(n)}
+                </option>
               ))}
             </select>
           </Field>
@@ -643,65 +648,71 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
       {step === 3 && (
         <div className="grid gap-6 sm:grid-cols-2">
           <Field
-            label="Faturação nos 5 maiores clientes"
-            hint="opcional, %"
+            label={copy.fields.pctTop5}
+            hint={`${copy.optional}, %`}
             error={err("pct_top5_clientes")}
             htmlFor="top5"
           >
             <PercentInput id="top5" value={form.pct_top5_clientes} onChange={(v) => set("pct_top5_clientes", v)} />
           </Field>
           <Field
-            label="Faturação no maior cliente"
-            hint="opcional, %"
+            label={copy.fields.pctTop1}
+            hint={`${copy.optional}, %`}
             error={err("pct_top1_clientes")}
             htmlFor="top1"
           >
             <PercentInput id="top1" value={form.pct_top1_clientes} onChange={(v) => set("pct_top1_clientes", v)} />
           </Field>
           <Field
-            label="Backlog contratado"
-            hint="opcional"
-            tooltip="Valor de encomendas ou contratos já adjudicados ainda por faturar."
+            label={copy.fields.backlog}
+            hint={copy.optional}
+            tooltip={copy.tooltips.backlog}
             htmlFor="backlog"
           >
             <MoneyInput id="backlog" value={form.backlog_contratado} onChange={(v) => set("backlog_contratado", v)} />
           </Field>
-          <Field label="Geografia dos clientes" hint="opcional" htmlFor="geografia">
+          <Field label={copy.fields.geografiaClientes} hint={copy.optional} htmlFor="geografia">
             <select
               id="geografia"
               className="field-input"
               value={form.geografia_clientes}
               onChange={(e) => set("geografia_clientes", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {GEOGRAFIAS.map((g) => (
-                <option key={g}>{g}</option>
+                <option key={g} value={g}>
+                  {opt(g)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Dependência do acionista na faturação" hint="opcional" htmlFor="depfat">
+          <Field label={copy.fields.dependenciaFaturacao} hint={copy.optional} htmlFor="depfat">
             <select
               id="depfat"
               className="field-input"
               value={form.dependencia_faturacao}
               onChange={(e) => set("dependencia_faturacao", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {DEPENDENCIAS_FATURACAO.map((d) => (
-                <option key={d}>{d}</option>
+                <option key={d} value={d}>
+                  {opt(d)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Dependência do acionista na gestão" hint="opcional" htmlFor="depgest">
+          <Field label={copy.fields.dependenciaGestao} hint={copy.optional} htmlFor="depgest">
             <select
               id="depgest"
               className="field-input"
               value={form.dependencia_gestao}
               onChange={(e) => set("dependencia_gestao", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {DEPENDENCIAS_GESTAO.map((d) => (
-                <option key={d}>{d}</option>
+                <option key={d} value={d}>
+                  {opt(d)}
+                </option>
               ))}
             </select>
           </Field>
@@ -712,7 +723,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <Field
-              label="A empresa é proprietária do imóvel onde opera?"
+              label={copy.fields.proprietarioImovel}
               error={err("proprietario_imovel")}
               htmlFor="propimovel"
             >
@@ -722,9 +733,9 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                 value={form.proprietario_imovel}
                 onChange={(e) => set("proprietario_imovel", e.target.value)}
               >
-                <option value="">Selecione…</option>
-                <option>Sim</option>
-                <option>Não</option>
+                <option value="">{copy.selectPlaceholder}</option>
+                <option value="Sim">{copy.yes}</option>
+                <option value="Não">{copy.no}</option>
               </select>
             </Field>
           </div>
@@ -733,7 +744,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
             <>
               <div className="sm:col-span-2">
                 <Field
-                  label="A renda atual reflete preços de mercado?"
+                  label={copy.fields.rendaReflectMercado}
                   error={err("renda_reflete_mercado")}
                   htmlFor="rendamercado"
                 >
@@ -743,17 +754,17 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                     value={form.renda_reflete_mercado}
                     onChange={(e) => set("renda_reflete_mercado", e.target.value)}
                   >
-                    <option value="">Selecione…</option>
-                    <option>Sim</option>
-                    <option>Não</option>
+                    <option value="">{copy.selectPlaceholder}</option>
+                    <option value="Sim">{copy.yes}</option>
+                    <option value="Não">{copy.no}</option>
                   </select>
                 </Field>
               </div>
               {form.renda_reflete_mercado === "Não" && (
                 <div className="sm:col-span-2">
                   <Field
-                    label="Qual o acréscimo anual a contabilizar para refletir preços de mercado?"
-                    tooltip={TOOLTIP_ACRESCIMO_RENDA}
+                    label={copy.fields.acrescimoRendaAnual}
+                    tooltip={copy.tooltips.acrescimoRenda}
                     error={err("acrescimo_renda_anual")}
                     htmlFor="acrescimo"
                   >
@@ -772,8 +783,8 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
             <>
               <div className="sm:col-span-2">
                 <Field
-                  label="Qual a valorização do imóvel?"
-                  tooltip={TOOLTIP_VALORIZACAO_IMOVEL}
+                  label={copy.fields.valorizacaoImovel}
+                  tooltip={copy.tooltips.valorizacaoImovel}
                   error={err("valorizacao_imovel")}
                   htmlFor="valorizacao"
                 >
@@ -786,7 +797,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               </div>
               <div className="sm:col-span-2">
                 <Field
-                  label="Pretende incluir o imóvel no perímetro da transação?"
+                  label={copy.fields.incluirImovelPerimetro}
                   error={err("incluir_imovel_perimetro")}
                   htmlFor="perimetro"
                 >
@@ -796,14 +807,14 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                     value={form.incluir_imovel_perimetro}
                     onChange={(e) => set("incluir_imovel_perimetro", e.target.value)}
                   >
-                    <option value="">Selecione…</option>
-                    <option>Sim</option>
-                    <option>Não</option>
+                    <option value="">{copy.selectPlaceholder}</option>
+                    <option value="Sim">{copy.yes}</option>
+                    <option value="Não">{copy.no}</option>
                   </select>
                 </Field>
               </div>
               <Field
-                label="Como foi determinada a valorização?"
+                label={copy.fields.metodoAvaliacaoImovel}
                 error={err("metodo_avaliacao_imovel")}
                 htmlFor="metodoimovel"
               >
@@ -813,13 +824,15 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                   value={form.metodo_avaliacao_imovel}
                   onChange={(e) => set("metodo_avaliacao_imovel", e.target.value)}
                 >
-                  <option value="">Selecione…</option>
+                  <option value="">{copy.selectPlaceholder}</option>
                   {METODOS_AVALIACAO_IMOVEL.map((m) => (
-                    <option key={m}>{m}</option>
+                    <option key={m} value={m}>
+                      {opt(m)}
+                    </option>
                   ))}
                 </select>
               </Field>
-              <Field label="Ano da avaliação do imóvel" hint="opcional" htmlFor="anoimovel">
+              <Field label={copy.fields.anoAvaliacaoImovel} hint={copy.optional} htmlFor="anoimovel">
                 <input
                   id="anoimovel"
                   inputMode="numeric"
@@ -830,9 +843,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               </Field>
 
               <p className="text-xs leading-relaxed font-light text-muted-foreground sm:col-span-2">
-                Se a empresa detiver o imóvel, o EBITDA é ajustado para refletir uma renda de mercado teórica. Se optar
-                por incluir o imóvel na transação, o seu valor soma-se ao valor final da empresa; se ficar de fora, esse
-                valor não é contabilizado.
+                {copy.fields.imovelNota}
               </p>
             </>
           )}
@@ -841,60 +852,68 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
 
       {step === 5 && (
         <div className="grid gap-6 sm:grid-cols-2">
-          <Field label="Estrutura de transação" error={err("estrutura_transacao")} htmlFor="estrutura">
+          <Field label={copy.fields.estruturaTransacao} error={err("estrutura_transacao")} htmlFor="estrutura">
             <select
               id="estrutura"
               className="field-input"
               value={form.estrutura_transacao}
               onChange={(e) => set("estrutura_transacao", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {ESTRUTURAS_TRANSACAO.map((e) => (
-                <option key={e}>{e}</option>
+                <option key={e} value={e}>
+                  {opt(e)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Motivo do interesse" error={err("motivo_interesse")} htmlFor="motivo">
+          <Field label={copy.fields.motivoInteresse} error={err("motivo_interesse")} htmlFor="motivo">
             <select
               id="motivo"
               className="field-input"
               value={form.motivo_interesse}
               onChange={(e) => set("motivo_interesse", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {MOTIVOS_INTERESSE.map((m) => (
-                <option key={m}>{m}</option>
+                <option key={m} value={m}>
+                  {opt(m)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Horizonte temporal" error={err("horizonte_temporal")} htmlFor="horizonte">
+          <Field label={copy.fields.horizonteTemporal} error={err("horizonte_temporal")} htmlFor="horizonte">
             <select
               id="horizonte"
               className="field-input"
               value={form.horizonte_temporal}
               onChange={(e) => set("horizonte_temporal", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {HORIZONTES.map((h) => (
-                <option key={h}>{h}</option>
+                <option key={h} value={h}>
+                  {opt(h)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Percentagem da empresa a transacionar" error={err("pct_a_transacionar")} htmlFor="pcttrans">
+          <Field label={copy.fields.pctATransacionar} error={err("pct_a_transacionar")} htmlFor="pcttrans">
             <select
               id="pcttrans"
               className="field-input"
               value={form.pct_a_transacionar}
               onChange={(e) => set("pct_a_transacionar", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {PCT_TRANSACIONAR.map((p) => (
-                <option key={p}>{p}</option>
+                <option key={p} value={p}>
+                  {opt(p)}
+                </option>
               ))}
             </select>
           </Field>
           <Field
-            label="Disponibilidade para permanecer após a venda"
+            label={copy.fields.permanenciaPosVenda}
             error={err("permanencia_pos_venda")}
             htmlFor="permanencia"
           >
@@ -904,22 +923,26 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               value={form.permanencia_pos_venda}
               onChange={(e) => set("permanencia_pos_venda", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {PERMANENCIAS_POS_VENDA.map((p) => (
-                <option key={p}>{p}</option>
+                <option key={p} value={p}>
+                  {opt(p)}
+                </option>
               ))}
             </select>
           </Field>
-          <Field label="Tipo de investidor preferencial" error={err("tipo_investidor")} htmlFor="tipoinvestidor">
+          <Field label={copy.fields.tipoInvestidor} error={err("tipo_investidor")} htmlFor="tipoinvestidor">
             <select
               id="tipoinvestidor"
               className="field-input"
               value={form.tipo_investidor}
               onChange={(e) => set("tipo_investidor", e.target.value)}
             >
-              <option value="">Selecione…</option>
+              <option value="">{copy.selectPlaceholder}</option>
               {TIPOS_INVESTIDOR.map((t) => (
-                <option key={t}>{t}</option>
+                <option key={t} value={t}>
+                  {opt(t)}
+                </option>
               ))}
             </select>
           </Field>
@@ -929,10 +952,10 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
 
       {step === 6 && (
         <div className="grid gap-6 sm:grid-cols-2">
-          <Field label="Nome" error={err("nome")} htmlFor="nome">
+          <Field label={copy.fields.nome} error={err("nome")} htmlFor="nome">
             <input id="nome" className="field-input" value={form.nome} onChange={(e) => set("nome", e.target.value)} />
           </Field>
-          <Field label="Email" error={err("email")} htmlFor="email">
+          <Field label={copy.fields.email} error={err("email")} htmlFor="email">
             <input
               id="email"
               type="email"
@@ -941,7 +964,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               onChange={(e) => set("email", e.target.value)}
             />
           </Field>
-          <Field label="Telefone" error={err("telefone")} htmlFor="telefone">
+          <Field label={copy.fields.telefone} error={err("telefone")} htmlFor="telefone">
             <input
               id="telefone"
               className="field-input"
@@ -949,7 +972,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
               onChange={(e) => set("telefone", e.target.value)}
             />
           </Field>
-          <Field label="Empresa" error={err("empresa")} htmlFor="empresa">
+          <Field label={copy.fields.empresa} error={err("empresa")} htmlFor="empresa">
             <input
               id="empresa"
               className="field-input"
@@ -958,14 +981,31 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
             />
           </Field>
           <div className="sm:col-span-2">
-            <Field label="Cargo" error={err("cargo")} htmlFor="cargo">
+            <Field label={copy.fields.cargo} error={err("cargo")} htmlFor="cargo">
               <input
                 id="cargo"
                 className="field-input"
-                placeholder="CEO, Fundador, Sócio-Gerente…"
+                placeholder={copy.fields.cargoPlaceholder}
                 value={form.cargo}
                 onChange={(e) => set("cargo", e.target.value)}
               />
+            </Field>
+          </div>
+          <div className="sm:col-span-2">
+            <Field label={copy.fields.idiomaRelatorio} htmlFor="idiomaRelatorio">
+              <select
+                id="idiomaRelatorio"
+                className="field-input"
+                value={form.idioma}
+                onChange={(e) => {
+                  setIdiomaTocado(true);
+                  set("idioma", e.target.value as "pt" | "en" | "es");
+                }}
+              >
+                <option value="pt">Português</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+              </select>
             </Field>
           </div>
           <div className="sm:col-span-2">
@@ -977,10 +1017,7 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
                 checked={form.consentimento_rgpd}
                 onChange={(e) => set("consentimento_rgpd", e.target.checked)}
               />
-              <span>
-                Autorizo a Lealia Advisory Partners a tratar os dados fornecidos para efeitos de contacto comercial e
-                elaboração da avaliação indicativa, nos termos do RGPD.
-              </span>
+              <span>{copy.fields.consentimento}</span>
             </label>
             {err("consentimento_rgpd") && <p className="mt-2 text-xs text-destructive">{errors.consentimento_rgpd}</p>}
           </div>
@@ -998,10 +1035,10 @@ Quanto mais completa for a informação, mais precisa será a avaliação.
           disabled={step === 0}
           style={step === 0 ? { visibility: "hidden" } : undefined}
         >
-          Anterior
+          {copy.previous}
         </button>
         <button type="button" className="btn-primary" onClick={next} disabled={touched && !valid}>
-          {step === STEPS.length - 1 ? "Calcular avaliação" : "Seguinte"}
+          {step === STEPS.length - 1 ? copy.submit : copy.next}
         </button>
       </div>
     </div>
