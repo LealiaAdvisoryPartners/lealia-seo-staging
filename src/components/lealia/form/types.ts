@@ -1,4 +1,5 @@
 import type { FormCopy } from "@/translations/valuation-form";
+export type { FormState } from "./state";
 import type { FormState } from "./state";
 
 export type FormErrors = Partial<Record<keyof FormState, string>>;
