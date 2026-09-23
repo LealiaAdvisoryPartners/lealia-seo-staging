@@ -1,21 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { ValuationForm, type FormState } from "@/components/lealia/ValuationForm";
+import { ValuationForm, type FormState } from "@/components/lealia/form";
 import { ThankYouCard } from "@/components/lealia/ThankYouCard";
 import { SampleReport } from "@/components/lealia/SampleReport";
 import { CalendlyInline } from "@/components/lealia/CalendlyInline";
-import { calcularValuation, type ValuationResult } from "@/lib/valuation";
-import { parseMoney } from "@/lib/money";
+import { calcularValuation, type ValuationResult } from "@core/valuation";
 import { registarLead } from "@/lib/leads";
+import { leadDoFormulario, valuationInputDoFormulario } from "@/components/lealia/submeter-avaliacao";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
 
 export const CALENDLY_URL = "https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report";
-
-const num = (v: string) => {
-  const n = parseMoney(v);
-  return n === null ? 0 : n;
-};
-const optNum = (v: string) => parseMoney(v);
 
 export function AvaliacaoTool() {
   const { language } = useLanguage();

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import SEOHead, { pageMeta } from "@/components/SEOHead";
+import SEOHead from "@/components/SEOHead";
 
 const Privacy = () => {
   const { t } = useLanguage();
@@ -25,11 +25,7 @@ const Privacy = () => {
 
   return (
     <>
-      <SEOHead
-        titleKey={pageMeta.privacy.titleKey}
-        descriptionKey={pageMeta.privacy.descriptionKey}
-        path="privacy"
-      />
+      <SEOHead slug="privacy" />
 
       {/* Hero */}
       <section

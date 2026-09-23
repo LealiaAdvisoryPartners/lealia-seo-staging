@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { buildPath, getPathWithoutLanguage } from "@/lib/routing";
+import { buildPath, stripLanguage } from "@/lib/routing";
 
 const LanguageToggle = () => {
   const { language, setLanguage } = useLanguage();
@@ -28,7 +28,7 @@ const LanguageToggle = () => {
     setLanguage(nextLang);
 
     // Get current path without language prefix
-    const currentPath = getPathWithoutLanguage(location.pathname);
+    const currentPath = stripLanguage(location.pathname);
     
     // Build new path with new language
     const newPath = buildPath(nextLang, currentPath);

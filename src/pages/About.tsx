@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { buildPath } from "@/lib/routing";
-import SEOHead, { pageMeta } from "@/components/SEOHead";
+import SEOHead from "@/components/SEOHead";
 import aboutStory from "@/assets/about-story.jpg";
 import { ArrowRight } from "lucide-react";
 import { SplitText } from "@/components/motion/SplitText";
@@ -24,7 +24,7 @@ const About = () => {
 
   return (
     <>
-      <SEOHead titleKey={pageMeta.about.titleKey} descriptionKey={pageMeta.about.descriptionKey} path="about" />
+      <SEOHead slug="about" />
 
       {/* Editorial Hero */}
       <section ref={heroRef} className="relative overflow-hidden grain" style={{ background: "var(--gradient-hero)" }}>

@@ -10,19 +10,19 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import LanguageRedirect from "./components/LanguageRedirect";
-
 import { ScrollProgress } from "./components/motion/ScrollProgress";
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Team from "./pages/Team";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Valuation from "./pages/Valuation";
+import { LANGUAGES } from "./lib/routing";
+import { SITE_PAGES } from "./pages";
 import Relatorio from "./pages/Relatorio";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+
+/**
+ * Cada página existe em quatro endereços: um por idioma (/pt/about) e um sem
+ * prefixo (/about), que o LanguageRedirect encaminha para o idioma activo.
+ */
+const pagePaths = (slug: string) => [...LANGUAGES.map((l) => `/${l}${slug && `/${slug}`}`), `/${slug}`];
 
 const App = () => (
   <HelmetProvider>
@@ -35,56 +35,21 @@ const App = () => (
             <ScrollToTop />
             <LanguageRedirect />
             <ScrollProgress />
-            
+
             <div className="min-h-screen flex flex-col">
               <Navigation />
               <main className="flex-1 pt-16">
                 <Routes>
-                  {/* Language-prefixed routes */}
-                  <Route path="/en" element={<Index />} />
-                  <Route path="/pt" element={<Index />} />
-                  <Route path="/es" element={<Index />} />
-                  <Route path="/en/about" element={<About />} />
-                  <Route path="/pt/about" element={<About />} />
-                  <Route path="/es/about" element={<About />} />
-                  <Route path="/en/services" element={<Services />} />
-                  <Route path="/pt/services" element={<Services />} />
-                  <Route path="/es/services" element={<Services />} />
-                  <Route path="/en/team" element={<Team />} />
-                  <Route path="/pt/team" element={<Team />} />
-                  <Route path="/es/team" element={<Team />} />
-                  <Route path="/en/valuation" element={<Valuation />} />
-                  <Route path="/pt/valuation" element={<Valuation />} />
-                  <Route path="/es/valuation" element={<Valuation />} />
-                  <Route path="/en/privacy" element={<Privacy />} />
-                  <Route path="/pt/privacy" element={<Privacy />} />
-                  <Route path="/es/privacy" element={<Privacy />} />
-                   <Route path="/en/terms" element={<Terms />} />
-                   <Route path="/pt/terms" element={<Terms />} />
-                   <Route path="/es/terms" element={<Terms />} />
-                  
-                  {/* Legacy routes without language prefix - will be redirected by LanguageRedirect */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/team" element={<Team />} />
-                  <Route path="/valuation" element={<Valuation />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                   <Route path="/terms" element={<Terms />} />
+                  {SITE_PAGES.flatMap(({ slug, Component }) =>
+                    pagePaths(slug).map((path) => <Route key={path} path={path} element={<Component />} />),
+                  )}
 
-                  {/* Relatório de avaliação (link privado, sem prefixo de idioma) */}
-                  <Route path="/relatorio/:token" element={<Relatorio />} />
-                  <Route path="/en/relatorio/:token" element={<Relatorio />} />
-                  <Route path="/pt/relatorio/:token" element={<Relatorio />} />
-                  <Route path="/es/relatorio/:token" element={<Relatorio />} />
-
-                  {/* Link curto do relatório: lealiaap.com/empresa-abcd */}
+                  {/* Relatório de avaliação: link longo e link curto (lealiaap.com/empresa-abcd). */}
+                  {["/relatorio/:token", ...LANGUAGES.map((l) => `/${l}/relatorio/:token`)].map((path) => (
+                    <Route key={path} path={path} element={<Relatorio />} />
+                  ))}
                   <Route path="/:token" element={<Relatorio />} />
 
-
-                  
-                  
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

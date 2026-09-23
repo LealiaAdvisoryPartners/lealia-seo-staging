@@ -1,57 +1,35 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { buildPath, getLanguageFromPath, getPathWithoutLanguage } from "@/lib/routing";
+import { buildPath, getLanguageFromPath, stripLanguage } from "@/lib/routing";
+import { PAGE_SLUGS } from "@/pages";
 
-/** Páginas reais do site — tudo o resto num único segmento é um link de relatório. */
-const KNOWN_PAGES = ["about", "services", "team", "valuation", "privacy", "terms", "relatorio"];
-
+/** Um único segmento que não é uma página do site é um link de relatório. */
 const isReportSlug = (pathname: string) => {
-  const segments = getPathWithoutLanguage(pathname).split("/").filter(Boolean);
-  return segments.length === 1 && !KNOWN_PAGES.includes(segments[0]);
+  const segments = stripLanguage(pathname).split("/").filter(Boolean);
+  return segments.length === 1 && !PAGE_SLUGS.has(segments[0]);
 };
 
 /**
- * Component that redirects non-prefixed URLs to language-prefixed versions
- * e.g., /about -> /en/about (or /pt/about, /es/about based on user preference)
- * Report links (lealiaap.com/empresa-abcd) stay at the root, without prefix.
+ * Normaliza o URL: as páginas vivem sob um prefixo de idioma (/about → /pt/about)
+ * e os links de relatório vivem na raiz (/pt/empresa-abcd → /empresa-abcd).
+ * A query string e o hash são sempre preservados (ex.: ?k= dos links internos).
  */
 const LanguageRedirect = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { pathname, search, hash } = useLocation();
   const { language } = useLanguage();
-  const hasRedirected = useRef(false);
 
   useEffect(() => {
-    const currentLang = getLanguageFromPath(location.pathname);
-    const suffix = `${location.search}${location.hash}`;
+    const temPrefixo = getLanguageFromPath(pathname) !== null;
+    const destino = isReportSlug(pathname)
+      ? stripLanguage(pathname)
+      : temPrefixo || pathname === "/"
+        ? pathname
+        : buildPath(language, pathname);
 
-    // Links de relatório vivem na raiz: remove qualquer prefixo de idioma.
-    if (isReportSlug(location.pathname)) {
-      if (currentLang) {
-        hasRedirected.current = true;
-        navigate(`${getPathWithoutLanguage(location.pathname)}${suffix}`, { replace: true });
-      }
-      return;
-    }
-
-    // If URL already has a language prefix, do nothing
-    if (currentLang) {
-      hasRedirected.current = true;
-      return;
-    }
-
-    if (!hasRedirected.current && location.pathname !== "/") {
-      const pathWithoutLang = getPathWithoutLanguage(location.pathname);
-      const newPath = buildPath(language, pathWithoutLang);
-
-      if (newPath !== location.pathname) {
-        hasRedirected.current = true;
-        // Preserve query string and hash (e.g. ?k= admin key on report links)
-        navigate(`${newPath}${suffix}`, { replace: true });
-      }
-    }
-  }, [location.pathname, location.search, location.hash, language, navigate]);
+    if (destino !== pathname) navigate(`${destino}${search}${hash}`, { replace: true });
+  }, [pathname, search, hash, language, navigate]);
 
   return null;
 };

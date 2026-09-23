@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import SEOHead, { pageMeta } from "@/components/SEOHead";
+import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { buildPath } from "@/lib/routing";
 import { termsContent } from "@/translations/terms";
@@ -29,7 +29,7 @@ const Terms = () => {
 
   return (
     <>
-      <SEOHead titleKey={pageMeta.terms.titleKey} descriptionKey={pageMeta.terms.descriptionKey} path="terms" />
+      <SEOHead slug="terms" />
 
       <section className="relative overflow-hidden grain" style={{ background: "var(--gradient-hero)" }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 md:pt-40 pb-16 md:pb-20 relative z-10">

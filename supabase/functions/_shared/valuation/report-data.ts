@@ -17,7 +17,7 @@ import {
   formatMultipleLang,
   formatFactorXLang,
   formatDateLang,
-} from "./report-i18n.ts";
+} from "./report-i18n/index.ts";
 
 /** Subconjunto de campos do lead necessários ao relatório. */
 export type ReportLead = {
