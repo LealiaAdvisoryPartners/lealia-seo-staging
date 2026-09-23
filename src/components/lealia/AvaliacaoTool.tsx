@@ -6,6 +6,8 @@ import { CalendlyInline } from "@/components/lealia/CalendlyInline";
 import { calcularValuation, type ValuationResult } from "@/lib/valuation";
 import { parseMoney } from "@/lib/money";
 import { registarLead } from "@/lib/leads";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { pageCopy } from "@/translations/valuation-page";
 
 export const CALENDLY_URL = "https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report";
 
@@ -16,6 +18,8 @@ const num = (v: string) => {
 const optNum = (v: string) => parseMoney(v);
 
 export function AvaliacaoTool() {
+  const { language } = useLanguage();
+  const copy = pageCopy[language];
   const [result, setResult] = useState<ValuationResult | null>(null);
   const [empresa, setEmpresa] = useState("");
   const [loading, setLoading] = useState(false);
@@ -129,6 +133,7 @@ export function AvaliacaoTool() {
         ano_avaliacao_imovel: optNum(data.ano_avaliacao_imovel),
         permanencia_pos_venda: data.permanencia_pos_venda || null,
         tipo_investidor: data.tipo_investidor || null,
+        idioma: data.idioma,
 
         estrutura_transacao: data.estrutura_transacao || null,
         pct_a_transacionar: data.pct_a_transacionar || null,
@@ -153,19 +158,18 @@ export function AvaliacaoTool() {
       <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
           <h1 className="section-title mt-6 max-w-4xl text-4xl leading-[1.08] md:text-6xl lg:text-7xl">
-            Quanto vale a sua empresa?{" "}
-            <span className="serif-accent text-accent">Peça uma análise indicativa gratuita.</span>
+            {copy.hero.titlePrefix}
+            <span className="serif-accent text-accent">{copy.hero.titleAccent}</span>
           </h1>
           <p className="body-justified mt-8 max-w-2xl text-base leading-relaxed font-light text-muted-foreground md:text-lg">
-            Submeta os dados da sua PME. A nossa equipa valida a informação, analisa os indicadores e prepara um
-            relatório completo em poucas horas.
+            {copy.hero.lead}
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <button className="btn-primary" onClick={() => scrollTo(formRef)}>
-              Avaliar a minha empresa agora
+              {copy.hero.ctaPrimary}
             </button>
             <button className="btn-outline" onClick={() => scrollTo(agendarRef)}>
-              Falar com a equipa
+              {copy.hero.ctaSecondary}
             </button>
           </div>
         </div>
@@ -173,26 +177,10 @@ export function AvaliacaoTool() {
 
       {/* Como funciona */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
-        <p className="eyebrow">Como funciona</p>
-        <h2 className="section-title mt-5 text-3xl md:text-5xl">Três passos, uma análise de valor</h2>
+        <p className="eyebrow">{copy.howItWorks.eyebrow}</p>
+        <h2 className="section-title mt-5 text-3xl md:text-5xl">{copy.howItWorks.heading}</h2>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {[
-            {
-              n: "01",
-              t: "Preencha o questionário de sete passos",
-              d: "Sete passos curtos sobre setor, histórico financeiro e contexto. Realizado em menos de 5 minutos.",
-            },
-            {
-              n: "02",
-              t: "Receba o relatório preliminar",
-              d: "A nossa equipa valida e analisa os dados, monta a equity bridge da sua empresa\ne envia o relatório para o seu e-mail.",
-            },
-            {
-              n: "03",
-              t: "Reveja o relatório completo connosco",
-              d: "Agende uma reunião de 20 minutos com a nossa equipa para aceder ao relatório completo e conhecer as suas opções.",
-            },
-          ].map((s) => (
+          {copy.howItWorks.steps.map((s) => (
             <div key={s.n} className="card-elegant p-8">
               <span className="num-index">{s.n}</span>
               <h3 className="mt-4 text-2xl">{s.t}</h3>
@@ -214,7 +202,7 @@ export function AvaliacaoTool() {
         <section ref={resultRef} className="scroll-mt-24">
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
             {loading ? (
-              <p className="serif-accent text-center text-2xl text-muted-foreground">A registar a sua submissão…</p>
+              <p className="serif-accent text-center text-2xl text-muted-foreground">{copy.loading}</p>
             ) : (
               result && (
                 <ThankYouCard empresa={empresa} calculoPossivel={result.ok} onAgendar={() => scrollTo(agendarRef)} />
@@ -227,8 +215,8 @@ export function AvaliacaoTool() {
       {/* Sample report */}
       <section ref={sampleRef} className="scroll-mt-24 border-t border-border">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
-          <p className="eyebrow">Relatório completo</p>
-          <h2 className="section-title mt-5 max-w-2xl text-3xl md:text-5xl">O que recebe numa análise Lealia</h2>
+          <p className="eyebrow">{copy.sampleSection.eyebrow}</p>
+          <h2 className="section-title mt-5 max-w-2xl text-3xl md:text-5xl">{copy.sampleSection.heading}</h2>
           <div className="mt-12">
             <SampleReport onAgendar={() => scrollTo(agendarRef)} />
           </div>
@@ -238,11 +226,9 @@ export function AvaliacaoTool() {
       {/* Agendamento */}
       <section ref={agendarRef} className="scroll-mt-24 border-t border-border">
         <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 md:py-28 lg:px-8">
-          <h2 className="section-title text-3xl md:text-5xl">Fale connosco e aceda ao relatório completo</h2>
+          <h2 className="section-title text-3xl md:text-5xl">{copy.scheduling.heading}</h2>
           <p className="body-justified mx-auto mt-6 max-w-xl leading-relaxed font-light text-muted-foreground">
-            Numa reunião de 20 minutos, apresentamos os detalhes completos da avaliação, respondemos a todas as suas
-            questões e explicamos-lhe como se processa uma transação de M&A, de A a Z. Totalmente gratuito e sem
-            compromisso.
+            {copy.scheduling.lead}
           </p>
           <div className="card-elegant mx-auto mt-12 max-w-2xl overflow-hidden p-1 sm:p-2">
             <CalendlyInline url={CALENDLY_URL} />
