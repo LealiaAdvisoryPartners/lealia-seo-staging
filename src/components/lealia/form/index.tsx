@@ -55,7 +55,6 @@ export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => voi
     if (!idiomaTocado) {
       setForm((f) => ({ ...f, idioma: language }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, idiomaTocado]);
 
   useEffect(() => {
