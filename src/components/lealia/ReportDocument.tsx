@@ -4,9 +4,14 @@ import cover from "@/assets/report-cover.png";
 import { FASES } from "@/lib/timeline";
 import type { ReportData } from "@/lib/report-data";
 import { formatEUR } from "@/lib/valuation";
-
-const DISCLAIMER =
-  "O presente relatório constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração deste documento.";
+import {
+  t,
+  type ReportLang,
+  groupThousandsLang,
+  formatPercentLang,
+  formatMultipleLang,
+  formatFactor3Lang,
+} from "@/lib/report-i18n";
 
 const EmpresaContext = React.createContext<string>("");
 
@@ -16,14 +21,19 @@ function Page({
   id,
   className,
   children,
+  empresaOverride,
+  lang,
 }: {
   numero: number;
   titulo?: string;
   id?: string;
   className?: string;
   children: React.ReactNode;
+  empresaOverride?: string;
+  lang: ReportLang;
 }) {
-  const empresa = React.useContext(EmpresaContext);
+  const empresaCtx = React.useContext(EmpresaContext);
+  const empresa = empresaOverride ?? empresaCtx;
   return (
     <section className={`report-page${className ? ` ${className}` : ""}`} id={id}>
       <header className="report-head">
@@ -32,19 +42,20 @@ function Page({
       </header>
       <div className="report-body">{children}</div>
       <footer className="report-foot">
-        <span>Lealia Advisory Partners · Relatório de avaliação indicativa{empresa ? ` para ${empresa}` : ""}</span>
+        <span>{t(lang).doc.footer(empresa)}</span>
         <span>{numero}</span>
       </footer>
     </section>
   );
 }
 
-function efeitoQualitativo(multiplicador: number, semDados?: boolean, efeito?: string) {
+function efeitoQualitativo(multiplicador: number, lang: ReportLang, semDados?: boolean, efeito?: string) {
   if (efeito) return efeito;
-  if (semDados) return "Neutro";
-  if (multiplicador > 0.995) return "Positivo";
-  if (multiplicador < 0.995) return "Negativo";
-  return "Neutro";
+  const efeitos = t(lang).doc.efeito;
+  if (semDados) return efeitos.neutro;
+  if (multiplicador > 0.995) return efeitos.positivo;
+  if (multiplicador < 0.995) return efeitos.negativo;
+  return efeitos.neutro;
 }
 
 const H = ({
@@ -68,8 +79,10 @@ const Kv = ({ label, value }: { label: React.ReactNode; value: React.ReactNode }
   </div>
 );
 
-function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
+function WaterfallChart({ items, lang }: { items: ReportData["ponte"]; lang: ReportLang }) {
   if (!items.length) return null;
+  const kEur = (v: number) => groupThousandsLang(v / 1000, lang);
+  const dictWaterfall = t(lang).doc.waterfall;
 
   const chartItems = items.map((item, index) => {
     const isTotal = item.tipo === "base" || item.tipo === "total";
@@ -95,8 +108,8 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
 
   return (
     <figure className="report-waterfall">
-      <figcaption>Equity Bridge · milhares de €</figcaption>
-      <svg viewBox={`0 0 ${width} 240`} role="img" aria-label="Gráfico waterfall da Equity Bridge">
+      <figcaption>{dictWaterfall.caption}</figcaption>
+      <svg viewBox={`0 0 ${width} 240`} role="img" aria-label={dictWaterfall.ariaLabel}>
         <line className="report-waterfall-axis" x1="10" x2={width - 10} y1={y(0)} y2={y(0)} />
         {chartItems.map((item, index) => {
           const x = startX + index * (barWidth + gap);
@@ -106,14 +119,14 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
           const height = Math.max(2, y(bottomValue) - top);
           const shortLabel =
             item.tipo === "base"
-              ? "Enterprise Value"
+              ? dictWaterfall.enterpriseValue
               : item.tipo === "total"
-                ? "Equity Value"
+                ? dictWaterfall.equityValue
                 : item.valor < 0
-                  ? "Dívida"
+                  ? dictWaterfall.divida
                   : item.label.includes("caixa")
-                    ? "Caixa"
-                    : "Imóvel";
+                    ? dictWaterfall.caixa
+                    : dictWaterfall.imovel;
           const className =
             item.tipo === "total"
               ? "report-waterfall-total"
@@ -156,20 +169,6 @@ function WaterfallChart({ items }: { items: ReportData["ponte"] }) {
   );
 }
 
-/** Agrupamento de milhares consistente (espaço inquebrável), inclusive para números de 4 dígitos. */
-const grupos = (n: number) => {
-  const neg = n < 0;
-  const s = Math.abs(Math.round(n))
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
-  return (neg ? "-" : "") + s;
-};
-const kEur = (v: number) => grupos(v / 1000);
-
-const pctFmt = (v: number, casas = 1) => `${(v * 100).toFixed(casas).replace(".", ",")}%`;
-const xFmt = (v: number | null) => (v === null ? "—" : `${v.toFixed(2).replace(".", ",")}x`);
-const fatorFmt = (v: number) => v.toFixed(3).replace(".", ",");
-
 type Dcf = NonNullable<ReportData["dcf"]>;
 type DcfAno = Dcf["anos"][number];
 type MapaLinha = {
@@ -180,19 +179,31 @@ type MapaLinha = {
   fmt?: (v: number) => string;
 };
 
-function MapaTabela({ dcf, linhas, head = true }: { dcf: Dcf; linhas: MapaLinha[]; head?: boolean }) {
+function MapaTabela({
+  dcf,
+  linhas,
+  head = true,
+  lang,
+}: {
+  dcf: Dcf;
+  linhas: MapaLinha[];
+  head?: boolean;
+  lang: ReportLang;
+}) {
+  const kEur = (v: number) => groupThousandsLang(v / 1000, lang);
+  const dictDcf = t(lang).doc.dcf;
   return (
     <table className="report-table report-table-compact report-dcf-map">
       <thead className={head ? undefined : "report-dcf-head-hidden"}>
         <tr>
-          <th>Linha</th>
+          <th>{dictDcf.linha}</th>
           {dcf.anos.map((a) => (
             <th key={a.ano} className={a.tipo === "forecast" ? "report-dcf-fc" : "report-dcf-hist"}>
               {a.ano}
               {a.tipo === "forecast" ? "F" : "A"}
             </th>
           ))}
-          <th className="report-dcf-tv">TV</th>
+          <th className="report-dcf-tv">{dictDcf.tv}</th>
         </tr>
       </thead>
       <tbody>
@@ -215,16 +226,18 @@ function MapaTabela({ dcf, linhas, head = true }: { dcf: Dcf; linhas: MapaLinha[
   );
 }
 
-function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
+function DcfPage({ d, numero, lang }: { d: ReportData; numero: number; lang: ReportLang }) {
   const dcf = d.dcf;
+  const dictDcf = t(lang).doc.dcf;
+  const pctFmt = (v: number, casas = 1) => formatPercentLang(v * 100, lang, casas);
+  const xFmt = (v: number | null) => formatMultipleLang(v, lang);
+  const fatorFmt = (v: number) => formatFactor3Lang(v, lang);
+
   if (!dcf) {
     return (
-      <Page numero={numero} titulo="DCF Valuation">
-        <H>Avaliação por fluxos de caixa descontados</H>
-        <div className="report-note">
-          {d.dcf_motivo ??
-            "Não é possível apresentar uma análise DCF com a informação disponibilizada. Em particular, o custo de capital estimado tem de ser superior à taxa de crescimento na perpetuidade."}
-        </div>
+      <Page numero={numero} titulo={dictDcf.titulo} lang={lang}>
+        <H>{dictDcf.hTitulo}</H>
+        <div className="report-note">{d.dcf_motivo ?? dictDcf.semDados}</div>
       </Page>
     );
   }
@@ -232,99 +245,96 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
   const fatorTv = 1 / Math.pow(1 + dcf.wacc, dcf.anos.filter((a) => a.tipo === "forecast").length);
 
   const linhasNopat: MapaLinha[] = [
-    { label: "Receita", get: (a) => a.receita },
-    { label: "EBITDA", get: (a) => a.ebitda },
-    { label: "Margem EBITDA", get: (a) => a.margem_ebitda, fmt: (v) => pctFmt(v) },
-    { label: "(−) D&A", get: (a) => -a.da },
-    { label: "= EBIT", get: (a) => a.ebit, total: true },
-    { label: "(−) Imposto s/ EBIT", get: (a) => -a.imposto },
-    { label: "= NOPAT", get: (a) => a.nopat, total: true },
+    { label: dictDcf.receita, get: (a) => a.receita },
+    { label: dictDcf.ebitda, get: (a) => a.ebitda },
+    { label: dictDcf.margemEbitda, get: (a) => a.margem_ebitda, fmt: (v) => pctFmt(v) },
+    { label: dictDcf.da, get: (a) => -a.da },
+    { label: dictDcf.ebit, get: (a) => a.ebit, total: true },
+    { label: dictDcf.impostoEbit, get: (a) => -a.imposto },
+    { label: dictDcf.nopat, get: (a) => a.nopat, total: true },
   ];
 
   const linhasFcff: MapaLinha[] = [
-    { label: "NOPAT", get: (a) => a.nopat },
-    { label: "(+) D&A", get: (a) => a.da },
-    { label: "(−) Capex", get: (a) => -a.capex },
-    { label: "= FCFF unlevered", get: (a) => a.fcff, tv: dcf.terminal_value, total: true },
-    { label: "Fator de desconto", get: (a) => a.fator_desconto, tv: fatorTv, fmt: fatorFmt },
-    { label: "= PV do FCFF", get: (a) => a.pv, tv: dcf.pv_terminal_value, total: true },
+    { label: dictDcf.nopat, get: (a) => a.nopat },
+    { label: dictDcf.maisDa, get: (a) => a.da },
+    { label: dictDcf.menosCapex, get: (a) => -a.capex },
+    { label: dictDcf.fcff, get: (a) => a.fcff, tv: dcf.terminal_value, total: true },
+    { label: dictDcf.fatorDesconto, get: (a) => a.fator_desconto, tv: fatorTv, fmt: fatorFmt },
+    { label: dictDcf.pvFcff, get: (a) => a.pv, tv: dcf.pv_terminal_value, total: true },
   ];
 
   return (
-    <Page numero={numero} titulo="DCF Valuation">
+    <Page numero={numero} titulo={dictDcf.titulo} lang={lang}>
       <div className="report-dcf">
         <section className="report-dcf-top">
           <div>
             <div className="report-dcf-title">
-              <H>Mapa de fluxos de caixa</H>
-              <span className="report-dcf-unit">milhares de €</span>
+              <H>{dictDcf.mapaFluxos}</H>
+              <span className="report-dcf-unit">{dictDcf.unidadeMilhares}</span>
             </div>
-            <MapaTabela dcf={dcf} linhas={linhasNopat} />
-            <MapaTabela dcf={dcf} linhas={linhasFcff} head={false} />
-            <p className="report-small">
-              A = exercício histórico · F = ano projetado · TV = valor terminal. Fluxo unlevered: o financiamento é
-              refletido no custo de capital e na dívida líquida. TV por perpetuidade sobre o FCFF do ano 8.
-            </p>
+            <MapaTabela dcf={dcf} linhas={linhasNopat} lang={lang} />
+            <MapaTabela dcf={dcf} linhas={linhasFcff} head={false} lang={lang} />
+            <p className="report-small">{dictDcf.legenda}</p>
           </div>
           <div>
-            <H>Pressupostos do forecast</H>
+            <H>{dictDcf.pressupostosForecast}</H>
             <table className="report-table report-table-compact">
               <tbody>
                 <tr>
-                  <td>Crescimento inicial</td>
+                  <td>{dictDcf.crescimentoInicial}</td>
                   <td>{pctFmt(dcf.crescimento_inicial)}</td>
                 </tr>
                 <tr>
-                  <td>Ano de estabilização</td>
-                  <td>Ano {dcf.ano_estabilizacao}</td>
+                  <td>{dictDcf.anoEstabilizacao}</td>
+                  <td>{dictDcf.anoN(dcf.ano_estabilizacao)}</td>
                 </tr>
                 <tr>
-                  <td>Crescimento estabilizado</td>
+                  <td>{dictDcf.crescimentoEstabilizado}</td>
                   <td>{pctFmt(dcf.crescimento_estabilizado)}</td>
                 </tr>
                 <tr>
-                  <td>Crescimento na perpetuidade</td>
+                  <td>{dictDcf.crescimentoPerpetuidade}</td>
                   <td>{pctFmt(dcf.terminal_growth)}</td>
                 </tr>
                 <tr>
-                  <td>Margem EBITDA projetada</td>
+                  <td>{dictDcf.margemEbitdaProjetada}</td>
                   <td>{pctFmt(dcf.margem_ebitda)}</td>
                 </tr>
                 <tr>
-                  <td>Capex (% receita)</td>
+                  <td>{dictDcf.capexPctReceita}</td>
                   <td>{pctFmt(dcf.capex_pct_receita)}</td>
                 </tr>
                 <tr>
-                  <td>D&A (% receita)</td>
+                  <td>{dictDcf.daPctReceita}</td>
                   <td>{pctFmt(dcf.da_pct_receita)}</td>
                 </tr>
                 <tr>
-                  <td>Fundo de maneio</td>
-                  <td>Não projetado</td>
+                  <td>{dictDcf.fundoManeio}</td>
+                  <td>{dictDcf.naoProjetado}</td>
                 </tr>
                 <tr>
-                  <td>Taxa de imposto (CIT)</td>
+                  <td>{dictDcf.taxaImposto}</td>
                   <td>{pctFmt(dcf.cit)}</td>
                 </tr>
               </tbody>
             </table>
-            <H>Indicadores de avaliação</H>
+            <H>{dictDcf.indicadoresAvaliacao}</H>
             <table className="report-table report-table-compact">
               <tbody>
                 <tr className="report-row-total">
-                  <td>Enterprise Value</td>
+                  <td>{dictDcf.enterpriseValue}</td>
                   <td>{formatEUR(Math.round(dcf.enterprise_value))}</td>
                 </tr>
                 <tr className="report-row-total">
-                  <td>Equity Value</td>
+                  <td>{dictDcf.equityValue}</td>
                   <td>{formatEUR(Math.round(dcf.equity_value))}</td>
                 </tr>
                 <tr>
-                  <td>EV / EBITDA implícito</td>
+                  <td>{dictDcf.evEbitdaImplicito}</td>
                   <td>{xFmt(dcf.ev_ebitda_implicito)}</td>
                 </tr>
                 <tr>
-                  <td>EV / Receita implícito</td>
+                  <td>{dictDcf.evReceitaImplicito}</td>
                   <td>{xFmt(dcf.ev_receita_implicito)}</td>
                 </tr>
               </tbody>
@@ -334,105 +344,102 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
 
         <section className="report-dcf-bottom">
           <div>
-            <H>Custo médio ponderado de capital</H>
+            <H>{dictDcf.wacc}</H>
             <table className="report-table report-table-compact">
               <tbody>
                 <tr>
-                  <td>Risk-free rate (Rf)</td>
+                  <td>{dictDcf.riskFree}</td>
                   <td>{pctFmt(dcf.risk_free)}</td>
                 </tr>
                 <tr>
-                  <td>Beta unlevered / levered (β)</td>
+                  <td>{dictDcf.beta}</td>
                   <td>
                     {dcf.beta_unlevered.toFixed(2)} / {dcf.beta_levered.toFixed(2)}
                   </td>
                 </tr>
                 <tr>
-                  <td>Equity Risk Premium (ERP)</td>
+                  <td>{dictDcf.erp}</td>
                   <td>{pctFmt(dcf.erp)}</td>
                 </tr>
                 <tr>
-                  <td>Country Risk Premium (CRP)</td>
+                  <td>{dictDcf.crp}</td>
                   <td>{pctFmt(dcf.crp)}</td>
                 </tr>
                 <tr>
-                  <td>Prémio de dimensão (PME)</td>
+                  <td>{dictDcf.premioDimensao}</td>
                   <td>{pctFmt(dcf.size_premium)}</td>
                 </tr>
                 <tr>
-                  <td>Prémio específico (iliquidez)</td>
+                  <td>{dictDcf.premioEspecifico}</td>
                   <td>{pctFmt(dcf.premio_especifico)}</td>
                 </tr>
                 {dcf.premio_ativo_especifico > 0 ? (
                   <tr>
-                    <td>Prémio específico do ativo</td>
+                    <td>{dictDcf.premioAtivoEspecifico}</td>
                     <td>{pctFmt(dcf.premio_ativo_especifico)}</td>
                   </tr>
                 ) : null}
                 <tr className="report-row-total">
-                  <td>Cost of Equity (Ke)</td>
+                  <td>{dictDcf.costOfEquity}</td>
                   <td>{pctFmt(dcf.cost_of_equity)}</td>
                 </tr>
                 <tr>
-                  <td>Cost of Debt pre / post tax (Kd)</td>
+                  <td>{dictDcf.costOfDebt}</td>
                   <td>
                     {pctFmt(dcf.cost_of_debt_pre)} / {pctFmt(dcf.cost_of_debt_pos)}
                   </td>
                 </tr>
                 <tr>
-                  <td>Peso de equity / dívida (E / D)</td>
+                  <td>{dictDcf.pesoEquityDivida}</td>
                   <td>
                     {pctFmt(dcf.peso_equity, 0)} / {pctFmt(dcf.peso_divida, 0)}
                   </td>
                 </tr>
                 <tr className="report-row-total">
-                  <td>WACC</td>
+                  <td>{dictDcf.waccLabel}</td>
                   <td>{pctFmt(dcf.wacc)}</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div>
-            <H>Resultados</H>
+            <H>{dictDcf.resultados}</H>
             <table className="report-table report-table-compact">
               <tbody>
                 <tr>
-                  <td>PV do forecast explícito (8 anos)</td>
+                  <td>{dictDcf.pvExplicito}</td>
                   <td>{formatEUR(Math.round(dcf.pv_explicito))}</td>
                 </tr>
                 <tr>
-                  <td>PV do valor terminal</td>
+                  <td>{dictDcf.pvTerminal}</td>
                   <td>{formatEUR(Math.round(dcf.pv_terminal_value))}</td>
                 </tr>
                 <tr>
-                  <td>Peso do valor terminal no EV</td>
+                  <td>{dictDcf.pesoTerminal}</td>
                   <td>{pctFmt(dcf.peso_terminal, 0)}</td>
                 </tr>
                 <tr className="report-row-total">
-                  <td>Enterprise Value</td>
+                  <td>{dictDcf.enterpriseValue}</td>
                   <td>{formatEUR(Math.round(dcf.enterprise_value))}</td>
                 </tr>
                 <tr>
-                  <td>Ajustamento de dívida líquida</td>
+                  <td>{dictDcf.ajusteDividaLiquida}</td>
                   <td>{formatEUR(Math.round(-dcf.divida_liquida))}</td>
                 </tr>
                 {dcf.ativos_nao_operacionais > 0 ? (
                   <tr>
-                    <td>Imóvel</td>
+                    <td>{dictDcf.imovel}</td>
                     <td>{formatEUR(Math.round(dcf.ativos_nao_operacionais))}</td>
                   </tr>
                 ) : null}
                 <tr className="report-row-total">
-                  <td>Equity Value</td>
+                  <td>{dictDcf.equityValue}</td>
                   <td>{formatEUR(Math.round(dcf.equity_value))}</td>
                 </tr>
               </tbody>
             </table>
             <p className="report-small">
-              Custo de capital estimado numa ótica prudente: às referências setoriais acrescem prémios de dimensão e de
-              iliquidez, porque uma PME não cotada tem risco superior ao das cotadas do setor. Beta, ERP, CRP, estrutura
-              de capital e spread são proxies setoriais; CIT de {d.pais} ({dcf.cit_nota})
-              {dcf.nota_reconciliacao ? ` ${dcf.nota_reconciliacao}` : ""}
+              {dictDcf.notaCustoCapital(d.pais, dcf.cit_nota, dcf.nota_reconciliacao ?? "")}
             </p>
           </div>
         </section>
@@ -441,15 +448,16 @@ function DcfPage({ d, numero }: { d: ReportData; numero: number }) {
   );
 }
 
-function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
+function SensitivityPage({ d, numero, lang }: { d: ReportData; numero: number; lang: ReportLang }) {
   const dcf = d.dcf;
+  const dictSens = t(lang).doc.sensitivity;
+  const kEur = (v: number) => groupThousandsLang(v / 1000, lang);
+
   if (!dcf) {
     return (
-      <Page numero={numero} titulo="Sensitivity Analysis">
-        <H>Análise de sensibilidade</H>
-        <div className="report-note">
-          {d.dcf_motivo ?? "Sem análise DCF disponível, não é possível apresentar as matrizes de sensibilidade."}
-        </div>
+      <Page numero={numero} titulo={dictSens.titulo} lang={lang}>
+        <H>{dictSens.hTitulo}</H>
+        <div className="report-note">{d.dcf_motivo ?? dictSens.semDados}</div>
       </Page>
     );
   }
@@ -475,10 +483,10 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
   ).filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
-    <Page numero={numero} titulo="Sensitivity Analysis">
+    <Page numero={numero} titulo={dictSens.titulo} lang={lang}>
       <div className="report-dcf-title">
-        <H>Sensibilidade do Enterprise Value</H>
-        <span className="report-dcf-unit">milhares de €</span>
+        <H>{dictSens.sensibilidadeEv}</H>
+        <span className="report-dcf-unit">{t(lang).doc.dcf.unidadeMilhares}</span>
       </div>
       <div className="report-sens-grid">
         {dcf.matrizes.map((m) => (
@@ -503,7 +511,7 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
                     <td className={l.base ? "report-sens-base" : undefined}>{l.label}</td>
                     {l.valores.map((v, i) => (
                       <td key={i} className={l.base && m.colunas[i]?.base ? "report-sens-cell-base" : undefined}>
-                        {Number.isFinite(v) ? kEur(v) : "n.a."}
+                        {Number.isFinite(v) ? kEur(v) : t(lang).common.naoAplicavel}
                       </td>
                     ))}
                   </tr>
@@ -513,25 +521,17 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
           </div>
         ))}
       </div>
-      <p className="report-small">
-        A célula destacada corresponde ao cenário base apresentado no slide anterior. As matrizes isolam o efeito de
-        cada variável, mantendo constantes os restantes pressupostos.
-      </p>
+      <p className="report-small">{dictSens.notaMatriz}</p>
 
       <section className="report-sens-assumptions">
-        <H>Transparência de pressupostos</H>
-        <p className="report-small report-dcf-assumptions-intro">
-          Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de
-          mercado, seguindo um critério conservador - na dúvida, adota-se o valor que resulta numa avaliação mais
-          prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou método
-          de derivação.
-        </p>
+        <H>{dictSens.transparenciaPressupostos}</H>
+        <p className="report-small report-dcf-assumptions-intro">{dictSens.introTransparencia}</p>
         <table className="report-table report-table-compact report-table-text">
           <thead>
             <tr>
-              <th>Parâmetro</th>
-              <th>Valor</th>
-              <th>Método / fonte</th>
+              <th>{dictSens.parametro}</th>
+              <th>{dictSens.valor}</th>
+              <th>{dictSens.metodoFonte}</th>
             </tr>
           </thead>
           <tbody>
@@ -551,18 +551,21 @@ function SensitivityPage({ d, numero }: { d: ReportData; numero: number }) {
 
 export type ReportModo = "completo" | "teaser";
 
-const LOCKED_PAGES: { numero: number; titulo: string }[] = [
-  { numero: 4, titulo: "Âmbito e limitações" },
-  { numero: 5, titulo: "Método e alternativas" },
-  { numero: 6, titulo: "Ajustes ao múltiplo" },
-  { numero: 7, titulo: "Cenários e sensibilidade" },
-  { numero: 8, titulo: "Equity Bridge e contexto da transação" },
-  { numero: 9, titulo: "Drivers de Valor & Riscos" },
-  { numero: 10, titulo: "DCF Valuation" },
-  { numero: 11, titulo: "Sensitivity Analysis" },
-  { numero: 12, titulo: "Preparação para o mercado" },
-  { numero: 13, titulo: "Processo de M&A" },
-];
+function lockedPages(lang: ReportLang): { numero: number; titulo: string }[] {
+  const lp = t(lang).doc.lockedPages;
+  return [
+    { numero: 4, titulo: lp.p4 },
+    { numero: 5, titulo: lp.p5 },
+    { numero: 6, titulo: lp.p6 },
+    { numero: 7, titulo: lp.p7 },
+    { numero: 8, titulo: lp.p8 },
+    { numero: 9, titulo: lp.p9 },
+    { numero: 10, titulo: lp.p10 },
+    { numero: 11, titulo: lp.p11 },
+    { numero: 12, titulo: lp.p12 },
+    { numero: 13, titulo: lp.p13 },
+  ];
+}
 
 const irParaAgendamento = () => {
   if (typeof document === "undefined") return;
@@ -590,20 +593,18 @@ function LockedSkeleton() {
   );
 }
 
-function LockedPage({ numero, titulo }: { numero: number; titulo: string }) {
+function LockedPage({ numero, titulo, lang }: { numero: number; titulo: string; lang: ReportLang }) {
+  const dictDoc = t(lang).doc;
   return (
-    <Page numero={numero} titulo={titulo}>
+    <Page numero={numero} titulo={titulo} lang={lang}>
       <div className="report-locked">
         <LockedSkeleton />
         <div className="report-locked-overlay">
-          <span className="report-locked-eyebrow">Conteúdo reservado</span>
+          <span className="report-locked-eyebrow">{dictDoc.conteudoReservado}</span>
           <h2 className="report-locked-h">{titulo}</h2>
-          <p className="report-locked-p">
-            Esta secção faz parte do relatório completo. Agende uma reunião de 20 minutos com a equipa da Lealia para
-            visualizar a análise integral e a discussão dos resultados.
-          </p>
+          <p className="report-locked-p">{dictDoc.lockedTexto}</p>
           <button type="button" className="report-locked-cta" onClick={irParaAgendamento}>
-            Agendar reunião para ver o relatório completo
+            {dictDoc.lockedCta}
           </button>
         </div>
       </div>
@@ -612,6 +613,10 @@ function LockedPage({ numero, titulo }: { numero: number; titulo: string }) {
 }
 
 export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?: ReportModo }) {
+  const lang: ReportLang = (d as { lang?: ReportLang }).lang ?? "pt";
+  const dict = t(lang).doc;
+  const disclaimer = dict.disclaimer;
+
   return (
     <EmpresaContext.Provider value={d.empresa}>
       <article className="report-doc">
@@ -621,7 +626,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
           <div className="report-cover-side">
             <img src={logo} alt="Lealia Advisory Partners" className="report-cover-logo" />
             <div className="mt-auto">
-              <h1 className="report-title">Preliminary Valuation</h1>
+              <h1 className="report-title">{dict.cover.titulo}</h1>
               <p className="report-title-company">{d.empresa}</p>
               <p className="report-sub">
                 {d.industria}
@@ -630,36 +635,36 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             </div>
             <div className="report-cover-meta">
               <div>
-                <span>Preparado para</span>
+                <span>{dict.cover.preparadoPara}</span>
                 <strong>
                   {d.nome}
                   {d.cargo ? ` · ${d.cargo}` : ""}
                 </strong>
               </div>
               <div>
-                <span>Data</span>
+                <span>{dict.cover.data}</span>
                 <strong>{d.data_relatorio}</strong>
               </div>
             </div>
-            <p className="report-cover-disclaimer">{DISCLAIMER}</p>
+            <p className="report-cover-disclaimer">{disclaimer}</p>
           </div>
         </section>
 
         {/* 2 — Sumário executivo */}
-        <Page numero={2} titulo="Sumário executivo">
-          <H>Sumário executivo</H>
+        <Page numero={2} titulo={dict.p2.titulo} lang={lang}>
+          <H>{dict.p2.titulo}</H>
           <p className="report-p" dangerouslySetInnerHTML={{ __html: d.resumo_textual }} />
 
           {d.ok ? (
             <div className="report-highlight">
               <div>
-                <span>Enterprise Value indicativo</span>
+                <span>{dict.p2.evIndicativo}</span>
                 <strong>
                   {d.ev_min_formatado} — {d.ev_max_formatado}
                 </strong>
               </div>
               <div>
-                <span>Equity Value Indicativo</span>
+                <span>{dict.p2.equityIndicativo}</span>
                 <strong>
                   {d.equity_min_formatado} — {d.equity_max_formatado}
                 </strong>
@@ -670,21 +675,21 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
           )}
 
           <div className="report-grid">
-            <Kv label="Faturação do ano de referência" value={d.faturacao_ano1_formatado} />
-            <Kv label="EBITDA normalizado" value={d.ebitda_normalizado_formatado} />
-            <Kv label="Margem EBITDA normalizada" value={d.margem_ebitda_ajustada_formatada} />
+            <Kv label={dict.p2.faturacaoAno} value={d.faturacao_ano1_formatado} />
+            <Kv label={dict.p2.ebitdaNormalizado} value={d.ebitda_normalizado_formatado} />
+            <Kv label={dict.p2.margemNormalizada} value={d.margem_ebitda_ajustada_formatada} />
             <Kv
-              label="Múltiplo implícito"
+              label={dict.p2.multiploImplicito}
               value={
                 d.multiplo_ajustado_min !== null && d.multiplo_ajustado_max !== null
-                  ? `${d.multiplo_ajustado_min.toFixed(2)}x — ${d.multiplo_ajustado_max.toFixed(2)}x`
+                  ? `${formatMultipleLang(d.multiplo_ajustado_min, lang)} — ${formatMultipleLang(d.multiplo_ajustado_max, lang)}`
                   : "—"
               }
             />
             <Kv
               label={
                 <span>
-                  Posição Líquida <span className="report-kv-hint">caixa / (dívida)</span>
+                  {dict.p2.posicaoLiquida} <span className="report-kv-hint">{dict.p2.posicaoLiquidaHint}</span>
                 </span>
               }
               value={
@@ -695,45 +700,36 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </span>
               }
             />
-            <Kv label="Completude da informação" value={d.confianca ?? "—"} />
+            <Kv label={dict.p2.completudeInformacao} value={d.confianca ?? "—"} />
           </div>
 
-          <H>Metodologia de avaliação</H>
+          <H>{dict.p2.metodologia}</H>
           <ol className="report-list report-compact">
             <li>
-              <strong>Determinação do EBITDA normalizado</strong> — EBITDA reportado último exercício de referência,
-              excluindo o impacto de despesas extraordinárias não recorrentes e, se aplicável, considerando o impacto de
-              uma correção teórica sobre a renda do imóvel ao mercado. O EBITDA normalizado é de{" "}
-              <strong>{d.ebitda_normalizado_formatado}</strong>.
+              <strong>{dict.p2.metodo1Titulo}</strong> — {dict.p2.metodo1(d.ebitda_normalizado_formatado)}
             </li>
             <li>
-              <strong>Múltiplo setorial de base</strong> — definido com referência aos múltiplos praticados em
-              transações recentes e comparáveis no setor e na região.
+              <strong>{dict.p2.metodo2Titulo}</strong> — {dict.p2.metodo2}
             </li>
             <li>
-              <strong>Ajustes de perfil e risco</strong> — dimensão, maturidade, crescimento, recorrência de receita,
-              concentração de clientes, geografia, dependência do acionista e intensidade de investimento, com um limite
-              global aplicado ao conjunto dos ajustes.
+              <strong>{dict.p2.metodo3Titulo}</strong> — {dict.p2.metodo3}
             </li>
             <li>
-              <strong>Equity Bridge</strong> — ao Enterprise Value soma-se a caixa, depósitos e outros equivalentes,
-              deduz-se a dívida total, e, se aplicável, soma-se o imóvel incluído no perímetro da transação e o impacto
-              pro-forma em caixa resultante da alienação de ativos não operacionais, obtendo-se o Equity Value antes de
-              ajustamentos de closing.
+              <strong>{dict.p2.metodo4Titulo}</strong> — {dict.p2.metodo4}
             </li>
           </ol>
         </Page>
 
         {/* 3 — Perfil, histórico e posição financeira */}
-        <Page numero={3} titulo="Perfil da empresa e outros indicadores">
+        <Page numero={3} titulo={dict.p3.titulo} lang={lang}>
           <div className="report-two">
             <div>
-              <H>Perfil da empresa</H>
+              <H>{dict.p3.perfilEmpresa}</H>
               <table className="report-table report-table-compact">
                 <thead>
                   <tr>
-                    <th>Indicador</th>
-                    <th>Valor</th>
+                    <th>{dict.p3.indicador}</th>
+                    <th>{dict.p3.valor}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -746,15 +742,15 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </tbody>
               </table>
 
-              <H>Histórico financeiro</H>
+              <H>{dict.p3.historicoFinanceiro}</H>
               <table className="report-table report-table-compact">
                 <thead>
                   <tr>
-                    <th>Ano</th>
-                    <th>Faturação</th>
-                    <th>EBITDA</th>
-                    <th>Extraordinários</th>
-                    <th>Normalizações</th>
+                    <th>{dict.p3.ano}</th>
+                    <th>{dict.p3.faturacao}</th>
+                    <th>{dict.p3.ebitda}</th>
+                    <th>{dict.p3.extraordinarios}</th>
+                    <th>{dict.p3.normalizacoes}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -774,26 +770,26 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 <table className="report-table report-table-compact">
                   <tbody>
                     <tr>
-                      <td>CAGR da faturação</td>
+                      <td>{dict.p3.cagrFaturacao}</td>
                       <td>{d.qualidade.cagr_faturacao ?? "—"}</td>
                     </tr>
                     <tr>
-                      <td>CAGR do EBITDA normalizado</td>
+                      <td>{dict.p3.cagrEbitda}</td>
                       <td>{d.qualidade.cagr_ebitda ?? "—"}</td>
                     </tr>
                   </tbody>
                 </table>
               ) : (
-                <p className="report-small">Sem informação suficiente</p>
+                <p className="report-small">{dict.p3.semInfoSuficiente}</p>
               )}
             </div>
             <div>
-              <H>Normalização do EBITDA</H>
+              <H>{dict.p3.normalizacaoEbitda}</H>
               <table className="report-table report-table-compact">
                 <thead>
                   <tr>
-                    <th>Linha</th>
-                    <th>Valor</th>
+                    <th>{dict.p3.linha}</th>
+                    <th>{dict.p3.valor}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -805,45 +801,43 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   ))}
                 </tbody>
               </table>
-              <p className="report-small report-normalizacao-nota">
-                Os ajustamentos de normalização aproximam o resultado operacional recorrente num cenário pós-transação.
-              </p>
-              <H>Outros Indicadores</H>
+              <p className="report-small report-normalizacao-nota">{dict.p3.notaNormalizacao}</p>
+              <H>{dict.p3.outrosIndicadores}</H>
               <table className="report-table report-table-compact">
                 <thead>
                   <tr>
-                    <th>Indicador</th>
-                    <th>Valor</th>
+                    <th>{dict.p3.indicador}</th>
+                    <th>{dict.p3.valor}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Caixa, depósitos e outros equivalentes</td>
+                    <td>{dict.p3.caixaDepositos}</td>
                     <td>{d.caixa_formatado}</td>
                   </tr>
                   <tr>
-                    <td>Dívida total</td>
+                    <td>{dict.p3.dividaTotal}</td>
                     <td>{d.divida_financeira_formatado}</td>
                   </tr>
                   <tr>
-                    <td>CAPEX anual recorrente</td>
+                    <td>{dict.p3.capexAnual}</td>
                     <td>{d.capex_formatado}</td>
                   </tr>
                   <tr>
-                    <td>Unidades / localizações</td>
-                    <td>{d.unidades || "Não indicado"}</td>
+                    <td>{dict.p3.unidadesLocalizacoes}</td>
+                    <td>{d.unidades || t(lang).common.naoIndicado}</td>
                   </tr>
                   <tr>
-                    <td>% Concentração no maior cliente</td>
-                    <td>{d.concentracao_top1 || "Não indicado"}</td>
+                    <td>{dict.p3.concentracaoMaiorCliente}</td>
+                    <td>{d.concentracao_top1 || t(lang).common.naoIndicado}</td>
                   </tr>
                   <tr>
-                    <td>% Concentração no top 5 clientes</td>
-                    <td>{d.concentracao_top5 || "Não indicado"}</td>
+                    <td>{dict.p3.concentracaoTop5}</td>
+                    <td>{d.concentracao_top5 || t(lang).common.naoIndicado}</td>
                   </tr>
                   <tr>
-                    <td>Clientes ativos</td>
-                    <td>{d.num_clientes_ativos || "Não indicado"}</td>
+                    <td>{dict.p3.clientesAtivos}</td>
+                    <td>{d.num_clientes_ativos || t(lang).common.naoIndicado}</td>
                   </tr>
                 </tbody>
               </table>
@@ -854,146 +848,73 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
         {modo === "completo" ? (
           <>
             {/* 4 — Âmbito e limitações */}
-            <Page numero={4} titulo="Âmbito e limitações">
-              <H>Âmbito e limitações deste relatório</H>
-              <p className="report-p">{DISCLAIMER}</p>
+            <Page numero={4} titulo={dict.p4.titulo} lang={lang}>
+              <H>{dict.p4.hTitulo}</H>
+              <p className="report-p">{disclaimer}</p>
               <div className="report-two">
                 <div>
-                  <H>Natureza do documento</H>
+                  <H>{dict.p4.naturezaDocumento}</H>
                   <ul className="report-list report-list-disc report-compact">
-                    <li>
-                      Trata-se de uma avaliação indicativa preliminar, elaborada exclusivamente a partir da informação
-                      fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.
-                    </li>
-                    <li>
-                      Não constitui aconselhamento financeiro, fiscal, contabilístico ou jurídico, nem uma recomendação
-                      de investimento ou desinvestimento.
-                    </li>
-                    <li>
-                      Não configura uma avaliação formal (fairness opinion) para efeitos legais, fiscais,
-                      contabilísticos ou regulatórios, nem uma proposta contratual ou oferta vinculativa.
-                    </li>
-                    <li>
-                      O documento destina-se ao uso exclusivo do destinatário identificado na capa e não deve ser
-                      divulgado a terceiros sem autorização escrita da Lealia Advisory Partners.
-                    </li>
+                    <li>{dict.p4.natureza1}</li>
+                    <li>{dict.p4.natureza2}</li>
+                    <li>{dict.p4.natureza3}</li>
+                    <li>{dict.p4.natureza4}</li>
                   </ul>
                 </div>
                 <div>
-                  <H>Limitações e fatores de variação</H>
+                  <H>{dict.p4.limitacoesFatores}</H>
                   <ul className="report-list report-list-disc report-compact">
-                    <li>
-                      Os valores apresentados dependem da qualidade, exatidão e completude dos dados introduzidos. Dados
-                      incompletos ou incorretos alteram materialmente o resultado.
-                    </li>
-                    <li>
-                      As referências de mercado utilizadas refletem condições vigentes à data de elaboração e podem
-                      variar rapidamente com o contexto macroeconómico, setorial e de financiamento.
-                    </li>
-                    <li>
-                      O preço efetivo de uma transação depende do perfil do comprador, da estrutura do negócio, das
-                      garantias, dos ajustamentos de closing e do processo negocial.
-                    </li>
-                    <li>
-                      Uma avaliação definitiva exige due diligence financeira, fiscal, legal e operacional, bem como a
-                      validação documental dos ajustamentos ao EBITDA.
-                    </li>
+                    <li>{dict.p4.limitacao1}</li>
+                    <li>{dict.p4.limitacao2}</li>
+                    <li>{dict.p4.limitacao3}</li>
+                    <li>{dict.p4.limitacao4}</li>
                   </ul>
-                  <div className="report-note">
-                    A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva neste
-                    documento.
-                  </div>
+                  <div className="report-note">{dict.p4.semResponsabilidade}</div>
                 </div>
               </div>
 
-              <H style={{ marginTop: "2.5mm", marginBottom: "2mm" }}>Leitura complementar</H>
+              <H style={{ marginTop: "2.5mm", marginBottom: "2mm" }}>{dict.p4.leituraComplementar}</H>
               <ul className="report-list report-list-disc report-leitura">
                 <li>{d.qualidade.conversao_caixa}</li>
                 <li>{d.qualidade.fundo_maneio}</li>
                 <li>{d.qualidade.ajustamentos}</li>
                 {d.qualidade.concentracao ? <li>{d.qualidade.concentracao}</li> : null}
                 {d.qualidade.backlog ? <li>{d.qualidade.backlog}</li> : null}
-                <li>
-                  A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta fase.
-                  Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a
-                  sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou
-                  necessidades estacionais de tesouraria.
-                </li>
+                <li>{dict.p4.leituraFinal}</li>
               </ul>
             </Page>
 
             {/* 5 — Método e alternativas */}
-            <Page numero={5} titulo="Método e alternativas">
-              <H>Porquê múltiplos de EBITDA</H>
+            <Page numero={5} titulo={dict.p5.titulo} lang={lang}>
+              <H>{dict.p5.porqueMultiplos}</H>
               <div className="report-two">
                 <div>
-                  <p className="report-p">
-                    A avaliação por múltiplos é uma abordagem de mercado: o valor de uma empresa é inferido a partir dos
-                    preços pagos por investidores em transações recentes por empresas com perfil comparável. No contexto
-                    de M&A de PME, o EBITDA é habitualmente utilizado como referência, por refletir a capacidade de
-                    geração de resultados operacionais antes do impacto da estrutura de financiamento, política de
-                    amortizações e do regime fiscal.
-                  </p>
-                  <p className="report-p">
-                    É também o método mais adequado a uma estimativa preliminar: exige poucos pressupostos
-                    discricionários, é transparente e reflete diretamente o apetite atual do mercado pelo setor. A sua
-                    limitação é a dependência da qualidade dos comparáveis e o facto de captar a fotografia atual do
-                    negócio, e não um plano de crescimento futuro.
-                  </p>
-                  <p className="report-p">
-                    O EV/EBITDA tende a ser mais adequado para empresas com EBITDA positivo, operações relativamente
-                    estáveis e estruturas de custos comparáveis às das empresas utilizadas como referência. É menos
-                    informativo quando a empresa apresenta resultados operacionais negativos ou muito voláteis, quando
-                    existem diferenças significativas de crescimento ou margem face aos comparáveis, ou quando o negócio
-                    se encontra numa fase de forte transformação.
-                  </p>
-                  <p className="report-p">
-                    A avaliação por múltiplos é, assim, uma referência simples, transparente e alinhada com o mercado,
-                    especialmente útil quando existem comparáveis sólidos e para suportar uma primeira estimativa de
-                    valor. A sua principal limitação é depender da qualidade desses comparáveis e não refletir, por si
-                    só, o potencial futuro do negócio.
-                  </p>
-                  <div className="report-note">
-                    Numa transação real, os múltiplos são o ponto de partida da negociação e são depois confrontados com
-                    uma análise de fluxos de caixa e com a due diligence.
-                  </div>
+                  <p className="report-p">{dict.p5.par1}</p>
+                  <p className="report-p">{dict.p5.par2}</p>
+                  <p className="report-p">{dict.p5.par3}</p>
+                  <p className="report-p">{dict.p5.par4}</p>
+                  <div className="report-note">{dict.p5.nota}</div>
                 </div>
                 <div>
-                  <H>Métodos alternativos</H>
+                  <H>{dict.p5.metodosAlternativos}</H>
                   <div className="report-cards">
                     <div className="report-card">
                       <strong>
-                        DCF - fluxos de caixa descontados <em>(ver slides 10 & 11)</em>
+                        {dict.p5.dcfTitulo} <em>{dict.p5.dcfNota}</em>
                       </strong>
-                      <p>
-                        Projeta os fluxos de caixa futuros e desconta-os a uma taxa que reflete o custo do capital
-                        (WACC). É o método mais rigoroso quando existe um plano de negócios credível, mas é muito
-                        sensível aos pressupostos.
-                      </p>
+                      <p>{dict.p5.dcfDesc}</p>
                     </div>
                     <div className="report-card">
-                      <strong>Outros múltiplos de transação</strong>
-                      <p>
-                        Para além do EV/EBITDA, podem ser utilizados múltiplos como EV/Receitas, EV/EBIT ou P/E,
-                        dependendo do setor, da maturidade e da rentabilidade da empresa. A sua relevância depende da
-                        comparabilidade das empresas e da qualidade da informação disponível.
-                      </p>
+                      <strong>{dict.p5.outrosMultiplosTitulo}</strong>
+                      <p>{dict.p5.outrosMultiplosDesc}</p>
                     </div>
                     <div className="report-card">
-                      <strong>Métricas específicas do setor</strong>
-                      <p>
-                        Complementa os múltiplos financeiros através de métricas operacionais relevantes para cada
-                        negócio, como valor por unidade, cliente, cama, subscritor ou metro quadrado. É particularmente
-                        útil em setores onde estes indicadores explicam de forma mais direta o potencial económico da
-                        empresa.
-                      </p>
+                      <strong>{dict.p5.metricasSetorTitulo}</strong>
+                      <p>{dict.p5.metricasSetorDesc}</p>
                     </div>
                     <div className="report-card">
-                      <strong>Valor patrimonial / liquidação</strong>
-                      <p>
-                        Avalia os ativos líquidos ao seu valor de mercado. Relevante em negócios intensivos em ativos,
-                        funcionando como valor mínimo de referência.
-                      </p>
+                      <strong>{dict.p5.valorPatrimonialTitulo}</strong>
+                      <p>{dict.p5.valorPatrimonialDesc}</p>
                     </div>
                   </div>
                 </div>
@@ -1001,15 +922,15 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             </Page>
 
             {/* 6 — Ajustes ao múltiplo */}
-            <Page numero={6} titulo="Ajustes ao múltiplo">
-              <H>Ajustes aplicados ao múltiplo setorial</H>
+            <Page numero={6} titulo={dict.p6.titulo} lang={lang}>
+              <H>{dict.p6.hTitulo}</H>
               {d.ajustes.length ? (
                 <table className="report-table report-table-text">
                   <thead>
                     <tr>
-                      <th>Fator</th>
-                      <th>Leitura</th>
-                      <th>Efeito</th>
+                      <th>{dict.p6.fator}</th>
+                      <th>{dict.p6.leitura}</th>
+                      <th>{dict.p6.efeito}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1017,33 +938,29 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       <tr key={`${a.label}-${i}`}>
                         <td>{a.label}</td>
                         <td>{a.detalhe}</td>
-                        <td>{efeitoQualitativo(a.multiplicador, a.semDados, a.efeito)}</td>
+                        <td>{efeitoQualitativo(a.multiplicador, lang, a.semDados, a.efeito)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               ) : (
-                <p className="report-p">Não foram aplicados ajustes ao múltiplo setorial de base.</p>
+                <p className="report-p">{dict.p6.semAjustes}</p>
               )}
-              <p className="report-small">
-                O conjunto dos ajustes está limitado a um intervalo global de −40% a +35% sobre o múltiplo setorial de
-                base, evitando que a combinação de fatores produza resultados extremos. Todos os fatores assentam em
-                informação declarada e carecem de validação documental.
-              </p>
+              <p className="report-small">{dict.p6.nota}</p>
             </Page>
 
             {/* 7 — Cenários e sensibilidade */}
-            <Page numero={7} titulo="Cenários e sensibilidade">
-              <H>Cenários de valorização</H>
+            <Page numero={7} titulo={dict.p7.titulo} lang={lang}>
+              <H>{dict.p7.cenariosValorizacao}</H>
               {d.cenarios.length ? (
                 <table className="report-table report-table-text">
                   <thead>
                     <tr>
-                      <th>Cenário</th>
-                      <th>Pressupostos</th>
-                      <th>Múltiplo</th>
-                      <th>Enterprise Value</th>
-                      <th>Equity Value</th>
+                      <th>{dict.p7.cenario}</th>
+                      <th>{dict.p7.pressupostos}</th>
+                      <th>{dict.p7.multiplo}</th>
+                      <th>{dict.p7.enterpriseValue}</th>
+                      <th>{dict.p7.equityValue}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1059,17 +976,17 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   </tbody>
                 </table>
               ) : (
-                <p className="report-p">Sem cenários disponíveis para os dados fornecidos.</p>
+                <p className="report-p">{dict.p7.semCenarios}</p>
               )}
 
-              <H>Sensibilidade do Enterprise Value</H>
+              <H>{dict.p7.sensibilidadeEv}</H>
               {d.sensibilidade ? (
                 <>
                   <table className="report-table report-table-compact">
                     <thead>
                       <tr>
-                        <th>Variação do EBITDA</th>
-                        <th>EBITDA</th>
+                        <th>{dict.p7.variacaoEbitda}</th>
+                        <th>{dict.p7.ebitda}</th>
                         {d.sensibilidade.colunas.map((c) => (
                           <th key={c}>{c}</th>
                         ))}
@@ -1087,29 +1004,25 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       ))}
                     </tbody>
                   </table>
-                  <p className="report-small">
-                    A tabela mostra como o Enterprise Value reage a variações do EBITDA normalizado e do múltiplo
-                    aplicado. O Equity Value acompanha estas variações, ajustado pela dívida total, caixa, depósitos e
-                    outros equivalentes, e o imóvel indicado na equity bridge.
-                  </p>
+                  <p className="report-small">{dict.p7.notaSensibilidade}</p>
                 </>
               ) : (
-                <p className="report-p">Sem análise de sensibilidade disponível.</p>
+                <p className="report-p">{dict.p7.semSensibilidade}</p>
               )}
             </Page>
 
             {/* 8 — Equity Bridge e contexto da transação */}
-            <Page numero={8} titulo="Equity Bridge e contexto da transação">
+            <Page numero={8} titulo={dict.p8.titulo} lang={lang}>
               <div className="report-slide-eight">
                 <section className="report-slide-eight-section">
-                  <H>Equity Bridge</H>
+                  <H>{dict.p8.equityBridge}</H>
                   <div className="report-slide-eight-bridge">
                     <div>
                       <table className="report-table report-table-compact">
                         <thead>
                           <tr>
-                            <th>Componente</th>
-                            <th>Valor</th>
+                            <th>{dict.p8.componente}</th>
+                            <th>{dict.p8.valor}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1122,30 +1035,30 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                         </tbody>
                       </table>
                     </div>
-                    <WaterfallChart items={d.ponte} />
+                    <WaterfallChart items={d.ponte} lang={lang} />
                   </div>
                 </section>
 
                 <section className="report-slide-eight-section report-slide-eight-transaction">
-                  <H>Contexto e estrutura da transação</H>
+                  <H>{dict.p8.contextoEstrutura}</H>
                   <div className="report-slide-eight-context">
                     <div>
                       <table className="report-table report-table-text report-table-compact">
                         <thead>
                           <tr>
-                            <th>Parâmetro</th>
-                            <th>Detalhe</th>
+                            <th>{dict.p8.parametro}</th>
+                            <th>{dict.p8.detalhe}</th>
                           </tr>
                         </thead>
                         <tbody>
                           {[
-                            ["Motivo da transação", d.motivo_interesse ?? "—"],
-                            ["Percentagem de capital a transacionar", d.pct_a_transacionar ?? "—"],
-                            ["Estrutura pretendida", d.estrutura_transacao ?? "—"],
-                            ["Horizonte temporal", d.horizonte_temporal ?? "—"],
-                            ["Permanência do acionista", d.permanencia_pos_venda ?? "—"],
-                            ["Imóvel", d.imovel_no_perimetro_texto],
-                            ["Tipo de investidor preferencial", d.tipo_investidor ?? "—"],
+                            [dict.p8.motivoTransacao, d.motivo_interesse ?? "—"],
+                            [dict.p8.pctATransacionar, d.pct_a_transacionar ?? "—"],
+                            [dict.p8.estruturaPretendida, d.estrutura_transacao ?? "—"],
+                            [dict.p8.horizonteTemporal, d.horizonte_temporal ?? "—"],
+                            [dict.p8.permanenciaAcionista, d.permanencia_pos_venda ?? "—"],
+                            [dict.p8.imovel, d.imovel_no_perimetro_texto],
+                            [dict.p8.tipoInvestidor, d.tipo_investidor ?? "—"],
                           ].map(([k, v]) => (
                             <tr key={String(k)}>
                               <td>{k}</td>
@@ -1159,8 +1072,8 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                       <table className="report-table report-table-text report-table-compact">
                         <thead>
                           <tr>
-                            <th>Estrutura</th>
-                            <th>Implicação</th>
+                            <th>{dict.p8.estrutura}</th>
+                            <th>{dict.p8.implicacao}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1180,14 +1093,14 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             </Page>
 
             {/* 9 — Drivers de Valor & Riscos */}
-            <Page numero={9} titulo="Drivers de Valor & Riscos" className="report-drivers">
-              <H>Drivers de Valor</H>
+            <Page numero={9} titulo={dict.p9.titulo} className="report-drivers" lang={lang}>
+              <H>{dict.p9.driversValor}</H>
               {d.drivers.length ? (
                 <table className="report-table report-table-text report-drivers-table">
                   <thead>
                     <tr>
-                      <th>Driver</th>
-                      <th>Descrição</th>
+                      <th>{dict.p9.driver}</th>
+                      <th>{dict.p9.descricao}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1200,20 +1113,18 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   </tbody>
                 </table>
               ) : (
-                <p className="report-p">
-                  Não foram identificados drivers de valor específicos com base na informação disponibilizada.
-                </p>
+                <p className="report-p">{dict.p9.semDrivers}</p>
               )}
 
-              <H>Riscos e mitigantes</H>
+              <H>{dict.p9.riscosMitigantes}</H>
               {d.riscos.length ? (
                 <table className="report-table report-table-text report-risks-table">
                   <thead>
                     <tr>
-                      <th>Risco</th>
-                      <th>Evidência disponível</th>
-                      <th>Impacto</th>
-                      <th>Mitigante</th>
+                      <th>{dict.p9.risco}</th>
+                      <th>{dict.p9.evidenciaDisponivel}</th>
+                      <th>{dict.p9.impacto}</th>
+                      <th>{dict.p9.mitigante}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1231,33 +1142,27 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   </tbody>
                 </table>
               ) : (
-                <p className="report-p">
-                  Não foram identificados riscos materiais específicos com base na informação disponibilizada.
-                </p>
+                <p className="report-p">{dict.p9.semRiscos}</p>
               )}
             </Page>
 
             {/* 10 — DCF Valuation */}
-            <DcfPage d={d} numero={10} />
+            <DcfPage d={d} numero={10} lang={lang} />
 
             {/* 11 — Sensitivity Analysis */}
-            <SensitivityPage d={d} numero={11} />
+            <SensitivityPage d={d} numero={11} lang={lang} />
 
             {/* 12 — Plano de preparação */}
-            <Page numero={12} titulo="Preparação para o mercado" className="report-preparation">
-              <H>Plano de preparação priorizado</H>
-              <div className="report-note report-disclaimer-inline">
-                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A. A nossa equipa pode
-                ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial
-                sem compromisso.
-              </div>
+            <Page numero={12} titulo={dict.p12.titulo} className="report-preparation" lang={lang}>
+              <H>{dict.p12.planoPreparacao}</H>
+              <div className="report-note report-disclaimer-inline">{dict.p12.notaSecao}</div>
               <table className="report-table report-table-text">
                 <thead>
                   <tr>
-                    <th>Prioridade</th>
-                    <th>Ação</th>
-                    <th>Impacto esperado</th>
-                    <th>Esforço</th>
+                    <th>{dict.p12.prioridade}</th>
+                    <th>{dict.p12.acao}</th>
+                    <th>{dict.p12.impactoEsperado}</th>
+                    <th>{dict.p12.esforco}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1275,7 +1180,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                   ))}
                 </tbody>
               </table>
-              <H className="report-h2-tight">Recomendações imediatas</H>
+              <H className="report-h2-tight">{dict.p12.recomendacoesImediatas}</H>
               <ol className="report-list report-compact">
                 {d.recomendacoes.slice(0, 5).map((rec, i) => (
                   <li key={i}>{rec}</li>
@@ -1285,13 +1190,9 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
 
             {/* 13 — Processo de M&A */}
 
-            <Page numero={13} titulo="Processo de M&A">
-              <H>Como decorre um processo de M&amp;A</H>
-              <div className="report-note report-disclaimer-inline">
-                Esta secção destina-se a quem está a considerar avançar com um processo de M&amp;A. A nossa equipa pode
-                ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial
-                sem compromisso.
-              </div>
+            <Page numero={13} titulo={dict.p13.titulo} lang={lang}>
+              <H>{dict.p13.hTitulo}</H>
+              <div className="report-note report-disclaimer-inline">{dict.p13.notaSecao}</div>
               <div className="report-phases report-phases-2 report-phases-tall">
                 {FASES.map((f) => (
                   <div key={f.numero} className="report-phase">
@@ -1311,33 +1212,26 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             </Page>
           </>
         ) : (
-          LOCKED_PAGES.map((p) => <LockedPage key={p.numero} numero={p.numero} titulo={p.titulo} />)
+          lockedPages(lang).map((p) => <LockedPage key={p.numero} numero={p.numero} titulo={p.titulo} lang={lang} />)
         )}
 
         {/* 15 — Próximo passo e contactos */}
-        <Page numero={14} titulo="Próximo passo e contactos" id="agendar">
+        <Page numero={14} titulo={dict.p14.titulo} id="agendar" lang={lang}>
           <div className="report-final">
             <div className="report-final-left">
-              <h2 className="report-closing-title">Obrigado.</h2>
-              <p className="report-closing-lead">
-                Obrigado pelo seu tempo. Este relatório é um ponto de partida: a conversão de uma estimativa indicativa
-                numa avaliação sustentada exige a validação dos números, a análise de transações comparáveis recentes e
-                a leitura do apetite atual de investidores financeiros e estratégicos para o seu setor.
-              </p>
+              <h2 className="report-closing-title">{dict.p14.obrigado}</h2>
+              <p className="report-closing-lead">{dict.p14.lead}</p>
 
               <div className="report-next-step-card report-final-card">
-                <strong>Próximo passo · Reunião de 20 minutos</strong>
-                <p>
-                  Revisão conjunta dos pressupostos deste relatório com a equipa da Lealia e apresentação do relatório
-                  completo.
-                </p>
+                <strong>{dict.p14.proximoPassoTitulo}</strong>
+                <p>{dict.p14.proximoPassoDesc}</p>
                 <a
                   href="https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report"
                   target="_blank"
                   rel="noreferrer"
                   className="report-next-step-btn"
                 >
-                  Agendar reunião
+                  {dict.p14.agendarReuniao}
                 </a>
               </div>
 
@@ -1362,11 +1256,11 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
             </div>
 
             <div className="report-final-right">
-              <span className="report-final-eyebrow">Contactos</span>
+              <span className="report-final-eyebrow">{dict.p14.contactos}</span>
 
               <div className="report-contact-card">
                 <strong>Ricardo Nascimento Ferreira</strong>
-                <span>Managing Partner</span>
+                <span>{dict.p14.managingPartner}</span>
                 <ul className="report-contact-list">
                   <li>
                     <a href="mailto:ricardo.ferreira@lealiaap.com">ricardo.ferreira@lealiaap.com</a>
@@ -1384,7 +1278,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
 
               <div className="report-contact-card">
                 <strong>Duarte Rocha Pereira</strong>
-                <span>Managing Partner</span>
+                <span>{dict.p14.managingPartner}</span>
                 <ul className="report-contact-list">
                   <li>
                     <a href="mailto:duarte.pereira@lealiaap.com">duarte.pereira@lealiaap.com</a>
@@ -1400,10 +1294,7 @@ export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?:
                 </ul>
               </div>
 
-              <p className="report-closing-note">
-                Documento de natureza indicativa, preparado exclusivamente para {d.empresa}. Não constitui
-                aconselhamento financeiro nem proposta contratual.
-              </p>
+              <p className="report-closing-note">{dict.p14.notaFinal(d.empresa)}</p>
             </div>
           </div>
         </Page>
