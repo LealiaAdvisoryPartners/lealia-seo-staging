@@ -1,9 +1,9 @@
 import * as React from "react";
 import logo from "@/assets/lealia-logo.png";
 import cover from "@/assets/report-cover.png";
-import { FASES } from "@/lib/timeline";
-import type { ReportData } from "@/lib/report-data";
-import { formatEUR } from "@/lib/valuation";
+import { FASES } from "@core/timeline";
+import type { ReportData } from "@core/report-data";
+import { formatEUR } from "@core/valuation";
 import {
   t,
   type ReportLang,
@@ -11,7 +11,7 @@ import {
   formatPercentLang,
   formatMultipleLang,
   formatFactor3Lang,
-} from "@/lib/report-i18n";
+} from "@core/report-i18n";
 
 const EmpresaContext = React.createContext<string>("");
 

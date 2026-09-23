@@ -19,7 +19,7 @@ import {
   TIPOS_INVESTIDOR,
   TIPOS_PERIODO,
   subindustriasDe,
-} from "@/lib/valuation";
+} from "@core/valuation";
 import { formatThousands, digitsOnly, parseMoney } from "@/lib/money";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formCopy, type FormCopy } from "@/translations/valuation-form";

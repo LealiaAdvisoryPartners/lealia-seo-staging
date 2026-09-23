@@ -13,6 +13,9 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Valuation engine + report model, shared verbatim with the edge functions.
+      // See supabase/functions/_shared/valuation/README.md
+      "@core": path.resolve(__dirname, "./supabase/functions/_shared/valuation"),
     },
   },
 }));

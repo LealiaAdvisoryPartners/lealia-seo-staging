@@ -23,6 +23,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@core/*": [
+        "./supabase/functions/_shared/valuation/*"
       ]
     }
   },
