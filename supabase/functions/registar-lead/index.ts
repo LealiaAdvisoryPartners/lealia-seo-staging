@@ -2,7 +2,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/valuation/cors.ts";
 import { gerarSlugRelatorio } from "../_shared/valuation/report-slug.ts";
-import { buildReportFromLead } from "../_shared/valuation/report-data.ts";
+import { buildReportFromLead } from "../_shared/valuation/report-data/index.ts";
 import { calcularEnvioRelatorio } from "../_shared/valuation/report-schedule.ts";
 import { gerarPdfRelatorio } from "../_shared/valuation/report-pdf.ts";
 import {

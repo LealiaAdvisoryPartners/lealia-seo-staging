@@ -1,20 +1,42 @@
 import * as React from "npm:react@18.3.1";
+import type { TemplateEntry } from "./registry.ts";
+import { previewData } from "./notificacao-lead.copy.ts";
 import {
   Body,
   Column,
   Container,
+  EmailHeader,
   Head,
-  Heading,
   Hr,
   Html,
-  Img,
   Link,
+  Metric,
   Preview,
   Row,
+  RowValue,
   Section,
+  SectionTitle,
   Text,
-} from "npm:@react-email/components@0.0.22";
-import type { TemplateEntry } from "./registry.ts";
+  cardSection,
+  container,
+  footerInternal,
+  footerLink,
+  hrInternal,
+  internalBadge,
+  internalLink,
+  internalLinkBlock,
+  internalLinkLabel,
+  leadSubtitle,
+  leadTitle,
+  main,
+  metricRow,
+  resultCard,
+  resultEyebrow,
+  resultSection,
+  resultWarning,
+  section,
+  sectionInner,
+} from "./ui.tsx";
 
 interface Props {
   nome?: string;
@@ -100,23 +122,6 @@ const txt = (value?: string | number | null) =>
 const multiple = (min?: number | null, max?: number | null) =>
   typeof min === "number" && typeof max === "number" ? `${min.toFixed(1)}x — ${max.toFixed(1)}x` : "—";
 
-const RowValue = ({ label, value }: { label: string; value: string }) => (
-  <Text style={row}>
-    <span style={rowLabel}>{label}</span>
-    <br />
-    <span style={rowValue}>{value}</span>
-  </Text>
-);
-
-const SectionTitle = ({ children }: { children: React.ReactNode }) => <Text style={sectionTitle}>{children}</Text>;
-
-const Metric = ({ label, value }: { label: string; value: string }) => (
-  <Column style={metricColumn}>
-    <Text style={metricLabel}>{label}</Text>
-    <Text style={metricValue}>{value}</Text>
-  </Column>
-);
-
 const Email = (p: Props) => {
   const anoReferencia = p.anoReferencia ?? null;
 
@@ -139,27 +144,11 @@ const Email = (p: Props) => {
 
       <Body style={main}>
         <Container style={container}>
-          {/* Header */}
-          <Row style={headerRow}>
-            <Column style={headerTextCol}>
-              <Text style={eyebrow}>LEALIA ADVISORY PARTNERS</Text>
-
-              <Heading style={h1}>Nova submissão da ferramenta de avaliação</Heading>
-
-              <Text style={headerDescription}>
-                Informação completa submetida pelo utilizador e resultado da pré-avaliação automática.
-              </Text>
-            </Column>
-
-            <Column style={headerLogoCol}>
-              <Img
-                src="https://www.lealiaap.com/assets/Logo_text_biggerfont_samesize_2-D3_brI8L.png"
-                alt="Lealia Advisory Partners"
-                width="140"
-                style={logo}
-              />
-            </Column>
-          </Row>
+          <EmailHeader
+            eyebrowText="LEALIA ADVISORY PARTNERS"
+            heading="Nova submissão da ferramenta de avaliação"
+            description="Informação completa submetida pelo utilizador e resultado da pré-avaliação automática."
+          />
 
           {/* Identificação */}
           <Section style={section}>
@@ -335,9 +324,9 @@ const Email = (p: Props) => {
           )}
 
           {/* Footer */}
-          <Hr style={hr} />
+          <Hr style={hrInternal} />
 
-          <Text style={footer}>
+          <Text style={footerInternal}>
             Email interno gerado automaticamente pela ferramenta de pré-avaliação.
             <br />
             <strong>Lealia Advisory Partners</strong>
@@ -364,326 +353,7 @@ export const template = {
 
   displayName: "Notificação interna de novo lead",
 
-  previewData: {
-    nome: "Duarte Pereira",
-    email: "exemplo@empresa.pt",
-    telefone: "+351 910 000 000",
-    empresa: "Empresa Exemplo, Lda.",
-    cargo: "CEO",
-    pais: "Portugal",
-    industria: "Indústria e Produção",
-    subindustria: "Metalomecânica",
-    idadeEmpresa: 18,
-    anoReferencia: 2025,
-
-    faturacaoAno1: 5200000,
-    faturacaoAno2: 4800000,
-    faturacaoAno3: 4300000,
-
-    ebitdaAno1: 820000,
-    ebitdaAno2: 700000,
-    ebitdaAno3: 610000,
-
-    despesasExtraAno1: 40000,
-    despesasExtraAno2: 30000,
-    despesasExtraAno3: 25000,
-
-    caixaEDepositos: 350000,
-    dividaFinanceira: 900000,
-    dividaLiquida: 550000,
-    capexAnualRecorrente: 120000,
-    percentagemReceitaRecorrente: 40,
-
-    pctTop5Clientes: 35,
-    geografiaClientes: "Maioritariamente nacional",
-    dependenciaAcionistaFaturacao: "Média",
-    dependenciaAcionistaGestao: "Elevada",
-
-    proprietarioImovel: "Sim",
-    rendaRefleteMercado: "Não",
-    acrescimoRendaAnual: 60000,
-    incluirImovelPerimetro: "Sim",
-    valorizacaoImovel: 1000000,
-
-    estruturaTransacao: "Venda total",
-    pctATransacionar: "Totalidade (90-100%)",
-    motivoInteresse: "Sucessão",
-    horizonteTemporal: "1-2 anos",
-
-    calculoPossivel: true,
-    evMin: 4200000,
-    evMax: 5600000,
-    equityMin: 4800000,
-    equityMax: 6200000,
-    multiploMin: 5.2,
-    multiploMax: 6.9,
-    confianca: "Média",
-
-    relatorioUrl: "https://exemplo.lealiaap.com/relatorio/token",
-    pdfUrl: "https://exemplo.lealiaap.com/relatorio/token.pdf",
-  },
+  previewData,
 } satisfies TemplateEntry;
-
-// -----------------------------------------------------------------------------
-// Styles
-// -----------------------------------------------------------------------------
-
-const NAVY = "#0f172a";
-const GOLD = "#BFA434";
-const MUTED = "#71717a";
-const GREY_LIGHT = "#f7f7f8";
-const BORDER = "#e5e6eb";
-const RESULT_BG = "#f8f7f1";
-
-const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
-
-const main = {
-  backgroundColor: "#f5f6f8",
-  color: NAVY,
-  padding: "40px 16px 56px 16px",
-  fontFamily: FONT,
-};
-
-const container = {
-  width: "100%",
-  maxWidth: "560px",
-  backgroundColor: "#ffffff",
-  borderRadius: "16px",
-  overflow: "hidden",
-  boxShadow: "0 12px 36px rgba(2,6,23,0.08)",
-  fontFamily: FONT,
-};
-
-const headerRow = {
-  padding: "26px 32px 20px 32px",
-  borderBottom: `1px solid ${BORDER}`,
-};
-
-const headerTextCol = {
-  verticalAlign: "top" as const,
-  paddingRight: "12px",
-};
-
-const headerLogoCol = {
-  width: "140px",
-  verticalAlign: "top" as const,
-  textAlign: "right" as const,
-};
-
-const logo = {
-  display: "block",
-  width: "140px",
-  maxWidth: "140px",
-  height: "auto",
-  border: "0",
-  outline: "none",
-  textDecoration: "none",
-};
-
-const eyebrow = {
-  margin: "0 0 14px 0",
-  color: "#a1a1aa",
-  fontSize: "10px",
-  lineHeight: "16px",
-  letterSpacing: "2px",
-  fontWeight: 700,
-  fontFamily: FONT,
-};
-
-const h1 = {
-  margin: "14px 0 0 0",
-  color: NAVY,
-  fontSize: "28px",
-  lineHeight: "34px",
-  fontWeight: 700,
-  letterSpacing: "-0.5px",
-  fontFamily: FONT,
-};
-
-const headerDescription = {
-  margin: "12px 0 0 0",
-  color: "#52525b",
-  fontSize: "14px",
-  lineHeight: "22px",
-  textAlign: "justify" as const,
-  fontFamily: FONT,
-};
-
-const section = {
-  padding: "24px 32px 0 32px",
-};
-
-const sectionInner = {
-  backgroundColor: "#ffffff",
-};
-
-const internalBadge = {
-  margin: "0 0 8px 0",
-  color: GOLD,
-  fontSize: "10px",
-  lineHeight: "16px",
-  letterSpacing: "1.8px",
-  fontWeight: 700,
-  fontFamily: FONT,
-};
-
-const leadTitle = {
-  margin: "0",
-  color: NAVY,
-  fontSize: "21px",
-  lineHeight: "28px",
-  fontWeight: 700,
-  fontFamily: FONT,
-};
-
-const leadSubtitle = {
-  margin: "5px 0 0 0",
-  color: "#52525b",
-  fontSize: "14px",
-  lineHeight: "22px",
-  fontFamily: FONT,
-};
-
-const resultSection = {
-  padding: "24px 32px 4px 32px",
-};
-
-const resultCard = {
-  backgroundColor: RESULT_BG,
-  border: `1px solid ${GOLD}`,
-  borderRadius: "12px",
-  padding: "22px 20px 18px 20px",
-};
-
-const resultEyebrow = {
-  margin: "0 0 16px 0",
-  color: "#8a8676",
-  fontSize: "10px",
-  lineHeight: "16px",
-  letterSpacing: "1.8px",
-  fontWeight: 700,
-  fontFamily: FONT,
-};
-
-const resultWarning = {
-  margin: "0",
-  color: "#991b1b",
-  fontSize: "15px",
-  lineHeight: "24px",
-  fontWeight: 600,
-  fontFamily: FONT,
-};
-
-const metricRow = {
-  width: "100%",
-};
-
-const metricColumn = {
-  width: "50%",
-  padding: "0 8px 12px 0",
-  verticalAlign: "top" as const,
-};
-
-const metricLabel = {
-  margin: "0 0 4px 0",
-  color: "#8a8676",
-  fontSize: "10px",
-  lineHeight: "16px",
-  letterSpacing: "0.8px",
-  textTransform: "uppercase" as const,
-  fontFamily: FONT,
-};
-
-const metricValue = {
-  margin: "0",
-  color: NAVY,
-  fontSize: "17px",
-  lineHeight: "24px",
-  fontWeight: 700,
-  fontFamily: FONT,
-};
-
-const cardSection = {
-  padding: "0 32px",
-};
-
-const sectionTitle = {
-  margin: "28px 0 14px 0",
-  paddingBottom: "9px",
-  borderBottom: `1px solid ${BORDER}`,
-  color: "#71717a",
-  fontSize: "10px",
-  lineHeight: "16px",
-  letterSpacing: "1.8px",
-  fontWeight: 700,
-  textTransform: "uppercase" as const,
-  fontFamily: FONT,
-};
-
-const row = {
-  margin: "0 0 11px 0",
-  color: "#33405a",
-  fontSize: "13px",
-  lineHeight: "20px",
-  fontFamily: FONT,
-};
-
-const rowLabel = {
-  color: "#8a8676",
-  fontSize: "11px",
-  lineHeight: "17px",
-  fontFamily: FONT,
-};
-
-const rowValue = {
-  color: NAVY,
-  fontSize: "14px",
-  lineHeight: "21px",
-  fontFamily: FONT,
-  wordBreak: "break-word" as const,
-};
-
-const internalLinkBlock = {
-  margin: "0 0 16px 0",
-  fontSize: "13px",
-  lineHeight: "20px",
-  fontFamily: FONT,
-};
-
-const internalLinkLabel = {
-  color: "#8a8676",
-  fontSize: "11px",
-  fontWeight: 700,
-  fontFamily: FONT,
-};
-
-const internalLink = {
-  color: GOLD,
-  fontSize: "13px",
-  lineHeight: "20px",
-  textDecoration: "underline",
-  wordBreak: "break-word" as const,
-  fontFamily: FONT,
-};
-
-const hr = {
-  borderColor: BORDER,
-  margin: "26px 32px 0 32px",
-};
-
-const footer = {
-  margin: "16px 32px 28px 32px",
-  color: MUTED,
-  fontSize: "11px",
-  lineHeight: "18px",
-  textAlign: "justify" as const,
-  fontFamily: FONT,
-};
-
-const footerLink = {
-  color: MUTED,
-  textDecoration: "none",
-  fontFamily: FONT,
-};
 
 export default Email;

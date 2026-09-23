@@ -33,7 +33,9 @@ export const SITE_PAGES: SitePage[] = [
   { slug: "terms", Component: Terms },
 ];
 
-export const NAV_PAGES = SITE_PAGES.filter((p) => p.navKey);
+export type NavPage = SitePage & { navKey: string };
+
+export const NAV_PAGES = SITE_PAGES.filter((p): p is NavPage => Boolean(p.navKey));
 
 /** Segmentos reservados: tudo o resto num único segmento é um link de relatório. */
 export const PAGE_SLUGS = new Set([...SITE_PAGES.map((p) => p.slug), "relatorio"]);

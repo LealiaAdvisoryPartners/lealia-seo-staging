@@ -15,7 +15,7 @@ export const dadosFinanceiros: StepDef = {
               id="anoRef"
               value={form.ano_referencia}
               onChange={(v) => set("ano_referencia", v)}
-              options={ANOS_REFERENCIA}
+              options={ANOS_REFERENCIA.map(String)}
               opt={(v) => v}
             />
           </Field>

@@ -17,7 +17,7 @@ const Navigation = () => {
 
   const navLinks = NAV_PAGES.map(({ slug, navKey }) => ({
     slug,
-    name: t(navKey!),
+    name: t(navKey),
     path: buildPath(language, slug),
   }));
 
