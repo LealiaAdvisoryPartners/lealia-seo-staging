@@ -1,157 +1,114 @@
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-interface SEOHeadProps {
-  titleKey?: string;
-  descriptionKey?: string;
-  path?: string;
-}
-
-const pageMeta: Record<string, { titleKey: string; descriptionKey: string }> = {
-  home: {
-    titleKey: "seo.home.title",
-    descriptionKey: "seo.home.description",
-  },
-  about: {
-    titleKey: "seo.about.title",
-    descriptionKey: "seo.about.description",
-  },
-  services: {
-    titleKey: "seo.services.title",
-    descriptionKey: "seo.services.description",
-  },
-  team: {
-    titleKey: "seo.team.title",
-    descriptionKey: "seo.team.description",
-  },
-  valuation: {
-    titleKey: "seo.valuation.title",
-    descriptionKey: "seo.valuation.description",
-  },
-  privacy: {
-    titleKey: "seo.privacy.title",
-    descriptionKey: "seo.privacy.description",
-  },
-  terms: {
-    titleKey: "seo.terms.title",
-    descriptionKey: "seo.terms.description",
-  },
-};
+import { LANGUAGES } from "@/lib/routing";
 
 const BASE_URL = "https://www.lealiaap.com";
 const OG_IMAGE =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/gfBsJlrY8AVsnIsP11IQGqm68GY2/social-images/social-1770631896542-Lealia_AP_Business_Card.png";
 
-const langMap: Record<string, string> = {
-  en: "en_US",
-  pt: "pt_PT",
-  es: "es_ES",
+const OG_LOCALE: Record<string, string> = { en: "en_US", pt: "pt_PT", es: "es_ES" };
+
+const ORG = { "@type": "Organization", name: "Lealia Advisory Partners", url: BASE_URL } as const;
+
+interface SchemaContext {
+  title: string;
+  description: string;
+  url: string;
+}
+
+/** Schema.org específico por página; as restantes usam `WebPage`. */
+const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>> = {
+  services: ({ description, url }) => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "M&A Advisory & Corporate Finance",
+    provider: { "@type": "ProfessionalService", name: ORG.name, url: BASE_URL },
+    areaServed: ["Portugal", "Spain", "Iberia", "Europe"],
+    serviceType: [
+      "Buy-Side M&A Advisory",
+      "Sell-Side M&A Advisory",
+      "Performance Improvement",
+      "Corporate Finance",
+      "Financial Modeling",
+      "Valuation",
+    ],
+    description,
+    url,
+  }),
+  about: ({ title, description, url }) => ({
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: title,
+    description,
+    url,
+    mainEntity: ORG,
+  }),
+  team: ({ title, description, url }) => ({
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: title,
+    description,
+    url,
+    mainEntity: [
+      {
+        "@type": "Person",
+        name: "Ricardo Nascimento Ferreira",
+        jobTitle: "Managing Partner",
+        email: "ricardo.ferreira@lealiaap.com",
+        sameAs: "https://www.linkedin.com/in/ricardo-a-n-ferreira/",
+        worksFor: ORG,
+      },
+      {
+        "@type": "Person",
+        name: "Duarte Rocha Pereira",
+        jobTitle: "Managing Partner",
+        email: "duarte.pereira@lealiaap.com",
+        sameAs: "https://www.linkedin.com/in/duarte-rocha-pereira/",
+        worksFor: ORG,
+      },
+    ],
+  }),
 };
 
-const buildJsonLd = (path: string, title: string, description: string, url: string) => {
+const webPageSchema = ({ title, description, url }: SchemaContext) => ({
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url,
+  isPartOf: { "@type": "WebSite", name: ORG.name, url: BASE_URL },
+});
+
+interface SEOHeadProps {
+  /** Segmento da página ("" na página inicial). Define URL canónico e chaves SEO. */
+  slug?: string;
+}
+
+/**
+ * Metadados da página: título, descrição, canónico, hreflang, Open Graph e
+ * dados estruturados — tudo derivado do slug e do idioma activo.
+ */
+const SEOHead = ({ slug = "" }: SEOHeadProps) => {
+  const { t, language } = useLanguage();
+
+  const key = slug || "home";
+  const title = t(`seo.${key}.title`);
+  const description = t(`seo.${key}.description`);
+
+  const suffix = slug ? `/${slug}` : "";
+  const url = `${BASE_URL}/${language}${suffix}`;
+  const ctx: SchemaContext = { title, description, url };
+
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-      ...(path
-        ? [
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: title.split("|")[0].trim(),
-              item: url,
-            },
-          ]
+      ...(slug
+        ? [{ "@type": "ListItem", position: 2, name: title.split("|")[0].trim(), item: url }]
         : []),
     ],
   };
-
-  let pageSchema: Record<string, unknown> | null = null;
-  if (path === "services") {
-    pageSchema = {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      name: "M&A Advisory & Corporate Finance",
-      provider: {
-        "@type": "ProfessionalService",
-        name: "Lealia Advisory Partners",
-        url: BASE_URL,
-      },
-      areaServed: ["Portugal", "Spain", "Iberia", "Europe"],
-      serviceType: [
-        "Buy-Side M&A Advisory",
-        "Sell-Side M&A Advisory",
-        "Performance Improvement",
-        "Corporate Finance",
-        "Financial Modeling",
-        "Valuation",
-      ],
-      description,
-      url,
-    };
-  } else if (path === "about") {
-    pageSchema = {
-      "@context": "https://schema.org",
-      "@type": "AboutPage",
-      name: title,
-      description,
-      url,
-      mainEntity: {
-        "@type": "Organization",
-        name: "Lealia Advisory Partners",
-        url: BASE_URL,
-      },
-    };
-  } else if (path === "team") {
-    pageSchema = {
-      "@context": "https://schema.org",
-      "@type": "AboutPage",
-      name: title,
-      description,
-      url,
-      mainEntity: [
-        {
-          "@type": "Person",
-          name: "Ricardo Nascimento Ferreira",
-          jobTitle: "Managing Partner",
-          email: "ricardo.ferreira@lealiaap.com",
-          sameAs: "https://www.linkedin.com/in/ricardo-a-n-ferreira/",
-          worksFor: { "@type": "Organization", name: "Lealia Advisory Partners", url: BASE_URL },
-        },
-        {
-          "@type": "Person",
-          name: "Duarte Rocha Pereira",
-          jobTitle: "Managing Partner",
-          email: "duarte.pereira@lealiaap.com",
-          sameAs: "https://www.linkedin.com/in/duarte-rocha-pereira/",
-          worksFor: { "@type": "Organization", name: "Lealia Advisory Partners", url: BASE_URL },
-        },
-      ],
-    };
-  } else {
-    pageSchema = {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: title,
-      description,
-      url,
-      isPartOf: { "@type": "WebSite", name: "Lealia Advisory Partners", url: BASE_URL },
-    };
-  }
-
-  return { breadcrumb, pageSchema };
-};
-
-const SEOHead = ({ titleKey, descriptionKey, path = "" }: SEOHeadProps) => {
-  const { t, language } = useLanguage();
-
-  const title = titleKey ? t(titleKey) : "Lealia Advisory Partners | M&A Advisory";
-  const description = descriptionKey ? t(descriptionKey) : t("seo.home.description");
-
-  const suffix = path ? `/${path}` : "";
-  const canonicalUrl = `${BASE_URL}/${language}${suffix}`;
-  const { breadcrumb, pageSchema } = buildJsonLd(path, title, description, canonicalUrl);
 
   return (
     <Helmet>
@@ -159,37 +116,32 @@ const SEOHead = ({ titleKey, descriptionKey, path = "" }: SEOHeadProps) => {
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-      <link rel="canonical" href={canonicalUrl} />
+      <link rel="canonical" href={url} />
 
-      {/* hreflang alternates for international SEO */}
-      <link rel="alternate" hrefLang="en" href={`${BASE_URL}/en${suffix}`} />
-      <link rel="alternate" hrefLang="pt" href={`${BASE_URL}/pt${suffix}`} />
-      <link rel="alternate" hrefLang="es" href={`${BASE_URL}/es${suffix}`} />
+      {LANGUAGES.map((l) => (
+        <link key={l} rel="alternate" hrefLang={l} href={`${BASE_URL}/${l}${suffix}`} />
+      ))}
       <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/en${suffix}`} />
 
-      {/* Open Graph */}
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="Lealia Advisory Partners" />
+      <meta property="og:site_name" content={ORG.name} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:locale" content={langMap[language] || "en_US"} />
+      <meta property="og:url" content={url} />
+      <meta property="og:locale" content={OG_LOCALE[language] ?? "en_US"} />
       <meta property="og:image" content={OG_IMAGE} />
       <meta property="og:image:width" content="1920" />
       <meta property="og:image:height" content="1080" />
 
-      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={OG_IMAGE} />
 
-      {/* Per-page structured data */}
       <script type="application/ld+json">{JSON.stringify(breadcrumb)}</script>
-      {pageSchema && <script type="application/ld+json">{JSON.stringify(pageSchema)}</script>}
+      <script type="application/ld+json">{JSON.stringify((PAGE_SCHEMA[key] ?? webPageSchema)(ctx))}</script>
     </Helmet>
   );
 };
 
-export { pageMeta };
 export default SEOHead;
