@@ -97,6 +97,7 @@ export async function enviarResumoAvaliacao(
         empresa: lead.empresa,
         relatorioUrl: relatorioUrl ?? null,
         pdfUrl: pdfUrl ?? null,
+        lang: idiomaDe(lead.idioma),
       },
     });
 

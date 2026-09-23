@@ -59,7 +59,8 @@ Deno.serve(async (req: Request) => {
   let relatorioDados: unknown = null;
   try {
     const { email: _e, telefone: _t, ...resto } = linha;
-    relatorioDados = buildReportFromLead(resto as never);
+    const idioma = lead.idioma === "en" || lead.idioma === "es" ? lead.idioma : "pt";
+    relatorioDados = buildReportFromLead(resto as never, idioma);
   } catch (e) {
     console.error("Falha ao construir relatório estático", e);
   }
@@ -118,6 +119,7 @@ Deno.serve(async (req: Request) => {
     email: String(lead.email ?? ""),
     empresa: String(lead.empresa ?? ""),
     calculo_possivel: !!lead.calculo_possivel,
+    idioma: typeof lead.idioma === "string" ? lead.idioma : "pt",
   });
   await notificarEquipaNovoLead(inserido.id, lead as Record<string, unknown>, relatorioAdminUrl, pdfAdminUrl);
 
