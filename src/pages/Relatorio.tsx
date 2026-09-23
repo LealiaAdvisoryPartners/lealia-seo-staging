@@ -109,13 +109,14 @@ const Relatorio = () => {
     };
   }, [token, chave]);
 
+  const langBruto = dados && dados.ok ? (dados.relatorio as { lang?: string }).lang : undefined;
+  const lang: Idioma = langBruto === "en" || langBruto === "es" ? langBruto : "pt";
+  const c = COPY[lang];
+
   const head = (
     <Helmet>
-      <title>Relatório de avaliação | Lealia Advisory Partners</title>
-      <meta
-        name="description"
-        content="Relatório personalizado de avaliação indicativa da sua empresa, com metodologia, drivers de valor e recomendações de preparação."
-      />
+      <title>{c.seoTitle}</title>
+      <meta name="description" content={c.seoDescription} />
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>
   );
@@ -125,7 +126,7 @@ const Relatorio = () => {
       <>
         {head}
         <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center gap-3 px-6 text-center">
-          <p className="text-sm tracking-[0.25em] uppercase text-muted-foreground">A carregar relatório…</p>
+          <p className="text-sm tracking-[0.25em] uppercase text-muted-foreground">{c.loading}</p>
         </div>
       </>
     );
@@ -137,22 +138,16 @@ const Relatorio = () => {
       <>
         {head}
         <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center gap-4 px-6 text-center">
-          <h1 className="font-serif text-3xl">
-            {expirado ? "Este relatório expirou" : "Relatório não encontrado"}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {expirado
-              ? "O acesso a este relatório era válido durante 7 dias. Agende uma reunião de 20 minutos para rever o relatório completo com a equipa Lealia."
-              : "O link poderá estar incompleto ou já não ser válido. Pode gerar uma nova avaliação a qualquer momento."}
-          </p>
+          <h1 className="font-serif text-3xl">{expirado ? c.expiredTitle : c.missingTitle}</h1>
+          <p className="text-sm text-muted-foreground">{expirado ? c.expiredText : c.missingText}</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             {expirado && (
               <a href={CALENDLY} target="_blank" rel="noreferrer" className="btn-primary">
-                Agendar reunião de 20 minutos
+                {c.schedule}
               </a>
             )}
             <Link to="/valuation" className={expirado ? "btn-outline" : "btn-primary"}>
-              Voltar à ferramenta
+              {c.backTool}
             </Link>
           </div>
         </div>
