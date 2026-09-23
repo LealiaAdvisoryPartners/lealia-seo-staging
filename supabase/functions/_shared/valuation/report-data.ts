@@ -2,15 +2,22 @@
 // Puro: sem I/O, sem dependências de servidor — usado no cliente e no servidor.
 import {
   calcularValuation,
-  formatEUR,
   type ValuationInput,
   type ValuationResult,
   type Ajuste,
   type Confianca,
-  CONF_EXPLICACAO,
   OUTRO,
   OUTRA_INDUSTRIA,
 } from "./valuation.ts";
+import {
+  t,
+  type ReportLang,
+  formatEURLang,
+  formatPercentLang,
+  formatMultipleLang,
+  formatFactorXLang,
+  formatDateLang,
+} from "./report-i18n.ts";
 
 /** Subconjunto de campos do lead necessários ao relatório. */
 export type ReportLead = {
@@ -117,20 +124,173 @@ export type LinhaHistorico = {
 
 export type ReportData = ReturnType<typeof buildReportData>;
 
-const NAO_INDICADO = "Não indicado";
-const pct1 = (v: number) => `${v.toFixed(1).replace(".", ",")}%`;
-const eur = (v?: number | null) => (typeof v === "number" ? formatEUR(Math.round(v)) : NAO_INDICADO);
+// --- Mapeadores de textos gerados pelo motor de cálculo (chaves canónicas em PT) ---
+
+const CONF_LEVEL_WORD: Record<Confianca, Record<ReportLang, string>> = {
+  Baixa: { pt: "Baixa", en: "Low", es: "Baja" },
+  Média: { pt: "Média", en: "Medium", es: "Media" },
+  Alta: { pt: "Alta", en: "High", es: "Alta" },
+};
+
+function traduzirLinhaEbitdaLabel(label: string, ano: number, lang: ReportLang): string {
+  const L = t(lang).engine.linhasEbitda;
+  if (label === `EBITDA reportado ${ano}`) return L.reportado(ano);
+  if (label === "Despesas extraordinárias não recorrentes") return L.despesasExtraordinarias;
+  if (label === "Renda teórica de mercado (imóvel próprio)") return L.rendaTeorica;
+  if (label === "Acréscimo de renda até valor de mercado") return L.acrescimoRenda;
+  if (label === "EBITDA normalizado") return L.normalizado;
+  return label;
+}
+
+function traduzirAjuste(a: Ajuste, lang: ReportLang): { label: string; detalhe: string } {
+  const A = t(lang).engine.ajustes;
+  switch (a.label) {
+    case "Volume de negócios": {
+      const map: Record<string, string> = {
+        "Faturação abaixo de 5M€": A.volumeNegocios.abaixo5M,
+        "Faturação entre 5M€ e 20M€": A.volumeNegocios.entre5e20M,
+        "Faturação de 20M€ ou mais": A.volumeNegocios.acima20M,
+      };
+      return { label: A.volumeNegocios.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Dimensão dos resultados": {
+      const map: Record<string, string> = {
+        "EBITDA normalizado abaixo de 2M€": A.dimensaoResultados.abaixo2M,
+        "EBITDA normalizado de 2M€ ou mais": A.dimensaoResultados.acimaIgual2M,
+      };
+      return { label: A.dimensaoResultados.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Idade da empresa": {
+      const map: Record<string, string> = {
+        "Menos de 3 anos": A.idadeEmpresa.menos3,
+        "Mais de 10 anos": A.idadeEmpresa.mais10,
+        "Entre 3 e 10 anos": A.idadeEmpresa.entre3e10,
+      };
+      return { label: A.idadeEmpresa.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Crescimento": {
+      if (a.detalhe === "Histórico insuficiente")
+        return { label: A.crescimento.label, detalhe: A.crescimento.historicoInsuficiente };
+      if (a.detalhe === "Faturação em queda face ao ano mais antigo indicado")
+        return { label: A.crescimento.label, detalhe: A.crescimento.emQueda };
+      if (a.detalhe === "Crescimento acumulado até 10%")
+        return { label: A.crescimento.label, detalhe: A.crescimento.ate10 };
+      const mAcum = /^Crescimento acumulado de (\d+)%$/.exec(a.detalhe);
+      if (mAcum) return { label: A.crescimento.label, detalhe: A.crescimento.acumulado(mAcum[1]) };
+      return { label: A.crescimento.label, detalhe: a.detalhe };
+    }
+    case "Unidades / localizações": {
+      const map: Record<string, string> = {
+        "Não indicado": A.unidades.naoIndicado,
+        "Operação concentrada numa única localização": A.unidades.unica,
+        "Operação multi-unidade (mais de 3 localizações)": A.unidades.maisDe3,
+        "Não aplicável ao modelo de negócio": A.unidades.naoAplicavel,
+        "Operação em 2-3 localizações": A.unidades.entre2e3,
+      };
+      return { label: A.unidades.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Concentração de clientes": {
+      const map: Record<string, string> = {
+        "Não indicada": A.concentracaoClientes.naoIndicada,
+        "Base de clientes diversificada": A.concentracaoClientes.diversificada,
+        "Concentração moderada nos 5 maiores clientes": A.concentracaoClientes.moderada,
+        "Forte dependência dos 5 maiores clientes": A.concentracaoClientes.forte,
+      };
+      return { label: A.concentracaoClientes.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Geografia dos clientes": {
+      const map: Record<string, string> = {
+        "Não indicada": A.geografia.naoIndicada,
+        "Equilíbrio nacional/internacional": A.geografia.equilibrio,
+      };
+      return { label: A.geografia.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Dependência do acionista (faturação)": {
+      const map: Record<string, string> = {
+        "Não indicada": A.depFaturacao.naoIndicada,
+        "Carteira pouco dependente do acionista": A.depFaturacao.baixa,
+        "Forte dependência comercial do acionista": A.depFaturacao.alta,
+        "Dependência moderada do acionista": A.depFaturacao.moderada,
+      };
+      return { label: A.depFaturacao.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Dependência do acionista (gestão)": {
+      const map: Record<string, string> = {
+        "Não indicada": A.depGestao.naoIndicada,
+        "Gestão autónoma face ao acionista": A.depGestao.baixa,
+        "Gestão fortemente centrada no acionista": A.depGestao.alta,
+        "Dependência moderada do acionista": A.depGestao.moderada,
+      };
+      return { label: A.depGestao.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    case "Intensidade de investimento (capex)": {
+      const map: Record<string, string> = {
+        "Não indicada": A.capex.naoIndicada,
+        "Capex recorrente reduzido face à faturação": A.capex.reduzido,
+        "Capex recorrente relevante face à faturação": A.capex.relevante,
+        "Capex recorrente elevado face à faturação": A.capex.elevado,
+      };
+      return { label: A.capex.label, detalhe: map[a.detalhe] ?? a.detalhe };
+    }
+    default:
+      return { label: a.label, detalhe: a.detalhe };
+  }
+}
+
+function traduzirCenarioPressuposto(nome: string, pressuposto: string, lang: ReportLang): string {
+  const C = t(lang).engine.cenarios;
+  if (nome === "Conservador") return C.conservador;
+  if (nome === "Base") return C.base;
+  if (nome === "Otimista") return C.otimista;
+  return pressuposto;
+}
+
+const DIMENSAO_MAP: Record<string, keyof ReturnType<typeof t>["engine"]["dimensoes"]> = {
+  "Histórico financeiro": "historicoFinanceiro",
+  "Qualidade do EBITDA": "qualidadeEbitda",
+  "Posição financeira": "posicaoFinanceira",
+  "Enquadramento setorial": "enquadramentoSetorial",
+  "Perfil de risco": "perfilRisco",
+};
+
+const ITEM_CONFIANCA_MAP: Record<string, keyof ReturnType<typeof t>["engine"]["itensConfianca"]> = {
+  "Faturação do ano de referência": "faturacaoAnoReferencia",
+  "Faturação do ano anterior": "faturacaoAnoAnterior",
+  "Faturação de há três anos": "faturacaoTresAnos",
+  "EBITDA do ano anterior": "ebitdaAnoAnterior",
+  "EBITDA de há três anos": "ebitdaTresAnos",
+  "Tipo de período de referência": "tipoPeriodoReferencia",
+  "Despesas extraordinárias identificadas": "despesasExtraordinariasIdentificadas",
+  "Enquadramento do imóvel de operação": "enquadramentoImovel",
+  "Capex anual recorrente": "capexAnualRecorrente",
+  "Caixa e depósitos": "caixaDepositos",
+  "Dívida financeira": "dividaFinanceira",
+  "Indústria identificada": "industriaIdentificada",
+  "Sub-indústria identificada": "subindustriaIdentificada",
+  "Atividade principal descrita": "atividadePrincipalDescrita",
+  "Concentração dos 5 maiores clientes": "concentracaoTop5",
+  "Peso do maior cliente": "pesoMaiorCliente",
+  "Unidades / localizações": "unidadesLocalizacoes",
+  "Geografia dos clientes": "geografiaClientes",
+  "Dependência do acionista (faturação)": "depFaturacao",
+  "Dependência do acionista (gestão)": "depGestao",
+};
 
 /**
  * Prepara todos os dados (valores formatados, flags e textos dinâmicos) que o
  * template do relatório consome. `result` deve vir de `calcularValuation`
  * com o mesmo input, garantindo números idênticos aos da página.
  */
-export function buildReportData(lead: ReportLead, result: ValuationResult) {
+export function buildReportData(lead: ReportLead, result: ValuationResult, lang: ReportLang = "pt") {
+  const L = t(lang);
   const ok = result.ok;
   const r = result.ok ? result : null;
   const ano = lead.ano_referencia ?? new Date().getFullYear();
   const fat1 = lead.faturacao_ano1 ?? 0;
+
+  const NAO_INDICADO = L.common.naoIndicado;
+  const pct1 = (v: number) => formatPercentLang(v, lang);
+  const eur = (v?: number | null) => (typeof v === "number" ? formatEURLang(Math.round(v), lang) : NAO_INDICADO);
 
   // Histórico: apenas anos efetivamente preenchidos.
   const anosBrutos = [
@@ -152,7 +312,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
   // Impacto da normalização da renda em cada período (recorrente e anual):
   // é o mesmo ajuste que entra no EBITDA normalizado, com sinal negativo.
   const impactoRenda = r && r.ajuste_ebitda_imovel !== 0 ? r.ajuste_ebitda_imovel : null;
-  const normalizacaoRenda = impactoRenda !== null ? `−${eur(Math.abs(impactoRenda))}` : "—";
+  const normalizacaoRenda = impactoRenda !== null ? `−${eur(Math.abs(impactoRenda))}` : L.common.tracoLongo;
 
 
   const historico: LinhaHistorico[] = anosBrutos.map((a) => ({
@@ -160,7 +320,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     faturacao: eur(a.faturacao),
     ebitda: eur(a.ebitda),
     normalizacoes: normalizacaoRenda,
-    despesas: typeof a.desp === "number" && a.desp !== 0 ? eur(a.desp) : "—",
+    despesas: typeof a.desp === "number" && a.desp !== 0 ? eur(a.desp) : L.common.tracoLongo,
   }));
 
   const margem_ebitda_ajustada = r && fat1 > 0 ? (r.ebitda_base / fat1) * 100 : null;
@@ -229,98 +389,62 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 
   // Ordenados por relevância para o comprador: primeiro o que move o múltiplo.
   const driversCandidatos: Array<[boolean, Driver]> = [
-    [
-      flags.crescimento_forte,
-      {
-        driver: "Crescimento sustentado",
-        descricao:
-          "A faturação evoluiu positivamente no período analisado. Trajetórias de crescimento demonstradas suportam o topo do intervalo de múltiplos e reduzem o peso relativo do risco de execução na negociação.",
-      },
-    ],
+    [flags.crescimento_forte, L.drivers.crescimentoSustentado],
     [
       (typeof fat1 === "number" && fat1 >= 20_000_000) || (ebitdaBase !== null && ebitdaBase >= 2_000_000),
-      {
-        driver: "Dimensão relevante",
-        descricao: `Com faturação de ${eur(fat1)} e EBITDA normalizado de ${eur(ebitdaBase)}, a empresa situa-se acima do limiar de dimensão a partir do qual investidores institucionais e compradores estratégicos internacionais competem ativamente, alargando o universo de contrapartes.`,
-      },
+      { driver: L.drivers.dimensaoRelevante.driver, descricao: L.drivers.dimensaoRelevante.descricao(eur(fat1), eur(ebitdaBase)) },
     ],
     [
       margem_ebitda_ajustada !== null && margem_ebitda_ajustada >= 15,
-      {
-        driver: "Rendibilidade acima da média",
-        descricao: `A margem EBITDA normalizada de ${margemFmt} evidencia poder de fixação de preço e disciplina de custos, atributos que os compradores remuneram com múltiplos superiores aos de referência setorial.`,
-      },
+      { driver: L.drivers.rendibilidadeAcimaMedia.driver, descricao: L.drivers.rendibilidadeAcimaMedia.descricao(margemFmt ?? "—") },
     ],
     [
       capexRacio !== null && capexRacio <= 0.15,
       {
-        driver: "Forte conversão de EBITDA em caixa",
-        descricao: `O CAPEX recorrente representa apenas ${capexRacio !== null ? pct1(capexRacio * 100) : "—"} do EBITDA normalizado. Um modelo pouco intensivo em investimento liberta caixa para serviço de dívida de aquisição, o que é determinante para compradores financeiros.`,
+        driver: L.drivers.conversaoCaixa.driver,
+        descricao: L.drivers.conversaoCaixa.descricao(capexRacio !== null ? pct1(capexRacio * 100) : "—"),
       },
     ],
-    [
-      flags.dependencia_gestao_baixa,
-      {
-        driver: "Gestão autónoma do acionista",
-        descricao:
-          "A operação funciona com baixa dependência do acionista na gestão corrente. A existência de uma segunda linha capaz de assegurar continuidade reduz o risco de transição e encurta períodos de permanência exigidos pelo comprador.",
-      },
-    ],
-    [
-      !!depFat?.startsWith("Baixa"),
-      {
-        driver: "Relações comerciais transferíveis",
-        descricao:
-          "A faturação não depende materialmente da relação pessoal do acionista com os clientes, o que reduz a probabilidade de erosão de receita após o closing e limita a necessidade de earn-outs ou garantias adicionais.",
-      },
-    ],
+    [flags.dependencia_gestao_baixa, L.drivers.gestaoAutonoma],
+    [!!depFat?.startsWith("Baixa"), L.drivers.relacoesTransferiveis],
     [
       (typeof top5 === "number" && top5 <= 40) || (typeof top1 === "number" && top1 <= 15),
       {
-        driver: "Carteira de clientes diversificada",
-        descricao: `${typeof top5 === "number" ? `Os cinco maiores clientes representam ${top5}% da faturação` : `O maior cliente representa ${top1}% da faturação`}, um nível de concentração confortável que reduz o risco comercial percebido e diminui a pressão sobre o pacote de garantias.`,
+        driver: L.drivers.carteiraDiversificada.driver,
+        descricao:
+          (typeof top5 === "number"
+            ? L.drivers.carteiraDiversificada.descricaoTop5(top5)
+            : L.drivers.carteiraDiversificada.descricaoTop1(top1 ?? 0)) + L.drivers.carteiraDiversificada.descricaoFim,
       },
     ],
     [
       backlogRacio !== null && backlogRacio >= 0.25,
       {
-        driver: "Visibilidade de receita contratada",
-        descricao: `O backlog contratado de ${eur(backlog)} equivale a ${backlogRacio !== null ? pct1(backlogRacio * 100) : "—"} da faturação anual, conferindo previsibilidade ao plano de negócios apresentado ao comprador.`,
+        driver: L.drivers.visibilidadeReceita.driver,
+        descricao: L.drivers.visibilidadeReceita.descricao(eur(backlog), backlogRacio !== null ? pct1(backlogRacio * 100) : "—"),
       },
     ],
     [
       multiUnidade,
-      {
-        driver: "Modelo replicável em várias unidades",
-        descricao: `A operação em ${(lead.unidades ?? "").toLowerCase()} demonstra que o modelo de negócio é replicável e não depende de um único ativo ou equipa, suportando teses de consolidação e de expansão pós-aquisição.`,
-      },
+      { driver: L.drivers.modeloReplicavel.driver, descricao: L.drivers.modeloReplicavel.descricao((lead.unidades ?? "").toLowerCase()) },
     ],
     [
       geografiaInternacional,
-      {
-        driver: "Exposição internacional",
-        descricao: `A distribuição de clientes (${lead.geografia_clientes}) reduz a dependência de um único mercado e torna a empresa relevante para compradores estrangeiros que procuram presença na região.`,
-      },
+      { driver: L.drivers.exposicaoInternacional.driver, descricao: L.drivers.exposicaoInternacional.descricao(lead.geografia_clientes ?? "") },
     ],
     [
       posicaoLiquida !== null && posicaoLiquida > 0,
-      {
-        driver: "Posição líquida de caixa",
-        descricao: `A empresa apresenta uma posição líquida positiva de ${eur(posicaoLiquida)}, o que acresce diretamente ao Equity Value e reforça a capacidade negocial do acionista quanto ao mecanismo de preço.`,
-      },
+      { driver: L.drivers.posicaoLiquida.driver, descricao: L.drivers.posicaoLiquida.descricao(eur(posicaoLiquida)) },
     ],
     [
       typeof lead.idade_empresa === "number" && lead.idade_empresa >= 10,
-      {
-        driver: "Track record consolidado",
-        descricao: `${lead.idade_empresa} anos de atividade sustentam a leitura de resiliência do modelo de negócio ao longo de diferentes ciclos e reduzem o risco operacional percebido pelo comprador.`,
-      },
+      { driver: L.drivers.trackRecord.driver, descricao: L.drivers.trackRecord.descricao(lead.idade_empresa ?? 0) },
     ],
     [
       imovelAvaliadoExternamente,
       {
-        driver: "Ativo imobiliário valorizado externamente",
-        descricao: `O imóvel próprio incluído no perímetro está suportado por ${(lead.metodo_avaliacao_imovel ?? "").toLowerCase()} (${eur(lead.valorizacao_imovel)}), acrescendo ao Equity Value com um valor defensável em due diligence.`,
+        driver: L.drivers.imovelValorizado.driver,
+        descricao: L.drivers.imovelValorizado.descricao((lead.metodo_avaliacao_imovel ?? "").toLowerCase(), eur(lead.valorizacao_imovel)),
       },
     ],
   ];
@@ -333,77 +457,59 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 
   // Recomendações derivadas dos drivers.
   const recomendacoes: string[] = [];
-  if (flags.dependencia_gestao_alta || flags.dependencia_faturacao_alta)
-    recomendacoes.push(
-      "Reforçar a equipa de gestão e documentar processos e relações comerciais, reduzindo a dependência do acionista.",
-    );
-  if (flags.concentracao_alta)
-    recomendacoes.push(
-      "Diversificar a base de clientes e formalizar contratos plurianuais com os principais clientes.",
-    );
-  if (flags.unidade_unica)
-    recomendacoes.push(
-      "Avaliar a replicabilidade do modelo noutras localizações, demonstrando potencial de escala ao investidor.",
-    );
-  if (flags.capex_intensivo)
-    recomendacoes.push(
-      "Documentar as necessidades de investimento, distinguindo capex de manutenção de capex de expansão.",
-    );
-  if (historico.length < 3)
-    recomendacoes.push(
-      "Preparar o histórico financeiro dos últimos três exercícios e a respetiva documentação de suporte.",
-    );
-  if (flags.tem_imovel_proprio)
-    recomendacoes.push(
-      "Definir antecipadamente se o imóvel deve integrar o perímetro da transação e obter uma avaliação independente.",
-    );
-  if (r?.aviso_margem)
-    recomendacoes.push("Validar a margem EBITDA e a classificação dos itens considerados extraordinários.");
-  if (flags.crescimento_negativo)
-    recomendacoes.push("Preparar uma explicação sustentada da contração de faturação e do plano de recuperação.");
-  recomendacoes.push(
-    "Validar esta avaliação indicativa com a equipa da Lealia Advisory Partners antes de qualquer decisão de mercado.",
-  );
+  if (flags.dependencia_gestao_alta || flags.dependencia_faturacao_alta) recomendacoes.push(L.recomendacoes.reforcarGestao);
+  if (flags.concentracao_alta) recomendacoes.push(L.recomendacoes.diversificarClientes);
+  if (flags.unidade_unica) recomendacoes.push(L.recomendacoes.avaliarReplicabilidade);
+  if (flags.capex_intensivo) recomendacoes.push(L.recomendacoes.documentarCapex);
+  if (historico.length < 3) recomendacoes.push(L.recomendacoes.prepararHistorico);
+  if (flags.tem_imovel_proprio) recomendacoes.push(L.recomendacoes.definirImovel);
+  if (r?.aviso_margem) recomendacoes.push(L.recomendacoes.validarMargem);
+  if (flags.crescimento_negativo) recomendacoes.push(L.recomendacoes.explicarContracao);
+  recomendacoes.push(L.recomendacoes.validarComLealia);
 
   const resumo_textual = r
-    ? [
-        `Com base nos dados disponibilizados, estima-se estima-se um <strong>valor indicativo para os acionistas entre ${eur(r.equity_min)} e ${eur(r.equity_max)}</strong>. ` +
-          `O intervalo resulta de um Enterprise Value entre ${eur(r.ev_min)} e ${eur(r.ev_max)}, ` +
-          `calculado sobre um EBITDA normalizado de ${eur(r.ebitda_base)} ` +
-          `e um múltiplo EV/EBITDA implícito ajustado de ${r.multiplo_ajustado_min.toFixed(2)}x–${r.multiplo_ajustado_max.toFixed(2)}x. ` +
-          `Em ${ano} (${lead.tipo_periodo}), a empresa apresentou uma faturação de ${eur(fat1)}` +
-          `${margem_ebitda_ajustada !== null ? ` e uma margem EBITDA de ${pct1(margem_ebitda_ajustada)}` : ""}.`,
-      ].join("")
-    : "Com os dados indicados não é possível apresentar um valor indicativo por múltiplo de EBITDA. " +
-      "Este relatório apresenta, ainda assim, o perfil operacional da empresa e as principais recomendações aplicáveis.";
+    ? L.resumo.comResultado({
+        equityMin: eur(r.equity_min),
+        equityMax: eur(r.equity_max),
+        evMin: eur(r.ev_min),
+        evMax: eur(r.ev_max),
+        ebitdaBase: eur(r.ebitda_base),
+        multMin: formatMultipleLang(r.multiplo_ajustado_min, lang),
+        multMax: formatMultipleLang(r.multiplo_ajustado_max, lang),
+        ano,
+        tipoPeriodo: lead.tipo_periodo ?? "",
+        fat1: eur(fat1),
+        margem: margem_ebitda_ajustada !== null ? pct1(margem_ebitda_ajustada) : null,
+      })
+    : L.resumo.semResultado;
 
   // --- Mensagem ao acionista: principal oportunidade de criação/preservação de valor ---
   const mensagem_acionista =
     historico.length < 3
-      ? "A principal oportunidade de preservação de valor antes de uma transação reside na consolidação de três exercícios financeiros reconciliados e na documentação dos ajustamentos ao EBITDA, reduzindo as lacunas de informação que tipicamente geram desconto em due diligence."
+      ? L.mensagemAcionista.historicoLimitado
       : flags.dependencia_gestao_alta || flags.dependencia_faturacao_alta
-        ? "A principal oportunidade de criação de valor reside na redução da dependência do acionista, através do reforço da equipa de gestão e da formalização das relações comerciais em nome da empresa, aumentando a transferibilidade do negócio."
+        ? L.mensagemAcionista.dependenciaAlta
         : flags.concentracao_alta
-          ? "A principal oportunidade de criação de valor reside na diversificação da carteira de clientes e na formalização contratual das contas mais relevantes, reduzindo o risco comercial percebido pelo comprador."
-          : "A principal oportunidade de criação de valor reside na validação da qualidade dos resultados, na documentação dos ajustamentos ao EBITDA e na redução das lacunas de informação que poderão gerar desconto em due diligence.";
+          ? L.mensagemAcionista.concentracaoAlta
+          : L.mensagemAcionista.padrao;
 
   // --- Perfil da empresa ---
   const perfil = [
-    { label: "Atividade principal", valor: lead.atividade_principal || NAO_INDICADO },
-    { label: "Setor", valor: `${lead.industria}${lead.subindustria ? ` · ${lead.subindustria}` : ""}` },
-    { label: "Geografia", valor: lead.pais },
-    { label: "Unidades / localizações", valor: lead.unidades || NAO_INDICADO },
-    { label: "Anos de atividade", valor: lead.idade_empresa ? `${lead.idade_empresa} anos` : NAO_INDICADO },
-    { label: "Colaboradores", valor: lead.num_colaboradores || NAO_INDICADO },
-    
+    { label: L.perfil.atividadePrincipal, valor: lead.atividade_principal || NAO_INDICADO },
+    { label: L.perfil.setor, valor: `${lead.industria}${lead.subindustria ? ` · ${lead.subindustria}` : ""}` },
+    { label: L.perfil.geografia, valor: lead.pais },
+    { label: L.perfil.unidadesLocalizacoes, valor: lead.unidades || NAO_INDICADO },
+    { label: L.perfil.anosAtividade, valor: lead.idade_empresa ? L.perfil.anosAtividadeValor(lead.idade_empresa) : NAO_INDICADO },
+    { label: L.perfil.colaboradores, valor: lead.num_colaboradores || NAO_INDICADO },
 
-    { label: "Ano de referência", valor: String(ano) },
-    { label: "Período de referência", valor: lead.tipo_periodo || NAO_INDICADO },
+
+    { label: L.perfil.anoReferencia, valor: String(ano) },
+    { label: L.perfil.periodoReferencia, valor: lead.tipo_periodo || NAO_INDICADO },
   ];
 
   // --- Normalização do EBITDA (waterfall) ---
   const linhas_ebitda = (r?.linhas_ebitda ?? []).map((l) => ({
-    label: l.label,
+    label: traduzirLinhaEbitdaLabel(l.label, ano, lang),
     tipo: l.tipo,
     valor: l.valor,
     formatado: `${l.tipo === "ajuste" && l.valor > 0 ? "+" : ""}${eur(l.valor)}`,
@@ -412,20 +518,20 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
   // --- Equity Bridge ---
   const ponte = r
     ? [
-        { label: "Enterprise Value base", valor: r.ev_medio, tipo: "base" as const },
-        { label: "Mais: caixa, depósitos e outros equivalentes", valor: r.caixa, tipo: "ajuste" as const },
-        { label: "Menos: dívida total", valor: -r.divida_financeira, tipo: "ajuste" as const },
+        { label: L.ponte.enterpriseValueBase, valor: r.ev_medio, tipo: "base" as const },
+        { label: L.ponte.maisCaixa, valor: r.caixa, tipo: "ajuste" as const },
+        { label: L.ponte.menosDivida, valor: -r.divida_financeira, tipo: "ajuste" as const },
         ...(r.valor_imovel > 0
           ? [
               {
-                label: "Mais: imóvel no perímetro",
+                label: L.ponte.maisImovel,
                 valor: r.valor_imovel,
                 tipo: "ajuste" as const,
               },
             ]
           : []),
         {
-          label: "Equity Value base",
+          label: L.ponte.equityValueBase,
           valor: Math.round((r.equity_min + r.equity_max) / 2),
           tipo: "total" as const,
         },
@@ -437,15 +543,15 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 
   const cenarios = (r?.cenarios ?? []).map((c) => ({
     nome: c.nome,
-    multiplo: `${c.multiplo.toFixed(2)}x`,
+    multiplo: formatMultipleLang(c.multiplo, lang),
     ev: eur(c.ev),
     equity: eur(c.equity),
-    pressuposto: c.pressuposto,
+    pressuposto: traduzirCenarioPressuposto(c.nome, c.pressuposto, lang),
   }));
 
   const sensibilidade = r
     ? {
-        colunas: r.sensibilidade.multiplos.map((m) => `${m.toFixed(2)}x`),
+        colunas: r.sensibilidade.multiplos.map((m) => formatMultipleLang(m, lang)),
         linhas: r.sensibilidade.linhas.map((l) => ({
           variacao: l.variacao,
           ebitda: eur(l.ebitda),
@@ -455,12 +561,18 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
       }
     : null;
 
-  const dimensoes_confianca = (r?.dimensoes_confianca ?? []).map((d) => ({
-    dimensao: d.dimensao,
-    peso: d.peso,
-    percentagem: Math.round(d.cobertura * 100),
-    em_falta: d.em_falta,
-  }));
+  const dimensoes_confianca = (r?.dimensoes_confianca ?? []).map((d) => {
+    const dimKey = DIMENSAO_MAP[d.dimensao];
+    return {
+      dimensao: dimKey ? L.engine.dimensoes[dimKey] : d.dimensao,
+      peso: d.peso,
+      percentagem: Math.round(d.cobertura * 100),
+      em_falta: d.em_falta.map((item) => {
+        const itemKey = ITEM_CONFIANCA_MAP[item];
+        return itemKey ? L.engine.itensConfianca[itemKey] : item;
+      }),
+    };
+  });
 
   // --- Riscos e mitigantes — apenas com evidência preenchida, máximo de quatro ---
   type Risco = {
@@ -476,100 +588,103 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     [
       historico.length < 3,
       {
-        risco: "Histórico financeiro limitado",
-        evidencia: `${historico.length} ${historico.length === 1 ? "exercício disponibilizado" : "exercícios disponibilizados"}`,
-        impacto: "Reduz a confiança na sustentabilidade dos resultados e pode condicionar o múltiplo",
-        mitigante: "Preparar e reconciliar a informação financeira dos últimos três exercícios",
+        risco: L.riscos.historicoLimitado.risco,
+        evidencia: historico.length === 1 ? L.riscos.historicoLimitado.evidenciaUm : L.riscos.historicoLimitado.evidenciaVarios(historico.length),
+        impacto: L.riscos.historicoLimitado.impacto,
+        mitigante: L.riscos.historicoLimitado.mitigante,
         nivel: "Alto",
       },
     ],
     [
       flags.dependencia_gestao_alta,
       {
-        risco: "Dependência de gestão do acionista",
-        evidencia: `Dependência do acionista na gestão: ${depGest}`,
-        impacto: "Aumenta o risco de transição e de continuidade operacional após a transação",
-        mitigante: "Reforçar a equipa de gestão e documentar os processos-chave",
+        risco: L.riscos.dependenciaGestao.risco,
+        evidencia: L.riscos.dependenciaGestao.evidencia(depGest ?? ""),
+        impacto: L.riscos.dependenciaGestao.impacto,
+        mitigante: L.riscos.dependenciaGestao.mitigante,
         nivel: "Alto",
       },
     ],
     [
       flags.concentracao_alta,
       {
-        risco: "Concentração de clientes",
-        evidencia: `Cinco maiores clientes: ${top5}% da faturação`,
-        impacto: "Aumenta a exposição à perda de clientes relevantes",
-        mitigante: "Diversificar a carteira comercial e formalizar contratos plurianuais",
+        risco: L.riscos.concentracaoClientes.risco,
+        evidencia: L.riscos.concentracaoClientes.evidencia(top5 ?? 0),
+        impacto: L.riscos.concentracaoClientes.impacto,
+        mitigante: L.riscos.concentracaoClientes.mitigante,
         nivel: "Alto",
       },
     ],
     [
       flags.dependencia_faturacao_alta,
       {
-        risco: "Dependência comercial do acionista",
-        evidencia: `Dependência do acionista na faturação: ${depFat}`,
-        impacto: "Reduz a transferibilidade das relações comerciais após a transação",
-        mitigante: "Transferir contas-chave para gestores de conta e contratar em nome da empresa",
+        risco: L.riscos.dependenciaComercial.risco,
+        evidencia: L.riscos.dependenciaComercial.evidencia(depFat ?? ""),
+        impacto: L.riscos.dependenciaComercial.impacto,
+        mitigante: L.riscos.dependenciaComercial.mitigante,
         nivel: "Alto",
       },
     ],
     [
       lead.unidades === "Localização única",
       {
-        risco: "Operação numa única localização",
-        evidencia: "Atividade concentrada num único site",
-        impacto: "Limita a escalabilidade e concentra o risco operacional e geográfico",
-        mitigante: "Avaliar replicabilidade do modelo e planos de expansão para novas localizações",
+        risco: L.riscos.localizacaoUnica.risco,
+        evidencia: L.riscos.localizacaoUnica.evidencia,
+        impacto: L.riscos.localizacaoUnica.impacto,
+        mitigante: L.riscos.localizacaoUnica.mitigante,
         nivel: "Médio",
       },
     ],
     [
       !!racioDivida && racioDivida > 3,
       {
-        risco: "Posição Líquida elevada",
-        evidencia: `Posição Líquida equivalente a ${racioDivida !== null ? racioDivida.toFixed(1).replace(".", ",") : "—"}x o EBITDA normalizado`,
-        impacto: "Reduz o Equity Value e pode limitar o financiamento de aquisição",
-        mitigante: "Reduzir dívida, otimizar caixa e preparar um mapa financeiro atualizado",
+        risco: L.riscos.posicaoLiquidaElevada.risco,
+        evidencia:
+          racioDivida !== null
+            ? L.riscos.posicaoLiquidaElevada.evidencia(formatFactorXLang(racioDivida, lang))
+            : L.riscos.posicaoLiquidaElevada.evidenciaSemDados,
+        impacto: L.riscos.posicaoLiquidaElevada.impacto,
+        mitigante: L.riscos.posicaoLiquidaElevada.mitigante,
         nivel: "Alto",
       },
     ],
     [
       flags.capex_intensivo,
       {
-        risco: "CAPEX elevado",
-        evidencia: `CAPEX recorrente de ${eur(capex)} face ao EBITDA normalizado`,
-        impacto: "Limita a conversão de EBITDA em geração de caixa",
-        mitigante: "Separar CAPEX de manutenção e de crescimento e validar necessidades futuras",
+        risco: L.riscos.capexElevado.risco,
+        evidencia: L.riscos.capexElevado.evidencia(eur(capex)),
+        impacto: L.riscos.capexElevado.impacto,
+        mitigante: L.riscos.capexElevado.mitigante,
         nivel: "Médio",
       },
     ],
     [
       flags.tem_imovel_proprio && lead.metodo_avaliacao_imovel !== "Avaliação independente",
       {
-        risco: "Imóvel próprio sem avaliação independente",
-        evidencia: `Método de avaliação indicado: ${lead.metodo_avaliacao_imovel || NAO_INDICADO}`,
-        impacto: "Introduz incerteza no Equity Value quando o imóvel integra o perímetro",
-        mitigante: "Obter avaliação independente e definir o perímetro da transação",
+        risco: L.riscos.imovelSemAvaliacao.risco,
+        evidencia: L.riscos.imovelSemAvaliacao.evidencia(lead.metodo_avaliacao_imovel || NAO_INDICADO),
+        impacto: L.riscos.imovelSemAvaliacao.impacto,
+        mitigante: L.riscos.imovelSemAvaliacao.mitigante,
         nivel: "Médio",
       },
     ],
     [
       typeof lead.despesas_extraordinarias_ano1 === "number" && lead.despesas_extraordinarias_ano1 !== 0,
       {
-        risco: "Ajustamentos ao EBITDA por validar",
-        evidencia: `Ajustamentos de ${eur(lead.despesas_extraordinarias_ano1)} declarados sem suporte documental`,
-        impacto: "Pode gerar descontos ou ajustamentos durante a due diligence",
-        mitigante: "Preparar reconciliação contabilística e documentação de suporte",
+        risco: L.riscos.ajustamentosPorValidar.risco,
+        evidencia: L.riscos.ajustamentosPorValidar.evidencia(eur(lead.despesas_extraordinarias_ano1)),
+        impacto: L.riscos.ajustamentosPorValidar.impacto,
+        mitigante: L.riscos.ajustamentosPorValidar.mitigante,
         nivel: "Médio",
       },
     ],
     [
       flags.crescimento_negativo,
       {
-        risco: "Contração da faturação",
-        evidencia: "Evolução negativa da faturação no período indicado",
-        impacto: "Pode condicionar o múltiplo aplicável e a leitura de sustentabilidade",
-        mitigante: "Documentar as causas e evidenciar a inflexão através de indicadores recentes",
+        risco: L.riscos.contracaoFaturacao.risco,
+        evidencia: L.riscos.contracaoFaturacao.evidencia,
+        impacto: L.riscos.contracaoFaturacao.impacto,
+        mitigante: L.riscos.contracaoFaturacao.mitigante,
         nivel: "Alto",
       },
     ],
@@ -585,120 +700,118 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     ...(historico.length < 3
       ? [
           {
-            prioridade: "Alta",
-            acao: "Consolidar três exercícios de informação financeira reconciliada",
-            impacto: "Alto",
-            esforco: "Médio",
-            prazo: "2-6 semanas",
+            prioridade: L.plano.prioridade.alta,
+            acao: L.plano.consolidarHistorico,
+            impacto: L.plano.impacto.alto,
+            esforco: L.plano.esforco.medio,
+            prazo: L.plano.prazo.semanas2a6,
           },
         ]
       : []),
     {
-      prioridade: "Alta",
-      acao: "Reconciliar EBITDA reportado e normalizado e documentar os ajustamentos",
-      impacto: "Alto",
-      esforco: "Médio",
-      prazo: "1-3 semanas",
+      prioridade: L.plano.prioridade.alta,
+      acao: L.plano.reconciliarEbitda,
+      impacto: L.plano.impacto.alto,
+      esforco: L.plano.esforco.medio,
+      prazo: L.plano.prazo.semanas1a3,
     },
     {
-      prioridade: "Alta",
-      acao: "Confirmar dívida total e caixa, depósitos e outros equivalentes disponíveis à data de referência",
-      impacto: "Alto",
-      esforco: "Baixo",
-      prazo: "1-2 semanas",
+      prioridade: L.plano.prioridade.alta,
+      acao: L.plano.confirmarDivida,
+      impacto: L.plano.impacto.alto,
+      esforco: L.plano.esforco.baixo,
+      prazo: L.plano.prazo.semanas1a2,
     },
     {
-      prioridade: "Alta",
-      acao: "Analisar o fundo de maneio normativo e a sazonalidade do negócio",
-      impacto: "Alto",
-      esforco: "Médio",
-      prazo: "2-4 semanas",
+      prioridade: L.plano.prioridade.alta,
+      acao: L.plano.analisarFundoManeio,
+      impacto: L.plano.impacto.alto,
+      esforco: L.plano.esforco.medio,
+      prazo: L.plano.prazo.semanas2a4,
     },
     ...(flags.dependencia_gestao_alta || flags.dependencia_faturacao_alta
       ? [
           {
-            prioridade: "Alta",
-            acao: "Reduzir a dependência do acionista e criar plano de sucessão",
-            impacto: "Muito alto",
-            esforco: "Alto",
-            prazo: "3-12 meses",
+            prioridade: L.plano.prioridade.alta,
+            acao: L.plano.reduzirDependencia,
+            impacto: L.plano.impacto.muitoAlto,
+            esforco: L.plano.esforco.alto,
+            prazo: L.plano.prazo.meses3a12,
           },
         ]
       : []),
     ...(flags.concentracao_alta
       ? [
           {
-            prioridade: "Média",
-            acao: "Mapear a concentração de clientes e formalizar contratos relevantes",
-            impacto: "Médio/alto",
-            esforco: "Médio",
-            prazo: "2-4 semanas",
+            prioridade: L.plano.prioridade.media,
+            acao: L.plano.mapearConcentracao,
+            impacto: L.plano.impacto.medioAlto,
+            esforco: L.plano.esforco.medio,
+            prazo: L.plano.prazo.semanas2a4,
           },
         ]
       : []),
     ...(flags.capex_intensivo
       ? [
           {
-            prioridade: "Média",
-            acao: "Separar CAPEX de manutenção e de crescimento",
-            impacto: "Médio/alto",
-            esforco: "Médio",
-            prazo: "2-4 semanas",
+            prioridade: L.plano.prioridade.media,
+            acao: L.plano.separarCapex,
+            impacto: L.plano.impacto.medioAlto,
+            esforco: L.plano.esforco.medio,
+            prazo: L.plano.prazo.semanas2a4,
           },
         ]
       : []),
     ...(flags.tem_imovel_proprio
       ? [
           {
-            prioridade: "Média",
-            acao: "Definir o tratamento do imóvel e obter avaliação independente",
-            impacto: "Médio/alto",
-            esforco: "Baixo",
-            prazo: "4-8 semanas",
+            prioridade: L.plano.prioridade.media,
+            acao: L.plano.definirImovel,
+            impacto: L.plano.impacto.medioAlto,
+            esforco: L.plano.esforco.baixo,
+            prazo: L.plano.prazo.semanas4a8,
           },
         ]
       : []),
     ...(flags.unidade_unica
       ? [
           {
-            prioridade: "Média",
-            acao: "Demonstrar a replicabilidade do modelo noutras localizações",
-            impacto: "Médio",
-            esforco: "Alto",
-            prazo: "6-12 meses",
+            prioridade: L.plano.prioridade.media,
+            acao: L.plano.demonstrarReplicabilidade,
+            impacto: L.plano.impacto.medio,
+            esforco: L.plano.esforco.alto,
+            prazo: L.plano.prazo.meses6a12,
           },
         ]
       : []),
     {
-      prioridade: "Média",
-      acao: "Definir a estrutura da transação e o perímetro pretendido",
-      impacto: "Alto",
-      esforco: "Médio",
-      prazo: "2-4 semanas",
+      prioridade: L.plano.prioridade.media,
+      acao: L.plano.definirEstrutura,
+      impacto: L.plano.impacto.alto,
+      esforco: L.plano.esforco.medio,
+      prazo: L.plano.prazo.semanas2a4,
     },
   ].slice(0, 8);
 
   // --- Implicações da percentagem a transacionar ---
   const pctT = lead.pct_a_transacionar ?? "";
   const implicacoes_participacao = pctT.startsWith("Minoritária")
-    ? "Numa participação minoritária não existe prémio de controlo e o investidor valoriza sobretudo a governação, os direitos de saída e o plano de crescimento. É frequente o valor por ação refletir um desconto de minoria."
+    ? L.implicacoesParticipacao.minoritaria
     : pctT.startsWith("Maioritária")
-      ? "Numa venda maioritária o comprador assume o controlo e tende a incorporar prémio de controlo, exigindo em contrapartida continuidade da gestão e mecanismos de alinhamento como earn-out ou rollover de parte do capital."
+      ? L.implicacoesParticipacao.maioritaria
       : pctT.startsWith("Totalidade")
-        ? "Na venda da totalidade o comprador paga tipicamente prémio de controlo, mas exige um período de transição, garantias de continuidade dos clientes e um pacote de representações e garantias mais alargado."
-        : "A percentagem a transacionar ainda não está definida. A decisão condiciona o universo de investidores, a existência de prémio de controlo e a estrutura de pagamento.";
+        ? L.implicacoesParticipacao.totalidade
+        : L.implicacoesParticipacao.indefinida;
 
   // --- Limitações da análise ---
   const limitacoes = [
-    "A estimativa assenta exclusivamente na informação declarada, sem verificação documental ou auditoria.",
-    "Não foi realizada análise de fundo de maneio normativo nem de sazonalidade do negócio.",
-    "Não foram analisadas transações comparáveis específicas nem o apetite atual de investidores para o ativo.",
-    ...(historico.length < 3 ? ["O histórico financeiro disponível é inferior a três exercícios."] : []),
-    ...(flags.industria_generica
-      ? ["O setor indicado não tem múltiplos específicos disponíveis; foi usada uma referência genérica de mercado."]
-      : []),
+    L.limitacoes.infoDeclarada,
+    L.limitacoes.fundoManeio,
+    L.limitacoes.transacoesComparaveis,
+    ...(historico.length < 3 ? [L.limitacoes.historicoInferior] : []),
+    ...(flags.industria_generica ? [L.limitacoes.setorGenerico] : []),
     ...((lead.tipo_periodo ?? "").startsWith("Orçamento") || (lead.tipo_periodo ?? "").startsWith("Estimativa")
-      ? ["O período de referência não corresponde a contas encerradas, o que aumenta a incerteza da estimativa."]
+      ? [L.limitacoes.periodoNaoEncerrado]
       : []),
   ];
 
@@ -747,8 +860,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
   const qualidade = {
     tem_serie: serie.length >= 2,
     apenas_um_ano: serie.length <= 1,
-    nota_um_ano:
-      "Com apenas um período financeiro, não é possível avaliar com robustez o crescimento, a estabilidade de margens, a conversão de resultados em caixa ou a sustentabilidade do EBITDA. Esta limitação reduz a confiança da avaliação e pode condicionar o múltiplo aplicável.",
+    nota_um_ano: L.qualidade.notaUmAno,
     cagr_faturacao: cagrFaturacao !== null ? pct1(cagrFaturacao) : null,
     cagr_ebitda: cagrEbitda !== null ? pct1(cagrEbitda) : null,
     margens: margensSerie.map((m) => ({ ano: m.ano, margem: pct1(m.margem), valor: m.margem })),
@@ -756,80 +868,60 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
       amplitudeMargem === null
         ? null
         : amplitudeMargem <= 2
-          ? "As margens EBITDA mantiveram-se estáveis no período analisado, o que sustenta a leitura de recorrência dos resultados."
+          ? L.qualidade.margensEstaveis
           : amplitudeMargem <= 5
-            ? "As margens EBITDA apresentam variação moderada no período analisado, justificando a validação dos fatores que explicam a oscilação."
-            : "As margens EBITDA apresentam variação relevante no período analisado, o que exige explicação documentada em due diligence.",
+            ? L.qualidade.margensModeradas
+            : L.qualidade.margensRelevantes,
     conversao_caixa:
       r && typeof capex === "number" && r.ebitda_base > 0
-        ? `Após CAPEX recorrente de ${eur(capex)}, a conversão indicativa de EBITDA em caixa operacional é de ${pct1(((r.ebitda_base - capex) / r.ebitda_base) * 100)}, antes de fundo de maneio, juros e impostos. Limitação: sem a desagregação entre CAPEX de manutenção e de crescimento, o fluxo de caixa livre subjacente à avaliação fica sujeito a correção em due diligence.`
-        : "Não foi indicado CAPEX recorrente. Limitação: sem este dado não é possível estimar a conversão de EBITDA em caixa, o que reduz a fiabilidade do valor calculado e tende a traduzir-se em desconto por parte de um comprador.",
-    fundo_maneio:
-      "O fundo de maneio não foi analisado nesta fase. Limitação: sem a normalização do fundo de maneio não é possível fixar com precisão a ponte entre Enterprise Value e Equity Value, podendo originar ajustamentos de closing euro-a-euro no preço final.",
+        ? L.qualidade.conversaoCaixaComCapex(eur(capex), pct1(((r.ebitda_base - capex) / r.ebitda_base) * 100))
+        : L.qualidade.conversaoCaixaSemCapex,
+    fundo_maneio: L.qualidade.fundoManeio,
     backlog:
-      typeof lead.backlog_contratado === "number"
-        ? `Foi indicado backlog contratado de ${eur(lead.backlog_contratado)}. Limitação: sem detalhe das margens, prazos de execução e condições de cancelamento, a visibilidade de receita não foi incorporada quantitativamente na avaliação — apenas considerada de forma qualitativa.`
-        : null,
+      typeof lead.backlog_contratado === "number" ? L.qualidade.backlog(eur(lead.backlog_contratado)) : null,
     concentracao:
       typeof top5 === "number"
-        ? `Concentração comercial: os cinco maiores clientes representam ${top5}% da faturação${typeof lead.pct_top1_clientes === "number" ? ` e o maior cliente ${lead.pct_top1_clientes}%` : ""}. Limitação: a dependência de poucos clientes aumenta o risco percebido da receita e condiciona diretamente o múltiplo aplicável na avaliação.`
+        ? L.qualidade.concentracaoTop5(top5) +
+          (typeof lead.pct_top1_clientes === "number" ? L.qualidade.concentracaoTop1(lead.pct_top1_clientes) : "") +
+          L.qualidade.concentracaoFim
         : null,
     ajustamentos:
       typeof lead.despesas_extraordinarias_ano1 === "number" && lead.despesas_extraordinarias_ano1 !== 0
-        ? `Foram declarados ajustamentos não recorrentes de ${eur(lead.despesas_extraordinarias_ano1)}. Limitação: até serem validados documentalmente, o EBITDA ajustado — e, por consequência, o intervalo de avaliação apresentado — fica sujeito a revisão.`
-        : "Não foram declarados ajustamentos não recorrentes ao EBITDA. Limitação: qualquer normalização identificada em due diligence (remunerações de sócios, rendas fora de mercado, proveitos não recorrentes) poderá alterar o EBITDA base e o valor calculado.",
+        ? L.qualidade.ajustamentosDeclarados(eur(lead.despesas_extraordinarias_ano1))
+        : L.qualidade.ajustamentosNaoDeclarados,
   };
 
   // --- Alertas automáticos ---
   const alertas: string[] = [];
-  if (serie.length <= 1)
-    alertas.push(
-      "Apenas foi disponibilizado um período financeiro. A análise de crescimento e estabilidade de margens não é conclusiva.",
-    );
+  if (serie.length <= 1) alertas.push(L.alertas.umPeriodo);
   if (typeof lead.despesas_extraordinarias_ano1 === "number" && lead.despesas_extraordinarias_ano1 !== 0)
-    alertas.push(
-      'Existem ajustamentos ao EBITDA sem suporte documental. Devem ser classificados como "a validar em due diligence".',
-    );
-  alertas.push("Não foi analisado o fundo de maneio. O Equity Value poderá ser afetado por ajustamentos de closing.");
-  if (proprietario && lead.metodo_avaliacao_imovel !== "Avaliação independente")
-    alertas.push(
-      "O valor do imóvel foi introduzido sem avaliação independente. O Equity Value poderá sofrer alteração material.",
-    );
+    alertas.push(L.alertas.ajustamentosSemSuporte);
+  alertas.push(L.alertas.fundoManeioNaoAnalisado);
+  if (proprietario && lead.metodo_avaliacao_imovel !== "Avaliação independente") alertas.push(L.alertas.imovelSemAvaliacao);
   if (imovelNoPerimetro && !(typeof lead.valorizacao_imovel === "number" && lead.valorizacao_imovel > 0))
-    alertas.push("O imóvel foi incluído no perímetro sem valor indicado, pelo que não foi somado ao Equity Value.");
-  if (!lead.tipo_periodo)
-    alertas.push(
-      "O período financeiro de referência não foi classificado (contas encerradas, estimativa ou orçamento).",
-    );
+    alertas.push(L.alertas.imovelSemValor);
+  if (!lead.tipo_periodo) alertas.push(L.alertas.periodoNaoClassificado);
   if (typeof top5 === "number" && typeof lead.pct_top1_clientes === "number" && top5 < lead.pct_top1_clientes)
-    alertas.push("O peso dos cinco maiores clientes é inferior ao do maior cliente. Os dados devem ser revistos.");
-  if ((lead.pct_a_transacionar ?? "").startsWith("Minoritária"))
-    alertas.push(
-      "O valor de uma participação minoritária não corresponde a uma proporção simples do Equity Value de 100%.",
-    );
+    alertas.push(L.alertas.concentracaoInconsistente);
+  if ((lead.pct_a_transacionar ?? "").startsWith("Minoritária")) alertas.push(L.alertas.minoritariaAtencao);
 
   // --- Implicações da estrutura de participação ---
   const implicacoes_estrutura = [
-    { estrutura: "Venda de 50%–51%", implicacao: "Exige regras claras de governação e acordo de acionistas" },
-    { estrutura: "Venda de 60%–80%", implicacao: "Comprador obtém controlo; pode existir rollover relevante" },
-    { estrutura: "Venda de 90%", implicacao: "Participação residual exige proteção e regras de saída" },
-    { estrutura: "Venda de 100%", implicacao: "Estrutura mais simples; continuidade de gestão torna-se crítica" },
+    L.implicacoesEstrutura.venda50,
+    L.implicacoesEstrutura.venda60,
+    L.implicacoesEstrutura.venda90,
+    L.implicacoesEstrutura.venda100,
   ];
 
-  const NOTA_EQUITY =
-    "O Equity Value apresentado é indicativo e calculado antes de ajustamentos de closing, normalização de fundo de maneio, contingências, impostos aplicáveis e validação em due diligence.";
-  const NOTA_MINORIA =
-    "O valor de uma participação minoritária não deve ser assumido como uma simples proporção do Equity Value de 100%. O valor pode variar em função de controlo, direitos de governação, liquidez e estrutura da transação.";
+  const NOTA_EQUITY = L.notas.equity;
+  const NOTA_MINORIA = L.notas.minoria;
 
-  const dataRelatorio = new Date(lead.created_at ?? Date.now()).toLocaleDateString("pt-PT", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  const dataRelatorio = formatDateLang(lead.created_at ?? Date.now(), lang);
 
   return {
     ok,
     motivo: result.ok ? null : (result as { ok: false; motivo: string }).motivo,
+    lang,
 
     empresa: lead.empresa,
     nome: lead.nome,
@@ -851,13 +943,13 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     ebitda_normalizado_formatado: r ? eur(r.ebitda_base) : NAO_INDICADO,
     ajuste_imovel_formatado: r && r.ajuste_ebitda_imovel !== 0 ? eur(Math.abs(r.ajuste_ebitda_imovel)) : null,
     margem_ebitda_ajustada,
-    margem_ebitda_ajustada_formatada: margem_ebitda_ajustada !== null ? pct1(margem_ebitda_ajustada) : "—",
+    margem_ebitda_ajustada_formatada: margem_ebitda_ajustada !== null ? pct1(margem_ebitda_ajustada) : L.common.tracoLongo,
 
-    ev_min_formatado: r ? eur(r.ev_min) : "—",
-    ev_max_formatado: r ? eur(r.ev_max) : "—",
-    ev_medio_formatado: r ? eur(r.ev_medio) : "—",
-    equity_min_formatado: r ? eur(r.equity_min) : "—",
-    equity_max_formatado: r ? eur(r.equity_max) : "—",
+    ev_min_formatado: r ? eur(r.ev_min) : L.common.tracoLongo,
+    ev_max_formatado: r ? eur(r.ev_max) : L.common.tracoLongo,
+    ev_medio_formatado: r ? eur(r.ev_medio) : L.common.tracoLongo,
+    equity_min_formatado: r ? eur(r.equity_min) : L.common.tracoLongo,
+    equity_max_formatado: r ? eur(r.equity_max) : L.common.tracoLongo,
     divida_liquida_formatado: r
       ? eur(r.divida_liquida)
       : eur((lead.divida_financeira ?? 0) - (lead.caixa_e_depositos ?? 0)),
@@ -876,23 +968,31 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     dependencia_faturacao: depFat || NAO_INDICADO,
     dependencia_gestao: depGest || NAO_INDICADO,
     imovel_descricao: proprietario
-      ? `Propriedade da empresa · ${imovelNoPerimetro ? "incluído no perímetro" : "fora do perímetro"}`
+      ? imovelNoPerimetro
+        ? L.imovel.propriedadeIncluida
+        : L.imovel.propriedadeExcluida
       : lead.proprietario_imovel === "Não"
-        ? "Arrendado a terceiros"
+        ? L.imovel.arrendadoTerceiros
         : NAO_INDICADO,
     valorizacao_imovel_formatado: typeof lead.valorizacao_imovel === "number" ? eur(lead.valorizacao_imovel) : null,
 
     pontos_confianca: r?.pontos_confianca ?? null,
-    confianca: (r?.confianca ?? null) as Confianca | null,
-    confianca_explicacao: r ? CONF_EXPLICACAO[r.confianca] : null,
+    confianca: (r ? CONF_LEVEL_WORD[r.confianca][lang] : null) as Confianca | null,
+    confianca_explicacao: r
+      ? r.confianca === "Baixa"
+        ? L.engine.confExplicacao.baixa
+        : r.confianca === "Média"
+          ? L.engine.confExplicacao.media
+          : L.engine.confExplicacao.alta
+      : null,
     anos_preenchidos: r?.anos_preenchidos ?? historico.length,
     historico,
-    nota_historico:
-      historico.length === 1
-        ? "Foi disponibilizado um ano de histórico financeiro."
-        : `Foram disponibilizados ${historico.length} anos de histórico financeiro.`,
+    nota_historico: historico.length === 1 ? L.historico.umAno : L.historico.variosAnos(historico.length),
 
-    ajustes: (r?.ajustes ?? []) as Ajuste[],
+    ajustes: (r?.ajustes ?? []).map((a) => {
+      const trad = traduzirAjuste(a, lang);
+      return { ...a, label: trad.label, detalhe: trad.detalhe };
+    }) as Ajuste[],
     aviso_margem: r?.aviso_margem ?? null,
     nota_setor: r?.nota_setor ?? null,
     resumo_textual,
@@ -918,8 +1018,7 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     posicao_liquida: r?.posicao_liquida ?? null,
     posicao_liquida_valor: r ? r.caixa - r.divida_financeira : null,
     divida_liquida_absoluta_formatado: r ? eur(Math.abs(r.divida_liquida)) : NAO_INDICADO,
-    racio_divida_ebitda:
-      r && r.ebitda_base > 0 ? `${(r.divida_liquida / r.ebitda_base).toFixed(1).replace(".", ",")}x` : "—",
+    racio_divida_ebitda: r && r.ebitda_base > 0 ? formatFactorXLang(r.divida_liquida / r.ebitda_base, lang) : L.common.tracoLongo,
     cenarios,
     sensibilidade,
     dimensoes_confianca,
@@ -934,9 +1033,9 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
     nota_minoria: NOTA_MINORIA,
     imovel_no_perimetro_texto: proprietario
       ? imovelNoPerimetro
-        ? "Incluído no perímetro"
-        : "Excluído do perímetro"
-      : "Arrendado",
+        ? L.imovel.incluidoPerimetro
+        : L.imovel.excluidoPerimetro
+      : L.imovel.arrendado,
     limitacoes,
     grafico_evolucao,
     grafico_max: maxGrafico,
@@ -949,9 +1048,9 @@ export function buildReportData(lead: ReportLead, result: ValuationResult) {
 }
 
 /** Atalho: calcula e prepara o relatório a partir da linha do lead. */
-export function buildReportFromLead(lead: ReportLead) {
+export function buildReportFromLead(lead: ReportLead, lang: ReportLang = "pt") {
   const result = calcularValuation(valuationInputFromLead(lead));
-  return buildReportData(lead, result);
+  return buildReportData(lead, result, lang);
 }
 
 /**
