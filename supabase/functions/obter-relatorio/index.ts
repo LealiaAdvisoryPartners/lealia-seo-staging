@@ -5,7 +5,7 @@
 // version. Never exposes email/telefone/relatorio_token_admin.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/valuation/cors.ts";
-import { buildReportFromLead, redigirRelatorioTeaser, type ReportData, type ReportLead } from "../_shared/valuation/report-data.ts";
+import { buildReportFromLead, redigirRelatorioTeaser, type ReportData, type ReportLead } from "../_shared/valuation/report-data/index.ts";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SLUG = /^[a-z0-9-]{3,60}$/;
