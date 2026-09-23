@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import SEOHead, { pageMeta } from "@/components/SEOHead";
+import SEOHead from "@/components/SEOHead";
 import { ServicesSidebar } from "@/components/services/ServicesSidebar";
 
 import { ServicesBuySide } from "@/components/services/ServicesBuySide";
@@ -56,11 +56,7 @@ const Services = () => {
 
   return (
     <>
-      <SEOHead
-        titleKey={pageMeta.services.titleKey}
-        descriptionKey={pageMeta.services.descriptionKey}
-        path="services"
-      />
+      <SEOHead slug="services" />
 
       {/* Editorial hero */}
       <section ref={heroRef} className="relative overflow-hidden grain" style={{ background: "var(--gradient-hero)" }}>

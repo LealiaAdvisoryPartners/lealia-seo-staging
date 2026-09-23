@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Mail, Linkedin, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import SEOHead, { pageMeta } from "@/components/SEOHead";
+import SEOHead from "@/components/SEOHead";
 import teamMember1 from "@/assets/Ricardo_cut.jpeg";
 import teamMember2 from "@/assets/Duarte_cut.jpeg";
 import { SplitText } from "@/components/motion/SplitText";
@@ -39,7 +39,7 @@ const Team = () => {
 
   return (
     <>
-      <SEOHead titleKey={pageMeta.team.titleKey} descriptionKey={pageMeta.team.descriptionKey} path="team" />
+      <SEOHead slug="team" />
 
       {/* Editorial Hero */}
       <section ref={heroRef} className="relative overflow-hidden grain" style={{ background: "var(--gradient-hero)" }}>
