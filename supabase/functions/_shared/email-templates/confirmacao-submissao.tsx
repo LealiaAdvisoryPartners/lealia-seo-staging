@@ -3,7 +3,6 @@ import type { TemplateEntry } from "./registry.ts";
 import { dict, type Lang } from "./confirmacao-submissao.copy.ts";
 import {
   Body,
-  Column,
   Container,
   CtaCard,
   EmailHeader,
@@ -13,7 +12,6 @@ import {
   Html,
   Link,
   Preview,
-  Row,
   Text,
   bodyText,
   container,
