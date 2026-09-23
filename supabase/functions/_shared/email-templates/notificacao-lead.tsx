@@ -6,6 +6,7 @@ import {
   Column,
   Container,
   EmailHeader,
+  headerDescription,
   Head,
   Hr,
   Html,
@@ -148,6 +149,7 @@ const Email = (p: Props) => {
             eyebrowText="LEALIA ADVISORY PARTNERS"
             heading="Nova submissão da ferramenta de avaliação"
             description="Informação completa submetida pelo utilizador e resultado da pré-avaliação automática."
+            descriptionStyle={headerDescription}
           />
 
           {/* Identificação */}

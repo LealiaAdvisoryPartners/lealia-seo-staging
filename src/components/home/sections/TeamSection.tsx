@@ -41,8 +41,9 @@ const TeamCard = ({ member, index, role, href }: { member: TeamMember; index: nu
       transition={{ duration: 1.1, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
       className={`group ${index === 1 ? "md:mt-20" : ""}`}
     >
-      <Link to={href} className="block">
-        <div className="relative overflow-hidden rounded-2xl bg-secondary aspect-[4/5]">
+      <div className="relative overflow-hidden rounded-2xl bg-secondary aspect-[4/5]">
+        {/* Link de cartão em sobreposição: evita aninhar os atalhos de contacto dentro de um <a>. */}
+        <Link to={href} className="absolute inset-0 z-10" aria-label={member.name} />
           <motion.img
             src={member.image}
             alt={member.name}
@@ -55,7 +56,7 @@ const TeamCard = ({ member, index, role, href }: { member: TeamMember; index: nu
             <h4 className="font-heading text-primary-foreground mt-2" style={{ fontSize: "clamp(1.125rem, 1.6vw, 1.5rem)", fontWeight: 400, letterSpacing: "-0.01em" }}>
               {member.name}
             </h4>
-            <div className="flex gap-2 mt-4">
+            <div className="relative z-20 flex gap-2 mt-4">
               <a href={`mailto:${member.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-primary-foreground/30 text-primary-foreground hover:bg-accent hover:border-accent hover:text-accent-foreground transition-all duration-500" aria-label="Email">
                 <Mail className="w-3.5 h-3.5" strokeWidth={1.5} />
               </a>
@@ -64,8 +65,7 @@ const TeamCard = ({ member, index, role, href }: { member: TeamMember; index: nu
               </a>
             </div>
           </div>
-        </div>
-      </Link>
+      </div>
     </motion.div>
   );
 };

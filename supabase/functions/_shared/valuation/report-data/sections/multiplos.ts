@@ -1,7 +1,7 @@
 // Cenários, múltiplos, sensibilidade e índice de confiança do resultado.
-import { formatMultipleLang, type Ajuste } from "../../report-i18n/index.ts";
+import { formatMultipleLang } from "../../report-i18n/index.ts";
 import { CONF_LEVEL_WORD, DIMENSAO_MAP, ITEM_CONFIANCA_MAP, traduzirAjuste, traduzirCenarioPressuposto } from "../translate.ts";
-import type { Confianca } from "../../valuation.ts";
+import type { Ajuste, Confianca } from "../../valuation.ts";
 import type { Ctx } from "../types.ts";
 
 export function buildMultiplos(ctx: Ctx) {
