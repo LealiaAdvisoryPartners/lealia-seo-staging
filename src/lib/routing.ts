@@ -1,52 +1,29 @@
-/**
- * Utility functions for handling language-prefixed routes
- */
+/** Caminhos com prefixo de idioma: /pt/about, /en/services, … */
 
-type Language = "en" | "pt" | "es";
+export const LANGUAGES = ["en", "pt", "es"] as const;
 
-/**
- * Extract language from URL path
- * Returns the language code if found, or null if not
- */
-export const getLanguageFromPath = (pathname: string): Language | null => {
-  const segments = pathname.split("/").filter(Boolean);
-  const firstSegment = segments[0];
-  
-  if (firstSegment === "en" || firstSegment === "pt" || firstSegment === "es") {
-    return firstSegment as Language;
-  }
-  
-  return null;
-};
+export type Language = (typeof LANGUAGES)[number];
 
-/**
- * Get the path without language prefix
- * e.g., "/en/about" -> "/about", "/pt/services" -> "/services"
- */
-export const getPathWithoutLanguage = (pathname: string): string => {
-  const segments = pathname.split("/").filter(Boolean);
-  const firstSegment = segments[0];
-  
-  if (firstSegment === "en" || firstSegment === "pt" || firstSegment === "es") {
-    return "/" + segments.slice(1).join("/") || "/";
-  }
-  
-  return pathname;
-};
+export const isLanguage = (v: unknown): v is Language =>
+  typeof v === "string" && (LANGUAGES as readonly string[]).includes(v);
 
-/**
- * Build a language-prefixed path
- * e.g., buildPath("en", "/about") -> "/en/about"
- */
-export const buildPath = (language: Language, path: string): string => {
-  // Remove leading slash if present
-  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
-  
-  // Handle root path
-  if (cleanPath === "" || cleanPath === "/") {
-    return `/${language}`;
-  }
-  
-  return `/${language}/${cleanPath}`;
-};
+const segmentsOf = (pathname: string) => pathname.split("/").filter(Boolean);
 
+/** Idioma no início do caminho, ou `null` se não existir prefixo. */
+export function getLanguageFromPath(pathname: string): Language | null {
+  const [first] = segmentsOf(pathname);
+  return isLanguage(first) ? first : null;
+}
+
+/** "/en/about" → "/about"; caminhos sem prefixo ficam inalterados. */
+export function stripLanguage(pathname: string): string {
+  const segments = segmentsOf(pathname);
+  if (!isLanguage(segments[0])) return pathname;
+  return "/" + segments.slice(1).join("/");
+}
+
+/** buildPath("en", "/about") → "/en/about"; buildPath("en", "/") → "/en". */
+export function buildPath(language: Language, path: string): string {
+  const slug = path.replace(/^\/+/, "");
+  return slug ? `/${language}/${slug}` : `/${language}`;
+}
