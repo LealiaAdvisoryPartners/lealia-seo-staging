@@ -37,6 +37,7 @@ const Email = ({
   empresa,
   relatorioUrl,
   pdfUrl,
+  upgradeUrl,
   calendlyUrl = "https://calendly.com/lealiaap-drp/valuationcall",
   lang = "pt",
 }: Props) => {
