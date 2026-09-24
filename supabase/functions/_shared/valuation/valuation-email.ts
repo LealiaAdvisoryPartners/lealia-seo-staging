@@ -133,3 +133,78 @@ export async function notificarEquipaNovoLead(
     }
   }
 }
+
+// -----------------------------------------------------------------------------
+// Relatório completo (pago)
+// -----------------------------------------------------------------------------
+
+const formatarEuros = (v: number, idioma: IdiomaLead) =>
+  new Intl.NumberFormat(idioma === "en" ? "en-GB" : idioma === "es" ? "es-ES" : "pt-PT", {
+    style: "currency",
+    currency: "EUR",
+  }).format(v);
+
+/** Entrega o relatório completo ao comprador. Idempotente pela chave de envio. */
+export async function enviarRelatorioCompleto(
+  admin: SupabaseClient,
+  lead: Lead,
+  relatorioUrl: string | null,
+  pagamento?: Lead | null,
+): Promise<boolean> {
+  const idioma = idiomaDe(lead.idioma);
+  try {
+    const result = await sendTemplateEmail("relatorio-completo", lead.email, {
+      idempotencyKey: `relatorio-completo-${lead.id}`,
+      templateData: {
+        nome: lead.nome,
+        empresa: lead.empresa,
+        relatorioUrl,
+        valor: pagamento?.amount ? formatarEuros(Number(pagamento.amount), idioma) : undefined,
+        referencia: pagamento?.ifthenpay_order_id ?? undefined,
+        lang: idioma,
+      },
+    });
+    return result.sent;
+  } catch (error) {
+    console.error(
+      `Falha ao enviar relatório completo do lead ${lead.id}:`,
+      error instanceof Error ? error.message : error,
+    );
+    void admin;
+    return false;
+  }
+}
+
+/** Avisa a equipa de que uma submissão foi paga. */
+export async function notificarEquipaPagamento(
+  lead: Lead,
+  pagamento: Lead,
+  relatorioUrl: string | null,
+): Promise<void> {
+  for (const destinatario of NOTIFICACAO_INTERNA) {
+    try {
+      await sendTemplateEmail("notificacao-pagamento", destinatario, {
+        idempotencyKey: `notificacao-pagamento-${pagamento.id}-${destinatario}`,
+        templateData: {
+          empresa: lead.empresa,
+          nome: lead.nome,
+          email: lead.email,
+          telefone: lead.telefone,
+          valor: formatarEuros(Number(pagamento.amount ?? 0), "pt"),
+          metodo: pagamento.method,
+          referencia: pagamento.ifthenpay_order_id,
+          pagoEm: pagamento.paid_at ?? new Date().toISOString(),
+          nif: pagamento.nif ?? undefined,
+          nomeFiscal: pagamento.nome_fiscal ?? undefined,
+          moradaFiscal: pagamento.morada_fiscal ?? undefined,
+          relatorioUrl,
+        },
+      });
+    } catch (error) {
+      console.error(
+        `Falha ao enviar notificação de pagamento ${pagamento.id}:`,
+        error instanceof Error ? error.message : error,
+      );
+    }
+  }
+}
