@@ -1,0 +1,241 @@
+import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { checkoutCopy } from "@/translations/checkout";
+import {
+  consultarPagamento,
+  criarPagamento,
+  type EstadoPagamento,
+  type MetodoPagamento,
+} from "@/lib/payments";
+
+type Fase = "form" | "aguardar" | "pago" | "encaminhar";
+
+const MOTIVOS: Record<string, keyof ReturnType<typeof textos>["errors"]> = {
+  telemovel_invalido: "phone",
+  referencia_invalida: "missingRef",
+  submissao_inexistente: "notFound",
+  falha_gateway: "gateway",
+};
+
+const textos = (lang: "pt" | "en" | "es") => checkoutCopy[lang];
+
+export function UpgradeCheckout({
+  referencia,
+  telefone,
+  reportUrl,
+  onPago,
+}: {
+  /** Slug ou token público da avaliação a que o pagamento fica associado. */
+  referencia: string | null;
+  telefone?: string | null;
+  reportUrl?: string | null;
+  onPago?: () => void;
+}) {
+  const { language } = useLanguage();
+  const c = checkoutCopy[language];
+
+  const [metodo, setMetodo] = useState<MetodoPagamento>("mbway");
+  const [telemovel, setTelemovel] = useState(telefone ?? "");
+  const [comFatura, setComFatura] = useState(false);
+  const [nif, setNif] = useState("");
+  const [nomeFiscal, setNomeFiscal] = useState("");
+  const [morada, setMorada] = useState("");
+  const [fase, setFase] = useState<Fase>("form");
+  const [erro, setErro] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [urlCompleto, setUrlCompleto] = useState<string | null>(null);
+  const sondagem = useRef<number | null>(null);
+
+  // Enquanto o cliente autoriza no telemóvel, vamos perguntando pelo estado.
+  useEffect(() => {
+    if (fase !== "aguardar" || !orderId) return;
+    const parar = () => {
+      if (sondagem.current) window.clearInterval(sondagem.current);
+      sondagem.current = null;
+    };
+    sondagem.current = window.setInterval(async () => {
+      const estado: EstadoPagamento | null = await consultarPagamento(orderId);
+      if (estado === "paid") {
+        parar();
+        setFase("pago");
+        onPago?.();
+      } else if (estado === "failed" || estado === "expired") {
+        parar();
+        setFase("form");
+        setErro(c.errors.declined);
+      }
+    }, 4000);
+    return parar;
+  }, [fase, orderId, c.errors.declined, onPago]);
+
+  const pagar = async () => {
+    if (!referencia) return setErro(c.errors.missingRef);
+    if (metodo === "mbway" && telemovel.replace(/\D/g, "").length < 9) return setErro(c.errors.phone);
+
+    setErro(null);
+    setFase(metodo === "mbway" ? "aguardar" : "encaminhar");
+
+    const resposta = await criarPagamento({
+      ref: referencia,
+      metodo,
+      idioma: language,
+      telemovel: metodo === "mbway" ? telemovel : null,
+      nif: comFatura ? nif : null,
+      nome_fiscal: comFatura ? nomeFiscal : null,
+      morada_fiscal: comFatura ? morada : null,
+    });
+
+    if (!resposta?.ok) {
+      if (resposta?.erro === "ja_pago") {
+        setFase("pago");
+        setUrlCompleto(reportUrl ?? null);
+        return;
+      }
+      const chave = MOTIVOS[resposta?.erro ?? ""] ?? "generic";
+      setErro(c.errors[chave]);
+      setFase("form");
+      return;
+    }
+
+    setOrderId(resposta.orderId ?? null);
+    if (metodo === "credit_card" && resposta.paymentUrl) {
+      window.location.href = resposta.paymentUrl;
+      return;
+    }
+  };
+
+  if (fase === "pago") {
+    return (
+      <div className="card-elegant p-8 text-center sm:p-12">
+        <p className="eyebrow">{c.eyebrow}</p>
+        <h3 className="section-title mt-4 text-2xl md:text-3xl">{c.paidTitle}</h3>
+        <p className="mt-4 text-sm leading-relaxed font-light text-muted-foreground">{c.paidText}</p>
+        {(urlCompleto ?? reportUrl) && (
+          <a className="btn-primary mt-8 inline-block" href={(urlCompleto ?? reportUrl) as string}>
+            {c.openReport}
+          </a>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+      {/* Valor */}
+      <div>
+        <p className="eyebrow">{c.eyebrow}</p>
+        <h2 className="section-title mt-5 text-3xl md:text-5xl">{c.heading}</h2>
+        <p className="body-justified mt-6 text-sm leading-relaxed font-light text-muted-foreground md:text-base">
+          {c.lead}
+        </p>
+
+        <div className="mt-10">
+          <p className="eyebrow">{c.includesTitle}</p>
+          <ul className="mt-5 space-y-3">
+            {c.includes.map((item) => (
+              <li key={item} className="flex gap-3 text-sm leading-relaxed font-light text-muted-foreground">
+                <span aria-hidden className="mt-[0.45rem] h-1 w-4 shrink-0 bg-accent" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Pagamento */}
+      <div className="card-elegant p-8 sm:p-10">
+        <p className="serif-accent text-3xl text-accent">299 €</p>
+        <p className="mt-2 text-xs tracking-wide uppercase text-muted-foreground">{c.priceNote}</p>
+
+        {fase === "encaminhar" ? (
+          <p className="mt-10 text-sm font-light text-muted-foreground">{c.redirectText}</p>
+        ) : fase === "aguardar" ? (
+          <div className="mt-10">
+            <h3 className="text-xl">{c.waitingTitle}</h3>
+            <p className="mt-3 text-sm leading-relaxed font-light text-muted-foreground">{c.waitingText}</p>
+            <div className="mt-6 h-[2px] w-full overflow-hidden bg-border">
+              <div className="h-full w-1/3 animate-[pulse_1.6s_ease-in-out_infinite] bg-accent" />
+            </div>
+          </div>
+        ) : (
+          <div className="mt-8">
+            <p className="eyebrow">{c.methodTitle}</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {(
+                [
+                  { id: "mbway" as const, label: c.methods.mbway, nota: null },
+                  { id: "credit_card" as const, label: c.methods.card, nota: c.methods.cardNote },
+                ]
+              ).map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => setMetodo(m.id)}
+                  className={`border p-4 text-left transition-colors ${
+                    metodo === m.id ? "border-accent bg-accent/5" : "border-border hover:border-accent/50"
+                  }`}
+                >
+                  <span className="block text-sm">{m.label}</span>
+                  {m.nota && <span className="mt-1 block text-xs font-light text-muted-foreground">{m.nota}</span>}
+                </button>
+              ))}
+            </div>
+
+            {metodo === "mbway" && (
+              <label className="mt-6 block">
+                <span className="text-xs tracking-wide uppercase text-muted-foreground">{c.phoneLabel}</span>
+                <input
+                  type="tel"
+                  value={telemovel}
+                  onChange={(e) => setTelemovel(e.target.value)}
+                  placeholder={c.phonePlaceholder}
+                  className="mt-2 w-full border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-accent"
+                />
+              </label>
+            )}
+
+            <label className="mt-6 flex items-start gap-3 text-sm font-light text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={comFatura}
+                onChange={(e) => setComFatura(e.target.checked)}
+                className="mt-1 accent-[hsl(var(--accent))]"
+              />
+              <span>
+                {c.invoiceToggle}
+                <span className="mt-1 block text-xs">{c.invoiceNote}</span>
+              </span>
+            </label>
+
+            {comFatura && (
+              <div className="mt-5 space-y-4">
+                {[
+                  { label: c.nifLabel, value: nif, set: setNif },
+                  { label: c.fiscalNameLabel, value: nomeFiscal, set: setNomeFiscal },
+                  { label: c.addressLabel, value: morada, set: setMorada },
+                ].map((campo) => (
+                  <label key={campo.label} className="block">
+                    <span className="text-xs tracking-wide uppercase text-muted-foreground">{campo.label}</span>
+                    <input
+                      value={campo.value}
+                      onChange={(e) => campo.set(e.target.value)}
+                      className="mt-2 w-full border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-accent"
+                    />
+                  </label>
+                ))}
+              </div>
+            )}
+
+            {erro && <p className="mt-6 text-sm text-destructive">{erro}</p>}
+
+            <button type="button" className="btn-primary mt-8 w-full" onClick={pagar}>
+              {c.submit}
+            </button>
+
+            <p className="mt-4 text-xs leading-relaxed font-light text-muted-foreground">{c.terms}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -61,6 +61,20 @@ export type IdiomaLead = "pt" | "en" | "es";
 
 const idiomaDe = (v: unknown): IdiomaLead => (v === "en" || v === "es" ? v : "pt");
 
+/** Endereço do checkout do relatório completo, no idioma do lead. */
+export function urlCompraRelatorio(lead: Lead): string | null {
+  const url = String(lead.relatorio_url ?? "");
+  if (!url) return null;
+  try {
+    const { origin } = new URL(url);
+    const ref = lead.relatorio_slug ?? lead.relatorio_token;
+    if (!ref) return null;
+    return `${origin}/${idiomaDe(lead.idioma)}/upgrade?ref=${encodeURIComponent(String(ref))}`;
+  } catch {
+    return null;
+  }
+}
+
 export async function enviarConfirmacaoSubmissao(
   leadId: string,
   lead: { nome: string; email: string; empresa: string; calculo_possivel: boolean; idioma?: string | null },
@@ -97,6 +111,7 @@ export async function enviarResumoAvaliacao(
         empresa: lead.empresa,
         relatorioUrl: relatorioUrl ?? null,
         pdfUrl: pdfUrl ?? null,
+        upgradeUrl: urlCompraRelatorio(lead),
         lang: idiomaDe(lead.idioma),
       },
     });
@@ -130,6 +145,81 @@ export async function notificarEquipaNovoLead(
       });
     } catch (error) {
       console.error(`Falha ao enviar notificação interna do lead ${leadId}:`, error instanceof Error ? error.message : error);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Relatório completo (pago)
+// -----------------------------------------------------------------------------
+
+const formatarEuros = (v: number, idioma: IdiomaLead) =>
+  new Intl.NumberFormat(idioma === "en" ? "en-GB" : idioma === "es" ? "es-ES" : "pt-PT", {
+    style: "currency",
+    currency: "EUR",
+  }).format(v);
+
+/** Entrega o relatório completo ao comprador. Idempotente pela chave de envio. */
+export async function enviarRelatorioCompleto(
+  admin: SupabaseClient,
+  lead: Lead,
+  relatorioUrl: string | null,
+  pagamento?: Lead | null,
+): Promise<boolean> {
+  const idioma = idiomaDe(lead.idioma);
+  try {
+    const result = await sendTemplateEmail("relatorio-completo", lead.email, {
+      idempotencyKey: `relatorio-completo-${lead.id}`,
+      templateData: {
+        nome: lead.nome,
+        empresa: lead.empresa,
+        relatorioUrl,
+        valor: pagamento?.amount ? formatarEuros(Number(pagamento.amount), idioma) : undefined,
+        referencia: pagamento?.ifthenpay_order_id ?? undefined,
+        lang: idioma,
+      },
+    });
+    return result.sent;
+  } catch (error) {
+    console.error(
+      `Falha ao enviar relatório completo do lead ${lead.id}:`,
+      error instanceof Error ? error.message : error,
+    );
+    void admin;
+    return false;
+  }
+}
+
+/** Avisa a equipa de que uma submissão foi paga. */
+export async function notificarEquipaPagamento(
+  lead: Lead,
+  pagamento: Lead,
+  relatorioUrl: string | null,
+): Promise<void> {
+  for (const destinatario of NOTIFICACAO_INTERNA) {
+    try {
+      await sendTemplateEmail("notificacao-pagamento", destinatario, {
+        idempotencyKey: `notificacao-pagamento-${pagamento.id}-${destinatario}`,
+        templateData: {
+          empresa: lead.empresa,
+          nome: lead.nome,
+          email: lead.email,
+          telefone: lead.telefone,
+          valor: formatarEuros(Number(pagamento.amount ?? 0), "pt"),
+          metodo: pagamento.method,
+          referencia: pagamento.ifthenpay_order_id,
+          pagoEm: pagamento.paid_at ?? new Date().toISOString(),
+          nif: pagamento.nif ?? undefined,
+          nomeFiscal: pagamento.nome_fiscal ?? undefined,
+          moradaFiscal: pagamento.morada_fiscal ?? undefined,
+          relatorioUrl,
+        },
+      });
+    } catch (error) {
+      console.error(
+        `Falha ao enviar notificação de pagamento ${pagamento.id}:`,
+        error instanceof Error ? error.message : error,
+      );
     }
   }
 }

@@ -1,6 +1,7 @@
 // Ported from src/lib/leads.functions.ts (registarLead server function).
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/valuation/cors.ts";
+import { registarEvento } from "../_shared/payments/orquestracao.ts";
 import { gerarSlugRelatorio } from "../_shared/valuation/report-slug.ts";
 import { buildReportFromLead } from "../_shared/valuation/report-data/index.ts";
 import { calcularEnvioRelatorio } from "../_shared/valuation/report-schedule.ts";
@@ -123,5 +124,10 @@ Deno.serve(async (req: Request) => {
   });
   await notificarEquipaNovoLead(inserido.id, lead as Record<string, unknown>, relatorioAdminUrl, pdfAdminUrl);
 
-  return json({ ok: true, emailEnviado, relatorioUrl, pdfUrl });
+  await registarEvento(supabaseAdmin, "submission_created", {
+    submissionId: inserido.id as string,
+    detalhes: { empresa: lead.empresa ?? null, idioma: lead.idioma ?? "pt" },
+  });
+
+  return json({ ok: true, emailEnviado, relatorioUrl, pdfUrl, ref: identificador });
 });

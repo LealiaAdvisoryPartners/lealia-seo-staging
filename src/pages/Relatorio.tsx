@@ -8,7 +8,14 @@ import { isLanguage } from "@/lib/routing";
 import { reportPageCopy } from "@/translations/report-page";
 import type { ReportData } from "@core/report-data";
 
-type RespostaOk = { ok: true; modo: "teaser" | "completo"; pdfUrl?: string | null; relatorio: ReportData };
+type RespostaOk = {
+  ok: true;
+  modo: "teaser" | "completo";
+  estado?: string;
+  ref?: string;
+  pdfUrl?: string | null;
+  relatorio: ReportData;
+};
 type RespostaErro = { ok: false; motivo?: string };
 type Resposta = RespostaOk | RespostaErro;
 
@@ -115,6 +122,11 @@ const Relatorio = () => {
             <Link to="/valuation" className="text-xs underline underline-offset-4 opacity-80">
               {c.back}
             </Link>
+            {dados.modo === "teaser" && dados.estado !== "full_paid" && (
+              <Link to={`/${lang}/upgrade?ref=${encodeURIComponent(dados.ref ?? token ?? "")}`} className="btn-outline">
+                {c.unlock}
+              </Link>
+            )}
             <button type="button" disabled={aGerarPdf} onClick={descarregar} className="btn-primary disabled:opacity-60">
               {aGerarPdf ? c.generating : c.download}
             </button>

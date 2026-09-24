@@ -70,6 +70,8 @@ export type RegistarLeadResponse = {
   emailEnviado?: boolean;
   relatorioUrl?: string | null;
   pdfUrl?: string | null;
+  /** Slug legível da avaliação; âncora do pagamento do relatório completo. */
+  ref?: string | null;
 };
 
 /** Regista o lead através da edge function "registar-lead". */

@@ -44,7 +44,12 @@ Deno.serve(async (req: Request) => {
   if (error || !lead) return json({ ok: false, motivo: "inexistente" });
 
   const linha = lead as Record<string, unknown>;
-  const completo = !!chave && chave === (linha["relatorio_token_admin"] as string | null);
+  // Acesso completo: chave interna da equipa, ou chave do comprador numa
+  // submissão cujo relatório completo já foi pago.
+  const chaveAdmin = chave === (linha["relatorio_token_admin"] as string | null);
+  const chaveComprador =
+    chave === (linha["full_report_token"] as string | null) && linha["status"] === "full_paid";
+  const completo = !!chave && (chaveAdmin || chaveComprador);
 
   const expiraEm = linha["relatorio_expira_em"] as string | null;
   if (!completo && expiraEm && new Date(expiraEm).getTime() < Date.now()) {
@@ -58,6 +63,8 @@ Deno.serve(async (req: Request) => {
   return json({
     ok: true,
     modo: completo ? "completo" : "teaser",
+    estado: (linha["status"] as string | null) ?? "pending",
+    ref: (linha["relatorio_slug"] as string | null) ?? (linha["relatorio_token"] as string),
     pdfUrl: completo
       ? ((linha["relatorio_pdf_admin_url"] as string | null) ?? null)
       : ((linha["relatorio_pdf_url"] as string | null) ?? null),

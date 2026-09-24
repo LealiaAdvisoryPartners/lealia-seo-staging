@@ -2,6 +2,8 @@ import type { ComponentType } from "npm:react@18.3.1";
 import { template as resumoAvaliacaoTemplate } from "./resumo-avaliacao.tsx";
 import { template as notificacaoLeadTemplate } from "./notificacao-lead.tsx";
 import { template as confirmacaoSubmissaoTemplate } from "./confirmacao-submissao.tsx";
+import { template as relatorioCompletoTemplate } from "./relatorio-completo.tsx";
+import { template as notificacaoPagamentoTemplate } from "./notificacao-pagamento.tsx";
 
 export interface TemplateEntry {
   // deno-lint-ignore no-explicit-any
@@ -19,4 +21,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "resumo-avaliacao": resumoAvaliacaoTemplate,
   "confirmacao-submissao": confirmacaoSubmissaoTemplate,
   "notificacao-lead": notificacaoLeadTemplate,
+  "relatorio-completo": relatorioCompletoTemplate,
+  "notificacao-pagamento": notificacaoPagamentoTemplate,
 };

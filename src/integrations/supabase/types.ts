@@ -54,6 +54,8 @@ export type Database = {
           faturacao_ano1: number | null
           faturacao_ano2: number | null
           faturacao_ano3: number | null
+          full_report_pago_em: string | null
+          full_report_token: string
           geografia_clientes: string | null
           horizonte_temporal: string | null
           id: string
@@ -91,6 +93,7 @@ export type Database = {
           relatorio_token_admin: string
           relatorio_url: string | null
           renda_reflete_mercado: string | null
+          status: string
           subindustria: string | null
           suprimentos_acionistas: number | null
           telefone: string | null
@@ -138,6 +141,8 @@ export type Database = {
           faturacao_ano1?: number | null
           faturacao_ano2?: number | null
           faturacao_ano3?: number | null
+          full_report_pago_em?: string | null
+          full_report_token?: string
           geografia_clientes?: string | null
           horizonte_temporal?: string | null
           id?: string
@@ -175,6 +180,7 @@ export type Database = {
           relatorio_token_admin?: string
           relatorio_url?: string | null
           renda_reflete_mercado?: string | null
+          status?: string
           subindustria?: string | null
           suprimentos_acionistas?: number | null
           telefone?: string | null
@@ -222,6 +228,8 @@ export type Database = {
           faturacao_ano1?: number | null
           faturacao_ano2?: number | null
           faturacao_ano3?: number | null
+          full_report_pago_em?: string | null
+          full_report_token?: string
           geografia_clientes?: string | null
           horizonte_temporal?: string | null
           id?: string
@@ -259,6 +267,7 @@ export type Database = {
           relatorio_token_admin?: string
           relatorio_url?: string | null
           renda_reflete_mercado?: string | null
+          status?: string
           subindustria?: string | null
           suprimentos_acionistas?: number | null
           telefone?: string | null
@@ -269,9 +278,164 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          expires_at: string | null
+          fatura_estado: string
+          fatura_referencia: string | null
+          id: string
+          ifthenpay_order_id: string
+          method: string
+          morada_fiscal: string | null
+          nif: string | null
+          nome_fiscal: string | null
+          paid_at: string | null
+          payment_details: Json | null
+          request_id: string | null
+          status: string
+          submission_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          fatura_estado?: string
+          fatura_referencia?: string | null
+          id?: string
+          ifthenpay_order_id: string
+          method: string
+          morada_fiscal?: string | null
+          nif?: string | null
+          nome_fiscal?: string | null
+          paid_at?: string | null
+          payment_details?: Json | null
+          request_id?: string | null
+          status?: string
+          submission_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          fatura_estado?: string
+          fatura_referencia?: string | null
+          id?: string
+          ifthenpay_order_id?: string
+          method?: string
+          morada_fiscal?: string | null
+          nif?: string | null
+          nome_fiscal?: string | null
+          paid_at?: string | null
+          payment_details?: Json | null
+          request_id?: string | null
+          status?: string
+          submission_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submission_overview"
+            referencedColumns: ["submission_id"]
+          },
+        ]
+      }
+      submission_audit_logs: {
+        Row: {
+          created_at: string
+          details: Json | null
+          event: string
+          id: string
+          payment_id: string | null
+          submission_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          event: string
+          id?: string
+          payment_id?: string | null
+          submission_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          event?: string
+          id?: string
+          payment_id?: string | null
+          submission_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submission_audit_logs_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submission_audit_logs_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "submission_overview"
+            referencedColumns: ["payment_id"]
+          },
+          {
+            foreignKeyName: "submission_audit_logs_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submission_audit_logs_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "submission_overview"
+            referencedColumns: ["submission_id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      submission_overview: {
+        Row: {
+          email: string | null
+          empresa: string | null
+          estado_pagamento: string | null
+          estado_submissao: string | null
+          full_report_pago_em: string | null
+          idioma: string | null
+          ifthenpay_order_id: string | null
+          metodo_pagamento: string | null
+          nome: string | null
+          paid_at: string | null
+          payment_id: string | null
+          relatorio_slug: string | null
+          resumo_agendado_para: string | null
+          resumo_enviado_em: string | null
+          submetido_em: string | null
+          submission_id: string | null
+          valor: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
