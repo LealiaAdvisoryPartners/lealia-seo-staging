@@ -173,6 +173,7 @@ const DCF_TEXT: Record<Exclude<ReportLang, "pt">, Record<string, string>> = {
     "Assumption": "Assumption", "Não projetado": "Not projected", "End of period convention": "End-of-period convention",
     "Taxa de imposto (CIT)": "Corporate income tax (CIT)",
     "Espanha · Taxa geral do Impuesto sobre Sociedades em Espanha.": "Spain · Standard Spanish corporate income tax rate.",
+    "Taxa geral do Impuesto sobre Sociedades em Espanha.": "Standard Spanish corporate income tax rate.",
     "Taxa geral aplicável em Espanha. Taxa geral do Impuesto sobre Sociedades em Espanha.": "Standard rate applicable in Spain. Standard Spanish corporate income tax rate.",
     "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).": "Average yield on the selected country's 10-year government bonds (European Central Bank / IGCP and Tesoro Público).",
     "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).": "Mature-market risk premium (Damodaran, Implied ERP, using the US market as the reference market).",
@@ -194,6 +195,7 @@ const DCF_TEXT: Record<Exclude<ReportLang, "pt">, Record<string, string>> = {
     "Assumption": "Hipótesis", "Não projetado": "No proyectado", "End of period convention": "Convención de fin de periodo",
     "Taxa de imposto (CIT)": "Impuesto sobre sociedades",
     "Espanha · Taxa geral do Impuesto sobre Sociedades em Espanha.": "España · Tipo general del Impuesto sobre Sociedades en España.",
+    "Taxa geral do Impuesto sobre Sociedades em Espanha.": "Tipo general del Impuesto sobre Sociedades en España.",
     "Taxa geral aplicável em Espanha. Taxa geral do Impuesto sobre Sociedades em Espanha.": "Tipo general aplicable en España. Tipo general del Impuesto sobre Sociedades en España.",
     "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).": "Rentabilidad media de la deuda pública a 10 años del país seleccionado (Banco Central Europeo / IGCP y Tesoro Público).",
     "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).": "Prima de riesgo de mercado maduro (Damodaran, Implied ERP, con el mercado estadounidense como referencia).",
@@ -235,7 +237,7 @@ export function traduzirDcf(dcf: Extract<DcfResult, { ok: true }>, lang: ReportL
     matrizes: dcf.matrizes.map((m) => ({ ...m, titulo: tr(m.titulo), eixo_x_label: tr(m.eixo_x_label), eixo_y_label: tr(m.eixo_y_label), colunas: m.colunas.map((c) => ({ ...c, label: lang === "en" ? c.label.replace(",", ".") : c.label })), linhas: m.linhas.map((l) => ({ ...l, label: lang === "en" ? l.label.replace(",", ".") : l.label })) })),
     pressupostos: dcf.pressupostos.map((p) => ({ ...p, label: tr(p.label), valor: tr(p.valor).replace(lang === "en" ? " da receita" : " da receita", lang === "en" ? " of revenue" : " de los ingresos"), origem: tr(p.origem) as typeof p.origem, nota: traduzirNota(p.nota) })),
     fontes: dcf.fontes.map((f) => ({ parametro: tr(f.parametro), fonte: tr(f.fonte) })),
-    cit_nota: lang === "en" ? "Standard Spanish corporate income tax rate." : "Tipo general del Impuesto sobre Sociedades en España.",
+    cit_nota: tr(dcf.cit_nota),
   };
 }
 
