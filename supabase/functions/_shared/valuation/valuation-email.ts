@@ -61,6 +61,20 @@ export type IdiomaLead = "pt" | "en" | "es";
 
 const idiomaDe = (v: unknown): IdiomaLead => (v === "en" || v === "es" ? v : "pt");
 
+/** Endereço do checkout do relatório completo, no idioma do lead. */
+export function urlCompraRelatorio(lead: Lead): string | null {
+  const url = String(lead.relatorio_url ?? "");
+  if (!url) return null;
+  try {
+    const { origin } = new URL(url);
+    const ref = lead.relatorio_slug ?? lead.relatorio_token;
+    if (!ref) return null;
+    return `${origin}/${idiomaDe(lead.idioma)}/upgrade?ref=${encodeURIComponent(String(ref))}`;
+  } catch {
+    return null;
+  }
+}
+
 export async function enviarConfirmacaoSubmissao(
   leadId: string,
   lead: { nome: string; email: string; empresa: string; calculo_possivel: boolean; idioma?: string | null },
@@ -97,6 +111,7 @@ export async function enviarResumoAvaliacao(
         empresa: lead.empresa,
         relatorioUrl: relatorioUrl ?? null,
         pdfUrl: pdfUrl ?? null,
+        upgradeUrl: urlCompraRelatorio(lead),
         lang: idiomaDe(lead.idioma),
       },
     });
