@@ -18,6 +18,9 @@ export const pt = {
   "seo.privacy.title": "Política de Privacidade | Lealia Advisory Partners",
   "seo.privacy.description":
     "Política de privacidade da Lealia Advisory Partners — como recolhemos, utilizamos e protegemos os seus dados pessoais.",
+  "seo.upgrade.title": "Relatório Completo de Avaliação | Lealia Advisory Partners",
+  "seo.upgrade.description":
+    "Desbloqueie o relatório completo da avaliação da sua empresa por 299 €: avaliação por múltiplos e DCF, sensibilidades, drivers de valor e plano de preparação para o mercado.",
   "seo.terms.title": "Termos e Condições | Lealia Advisory Partners",
   "seo.terms.description":
     "Termos e Condições aplicáveis aos serviços de avaliação de empresas prestados pela Lealia Advisory Partners.",
