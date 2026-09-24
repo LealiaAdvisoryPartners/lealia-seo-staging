@@ -20,12 +20,13 @@ const MOTIVOS: Record<string, keyof ReturnType<typeof textos>["errors"]> = {
 const textos = (lang: "pt" | "en" | "es") => checkoutCopy[lang];
 
 export function UpgradeCheckout({
-  ref: referencia,
+  referencia,
   telefone,
   reportUrl,
   onPago,
 }: {
-  ref: string | null;
+  /** Slug ou token público da avaliação a que o pagamento fica associado. */
+  referencia: string | null;
   telefone?: string | null;
   reportUrl?: string | null;
   onPago?: () => void;
