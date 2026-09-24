@@ -44,6 +44,7 @@ Deno.serve(async (req: Request) => {
   }
 
   let enviados = 0;
+  let travadosPorPagamento = 0;
   for (const lead of pendentes ?? []) {
     const linha = lead as Record<string, unknown>;
     const id = linha["id"] as string;
@@ -52,21 +53,22 @@ Deno.serve(async (req: Request) => {
     if (linha["calculo_possivel"] !== true) {
       await supabaseAdmin
         .from("leads")
-        .update({ email_relatorio_enviado_em: new Date().toISOString() })
+        .update({ status: "sample_sent", email_relatorio_enviado_em: new Date().toISOString() })
         .eq("id", id)
-        .is("email_relatorio_enviado_em", null);
+        .eq("status", "pending");
       console.info(`Lead ${id} ignorado: cálculo não possível`);
       continue;
     }
 
-    // Marca já a tentativa para garantir que não há envios duplicados.
-    const { error: reservaErro } = await supabaseAdmin
-      .from("leads")
-      .update({ email_relatorio_enviado_em: new Date().toISOString() })
-      .eq("id", id)
-      .is("email_relatorio_enviado_em", null);
-    if (reservaErro) {
-      console.error(`Falha a reservar envio do lead ${id}`, reservaErro.message);
+    await registarEvento(supabaseAdmin, "sample_send_attempted", { submissionId: id });
+
+    // REGRA DURA: a reserva é condicional ao estado "pending" no instante exato do
+    // envio. Se o relatório completo foi pago entretanto, o resumo nunca sai.
+    const reservado = await reservarEnvioResumo(supabaseAdmin, id);
+    if (!reservado) {
+      travadosPorPagamento++;
+      await registarEvento(supabaseAdmin, "sample_send_skipped_paid", { submissionId: id });
+      console.info(`Lead ${id} ignorado: relatório completo já pago ou já processado`);
       continue;
     }
 
@@ -92,8 +94,12 @@ Deno.serve(async (req: Request) => {
       })
       .eq("id", id);
 
-    if (ok) enviados++;
+    if (ok) {
+      enviados++;
+      await registarEvento(supabaseAdmin, "sample_sent", { submissionId: id, detalhes: { relatorioUrl } });
+    }
   }
+
 
   return json({ ok: true, processados: pendentes?.length ?? 0, enviados });
 });
