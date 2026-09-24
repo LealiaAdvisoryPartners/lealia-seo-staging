@@ -9,7 +9,7 @@ import { leadDoFormulario, valuationInputDoFormulario } from "@/components/leali
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
 
-export const CALENDLY_URL = "https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report";
+export const CALENDLY_URL = "https://calendly.com/lealiaap-drp/valuationcall";
 
 export function AvaliacaoTool() {
   const { language } = useLanguage();

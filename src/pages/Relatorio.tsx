@@ -12,7 +12,7 @@ type RespostaOk = { ok: true; modo: "teaser" | "completo"; pdfUrl?: string | nul
 type RespostaErro = { ok: false; motivo?: string };
 type Resposta = RespostaOk | RespostaErro;
 
-const CALENDLY = "https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report";
+const CALENDLY = "https://calendly.com/lealiaap-drp/valuationcall";
 
 const Relatorio = () => {
   const { token } = useParams<{ token: string }>();

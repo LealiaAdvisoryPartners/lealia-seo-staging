@@ -36,7 +36,7 @@ const Email = ({
   empresa,
   relatorioUrl,
   pdfUrl,
-  calendlyUrl = "https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report",
+  calendlyUrl = "https://calendly.com/lealiaap-drp/valuationcall",
   lang = "pt",
 }: Props) => {
   const reportUrl = relatorioUrl || pdfUrl;
