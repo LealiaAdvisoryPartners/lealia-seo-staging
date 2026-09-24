@@ -7,6 +7,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/valuation/cors.ts";
 import { calcularExpiracaoRelatorio } from "../_shared/valuation/report-schedule.ts";
 import { enviarResumoAvaliacao } from "../_shared/valuation/valuation-email.ts";
+import { registarEvento, reservarEnvioResumo } from "../_shared/payments/orquestracao.ts";
 
 const LOTE = 20;
 
