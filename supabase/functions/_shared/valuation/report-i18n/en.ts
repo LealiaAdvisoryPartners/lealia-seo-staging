@@ -700,6 +700,8 @@ export const en: typeof pt = {
       planoPreparacao: "Prioritised preparation plan",
       notaSecao: "This section is intended for those considering moving forward with an M&A process. Our team can help you prepare the business to maximise value at sale. Contact us for an initial no-obligation conversation.",
       prioridade: "Priority",
+      priorityHigh: "High",
+      priorityMedium: "Medium",
       acao: "Action",
       impactoEsperado: "Expected impact",
       esforco: "Effort",

@@ -1041,15 +1041,19 @@
 }
 
 .report-preparation .report-table th:first-child {
-  width: 25mm;
+  width: 11%;
 }
 
 .report-preparation .report-table th:nth-child(2) {
-  width: 92mm;
+  width: 42%;
+}
+
+.report-preparation .report-table th:nth-child(3) {
+  width: 31%;
 }
 
 .report-preparation .report-table th:nth-child(4) {
-  width: 22mm;
+  width: 16%;
 }
 
 .report-preparation .report-body > .report-h2.report-h2-tight {
@@ -1380,7 +1384,7 @@
 }
 
 .report-disclaimer-slide .report-h2 {
-  margin-bottom: 2.5mm;
+  margin-bottom: 2mm;
 }
 
 .report-disclaimer-slide .report-h3 {
@@ -1395,7 +1399,7 @@
 }
 
 .report-disclaimer-intro {
-  margin: 0 0 3.5mm;
+  margin: 0 0 2.5mm;
 }
 
 .report-disclaimer-grid,
@@ -1416,8 +1420,26 @@
 }
 
 .report-disclaimer-slide .report-list li {
-  margin-bottom: 1.4mm;
+  margin-bottom: 0.9mm;
   text-align: left;
+}
+
+.report-disclaimer-slide .report-p {
+  margin-bottom: 2.5mm;
+}
+
+.report-disclaimer-slide .report-note {
+  margin-top: 1.5mm;
+  padding: 2mm 3mm;
+}
+
+.report-disclaimer-slide .report-body > .report-h2.report-disclaimer-reading-title {
+  margin-top: 2mm;
+  margin-bottom: 1.5mm;
+}
+
+.report-disclaimer-slide .report-leitura {
+  line-height: 1.32;
 }
 
 .report-disclaimer-note {
@@ -1451,19 +1473,22 @@
 }
 
 .report-badge-alto,
-.report-badge-alta {
+.report-badge-alta,
+.report-badge-high {
   background: hsl(0 65% 50% / 0.12);
   color: hsl(0 60% 38%);
 }
 
 .report-badge-médio,
-.report-badge-média {
+.report-badge-média,
+.report-badge-medium {
   background: hsl(36 70% 50% / 0.15);
   color: hsl(30 65% 35%);
 }
 
 .report-badge-baixo,
-.report-badge-baixa {
+.report-badge-baixa,
+.report-badge-low {
   background: hsl(150 45% 40% / 0.12);
   color: hsl(150 45% 28%);
 }

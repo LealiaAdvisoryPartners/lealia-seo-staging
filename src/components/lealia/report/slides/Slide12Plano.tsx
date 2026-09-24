@@ -4,6 +4,9 @@ import { Page, H } from "../primitives";
 
 export function Slide12Plano({ d, lang }: { d: ReportData; lang: ReportLang }) {
   const dict = t(lang).doc;
+  const priorityClass = (priority: string) =>
+    priority === dict.p12.priorityHigh ? "high" : priority === dict.p12.priorityMedium ? "medium" : "neutral";
+
   return (
     <Page numero={12} titulo={dict.p12.titulo} className="report-preparation" lang={lang}>
       <H>{dict.p12.planoPreparacao}</H>
@@ -21,7 +24,7 @@ export function Slide12Plano({ d, lang }: { d: ReportData; lang: ReportLang }) {
           {d.plano.map((p, i) => (
             <tr key={i}>
               <td>
-                <span className={`report-badge report-badge-${p.prioridade.toLowerCase()}`}>{p.prioridade}</span>
+                <span className={`report-badge report-badge-${priorityClass(p.prioridade)}`}>{p.prioridade}</span>
               </td>
               <td>{p.acao}</td>
               <td>{p.impacto}</td>
