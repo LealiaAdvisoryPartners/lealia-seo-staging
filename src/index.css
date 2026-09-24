@@ -1041,19 +1041,19 @@
 }
 
 .report-preparation .report-table th:first-child {
-  width: 22mm;
+  width: 11%;
 }
 
 .report-preparation .report-table th:nth-child(2) {
-  width: 102mm;
+  width: 42%;
 }
 
 .report-preparation .report-table th:nth-child(3) {
-  width: 76mm;
+  width: 31%;
 }
 
 .report-preparation .report-table th:nth-child(4) {
-  width: 20mm;
+  width: 16%;
 }
 
 .report-preparation .report-body > .report-h2.report-h2-tight {
@@ -1433,7 +1433,7 @@
   padding: 2mm 3mm;
 }
 
-.report-disclaimer-slide .report-disclaimer-reading-title {
+.report-disclaimer-slide .report-body > .report-h2.report-disclaimer-reading-title {
   margin-top: 2mm;
   margin-bottom: 1.5mm;
 }
