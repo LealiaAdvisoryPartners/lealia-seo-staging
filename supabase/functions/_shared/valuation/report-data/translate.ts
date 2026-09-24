@@ -171,6 +171,9 @@ const DCF_TEXT: Record<Exclude<ReportLang, "pt">, Record<string, string>> = {
     "Crescimento na perpetuidade vs. WACC": "Perpetuity growth vs. WACC", "g terminal": "Terminal growth", "Capex (% da receita) vs. WACC": "Capex (% of revenue) vs. WACC",
     "Crescimento inicial da receita": "Initial revenue growth", "Margem EBITDA projetada": "Projected EBITDA margin", "Prémio de dimensão (PME)": "Size premium (SME)", "Prémio específico (iliquidez)": "Specific premium (illiquidity)", "Prémio específico do ativo": "Asset-specific premium", "Estrutura de capital (D / E)": "Capital structure (D / E)", "Crescimento estabilizado (anos 4-8)": "Stabilised growth (years 4-8)", "Crescimento na perpetuidade": "Perpetuity growth", "Convenção de desconto": "Discount convention",
     "Assumption": "Assumption", "Não projetado": "Not projected", "End of period convention": "End-of-period convention",
+    "Taxa de imposto (CIT)": "Corporate income tax (CIT)",
+    "Espanha · Taxa geral do Impuesto sobre Sociedades em Espanha.": "Spain · Standard Spanish corporate income tax rate.",
+    "Taxa geral aplicável em Espanha. Taxa geral do Impuesto sobre Sociedades em Espanha.": "Standard rate applicable in Spain. Standard Spanish corporate income tax rate.",
     "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).": "Average yield on the selected country's 10-year government bonds (European Central Bank / IGCP and Tesoro Público).",
     "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).": "Mature-market risk premium (Damodaran, Implied ERP, using the US market as the reference market).",
     "Damodaran, Country Risk Premiums, derivado do spread de default do rating soberano ajustado pela volatilidade relativa do mercado acionista.": "Damodaran Country Risk Premiums, derived from the sovereign-rating default spread and adjusted for relative equity-market volatility.",
@@ -189,6 +192,9 @@ const DCF_TEXT: Record<Exclude<ReportLang, "pt">, Record<string, string>> = {
     "Crescimento na perpetuidade vs. WACC": "Crecimiento a perpetuidad vs. WACC", "g terminal": "Crecimiento terminal", "Capex (% da receita) vs. WACC": "Capex (% de ingresos) vs. WACC",
     "Crescimento inicial da receita": "Crecimiento inicial de los ingresos", "Margem EBITDA projetada": "Margen EBITDA proyectado", "Prémio de dimensão (PME)": "Prima de tamaño (pyme)", "Prémio específico (iliquidez)": "Prima específica (iliquidez)", "Prémio específico do ativo": "Prima específica del activo", "Estrutura de capital (D / E)": "Estructura de capital (D / E)", "Crescimento estabilizado (anos 4-8)": "Crecimiento estabilizado (años 4-8)", "Crescimento na perpetuidade": "Crecimiento a perpetuidad", "Convenção de desconto": "Convención de descuento",
     "Assumption": "Hipótesis", "Não projetado": "No proyectado", "End of period convention": "Convención de fin de periodo",
+    "Taxa de imposto (CIT)": "Impuesto sobre sociedades",
+    "Espanha · Taxa geral do Impuesto sobre Sociedades em Espanha.": "España · Tipo general del Impuesto sobre Sociedades en España.",
+    "Taxa geral aplicável em Espanha. Taxa geral do Impuesto sobre Sociedades em Espanha.": "Tipo general aplicable en España. Tipo general del Impuesto sobre Sociedades en España.",
     "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).": "Rentabilidad media de la deuda pública a 10 años del país seleccionado (Banco Central Europeo / IGCP y Tesoro Público).",
     "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).": "Prima de riesgo de mercado maduro (Damodaran, Implied ERP, con el mercado estadounidense como referencia).",
     "Damodaran, Country Risk Premiums, derivado do spread de default do rating soberano ajustado pela volatilidade relativa do mercado acionista.": "Damodaran, Country Risk Premiums, derivada del diferencial de impago de la calificación soberana y ajustada por la volatilidad relativa del mercado de renta variable.",
@@ -228,6 +234,8 @@ export function traduzirDcf(dcf: Extract<DcfResult, { ok: true }>, lang: ReportL
     ...dcf,
     matrizes: dcf.matrizes.map((m) => ({ ...m, titulo: tr(m.titulo), eixo_x_label: tr(m.eixo_x_label), eixo_y_label: tr(m.eixo_y_label), colunas: m.colunas.map((c) => ({ ...c, label: lang === "en" ? c.label.replace(",", ".") : c.label })), linhas: m.linhas.map((l) => ({ ...l, label: lang === "en" ? l.label.replace(",", ".") : l.label })) })),
     pressupostos: dcf.pressupostos.map((p) => ({ ...p, label: tr(p.label), valor: tr(p.valor).replace(lang === "en" ? " da receita" : " da receita", lang === "en" ? " of revenue" : " de los ingresos"), origem: tr(p.origem) as typeof p.origem, nota: traduzirNota(p.nota) })),
+    fontes: dcf.fontes.map((f) => ({ parametro: tr(f.parametro), fonte: tr(f.fonte) })),
+    cit_nota: lang === "en" ? "Standard Spanish corporate income tax rate." : "Tipo general del Impuesto sobre Sociedades en España.",
   };
 }
 
