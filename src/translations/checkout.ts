@@ -42,7 +42,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     eyebrow: "RELATÓRIO COMPLETO",
     heading: "Desbloqueie a avaliação integral da sua empresa",
     lead: "O relatório completo entrega a análise sem secções bloqueadas, com avaliação por múltiplos e por fluxos de caixa descontados, análises de sensibilidade e um plano concreto de preparação para o mercado.",
-    priceNote: "299 € · pagamento único · IVA incluído",
+    priceNote: "Pagamento único · IVA incluído",
     includesTitle: "O que recebe",
     includes: [
       "Avaliação por múltiplos de mercado e por fluxos de caixa descontados",
@@ -89,7 +89,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     eyebrow: "FULL REPORT",
     heading: "Unlock the complete valuation of your company",
     lead: "The full report delivers the analysis with no locked sections: market multiples and discounted cash flow valuation, sensitivity analyses and a concrete market-readiness plan.",
-    priceNote: "€299 · one-off payment · VAT included",
+    priceNote: "One-off payment · VAT included",
     includesTitle: "What you get",
     includes: [
       "Valuation by market multiples and by discounted cash flows",
@@ -136,7 +136,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     eyebrow: "INFORME COMPLETO",
     heading: "Desbloquee la valoración integral de su empresa",
     lead: "El informe completo entrega el análisis sin secciones bloqueadas, con valoración por múltiplos y por flujos de caja descontados, análisis de sensibilidad y un plan concreto de preparación para el mercado.",
-    priceNote: "299 € · pago único · IVA incluido",
+    priceNote: "Pago único · IVA incluido",
     includesTitle: "Qué recibe",
     includes: [
       "Valoración por múltiplos de mercado y por flujos de caja descontados",
