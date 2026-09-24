@@ -121,7 +121,7 @@ export type Risco = {
   evidencia: string;
   impacto: string;
   mitigante: string;
-  nivel: "Alto" | "Médio" | "Baixo";
+  nivel: string;
 };
 
 /** Todas as flags booleanas derivadas do lead/resultado, reutilizadas por várias secções. */

@@ -1,6 +1,7 @@
 // Riscos e mitigantes — apenas com evidência preenchida, máximo de quatro.
 import { formatFactorXLang } from "../../report-i18n/index.ts";
 import type { Ctx, Risco } from "../types.ts";
+import { traduzirValorFormulario } from "../translate.ts";
 
 export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
   const { L, historico, flags, depGest, top5, depFat, racioDivida, capex, lead, fmt, NAO_INDICADO, lang } = ctx;
@@ -14,17 +15,17 @@ export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
         evidencia: historico.length === 1 ? L.riscos.historicoLimitado.evidenciaUm : L.riscos.historicoLimitado.evidenciaVarios(historico.length),
         impacto: L.riscos.historicoLimitado.impacto,
         mitigante: L.riscos.historicoLimitado.mitigante,
-        nivel: "Alto",
+        nivel: L.riscos.niveis.alto,
       },
     ],
     [
       flags.dependencia_gestao_alta,
       {
         risco: L.riscos.dependenciaGestao.risco,
-        evidencia: L.riscos.dependenciaGestao.evidencia(depGest ?? ""),
+        evidencia: L.riscos.dependenciaGestao.evidencia(traduzirValorFormulario(depGest, lang) ?? ""),
         impacto: L.riscos.dependenciaGestao.impacto,
         mitigante: L.riscos.dependenciaGestao.mitigante,
-        nivel: "Alto",
+        nivel: L.riscos.niveis.alto,
       },
     ],
     [
@@ -34,17 +35,17 @@ export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
         evidencia: L.riscos.concentracaoClientes.evidencia(top5 ?? 0),
         impacto: L.riscos.concentracaoClientes.impacto,
         mitigante: L.riscos.concentracaoClientes.mitigante,
-        nivel: "Alto",
+        nivel: L.riscos.niveis.alto,
       },
     ],
     [
       flags.dependencia_faturacao_alta,
       {
         risco: L.riscos.dependenciaComercial.risco,
-        evidencia: L.riscos.dependenciaComercial.evidencia(depFat ?? ""),
+        evidencia: L.riscos.dependenciaComercial.evidencia(traduzirValorFormulario(depFat, lang) ?? ""),
         impacto: L.riscos.dependenciaComercial.impacto,
         mitigante: L.riscos.dependenciaComercial.mitigante,
-        nivel: "Alto",
+        nivel: L.riscos.niveis.alto,
       },
     ],
     [
@@ -54,7 +55,7 @@ export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
         evidencia: L.riscos.localizacaoUnica.evidencia,
         impacto: L.riscos.localizacaoUnica.impacto,
         mitigante: L.riscos.localizacaoUnica.mitigante,
-        nivel: "Médio",
+        nivel: L.riscos.niveis.medio,
       },
     ],
     [
@@ -67,7 +68,7 @@ export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
             : L.riscos.posicaoLiquidaElevada.evidenciaSemDados,
         impacto: L.riscos.posicaoLiquidaElevada.impacto,
         mitigante: L.riscos.posicaoLiquidaElevada.mitigante,
-        nivel: "Alto",
+        nivel: L.riscos.niveis.alto,
       },
     ],
     [
@@ -77,17 +78,17 @@ export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
         evidencia: L.riscos.capexElevado.evidencia(eur(capex)),
         impacto: L.riscos.capexElevado.impacto,
         mitigante: L.riscos.capexElevado.mitigante,
-        nivel: "Médio",
+        nivel: L.riscos.niveis.medio,
       },
     ],
     [
       flags.tem_imovel_proprio && lead.metodo_avaliacao_imovel !== "Avaliação independente",
       {
         risco: L.riscos.imovelSemAvaliacao.risco,
-        evidencia: L.riscos.imovelSemAvaliacao.evidencia(lead.metodo_avaliacao_imovel || NAO_INDICADO),
+        evidencia: L.riscos.imovelSemAvaliacao.evidencia(traduzirValorFormulario(lead.metodo_avaliacao_imovel, lang) || NAO_INDICADO),
         impacto: L.riscos.imovelSemAvaliacao.impacto,
         mitigante: L.riscos.imovelSemAvaliacao.mitigante,
-        nivel: "Médio",
+        nivel: L.riscos.niveis.medio,
       },
     ],
     [
@@ -97,7 +98,7 @@ export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
         evidencia: L.riscos.ajustamentosPorValidar.evidencia(eur(lead.despesas_extraordinarias_ano1)),
         impacto: L.riscos.ajustamentosPorValidar.impacto,
         mitigante: L.riscos.ajustamentosPorValidar.mitigante,
-        nivel: "Médio",
+        nivel: L.riscos.niveis.medio,
       },
     ],
     [
@@ -107,7 +108,7 @@ export function buildRiscos(ctx: Ctx): { riscos: Risco[] } {
         evidencia: L.riscos.contracaoFaturacao.evidencia,
         impacto: L.riscos.contracaoFaturacao.impacto,
         mitigante: L.riscos.contracaoFaturacao.mitigante,
-        nivel: "Alto",
+        nivel: L.riscos.niveis.alto,
       },
     ],
   ];

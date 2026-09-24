@@ -3,8 +3,11 @@ import { type ReportLang, t } from "@core/report-i18n";
 import { Page, H } from "../primitives";
 
 function efeitoQualitativo(multiplicador: number, lang: ReportLang, semDados?: boolean, efeito?: string) {
-  if (efeito) return efeito;
   const efeitos = t(lang).doc.efeito;
+  if (efeito === "Positivo") return efeitos.positivo;
+  if (efeito === "Negativo") return efeitos.negativo;
+  if (efeito === "Neutro") return efeitos.neutro;
+  if (efeito) return efeito;
   if (semDados) return efeitos.neutro;
   if (multiplicador > 0.995) return efeitos.positivo;
   if (multiplicador < 0.995) return efeitos.negativo;
