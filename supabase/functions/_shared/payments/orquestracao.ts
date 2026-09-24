@@ -127,7 +127,12 @@ export async function confirmarPagamento(
   const { data: lead } = await admin.from("leads").select("*").eq("id", pagamento.submission_id).maybeSingle();
   if (lead) {
     const url = urlRelatorioCompleto(lead as Record<string, unknown>);
-    const enviado = await enviarRelatorioCompleto(admin, lead as Record<string, unknown>, url);
+    const enviado = await enviarRelatorioCompleto(
+      admin,
+      lead as Record<string, unknown>,
+      url,
+      pagamento as Record<string, unknown>,
+    );
     if (enviado) {
       await registarEvento(admin, "full_report_sent", {
         submissionId: pagamento.submission_id,
