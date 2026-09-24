@@ -46,7 +46,7 @@ export function WaterfallChart({ items, lang }: { items: ReportData["ponte"]; la
                 ? dictWaterfall.equityValue
                 : item.valor < 0
                   ? dictWaterfall.divida
-                  : item.label.includes("caixa")
+                  : item.label === t(lang).ponte.maisCaixa
                     ? dictWaterfall.caixa
                     : dictWaterfall.imovel;
           const className =

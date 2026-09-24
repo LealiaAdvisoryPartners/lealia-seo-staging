@@ -514,7 +514,7 @@ export const es: typeof pt = {
     },
 
     sensitivity: {
-      titulo: "Sensitivity Analysis",
+      titulo: "Análisis de sensibilidad",
       hTitulo: "Análisis de sensibilidad",
       semDados: "No hay un análisis DCF disponible, por lo que no es posible presentar las matrices de sensibilidad.",
       sensibilidadeEv: "Sensibilidad del Enterprise Value",
@@ -543,7 +543,7 @@ export const es: typeof pt = {
     lockedCta: "Agendar una reunión para ver el informe completo",
 
     cover: {
-      titulo: "Preliminary Valuation",
+      titulo: "Valoración preliminar",
       preparadoPara: "Preparado para",
       data: "Fecha",
     },
