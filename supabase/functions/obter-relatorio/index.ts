@@ -63,6 +63,8 @@ Deno.serve(async (req: Request) => {
   return json({
     ok: true,
     modo: completo ? "completo" : "teaser",
+    estado: (linha["status"] as string | null) ?? "pending",
+    ref: (linha["relatorio_slug"] as string | null) ?? (linha["relatorio_token"] as string),
     pdfUrl: completo
       ? ((linha["relatorio_pdf_admin_url"] as string | null) ?? null)
       : ((linha["relatorio_pdf_url"] as string | null) ?? null),
