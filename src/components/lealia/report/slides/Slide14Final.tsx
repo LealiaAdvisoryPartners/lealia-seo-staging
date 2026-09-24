@@ -16,7 +16,7 @@ export function Slide14Final({ d, lang }: { d: ReportData; lang: ReportLang }) {
             <strong>{dict.p14.proximoPassoTitulo}</strong>
             <p>{dict.p14.proximoPassoDesc}</p>
             <a
-              href="https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report"
+              href="https://calendly.com/lealiaap-drp/valuationcall"
               target="_blank"
               rel="noreferrer"
               className="report-next-step-btn"

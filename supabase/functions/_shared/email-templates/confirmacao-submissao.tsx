@@ -33,7 +33,7 @@ const Email = ({
   nome,
   empresa,
   calculoPossivel = true,
-  calendlyUrl = "https://calendly.com/d/d3qm-jpm-t5x/valuation-full-report",
+  calendlyUrl = "https://calendly.com/lealiaap-drp/valuationcall",
   lang = "pt",
 }: Props) => {
   const t = dict[lang] ?? dict.pt;
