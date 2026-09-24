@@ -13,7 +13,7 @@ export function buildPerfil(ctx: Ctx) {
   const perfil = [
     { label: L.perfil.atividadePrincipal, valor: lead.atividade_principal || NAO_INDICADO },
     { label: L.perfil.setor, valor: `${industria}${subindustria ? ` · ${subindustria}` : ""}` },
-    { label: L.perfil.geografia, valor: lead.pais },
+    { label: L.perfil.geografia, valor: traduzirValorFormulario(lead.pais, lang) ?? lead.pais },
     { label: L.perfil.unidadesLocalizacoes, valor: traduzirValorFormulario(lead.unidades, lang) || NAO_INDICADO },
     { label: L.perfil.anosAtividade, valor: lead.idade_empresa ? L.perfil.anosAtividadeValor(lead.idade_empresa) : NAO_INDICADO },
     { label: L.perfil.colaboradores, valor: lead.num_colaboradores || NAO_INDICADO },

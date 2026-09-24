@@ -61,7 +61,14 @@ export function buildMultiplos(ctx: Ctx) {
 
     ajustes: (r?.ajustes ?? []).map((a) => {
       const trad = traduzirAjuste(a, lang);
-      return { ...a, label: trad.label, detalhe: trad.detalhe };
+      const efeito = a.efeito === "Positivo"
+        ? L.doc.efeito.positivo
+        : a.efeito === "Negativo"
+          ? L.doc.efeito.negativo
+          : a.efeito === "Neutro"
+            ? L.doc.efeito.neutro
+            : a.efeito;
+      return { ...a, label: trad.label, detalhe: trad.detalhe, efeito };
     }) as Ajuste[],
     aviso_margem: r?.aviso_margem ?? null,
     nota_setor: r?.nota_setor ?? null,
