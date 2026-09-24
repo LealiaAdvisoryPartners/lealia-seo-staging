@@ -1,4 +1,4 @@
-import { FASES } from "@core/timeline";
+import { getFases } from "@core/timeline";
 import { type ReportLang, t } from "@core/report-i18n";
 import { Page, H } from "../primitives";
 
@@ -9,7 +9,7 @@ export function Slide13Processo({ lang }: { lang: ReportLang }) {
       <H>{dict.p13.hTitulo}</H>
       <div className="report-note report-disclaimer-inline">{dict.p13.notaSecao}</div>
       <div className="report-phases report-phases-2 report-phases-tall">
-        {FASES.map((f) => (
+        {getFases(lang).map((f) => (
           <div key={f.numero} className="report-phase">
             <div className="report-phase-head">
               <span>{f.numero}</span>

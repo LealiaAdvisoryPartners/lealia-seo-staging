@@ -171,6 +171,17 @@ const DCF_TEXT: Record<Exclude<ReportLang, "pt">, Record<string, string>> = {
     "Crescimento na perpetuidade vs. WACC": "Perpetuity growth vs. WACC", "g terminal": "Terminal growth", "Capex (% da receita) vs. WACC": "Capex (% of revenue) vs. WACC",
     "Crescimento inicial da receita": "Initial revenue growth", "Margem EBITDA projetada": "Projected EBITDA margin", "Prémio de dimensão (PME)": "Size premium (SME)", "Prémio específico (iliquidez)": "Specific premium (illiquidity)", "Prémio específico do ativo": "Asset-specific premium", "Estrutura de capital (D / E)": "Capital structure (D / E)", "Crescimento estabilizado (anos 4-8)": "Stabilised growth (years 4-8)", "Crescimento na perpetuidade": "Perpetuity growth", "Convenção de desconto": "Discount convention",
     "Assumption": "Assumption", "Não projetado": "Not projected", "End of period convention": "End-of-period convention",
+    "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).": "Average yield on the selected country's 10-year government bonds (European Central Bank / IGCP and Tesoro Público).",
+    "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).": "Mature-market risk premium (Damodaran, Implied ERP, using the US market as the reference market).",
+    "Damodaran, Country Risk Premiums, derivado do spread de default do rating soberano ajustado pela volatilidade relativa do mercado acionista.": "Damodaran Country Risk Premiums, derived from the sovereign-rating default spread and adjusted for relative equity-market volatility.",
+    "Beta unlevered setorial (Damodaran, Betas by Sector - Europa Ocidental), realavancado à estrutura de capital-alvo do setor pela fórmula de Hamada.": "Sector unlevered beta (Damodaran, Betas by Sector — Western Europe), relevered to the sector target capital structure using the Hamada formula.",
+    "Prémio de small/micro cap face às cotadas de referência (Damodaran / Kroll Size Premia). Aplicado por prudência: uma PME tem custo de capital superior ao das empresas de referência do setor.": "Small/micro-cap premium over listed reference companies (Damodaran / Kroll Size Premia). Applied prudently because an SME has a higher cost of capital than listed sector peers.",
+    "Prémio de iliquidez do capital e de dependência de pessoas-chave, prática corrente em avaliação de PME não cotadas.": "Premium for equity illiquidity and key-person dependence, commonly applied when valuing unlisted SMEs.",
+    "Prémio de risco específico do ativo, calibrado em função do perfil de risco da empresa e da consistência dos pressupostos de longo prazo face às referências de mercado.": "Asset-specific risk premium calibrated to the company's risk profile and the consistency of long-term assumptions against market references.",
+    "Risk-free acrescido do spread de crédito médio do setor e de um add-on de PME; o formulário não recolhe o custo efetivo da dívida.": "Risk-free rate plus the sector's average credit spread and an SME add-on; the form does not collect the company's effective cost of debt.",
+    "Estrutura de capital-alvo de referência do setor (Damodaran, Debt Ratios by Sector), não a estrutura corrente da empresa.": "Reference sector target capital structure (Damodaran, Debt Ratios by Sector), rather than the company's current structure.",
+    "CAGR histórico da receita, usado como ponto de partida e convergido linearmente para o crescimento estabilizado ao longo do horizonte.": "Historical revenue CAGR, used as the starting point and converged linearly towards stabilised growth over the forecast horizon.",
+    "Histórico inferior a três exercícios: aplicada a taxa de crescimento de referência do setor, limitada ao crescimento estabilizado.": "Fewer than three financial years available: the sector reference growth rate is applied, capped at stabilised growth.",
   },
   es: {
     "CAGR da faturação (período explícito) vs. WACC": "CAGR de la facturación (periodo explícito) vs. WACC", "CAGR receita": "CAGR de la facturación",
@@ -178,6 +189,17 @@ const DCF_TEXT: Record<Exclude<ReportLang, "pt">, Record<string, string>> = {
     "Crescimento na perpetuidade vs. WACC": "Crecimiento a perpetuidad vs. WACC", "g terminal": "Crecimiento terminal", "Capex (% da receita) vs. WACC": "Capex (% de ingresos) vs. WACC",
     "Crescimento inicial da receita": "Crecimiento inicial de los ingresos", "Margem EBITDA projetada": "Margen EBITDA proyectado", "Prémio de dimensão (PME)": "Prima de tamaño (pyme)", "Prémio específico (iliquidez)": "Prima específica (iliquidez)", "Prémio específico do ativo": "Prima específica del activo", "Estrutura de capital (D / E)": "Estructura de capital (D / E)", "Crescimento estabilizado (anos 4-8)": "Crecimiento estabilizado (años 4-8)", "Crescimento na perpetuidade": "Crecimiento a perpetuidad", "Convenção de desconto": "Convención de descuento",
     "Assumption": "Hipótesis", "Não projetado": "No proyectado", "End of period convention": "Convención de fin de periodo",
+    "Yield média das Obrigações do Tesouro a 10 anos do país selecionado (Banco Central Europeu / IGCP e Tesoro Público).": "Rentabilidad media de la deuda pública a 10 años del país seleccionado (Banco Central Europeo / IGCP y Tesoro Público).",
+    "Prémio de risco de mercado maduro (Damodaran, Implied ERP - mercado dos EUA como mercado de referência).": "Prima de riesgo de mercado maduro (Damodaran, Implied ERP, con el mercado estadounidense como referencia).",
+    "Damodaran, Country Risk Premiums, derivado do spread de default do rating soberano ajustado pela volatilidade relativa do mercado acionista.": "Damodaran, Country Risk Premiums, derivada del diferencial de impago de la calificación soberana y ajustada por la volatilidad relativa del mercado de renta variable.",
+    "Beta unlevered setorial (Damodaran, Betas by Sector - Europa Ocidental), realavancado à estrutura de capital-alvo do setor pela fórmula de Hamada.": "Beta sectorial desapalancada (Damodaran, Betas by Sector — Europa Occidental), reapalancada a la estructura de capital objetivo del sector mediante la fórmula de Hamada.",
+    "Prémio de small/micro cap face às cotadas de referência (Damodaran / Kroll Size Premia). Aplicado por prudência: uma PME tem custo de capital superior ao das empresas de referência do setor.": "Prima de small/micro cap frente a cotizadas de referencia (Damodaran / Kroll Size Premia). Se aplica con prudencia porque una pyme tiene un coste de capital superior al de las cotizadas comparables del sector.",
+    "Prémio de iliquidez do capital e de dependência de pessoas-chave, prática corrente em avaliação de PME não cotadas.": "Prima por iliquidez del capital y dependencia de personas clave, habitual en la valoración de pymes no cotizadas.",
+    "Prémio de risco específico do ativo, calibrado em função do perfil de risco da empresa e da consistência dos pressupostos de longo prazo face às referências de mercado.": "Prima de riesgo específica del activo, calibrada según el perfil de riesgo de la empresa y la consistencia de las hipótesis a largo plazo frente a referencias de mercado.",
+    "Risk-free acrescido do spread de crédito médio do setor e de um add-on de PME; o formulário não recolhe o custo efetivo da dívida.": "Tipo libre de riesgo más el diferencial de crédito medio del sector y un recargo de pyme; el formulario no recoge el coste efectivo de la deuda.",
+    "Estrutura de capital-alvo de referência do setor (Damodaran, Debt Ratios by Sector), não a estrutura corrente da empresa.": "Estructura de capital objetivo de referencia del sector (Damodaran, Debt Ratios by Sector), no la estructura actual de la empresa.",
+    "CAGR histórico da receita, usado como ponto de partida e convergido linearmente para o crescimento estabilizado ao longo do horizonte.": "CAGR histórico de los ingresos, utilizado como punto de partida y convergido linealmente hacia el crecimiento estabilizado durante el horizonte de proyección.",
+    "Histórico inferior a três exercícios: aplicada a taxa de crescimento de referência do setor, limitada ao crescimento estabilizado.": "Menos de tres ejercicios disponibles: se aplica la tasa de crecimiento de referencia del sector, limitada al crecimiento estabilizado.",
   },
 };
 
@@ -187,6 +209,8 @@ export function traduzirDcf(dcf: Extract<DcfResult, { ok: true }>, lang: ReportL
   const tr = (value: string) => map[value] ?? value;
   const traduzirNota = (nota?: string) => {
     if (!nota) return nota;
+    const completa = map[nota];
+    if (completa) return completa;
     if (lang === "en") return nota
       .replace(" da receita", " of revenue")
       .replace("Convergência até ao ano 4 para o crescimento estabilizado: se o CAGR histórico estiver entre 2% e 3,5%, mantém-se; abaixo de 2% converge para 2%; acima de 3,5% fica limitado a 3,5%, alinhado com o crescimento nominal de longo prazo da economia.", "Convergence by year 4 to stabilised growth: the historical CAGR is retained between 2% and 3.5%; below 2% it converges to 2%; above 3.5% it is capped at 3.5%, in line with long-term nominal economic growth.")
@@ -202,7 +226,7 @@ export function traduzirDcf(dcf: Extract<DcfResult, { ok: true }>, lang: ReportL
   };
   return {
     ...dcf,
-    matrizes: dcf.matrizes.map((m) => ({ ...m, titulo: tr(m.titulo), eixo_x_label: tr(m.eixo_x_label), eixo_y_label: tr(m.eixo_y_label) })),
+    matrizes: dcf.matrizes.map((m) => ({ ...m, titulo: tr(m.titulo), eixo_x_label: tr(m.eixo_x_label), eixo_y_label: tr(m.eixo_y_label), colunas: m.colunas.map((c) => ({ ...c, label: lang === "en" ? c.label.replace(",", ".") : c.label })), linhas: m.linhas.map((l) => ({ ...l, label: lang === "en" ? l.label.replace(",", ".") : l.label })) })),
     pressupostos: dcf.pressupostos.map((p) => ({ ...p, label: tr(p.label), valor: tr(p.valor).replace(lang === "en" ? " da receita" : " da receita", lang === "en" ? " of revenue" : " de los ingresos"), origem: tr(p.origem) as typeof p.origem, nota: traduzirNota(p.nota) })),
   };
 }

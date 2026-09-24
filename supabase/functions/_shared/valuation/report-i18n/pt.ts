@@ -546,7 +546,7 @@ export const pt = {
     lockedCta: "Agendar reunião para ver o relatório completo",
 
     cover: {
-      titulo: "Preliminary Valuation",
+      titulo: "Avaliação preliminar",
       preparadoPara: "Preparado para",
       data: "Data",
     },

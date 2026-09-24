@@ -2,23 +2,8 @@ import type { ReportData } from "@core/report-data";
 import { t, type ReportLang, groupThousandsLang } from "@core/report-i18n";
 import { Page, H } from "./primitives";
 
-// Lista fechada de pressupostos a apresentar na secção de transparência.
-const PRESSUPOSTOS_TRANSPARENCIA = [
-  "Crescimento inicial da receita",
-  "Margem EBITDA projetada",
-  "Risk-free rate",
-  "Beta unlevered / levered",
-  "Equity Risk Premium",
-  "Country Risk Premium",
-  "Prémio de dimensão (PME)",
-  "Prémio específico (iliquidez)",
-  "Prémio específico do ativo",
-  "Cost of debt (pre / post tax)",
-  "Estrutura de capital (D / E)",
-  "Crescimento estabilizado (anos 5-8)",
-  "Crescimento na perpetuidade",
-  "Convenção de desconto",
-];
+// Índices estáveis dos pressupostos pedidos para a transparência do slide.
+const PRESSUPOSTOS_TRANSPARENCIA = [4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
 export function SensitivityPage({ d, numero, lang }: { d: ReportData; numero: number; lang: ReportLang }) {
   const dcf = d.dcf;
@@ -34,9 +19,8 @@ export function SensitivityPage({ d, numero, lang }: { d: ReportData; numero: nu
     );
   }
 
-  const pressupostosExtra = PRESSUPOSTOS_TRANSPARENCIA.map((label) =>
-    dcf.pressupostos.find((p) => p.label === label),
-  ).filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const pressupostosExtra = PRESSUPOSTOS_TRANSPARENCIA.map((index) => dcf.pressupostos[index])
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
     <Page numero={numero} titulo={dictSens.titulo} lang={lang}>
