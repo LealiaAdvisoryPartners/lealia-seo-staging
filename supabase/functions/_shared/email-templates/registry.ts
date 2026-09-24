@@ -21,4 +21,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "resumo-avaliacao": resumoAvaliacaoTemplate,
   "confirmacao-submissao": confirmacaoSubmissaoTemplate,
   "notificacao-lead": notificacaoLeadTemplate,
+  "relatorio-completo": relatorioCompletoTemplate,
+  "notificacao-pagamento": notificacaoPagamentoTemplate,
 };
