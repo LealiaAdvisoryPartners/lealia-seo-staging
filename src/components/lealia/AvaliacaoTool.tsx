@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ValuationForm, type FormState } from "@/components/lealia/form";
 import { ThankYouCard } from "@/components/lealia/ThankYouCard";
+import { UpgradeCheckout } from "@/components/lealia/checkout/UpgradeCheckout";
 import { SampleReport } from "@/components/lealia/SampleReport";
 import { CalendlyInline } from "@/components/lealia/CalendlyInline";
 import { calcularValuation, type ValuationResult } from "@core/valuation";
@@ -16,6 +17,8 @@ export function AvaliacaoTool() {
   const copy = pageCopy[language];
   const [result, setResult] = useState<ValuationResult | null>(null);
   const [empresa, setEmpresa] = useState("");
+  const [referencia, setReferencia] = useState<string | null>(null);
+  const [telefone, setTelefone] = useState("");
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
@@ -31,6 +34,8 @@ export function AvaliacaoTool() {
 
   const handleSubmit = (data: FormState) => {
     setEmpresa(data.empresa);
+    setTelefone(data.telefone ?? "");
+    setReferencia(null);
     setLoading(true);
     setResult(null);
     setTimeout(() => {
@@ -38,9 +43,9 @@ export function AvaliacaoTool() {
       setResult(r);
       setLoading(false);
 
-      void registarLead(leadDoFormulario(data, r)).catch((e) =>
-        console.error("Falha ao registar lead", e),
-      );
+      void registarLead(leadDoFormulario(data, r))
+        .then((resposta) => setReferencia(resposta?.ref ?? null))
+        .catch((e) => console.error("Falha ao registar lead", e));
     }, 1400);
   };
 
@@ -97,7 +102,19 @@ export function AvaliacaoTool() {
               <p className="serif-accent text-center text-2xl text-muted-foreground">{copy.loading}</p>
             ) : (
               result && (
-                <ThankYouCard empresa={empresa} calculoPossivel={result.ok} onAgendar={() => scrollTo(agendarRef)} />
+                <>
+                  <ThankYouCard empresa={empresa} calculoPossivel={result.ok} onAgendar={() => scrollTo(agendarRef)} />
+
+                  {result.ok && referencia && (
+                    <div className="mt-20 border-t border-border pt-20">
+                      <UpgradeCheckout
+                        referencia={referencia}
+                        telefone={telefone}
+                        reportUrl={`/${referencia}`}
+                      />
+                    </div>
+                  )}
+                </>
               )
             )}
           </div>
