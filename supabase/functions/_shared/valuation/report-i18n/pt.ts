@@ -703,6 +703,8 @@ export const pt = {
       planoPreparacao: "Plano de preparação priorizado",
       notaSecao: "Esta secção destina-se a quem está a considerar avançar com um processo de M&A. A nossa equipa pode ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial sem compromisso.",
       prioridade: "Prioridade",
+      priorityHigh: "Alta",
+      priorityMedium: "Média",
       acao: "Ação",
       impactoEsperado: "Impacto esperado",
       esforco: "Esforço",

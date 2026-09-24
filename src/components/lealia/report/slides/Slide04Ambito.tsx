@@ -5,7 +5,7 @@ import { Page, H } from "../primitives";
 export function Slide04Ambito({ d, lang }: { d: ReportData; lang: ReportLang }) {
   const dict = t(lang).doc;
   return (
-    <Page numero={4} titulo={dict.p4.titulo} lang={lang}>
+    <Page numero={4} titulo={dict.p4.titulo} className="report-disclaimer-slide" lang={lang}>
       <H>{dict.p4.hTitulo}</H>
       <p className="report-p">{dict.disclaimer}</p>
       <div className="report-two">
@@ -30,7 +30,7 @@ export function Slide04Ambito({ d, lang }: { d: ReportData; lang: ReportLang }) 
         </div>
       </div>
 
-      <H style={{ marginTop: "2.5mm", marginBottom: "2mm" }}>{dict.p4.leituraComplementar}</H>
+      <H className="report-disclaimer-reading-title">{dict.p4.leituraComplementar}</H>
       <ul className="report-list report-list-disc report-leitura">
         <li>{d.qualidade.conversao_caixa}</li>
         <li>{d.qualidade.fundo_maneio}</li>
