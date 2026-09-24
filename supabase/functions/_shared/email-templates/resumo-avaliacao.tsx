@@ -76,6 +76,15 @@ const Email = ({
             </Text>
           )}
 
+          {upgradeUrl && (
+            <CtaCard
+              eyebrowText={t.upgradeEyebrow}
+              title={t.upgradeTitle}
+              href={upgradeUrl}
+              buttonLabel={t.upgradeButton}
+            />
+          )}
+
           <CtaCard eyebrowText={t.ctaEyebrow} title={t.ctaTitle} href={calendlyUrl} buttonLabel={t.ctaButton} />
 
           {/* Footer */}
