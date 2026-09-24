@@ -30,6 +30,7 @@ Deno.serve(async (req: Request) => {
   const { data: pendentes, error } = await supabaseAdmin
     .from("leads")
     .select("*")
+    .eq("status", "pending")
     .is("email_relatorio_enviado_em", null)
     .not("email_relatorio_agendado_para", "is", null)
     .lte("email_relatorio_agendado_para", agora.toISOString())
