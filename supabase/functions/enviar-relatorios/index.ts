@@ -101,5 +101,5 @@ Deno.serve(async (req: Request) => {
   }
 
 
-  return json({ ok: true, processados: pendentes?.length ?? 0, enviados });
+  return json({ ok: true, processados: pendentes?.length ?? 0, enviados, travadosPorPagamento });
 });
