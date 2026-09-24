@@ -27,6 +27,7 @@ interface Props {
   empresa?: string;
   relatorioUrl?: string | null;
   pdfUrl?: string | null;
+  upgradeUrl?: string | null;
   calendlyUrl?: string;
   lang?: Lang;
 }
