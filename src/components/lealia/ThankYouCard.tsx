@@ -1,26 +1,25 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
+import { calendlyLinkProps } from "@/lib/calendly";
 
 export function ThankYouCard({
   empresa,
   calculoPossivel,
-  onAgendar,
 }: {
   empresa: string;
   calculoPossivel: boolean;
-  onAgendar: () => void;
 }) {
   const { language } = useLanguage();
   const c = pageCopy[language].thankYou;
 
   return (
-    <div className="mx-auto max-w-2xl text-center">
-      <p className="flex justify-center">
+    <div className="w-full">
+      <p className="flex">
         <span className="eyebrow">{c.eyebrow}</span>
       </p>
       <h2 className="section-title mt-4 text-3xl md:text-5xl">{c.heading}</h2>
 
-      <div className="card-elegant mt-10 p-8 text-left sm:p-12">
+      <div className="card-elegant mt-8 p-8 text-left sm:p-10">
         {calculoPossivel ? (
           <>
             <p className="body-justified text-sm leading-relaxed font-light text-muted-foreground">
@@ -41,12 +40,12 @@ export function ThankYouCard({
               .
             </p>
 
-            <div className="mt-8 border-t border-border pt-8 text-center">
+            <div className="mt-8 border-t border-border pt-8">
               <p className="eyebrow">{c.ok.nextStepEyebrow}</p>
               <p className="body-justified mt-3 text-sm font-light text-muted-foreground">{c.ok.nextStepText}</p>
-              <button className="btn-primary mt-6" onClick={onAgendar}>
+              <a className="btn-primary mt-6 inline-block" {...calendlyLinkProps}>
                 {c.ok.cta}
-              </button>
+              </a>
             </div>
           </>
         ) : (
@@ -65,12 +64,12 @@ export function ThankYouCard({
               {c.notOk.p2}
             </p>
 
-            <div className="mt-8 border-t border-border pt-8 text-center">
+            <div className="mt-8 border-t border-border pt-8">
               <p className="eyebrow">{c.notOk.nextStepEyebrow}</p>
               <p className="body-justified mt-3 text-sm font-light text-muted-foreground">{c.notOk.nextStepText}</p>
-              <button className="btn-primary mt-6" onClick={onAgendar}>
+              <a className="btn-primary mt-6 inline-block" {...calendlyLinkProps}>
                 {c.notOk.cta}
-              </button>
+              </a>
             </div>
           </>
         )}
