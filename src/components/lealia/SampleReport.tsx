@@ -1,7 +1,8 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
+import { calendlyLinkProps } from "@/lib/calendly";
 
-export function SampleReport({ onAgendar }: { onAgendar: () => void }) {
+export function SampleReport() {
   const { language } = useLanguage();
   const c = pageCopy[language].sampleReport;
 
@@ -18,9 +19,9 @@ export function SampleReport({ onAgendar }: { onAgendar: () => void }) {
       </div>
 
       <div className="mt-10">
-        <button className="btn-primary" onClick={onAgendar}>
+        <a className="btn-primary inline-block" {...calendlyLinkProps}>
           {c.cta}
-        </button>
+        </a>
       </div>
     </div>
   );
