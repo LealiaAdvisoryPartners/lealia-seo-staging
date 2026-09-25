@@ -69,14 +69,14 @@ export const dict = {
     greetingWithCompany: (nome: string) => `Hola ${nome}`,
     receivedFrom: ", hemos recibido los datos de ",
     bodyPossivel:
-      "Nuestro equipo va a analizar ahora la información remitida y le enviaremos el informe de valoración indicativa en cuanto esté finalizado.",
+      "Nuestro equipo va a analizar ahora la información remitida y le enviaremos el informe de valoración indicativa en menos de 3 días hábiles.",
     bodyImpossivel1:
       "La información facilitada no permite, en esta fase, realizar una estimación fiable de la valoración de su empresa.",
     bodyImpossivel2:
       "Esto no significa que su empresa carezca de valor: póngase en contacto con nosotros para que podamos analizar su situación concreta y ayudarle con un proceso de valoración personalizado.",
     contactPrefix: "Para cualquier consulta mientras tanto, puede contactarnos a través de",
     ctaEyebrow: "PRÓXIMO PASO - REUNIÓN DE 20 MINUTOS",
-    ctaTitlePossivel: "Presentación del informe completo.",
+    ctaTitlePossivel: "Discusión estratégica y contexto de mercado con nuestro equipo.",
     ctaTitleImpossivel: "Análisis personalizado de su empresa.",
     ctaButtonPossivel: "Agendar reunión",
     ctaButtonImpossivel: "Hablar con el equipo",
