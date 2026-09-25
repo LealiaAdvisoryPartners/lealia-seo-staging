@@ -13,6 +13,10 @@ export type PageCopy = {
     heading: string;
     steps: { n: string; t: string; d: string }[];
   };
+  formSection: {
+    eyebrow: string;
+    heading: string;
+  };
   loading: string;
   sampleSection: {
     eyebrow: string;
@@ -107,6 +111,10 @@ export const pageCopy: Record<Language, PageCopy> = {
           d: "Receba a análise detalhada completa, e agende uma reunião de 20 minutos com a nossa equipa para discutir os resultados.",
         },
       ],
+    },
+    formSection: {
+      eyebrow: "Avaliação indicativa",
+      heading: "Inicie a análise da sua empresa",
     },
     loading: "A registar a sua submissão…",
     sampleSection: {
@@ -260,6 +268,10 @@ export const pageCopy: Record<Language, PageCopy> = {
         },
       ],
     },
+    formSection: {
+      eyebrow: "Indicative valuation",
+      heading: "Start your company analysis",
+    },
     loading: "Registering your submission…",
     sampleSection: {
       eyebrow: "Full report",
@@ -411,6 +423,10 @@ export const pageCopy: Record<Language, PageCopy> = {
           d: "Reciba el análisis detallado completo y programe una reunión de 20 minutos con nuestro equipo para comentar los resultados.",
         },
       ],
+    },
+    formSection: {
+      eyebrow: "Valoración indicativa",
+      heading: "Inicie el análisis de su empresa",
     },
     loading: "Registrando su envío…",
     sampleSection: {

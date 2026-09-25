@@ -89,6 +89,11 @@ export function AvaliacaoTool() {
       {/* Formulário */}
       <section ref={formRef} className="scroll-mt-24 border-y border-border bg-secondary/50">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+          <div className="mx-auto mb-12 max-w-2xl">
+            <p className="eyebrow">{copy.formSection.eyebrow}</p>
+            <h2 className="section-title mt-5 text-3xl md:text-4xl">{copy.formSection.heading}</h2>
+            <div className="mt-6 h-px w-16 bg-accent" />
+          </div>
           <ValuationForm onSubmit={handleSubmit} />
         </div>
       </section>

@@ -36,7 +36,6 @@ export const dadosFinanceiros: StepDef = {
           </Field>
         </div>
 
-        <p className="text-sm text-muted-foreground">{copy.fields.valoresEurosNote(anoLabel(1))}</p>
         {([1, 2, 3] as const).map((ano) => (
           <div key={ano} className="border-t border-border pt-6">
             <p className="eyebrow mb-4">
