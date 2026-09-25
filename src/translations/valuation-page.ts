@@ -83,7 +83,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     hero: {
       titlePrefix: "Quanto vale a sua empresa? ",
       titleAccent: "Peça uma análise indicativa gratuita.",
-      lead: "Submeta os dados da sua PME. A nossa equipa valida a informação, analisa os indicadores e prepara um relatório completo em poucas horas.",
+      lead: "Submeta os dados da sua PME. A nossa equipa valida a informação, analisa os indicadores e prepara o relatório em menos de 3 dias úteis.",
       ctaPrimary: "Avaliar a minha empresa agora",
       ctaSecondary: "Falar com a equipa",
     },
@@ -99,12 +99,12 @@ export const pageCopy: Record<Language, PageCopy> = {
         {
           n: "02",
           t: "Receba o relatório preliminar",
-          d: "A nossa equipa valida e analisa os dados, monta a equity bridge da sua empresa\ne envia o relatório para o seu e-mail.",
+          d: "A nossa equipa valida e analisa os dados, monta a equity bridge da sua empresa\ne envia o relatório para o seu e-mail em menos de 3 dias úteis.",
         },
         {
           n: "03",
-          t: "Reveja o relatório completo connosco",
-          d: "Agende uma reunião de 20 minutos com a nossa equipa para aceder ao relatório completo e conhecer as suas opções.",
+          t: "Discuta a estratégia connosco",
+          d: "Agende uma reunião de 20 minutos para enquadrar o valor no mercado atual e explorar as suas opções de transação.",
         },
       ],
     },
@@ -114,8 +114,8 @@ export const pageCopy: Record<Language, PageCopy> = {
       heading: "O que recebe numa análise Lealia",
     },
     scheduling: {
-      heading: "Fale connosco e aceda ao relatório completo",
-      lead: "Numa reunião de 20 minutos, apresentamos os detalhes completos da avaliação, respondemos a todas as suas questões e explicamos-lhe como se processa uma transação de M&A, de A a Z. Totalmente gratuito e sem compromisso.",
+      heading: "Fale connosco sobre a estratégia para a sua empresa",
+      lead: "Numa reunião de 20 minutos, enquadramos o valor da sua empresa no apetite atual do mercado, discutimos as opções de transação disponíveis e explicamos-lhe como se processa um processo de M&A, de A a Z. Totalmente gratuito e sem compromisso.",
     },
     thankYou: {
       eyebrow: "Submissão recebida",
@@ -124,11 +124,11 @@ export const pageCopy: Record<Language, PageCopy> = {
         p1Prefix: "Recebemos os dados",
         p1CompanyPrefix: " da ",
         p1Suffix:
-          ". A nossa equipa vai agora trabalhar a informação submetida e enviamos-lhe o relatório de avaliação indicativa, por email, assim que estiver finalizado.",
+          ". A nossa equipa vai agora trabalhar a informação submetida e enviamos-lhe o relatório de avaliação indicativa, por email, em menos de 3 dias úteis.",
         p2Prefix: "Para qualquer questão entretanto, pode contactar-nos através de",
         email: "valuations@lealiaap.com",
         nextStepEyebrow: "Próximo passo — reunião de 20 minutos",
-        nextStepText: "Apresentação e discussão do relatório completo com um Managing Partner.",
+        nextStepText: "Discussão estratégica e enquadramento de mercado com um Managing Partner.",
         cta: "Agendar reunião",
       },
       notOk: {
@@ -164,39 +164,39 @@ export const pageCopy: Record<Language, PageCopy> = {
         },
         {
           numero: "04",
-          titulo: "Método e alternativas",
-          texto:
-            "Enquadramente e explicação da metodologia aplicada e comparativo face a abordagens alternativas de avaliação.",
-        },
-        {
-          numero: "05",
           titulo: "Ajustes ao múltiplo",
           texto:
             "Detalhe de cada ajuste aplicado ao múltiplo base do setor: dimensão, crescimento, recorrência, concentração de clientes e dependência da gestão.",
         },
         {
-          numero: "06",
+          numero: "05",
           titulo: "Cenários e sensibilidade",
           texto:
             "Análise de sensibilidade do Enterprise Value a variações de EBITDA e de múltiplo, com cenários conservador, base e otimista.",
         },
         {
-          numero: "07",
+          numero: "06",
           titulo: "Equity Bridge e contexto da transação",
           texto:
             "Passagem de Enterprise Value a Equity Value — dívida, caixa e imóvel no perímetro — e leitura e enquadramento da estrutura de transação pretendida.",
         },
         {
-          numero: "08",
-          titulo: "Drivers de valor",
+          numero: "07",
+          titulo: "Avaliação por DCF",
           texto:
-            "Identificação e sugestão de plano de ação sobre os principais fatores que expandem ou comprimem o valor do negócio.",
+            "Avaliação por fluxos de caixa descontados: projeções explícitas, custo de capital (WACC) construído numa ótica prudente para PME e valor terminal.",
+        },
+        {
+          numero: "08",
+          titulo: "Matriz de sensibilidades DCF",
+          texto:
+            "Matrizes que cruzam o custo de capital com o crescimento perpétuo e com a margem, isolando o impacto de cada pressuposto no valor.",
         },
         {
           numero: "09",
-          titulo: "Preparação para o mercado",
+          titulo: "Drivers de valor, Riscos, e preparação para mercado",
           texto:
-            "Alterações de implementação imediata para maximizar o valor do negócio, com prioridades e horizonte de execução.",
+            "Fatores que expandem ou comprimem o valor, riscos identificados com mitigantes e plano de ação imediato para maximizar o negócio antes de ir a mercado.",
         },
       ],
       cta: "Quero o relatório completo e uma análise personalizada",
