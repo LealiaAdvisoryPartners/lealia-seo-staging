@@ -64,9 +64,9 @@ export function AvaliacaoTool() {
             <button className="btn-primary" onClick={() => scrollTo(formRef)}>
               {copy.hero.ctaPrimary}
             </button>
-            <button className="btn-outline" onClick={() => scrollTo(agendarRef)}>
+            <a className="btn-outline inline-block" {...calendlyLinkProps}>
               {copy.hero.ctaSecondary}
-            </button>
+            </a>
           </div>
         </div>
       </section>
