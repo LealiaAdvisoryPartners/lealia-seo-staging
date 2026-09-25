@@ -1,13 +1,11 @@
-// Ported from src/routes/api/public/enviar-relatorios.ts.
-// Batch job: sends the scheduled "resumo de avaliação" email to leads whose
-// send time has arrived. Invoked every 15 minutes by pg_cron (see migration).
-// Reservation pattern (`update ... .is("email_relatorio_enviado_em", null)`) guarantees
-// a lead is never emailed twice, even if the job overlaps itself or retries.
+// Job diário (08:53 Lisboa): liberta os relatórios cuja hora (n+2) chegou —
+// completo para quem pagou antes, sample para quem não pagou.
+// Reservas atómicas garantem um único envio por lead, mesmo com sobreposição.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/valuation/cors.ts";
-import { calcularExpiracaoRelatorio } from "../_shared/valuation/report-schedule.ts";
+import { calcularExpiracaoRelatorio, HORA_ENVIO_LISBOA, horaLisboa } from "../_shared/valuation/report-schedule.ts";
 import { enviarResumoAvaliacao } from "../_shared/valuation/valuation-email.ts";
-import { registarEvento, reservarEnvioResumo } from "../_shared/payments/orquestracao.ts";
+import { entregarRelatorioCompleto, registarEvento, reservarEnvioResumo } from "../_shared/payments/orquestracao.ts";
 
 const LOTE = 20;
 
@@ -20,6 +18,12 @@ Deno.serve(async (req: Request) => {
   const auth = req.headers.get("authorization") ?? "";
   if (!chave || auth !== `Bearer ${chave}`) return json({ ok: false, error: "Unauthorized" }, 401);
 
+  // O agendador corre às 07:53 e 08:53 UTC; só a execução das 8h de Lisboa atua
+  // (cobre horário de verão e de inverno).
+  const forcar = new URL(req.url).searchParams.get("forcar") === "1";
+  if (!forcar && horaLisboa() !== HORA_ENVIO_LISBOA) {
+    return json({ ok: true, ignorado: "fora_da_hora_lisboa" });
+  }
 
   const supabaseAdmin = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -27,6 +31,25 @@ Deno.serve(async (req: Request) => {
   );
 
   const agora = new Date();
+
+  // 1) Relatórios completos pagos antes da hora de libertação.
+  const { data: pagos } = await supabaseAdmin
+    .from("leads")
+    .select("*")
+    .eq("status", "full_paid")
+    .is("full_report_enviado_em", null)
+    .lte("email_relatorio_agendado_para", agora.toISOString())
+    .limit(LOTE);
+  let completosEnviados = 0;
+  for (const lead of pagos ?? []) {
+    try {
+      if (await entregarRelatorioCompleto(supabaseAdmin, lead as Record<string, unknown>)) completosEnviados++;
+    } catch (e) {
+      console.error(`Falha ao entregar relatório completo do lead ${lead.id}`, e instanceof Error ? e.message : e);
+    }
+  }
+
+  // 2) Samples para quem não pagou.
   const { data: pendentes, error } = await supabaseAdmin
     .from("leads")
     .select("*")
@@ -49,17 +72,6 @@ Deno.serve(async (req: Request) => {
     const linha = lead as Record<string, unknown>;
     const id = linha["id"] as string;
 
-    // Segurança: não envia relatório quando o cálculo não foi possível.
-    if (linha["calculo_possivel"] !== true) {
-      await supabaseAdmin
-        .from("leads")
-        .update({ status: "sample_sent", email_relatorio_enviado_em: new Date().toISOString() })
-        .eq("id", id)
-        .eq("status", "pending");
-      console.info(`Lead ${id} ignorado: cálculo não possível`);
-      continue;
-    }
-
     await registarEvento(supabaseAdmin, "sample_send_attempted", { submissionId: id });
 
     // REGRA DURA: a reserva é condicional ao estado "pending" no instante exato do
@@ -68,7 +80,6 @@ Deno.serve(async (req: Request) => {
     if (!reservado) {
       travadosPorPagamento++;
       await registarEvento(supabaseAdmin, "sample_send_skipped_paid", { submissionId: id });
-      console.info(`Lead ${id} ignorado: relatório completo já pago ou já processado`);
       continue;
     }
 
@@ -79,18 +90,14 @@ Deno.serve(async (req: Request) => {
     try {
       ok = await enviarResumoAvaliacao(supabaseAdmin, id, linha, relatorioUrl, pdfUrl);
     } catch (e) {
-      // Nunca deve travar o lote: regista e continua com o próximo lead.
       console.error(`Falha inesperada ao enviar resumo do lead ${id}`, e instanceof Error ? e.message : e);
     }
 
     await supabaseAdmin
       .from("leads")
       .update({
-        // 7 dias de validade a contar do momento em que o utilizador recebe o link.
         relatorio_expira_em: calcularExpiracaoRelatorio(new Date()).toISOString(),
-        ...(ok
-          ? { relatorio_estado: "enviado", relatorio_enviado_em: new Date().toISOString() }
-          : {}),
+        ...(ok ? { relatorio_estado: "enviado", relatorio_enviado_em: new Date().toISOString() } : {}),
       })
       .eq("id", id);
 
@@ -100,6 +107,5 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-
-  return json({ ok: true, processados: pendentes?.length ?? 0, enviados, travadosPorPagamento });
+  return json({ ok: true, processados: pendentes?.length ?? 0, enviados, travadosPorPagamento, completosEnviados });
 });
