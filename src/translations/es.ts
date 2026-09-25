@@ -5,19 +5,19 @@ export const es = {
     "Firma independiente de asesoramiento M&A para pymes y lower mid-market en la Península Ibérica. Asesoramiento buy-side y sell-side, mejora del desempeño y corporate finance.",
   "seo.about.title": "Sobre Nosotros | Lealia Advisory Partners",
   "seo.about.description":
-    "Conozca Lealia Advisory Partners — asesoramiento financiero independiente especializado en M&A y corporate finance para pymes en el mercado ibérico.",
+    "Conozca Lealia Advisory Partners - asesoramiento financiero independiente especializado en M&A y corporate finance para pymes en el mercado ibérico.",
   "seo.services.title": "Servicios | Lealia Advisory Partners",
   "seo.services.description":
     "Asesoramiento M&A buy-side y sell-side, mejora del desempeño y corporate finance para pymes y empresas del lower mid-market en la Península Ibérica.",
   "seo.team.title": "Equipo | Lealia Advisory Partners",
   "seo.team.description":
-    "Conozca a los Managing Partners de Lealia Advisory Partners — profesionales con amplia experiencia en M&A y más de 30 transacciones en Europa.",
+    "Conozca a los Managing Partners de Lealia Advisory Partners - profesionales con amplia experiencia en M&A y más de 30 transacciones en Europa.",
   "seo.valuation.title": "Valoración de Empresa Gratuita | Lealia Advisory Partners",
   "seo.valuation.description":
     "Obtenga una valoración indicativa de su empresa en minutos. Herramienta gratuita y confidencial de Lealia Advisory Partners, asesores de M&A en Iberia.",
   "seo.privacy.title": "Política de Privacidad | Lealia Advisory Partners",
   "seo.privacy.description":
-    "Política de privacidad de Lealia Advisory Partners — cómo recopilamos, utilizamos y protegemos su información personal.",
+    "Política de privacidad de Lealia Advisory Partners - cómo recopilamos, utilizamos y protegemos su información personal.",
   "seo.upgrade.title": "Informe Completo de Valoración | Lealia Advisory Partners",
   "seo.upgrade.description":
     "Desbloquee el informe completo de valoración de su empresa por 299 €: valoración por múltiplos y DCF, sensibilidades, drivers de valor y plan de preparación para el mercado.",
@@ -37,7 +37,7 @@ export const es = {
   "hero.tagline": "Asesoramiento Estratégico para Resultados Transformadores",
   "hero.services": "ASESORAMIENTO M&A Y CONSULTORÍA ESTRATÉGICA",
 
-  // Home — FluidHome
+  // Home - FluidHome
   "home.manifesto.eyebrow": "Una boutique de M&A",
   "home.manifesto.words":
     "Acompañamos a {i:fundadores,} familias y {i:inversores} a lo largo de toda la {a:transacción}.",
@@ -123,7 +123,7 @@ export const es = {
   "privacy.section2.item2": "Nombre de la empresa y datos profesionales",
   "privacy.section2.item3": "Preferencias de comunicación",
   "privacy.section2.item4":
-    "Datos de facturación y pago (p. ej.: nombre del titular de la tarjeta, dirección de facturación, historial de transacciones — los datos sensibles de la tarjeta son procesados directamente por nuestro proveedor de servicios de pago, no por nosotros)",
+    "Datos de facturación y pago (p. ej.: nombre del titular de la tarjeta, dirección de facturación, historial de transacciones - los datos sensibles de la tarjeta son procesados directamente por nuestro proveedor de servicios de pago, no por nosotros)",
   "privacy.section2.item5":
     "Datos de navegación recopilados automáticamente a través de cookies y tecnologías similares (ver sección 7)",
   "privacy.section2.item6": "Cualquier otra información que decida facilitarnos",
@@ -143,13 +143,12 @@ export const es = {
   "privacy.section4.item2":
     "Cumplir obligaciones legales y fiscales (en particular los plazos de conservación de registros contables exigidos por ley en Portugal)",
   "privacy.section4.item3": "Resolver eventuales litigios y hacer cumplir nuestros acuerdos",
-  "privacy.section4.p2":
-    "Transcurrido ese período, los datos se eliminan o se anonimizan de forma segura.",
+  "privacy.section4.p2": "Transcurrido ese período, los datos se eliminan o se anonimizan de forma segura.",
   "privacy.section5.title": "Pagos",
   "privacy.section5.p1":
     "Al realizar un pago a través de nuestro sitio web, el procesamiento es llevado a cabo por ifthenpay, una Institución de Pago portuguesa autorizada y supervisada por el Banco de Portugal (licencia n.º 8707), que actúa como intermediaria en el procesamiento de pagos por Referencia Multibanco, MB WAY, tarjeta de crédito/débito, entre otros métodos disponibles.",
   "privacy.section5.item1":
-    "No almacenamos números completos de tarjetas de crédito/débito en nuestros propios sistemas — esos datos son gestionados directamente por ifthenpay, en conformidad con la norma PCI-DSS y la normativa aplicable a las Instituciones de Pago en Portugal",
+    "No almacenamos números completos de tarjetas de crédito/débito en nuestros propios sistemas - esos datos son gestionados directamente por ifthenpay, en conformidad con la norma PCI-DSS y la normativa aplicable a las Instituciones de Pago en Portugal",
   "privacy.section5.item2":
     "Compartimos con ifthenpay únicamente los datos estrictamente necesarios para procesar la transacción (p. ej.: importe, referencia del servicio, datos de contacto para la confirmación del pago)",
   "privacy.section5.item3":
@@ -164,30 +163,28 @@ export const es = {
   "privacy.section6.item2": "Autoridades competentes, cuando así lo exija la ley",
   "privacy.section7.title": "Cookies y Tecnologías Similares",
   "privacy.section7.p1":
-    "Nuestro sitio web utiliza únicamente cookies estrictamente necesarias para su funcionamiento y para la seguridad del proceso de pago — en concreto, cookies de sesión y cookies exigidas por nuestro proveedor de servicios de pago (ifthenpay) para procesar la transacción de forma segura.",
+    "Nuestro sitio web utiliza únicamente cookies estrictamente necesarias para su funcionamiento y para la seguridad del proceso de pago - en concreto, cookies de sesión y cookies exigidas por nuestro proveedor de servicios de pago (ifthenpay) para procesar la transacción de forma segura.",
   "privacy.section7.p2":
     "No utilizamos cookies de análisis (analytics), publicidad ni marketing de terceros. Por ese motivo, y en los términos de la legislación aplicable (Ley n.º 41/2004 y RGPD), estas cookies no requieren su consentimiento previo, ya que son indispensables para el funcionamiento del sitio web y para la prestación del servicio solicitado. Si en el futuro llegáramos a utilizar cookies de análisis o marketing, esta política se actualizará y se presentará un mecanismo de consentimiento adecuado.",
   "privacy.section7.p3":
-    "Puede gestionar o eliminar las cookies en cualquier momento a través de la configuración de su navegador — tenga en cuenta que desactivar las cookies estrictamente necesarias puede afectar al funcionamiento del sitio web, incluido el proceso de pago.",
+    "Puede gestionar o eliminar las cookies en cualquier momento a través de la configuración de su navegador - tenga en cuenta que desactivar las cookies estrictamente necesarias puede afectar al funcionamiento del sitio web, incluido el proceso de pago.",
   "privacy.section8.title": "Seguridad de los Datos",
   "privacy.section8.p1":
-    "Aplicamos medidas técnicas y organizativas adecuadas para proteger sus datos personales — incluidos los datos de pago — frente a accesos, alteraciones, divulgaciones o destrucciones no autorizados. No obstante, ningún método de transmisión por Internet ni de almacenamiento electrónico es 100% seguro.",
+    "Aplicamos medidas técnicas y organizativas adecuadas para proteger sus datos personales - incluidos los datos de pago - frente a accesos, alteraciones, divulgaciones o destrucciones no autorizados. No obstante, ningún método de transmisión por Internet ni de almacenamiento electrónico es 100% seguro.",
   "privacy.section9.title": "Sus Derechos",
-  "privacy.section9.p1":
-    "En los términos del Reglamento General de Protección de Datos (RGPD), usted tiene derecho a:",
+  "privacy.section9.p1": "En los términos del Reglamento General de Protección de Datos (RGPD), usted tiene derecho a:",
   "privacy.section9.item1": "Acceder a sus datos personales",
   "privacy.section9.item2": "Rectificar datos incorrectos o incompletos",
   "privacy.section9.item3":
     "Solicitar la eliminación de sus datos ('derecho al olvido'), sujeto a las obligaciones legales de conservación (p. ej.: registros fiscales de pagos)",
-  "privacy.section9.item4":
-    "Oponerse al tratamiento de sus datos con fines de marketing, en cualquier momento",
+  "privacy.section9.item4": "Oponerse al tratamiento de sus datos con fines de marketing, en cualquier momento",
   "privacy.section9.item5":
     "Presentar una reclamación ante la Comissão Nacional de Proteção de Dados (CNPD) de Portugal",
   "privacy.section9.p2":
     "Para ejercer estos derechos, contáctenos a través de la información disponible en nuestro sitio web.",
   "privacy.section10.title": "Contacto",
   "privacy.section10.p1":
-    "Lealia Advisory Partners, Lda. — NIF/NIPC: 519187334 — Domicilio social: Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa, Portugal",
+    "Lealia Advisory Partners, Lda. - NIF/NIPC: 519187334 - Domicilio social: Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa, Portugal",
   "privacy.section10.p2":
     "Si tiene dudas sobre esta Política de Privacidad o sobre nuestras prácticas relacionadas con datos y pagos, contáctenos a través del formulario disponible en el sitio web.",
 
