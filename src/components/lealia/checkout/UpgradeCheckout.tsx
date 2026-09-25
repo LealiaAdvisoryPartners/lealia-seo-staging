@@ -123,7 +123,7 @@ export function UpgradeCheckout({
   }
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+    <div className={layout === "stacked" ? "grid gap-8" : "grid gap-10 lg:grid-cols-[1.1fr_1fr]"}>
       {/* Valor */}
       <div>
         <p className="eyebrow">{c.eyebrow}</p>
