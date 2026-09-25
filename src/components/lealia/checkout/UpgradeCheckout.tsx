@@ -24,12 +24,15 @@ export function UpgradeCheckout({
   telefone,
   reportUrl,
   onPago,
+  layout = "wide",
 }: {
   /** Slug ou token público da avaliação a que o pagamento fica associado. */
   referencia: string | null;
   telefone?: string | null;
   reportUrl?: string | null;
   onPago?: () => void;
+  /** "stacked" mantém tudo numa coluna (para uso lado a lado com outro bloco). */
+  layout?: "wide" | "stacked";
 }) {
   const { language } = useLanguage();
   const c = checkoutCopy[language];
