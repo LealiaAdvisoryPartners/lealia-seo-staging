@@ -3,7 +3,7 @@ import { ValuationForm, type FormState } from "@/components/lealia/form";
 import { ThankYouCard } from "@/components/lealia/ThankYouCard";
 import { UpgradeCheckout } from "@/components/lealia/checkout/UpgradeCheckout";
 import { SampleReport } from "@/components/lealia/SampleReport";
-import { CalendlyInline } from "@/components/lealia/CalendlyInline";
+import { calendlyLinkProps } from "@/lib/calendly";
 import { calcularValuation, type ValuationResult } from "@core/valuation";
 import { registarLead } from "@/lib/leads";
 import { leadDoFormulario, valuationInputDoFormulario } from "@/components/lealia/submeter-avaliacao";
