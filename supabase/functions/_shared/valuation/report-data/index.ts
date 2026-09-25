@@ -92,32 +92,16 @@ export function buildReportFromLead(lead: ReportLead, lang: ReportLang = "pt") {
 }
 
 /**
- * Versão "teaser" do relatório: remove por completo o conteúdo das páginas
- * bloqueadas (4 a 11), de modo a que esses dados nunca sejam enviados para o
- * browser do cliente. As páginas 1, 2, 3 e a final mantêm-se intactas.
+ * Versão "teaser" do relatório: conserva apenas os dados necessários às
+ * páginas públicas 1, 3, 4, 5, 6, 13 e 14. O conteúdo exclusivo das páginas
+ * 2 e 7 a 12 nunca é enviado para o browser do cliente.
  */
 export function redigirRelatorioTeaser(d: ReportData): ReportData {
   return {
     ...d,
     dcf: null,
     dcf_motivo: null,
-    qualidade: {
-      ...d.qualidade,
-      tem_serie: false,
-      apenas_um_ano: false,
-      nota_um_ano: "",
-      cagr_faturacao: null,
-      cagr_ebitda: null,
-      comentario_margens: "",
-      margens: [],
-      ajustamentos: "",
-      concentracao: "",
-      backlog: "",
-      conversao_caixa: "",
-      fundo_maneio: "",
-    },
     grafico_evolucao: [],
-    ajustes: [],
     cenarios: [],
     sensibilidade: { colunas: [], linhas: [] },
     ponte: [],

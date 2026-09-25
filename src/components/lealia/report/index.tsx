@@ -21,31 +21,28 @@ export type ReportModo = "completo" | "teaser";
 
 export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?: ReportModo }) {
   const lang: ReportLang = (d as { lang?: ReportLang }).lang ?? "pt";
+  const bloqueadas = new Map(lockedPages(lang).map((pagina) => [pagina.numero, pagina.titulo]));
+  const paginaBloqueada = (numero: number) => {
+    const titulo = bloqueadas.get(numero);
+    return titulo ? <LockedPage numero={numero} titulo={titulo} lang={lang} /> : null;
+  };
 
   return (
     <EmpresaContext.Provider value={d.empresa}>
       <article className="report-doc">
         <Cover d={d} lang={lang} />
-        <Slide02Sumario d={d} lang={lang} />
+        {modo === "completo" ? <Slide02Sumario d={d} lang={lang} /> : paginaBloqueada(2)}
         <Slide03Perfil d={d} lang={lang} />
-
-        {modo === "completo" ? (
-          <>
-            <Slide04Ambito d={d} lang={lang} />
-            <Slide05Metodo lang={lang} />
-            <Slide06Ajustes d={d} lang={lang} />
-            <Slide07Cenarios d={d} lang={lang} />
-            <Slide08Bridge d={d} lang={lang} />
-            <Slide09Drivers d={d} lang={lang} />
-            <DcfPage d={d} numero={10} lang={lang} />
-            <SensitivityPage d={d} numero={11} lang={lang} />
-            <Slide12Plano d={d} lang={lang} />
-            <Slide13Processo lang={lang} />
-          </>
-        ) : (
-          lockedPages(lang).map((p) => <LockedPage key={p.numero} numero={p.numero} titulo={p.titulo} lang={lang} />)
-        )}
-
+        <Slide04Ambito d={d} lang={lang} />
+        <Slide05Metodo lang={lang} />
+        <Slide06Ajustes d={d} lang={lang} />
+        {modo === "completo" ? <Slide07Cenarios d={d} lang={lang} /> : paginaBloqueada(7)}
+        {modo === "completo" ? <Slide08Bridge d={d} lang={lang} /> : paginaBloqueada(8)}
+        {modo === "completo" ? <Slide09Drivers d={d} lang={lang} /> : paginaBloqueada(9)}
+        {modo === "completo" ? <DcfPage d={d} numero={10} lang={lang} /> : paginaBloqueada(10)}
+        {modo === "completo" ? <SensitivityPage d={d} numero={11} lang={lang} /> : paginaBloqueada(11)}
+        {modo === "completo" ? <Slide12Plano d={d} lang={lang} /> : paginaBloqueada(12)}
+        <Slide13Processo lang={lang} />
         <Slide14Final d={d} lang={lang} />
       </article>
     </EmpresaContext.Provider>
