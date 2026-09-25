@@ -24,12 +24,15 @@ export function UpgradeCheckout({
   telefone,
   reportUrl,
   onPago,
+  layout = "wide",
 }: {
   /** Slug ou token público da avaliação a que o pagamento fica associado. */
   referencia: string | null;
   telefone?: string | null;
   reportUrl?: string | null;
   onPago?: () => void;
+  /** "stacked" mantém tudo numa coluna (para uso lado a lado com outro bloco). */
+  layout?: "wide" | "stacked";
 }) {
   const { language } = useLanguage();
   const c = checkoutCopy[language];
@@ -120,7 +123,7 @@ export function UpgradeCheckout({
   }
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+    <div className={layout === "stacked" ? "grid gap-8" : "grid gap-10 lg:grid-cols-[1.1fr_1fr]"}>
       {/* Valor */}
       <div>
         <p className="eyebrow">{c.eyebrow}</p>

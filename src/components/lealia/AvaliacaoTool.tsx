@@ -3,14 +3,14 @@ import { ValuationForm, type FormState } from "@/components/lealia/form";
 import { ThankYouCard } from "@/components/lealia/ThankYouCard";
 import { UpgradeCheckout } from "@/components/lealia/checkout/UpgradeCheckout";
 import { SampleReport } from "@/components/lealia/SampleReport";
-import { CalendlyInline } from "@/components/lealia/CalendlyInline";
+import { calendlyLinkProps } from "@/lib/calendly";
 import { calcularValuation, type ValuationResult } from "@core/valuation";
 import { registarLead } from "@/lib/leads";
 import { leadDoFormulario, valuationInputDoFormulario } from "@/components/lealia/submeter-avaliacao";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
 
-export const CALENDLY_URL = "https://calendly.com/lealiaap-drp/valuationcall";
+export { CALENDLY_URL } from "@/lib/calendly";
 
 export function AvaliacaoTool() {
   const { language } = useLanguage();
@@ -23,7 +23,6 @@ export function AvaliacaoTool() {
   const formRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const sampleRef = useRef<HTMLDivElement>(null);
-  const agendarRef = useRef<HTMLDivElement>(null);
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) =>
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -65,9 +64,9 @@ export function AvaliacaoTool() {
             <button className="btn-primary" onClick={() => scrollTo(formRef)}>
               {copy.hero.ctaPrimary}
             </button>
-            <button className="btn-outline" onClick={() => scrollTo(agendarRef)}>
+            <a className="btn-outline inline-block" {...calendlyLinkProps}>
               {copy.hero.ctaSecondary}
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -101,21 +100,24 @@ export function AvaliacaoTool() {
             {loading ? (
               <p className="serif-accent text-center text-2xl text-muted-foreground">{copy.loading}</p>
             ) : (
-              result && (
-                <>
-                  <ThankYouCard empresa={empresa} calculoPossivel={result.ok} onAgendar={() => scrollTo(agendarRef)} />
-
-                  {result.ok && referencia && (
-                    <div className="mt-20 border-t border-border pt-20">
-                      <UpgradeCheckout
-                        referencia={referencia}
-                        telefone={telefone}
-                        reportUrl={`/${referencia}`}
-                      />
-                    </div>
-                  )}
-                </>
-              )
+              result &&
+              (result.ok && referencia ? (
+                <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+                  <ThankYouCard empresa={empresa} calculoPossivel />
+                  <div className="lg:border-l lg:border-border lg:pl-16">
+                    <UpgradeCheckout
+                      referencia={referencia}
+                      telefone={telefone}
+                      reportUrl={`/${referencia}`}
+                      layout="stacked"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="mx-auto max-w-2xl">
+                  <ThankYouCard empresa={empresa} calculoPossivel={result.ok} />
+                </div>
+              ))
             )}
           </div>
         </section>
@@ -127,20 +129,7 @@ export function AvaliacaoTool() {
           <p className="eyebrow">{copy.sampleSection.eyebrow}</p>
           <h2 className="section-title mt-5 max-w-2xl text-3xl md:text-5xl">{copy.sampleSection.heading}</h2>
           <div className="mt-12">
-            <SampleReport onAgendar={() => scrollTo(agendarRef)} />
-          </div>
-        </div>
-      </section>
-
-      {/* Agendamento */}
-      <section ref={agendarRef} className="scroll-mt-24 border-t border-border">
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 md:py-28 lg:px-8">
-          <h2 className="section-title text-3xl md:text-5xl">{copy.scheduling.heading}</h2>
-          <p className="body-justified mx-auto mt-6 max-w-xl leading-relaxed font-light text-muted-foreground">
-            {copy.scheduling.lead}
-          </p>
-          <div className="card-elegant mx-auto mt-12 max-w-2xl overflow-hidden p-1 sm:p-2">
-            <CalendlyInline url={CALENDLY_URL} />
+            <SampleReport />
           </div>
         </div>
       </section>
