@@ -85,22 +85,29 @@ const Relatorio = () => {
   }
 
   if (!dados.ok) {
-    const expirado = (dados as RespostaErro).motivo === "expirado";
+    const motivo = (dados as RespostaErro).motivo;
+    const expirado = motivo === "expirado";
+    const emPreparacao = motivo === "em_preparacao";
+    const titulo = emPreparacao ? c.preparingTitle : expirado ? c.expiredTitle : c.missingTitle;
+    const texto = emPreparacao ? c.preparingText : expirado ? c.expiredText : c.missingText;
     return (
       <>
         {head}
         <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center gap-4 px-6 text-center">
-          <h1 className="font-serif text-3xl">{expirado ? c.expiredTitle : c.missingTitle}</h1>
-          <p className="text-sm text-muted-foreground">{expirado ? c.expiredText : c.missingText}</p>
+          {emPreparacao && <div className="h-px w-16 bg-accent" />}
+          <h1 className="font-serif text-3xl">{titulo}</h1>
+          <p className="text-sm text-muted-foreground">{texto}</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             {expirado && (
               <a href={CALENDLY} target="_blank" rel="noreferrer" className="btn-primary">
                 {c.schedule}
               </a>
             )}
-            <Link to="/valuation" className={expirado ? "btn-outline" : "btn-primary"}>
-              {c.backTool}
-            </Link>
+            {!emPreparacao && (
+              <Link to="/valuation" className={expirado ? "btn-outline" : "btn-primary"}>
+                {c.backTool}
+              </Link>
+            )}
           </div>
         </div>
       </>
