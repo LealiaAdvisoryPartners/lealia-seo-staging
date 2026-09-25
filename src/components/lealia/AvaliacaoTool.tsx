@@ -10,7 +10,7 @@ import { leadDoFormulario, valuationInputDoFormulario } from "@/components/leali
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
 
-export const CALENDLY_URL = "https://calendly.com/lealiaap-drp/valuationcall";
+export { CALENDLY_URL } from "@/lib/calendly";
 
 export function AvaliacaoTool() {
   const { language } = useLanguage();
@@ -23,7 +23,6 @@ export function AvaliacaoTool() {
   const formRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const sampleRef = useRef<HTMLDivElement>(null);
-  const agendarRef = useRef<HTMLDivElement>(null);
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) =>
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
