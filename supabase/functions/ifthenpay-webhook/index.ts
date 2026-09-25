@@ -23,7 +23,8 @@ Deno.serve(async (req: Request) => {
     console.error("IFTHENPAY_ANTIPHISHING_KEY não configurada");
     return new Response("misconfigured", { status: 500, headers: corsHeaders });
   }
-  if (p.get("chave") !== chaveEsperada) {
+  const chaveRecebida = (p.get("chave") ?? p.get("key") ?? "").trim();
+  if (chaveRecebida !== chaveEsperada) {
     console.warn("Callback ifthenpay com chave inválida");
     return new Response("forbidden", { status: 403, headers: corsHeaders });
   }
