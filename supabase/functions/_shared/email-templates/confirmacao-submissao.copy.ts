@@ -15,14 +15,14 @@ export const dict = {
     greetingWithCompany: (nome: string) => `Olá ${nome}`,
     receivedFrom: ", recebemos os dados da ",
     bodyPossivel:
-      "A nossa equipa vai agora trabalhar a informação submetida e enviamos-lhe o relatório de avaliação indicativa assim que estiver finalizado.",
+      "A nossa equipa vai agora trabalhar a informação submetida e enviamos-lhe o relatório de avaliação indicativa em menos de 3 dias úteis.",
     bodyImpossivel1:
       "A informação fornecida não permite, nesta fase, uma estimativa fiável de avaliação da sua empresa.",
     bodyImpossivel2:
       "Isto não significa que não tenha valor: fale connosco para podermos analisar a situação específica e ajudar com um processo de avaliação personalizado.",
     contactPrefix: "Para qualquer questão entretanto, pode contactar-nos através de",
     ctaEyebrow: "PRÓXIMO PASSO - REUNIÃO DE 20 MINUTOS",
-    ctaTitlePossivel: "Apresentação do relatório completo.",
+    ctaTitlePossivel: "Discussão estratégica e enquadramento de mercado com a nossa equipa.",
     ctaTitleImpossivel: "Análise personalizada da sua empresa.",
     ctaButtonPossivel: "Agendar reunião",
     ctaButtonImpossivel: "Falar com a equipa",
@@ -42,14 +42,14 @@ export const dict = {
     greetingWithCompany: (nome: string) => `Hello ${nome}`,
     receivedFrom: ", we have received the information from ",
     bodyPossivel:
-      "Our team will now review the information submitted and we will send you the indicative valuation report as soon as it is finalised.",
+      "Our team will now review the information submitted and we will send you the indicative valuation report in under 3 business days.",
     bodyImpossivel1:
       "At this stage, the information provided does not allow for a reliable valuation estimate of your company.",
     bodyImpossivel2:
       "This does not mean your company has no value: get in touch with us so we can review your specific situation and support you with a tailored valuation process.",
     contactPrefix: "Should you have any questions in the meantime, please contact us at",
     ctaEyebrow: "NEXT STEP - 20 MINUTE MEETING",
-    ctaTitlePossivel: "Presentation of the full report.",
+    ctaTitlePossivel: "Strategic discussion and market context with our team.",
     ctaTitleImpossivel: "A tailored analysis of your company.",
     ctaButtonPossivel: "Schedule a meeting",
     ctaButtonImpossivel: "Speak with our team",
@@ -69,14 +69,14 @@ export const dict = {
     greetingWithCompany: (nome: string) => `Hola ${nome}`,
     receivedFrom: ", hemos recibido los datos de ",
     bodyPossivel:
-      "Nuestro equipo va a analizar ahora la información remitida y le enviaremos el informe de valoración indicativa en cuanto esté finalizado.",
+      "Nuestro equipo va a analizar ahora la información remitida y le enviaremos el informe de valoración indicativa en menos de 3 días hábiles.",
     bodyImpossivel1:
       "La información facilitada no permite, en esta fase, realizar una estimación fiable de la valoración de su empresa.",
     bodyImpossivel2:
       "Esto no significa que su empresa carezca de valor: póngase en contacto con nosotros para que podamos analizar su situación concreta y ayudarle con un proceso de valoración personalizado.",
     contactPrefix: "Para cualquier consulta mientras tanto, puede contactarnos a través de",
     ctaEyebrow: "PRÓXIMO PASO - REUNIÓN DE 20 MINUTOS",
-    ctaTitlePossivel: "Presentación del informe completo.",
+    ctaTitlePossivel: "Discusión estratégica y contexto de mercado con nuestro equipo.",
     ctaTitleImpossivel: "Análisis personalizado de su empresa.",
     ctaButtonPossivel: "Agendar reunión",
     ctaButtonImpossivel: "Hablar con el equipo",

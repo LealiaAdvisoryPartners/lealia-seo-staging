@@ -539,8 +539,8 @@ export const en: typeof pt = {
       p13: "M&A process",
     },
     conteudoReservado: "Reserved content",
-    lockedTexto: "This section is part of the full report. Schedule a 20-minute meeting with the Lealia team to view the full analysis and discuss the results.",
-    lockedCta: "Schedule a meeting to view the full report",
+    lockedTexto: "This section is part of the full report. Unlock the complete analysis using the button at the top of the page to access this and the remaining reserved sections.",
+    lockedCta: "Speak with our team",
 
     cover: {
       titulo: "Preliminary Valuation",
@@ -613,7 +613,7 @@ export const en: typeof pt = {
       limitacao4: "A definitive valuation requires financial, tax, legal and operational due diligence, as well as documentary validation of the EBITDA adjustments.",
       semResponsabilidade: "Lealia Advisory Partners assumes no responsibility for decisions made based solely on this document.",
       leituraComplementar: "Further reading",
-      leituraFinal: "Seasonality and maintenance capex relative to growth capex have not been broken down at this stage. Limitation: without this analysis it is not possible to assess the monthly recurrence of results or the sustainability of cash flow, so the value calculated does not reflect any seasonal peaks or treasury needs.",
+      leituraFinal: "The seasonality profile and the monthly distribution of activity have not been analysed at this stage. Limitation: without this analysis it is not possible to assess the intra-year recurrence of results, so the value calculated does not reflect any peaks in activity or seasonal treasury needs during the year.",
     },
 
     p5: {
