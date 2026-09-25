@@ -129,20 +129,7 @@ export function AvaliacaoTool() {
           <p className="eyebrow">{copy.sampleSection.eyebrow}</p>
           <h2 className="section-title mt-5 max-w-2xl text-3xl md:text-5xl">{copy.sampleSection.heading}</h2>
           <div className="mt-12">
-            <SampleReport onAgendar={() => scrollTo(agendarRef)} />
-          </div>
-        </div>
-      </section>
-
-      {/* Agendamento */}
-      <section ref={agendarRef} className="scroll-mt-24 border-t border-border">
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 md:py-28 lg:px-8">
-          <h2 className="section-title text-3xl md:text-5xl">{copy.scheduling.heading}</h2>
-          <p className="body-justified mx-auto mt-6 max-w-xl leading-relaxed font-light text-muted-foreground">
-            {copy.scheduling.lead}
-          </p>
-          <div className="card-elegant mx-auto mt-12 max-w-2xl overflow-hidden p-1 sm:p-2">
-            <CalendlyInline url={CALENDLY_URL} />
+            <SampleReport />
           </div>
         </div>
       </section>
