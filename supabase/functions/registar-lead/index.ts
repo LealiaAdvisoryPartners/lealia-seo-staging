@@ -106,8 +106,8 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  // O utilizador recebe já a confirmação; o relatório segue mais tarde
-  // (submissão + 6h06, respeitando a janela noturna).
+  // O utilizador recebe já a confirmação; o sample fica elegível 16h depois.
+  // O envio efetivo ocorre na execução diária seguinte do job de relatórios.
   const agendadoPara = calcularEnvioRelatorio(new Date());
 
   await supabaseAdmin
