@@ -616,7 +616,7 @@ export const pt = {
       limitacao4: "Uma avaliação definitiva exige due diligence financeira, fiscal, legal e operacional, bem como a validação documental dos ajustamentos ao EBITDA.",
       semResponsabilidade: "A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva neste documento.",
       leituraComplementar: "Leitura complementar",
-      leituraFinal: "A sazonalidade e o CAPEX de manutenção face ao CAPEX de crescimento não foram desagregados nesta fase. Limitação: sem esta leitura não é possível aferir a recorrência mensal dos resultados nem a sustentabilidade do fluxo de caixa, pelo que o valor calculado não reflete eventuais picos ou necessidades estacionais de tesouraria.",
+      leituraFinal: "O perfil de sazonalidade e a distribuição mensal da atividade não foram analisados nesta fase. Limitação: sem esta leitura não é possível aferir a recorrência intra-anual dos resultados, pelo que o valor calculado não reflete eventuais picos de atividade nem necessidades estacionais de tesouraria ao longo do ano.",
     },
 
     p5: {
