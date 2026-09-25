@@ -100,21 +100,24 @@ export function AvaliacaoTool() {
             {loading ? (
               <p className="serif-accent text-center text-2xl text-muted-foreground">{copy.loading}</p>
             ) : (
-              result && (
-                <>
-                  <ThankYouCard empresa={empresa} calculoPossivel={result.ok} onAgendar={() => scrollTo(agendarRef)} />
-
-                  {result.ok && referencia && (
-                    <div className="mt-20 border-t border-border pt-20">
-                      <UpgradeCheckout
-                        referencia={referencia}
-                        telefone={telefone}
-                        reportUrl={`/${referencia}`}
-                      />
-                    </div>
-                  )}
-                </>
-              )
+              result &&
+              (result.ok && referencia ? (
+                <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+                  <ThankYouCard empresa={empresa} calculoPossivel />
+                  <div className="lg:border-l lg:border-border lg:pl-16">
+                    <UpgradeCheckout
+                      referencia={referencia}
+                      telefone={telefone}
+                      reportUrl={`/${referencia}`}
+                      layout="stacked"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="mx-auto max-w-2xl">
+                  <ThankYouCard empresa={empresa} calculoPossivel={result.ok} />
+                </div>
+              ))
             )}
           </div>
         </section>
