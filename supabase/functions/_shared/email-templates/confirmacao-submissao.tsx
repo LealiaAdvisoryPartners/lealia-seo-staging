@@ -26,6 +26,7 @@ interface Props {
   empresa?: string;
   calculoPossivel?: boolean;
   calendlyUrl?: string;
+  upgradeUrl?: string | null;
   lang?: Lang;
 }
 
@@ -33,6 +34,7 @@ const Email = ({
   nome,
   empresa,
   calculoPossivel = true,
+  upgradeUrl,
   calendlyUrl = "https://calendly.com/lealiaap-drp/valuationcall",
   lang = "pt",
 }: Props) => {
@@ -76,6 +78,15 @@ const Email = ({
             </Link>
             .
           </Text>
+
+          {calculoPossivel && upgradeUrl && (
+            <CtaCard
+              eyebrowText={t.upgradeEyebrow}
+              title={t.upgradeTitle}
+              href={upgradeUrl}
+              buttonLabel={t.upgradeButton}
+            />
+          )}
 
           <CtaCard
             eyebrowText={t.ctaEyebrow}

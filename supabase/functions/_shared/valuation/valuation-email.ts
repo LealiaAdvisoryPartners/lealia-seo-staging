@@ -78,6 +78,7 @@ export function urlCompraRelatorio(lead: Lead): string | null {
 export async function enviarConfirmacaoSubmissao(
   leadId: string,
   lead: { nome: string; email: string; empresa: string; calculo_possivel: boolean; idioma?: string | null },
+  upgradeUrl?: string | null,
 ): Promise<boolean> {
   try {
     const result = await sendTemplateEmail("confirmacao-submissao", lead.email, {
@@ -87,6 +88,7 @@ export async function enviarConfirmacaoSubmissao(
         empresa: lead.empresa,
         calculoPossivel: lead.calculo_possivel,
         lang: idiomaDe(lead.idioma),
+        upgradeUrl: upgradeUrl ?? null,
       },
     });
     return result.sent;

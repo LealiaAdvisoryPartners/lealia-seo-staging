@@ -5,6 +5,9 @@ export type Lang = "pt" | "en" | "es";
 // deno-lint-ignore no-explicit-any
 export const dict = {
   pt: {
+    upgradeEyebrow: 'RELATÓRIO COMPLETO — 299 €',
+    upgradeTitle: 'Pode já garantir a análise integral: avaliação por DCF, sensibilidades, drivers de valor, riscos e plano de preparação para o mercado. Recebe-a em vez do resumo.',
+    upgradeButton: 'Comprar o relatório completo',
     preview: "Recebemos a sua submissão. Enviamos o relatório assim que estiver finalizado.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Obrigado pela sua submissão",
@@ -29,6 +32,9 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Recebemos a sua submissão",
   },
   en: {
+    upgradeEyebrow: 'FULL REPORT — €299',
+    upgradeTitle: 'Secure the complete analysis now: DCF valuation, sensitivities, value drivers, risks and a market-readiness plan. You will receive it instead of the summary.',
+    upgradeButton: 'Buy the full report',
     preview: "We have received your submission. We will send you the report as soon as it is ready.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Thank you for your submission",
@@ -53,6 +59,9 @@ export const dict = {
     subjectWithoutCompany: "Lealia | We Received Your Submission",
   },
   es: {
+    upgradeEyebrow: 'INFORME COMPLETO — 299 €',
+    upgradeTitle: 'Asegure ya el análisis integral: valoración por DCF, sensibilidades, drivers de valor, riesgos y plan de preparación para el mercado. Lo recibirá en lugar del resumen.',
+    upgradeButton: 'Comprar el informe completo',
     preview: "Hemos recibido su solicitud. Le enviaremos el informe en cuanto esté finalizado.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Gracias por su solicitud",

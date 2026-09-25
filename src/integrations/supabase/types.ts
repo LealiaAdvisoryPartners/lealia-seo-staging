@@ -54,6 +54,7 @@ export type Database = {
           faturacao_ano1: number | null
           faturacao_ano2: number | null
           faturacao_ano3: number | null
+          full_report_enviado_em: string | null
           full_report_pago_em: string | null
           full_report_token: string
           geografia_clientes: string | null
@@ -141,6 +142,7 @@ export type Database = {
           faturacao_ano1?: number | null
           faturacao_ano2?: number | null
           faturacao_ano3?: number | null
+          full_report_enviado_em?: string | null
           full_report_pago_em?: string | null
           full_report_token?: string
           geografia_clientes?: string | null
@@ -228,6 +230,7 @@ export type Database = {
           faturacao_ano1?: number | null
           faturacao_ano2?: number | null
           faturacao_ano3?: number | null
+          full_report_enviado_em?: string | null
           full_report_pago_em?: string | null
           full_report_token?: string
           geografia_clientes?: string | null

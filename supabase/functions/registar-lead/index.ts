@@ -8,6 +8,7 @@ import { calcularEnvioRelatorio } from "../_shared/valuation/report-schedule.ts"
 import { gerarPdfRelatorio } from "../_shared/valuation/report-pdf.ts";
 import {
   enviarConfirmacaoSubmissao,
+  urlCompraRelatorio,
   notificarEquipaNovoLead,
 } from "../_shared/valuation/valuation-email.ts";
 
@@ -106,8 +107,7 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  // O utilizador recebe já a confirmação; o sample fica elegível 16h depois.
-  // O envio efetivo ocorre na execução diária seguinte do job de relatórios.
+  // Libertação no dia n+2 às 08:53 (Lisboa): sample, ou relatório completo se pago antes.
   const agendadoPara = calcularEnvioRelatorio(new Date());
 
   await supabaseAdmin
@@ -121,7 +121,7 @@ Deno.serve(async (req: Request) => {
     empresa: String(lead.empresa ?? ""),
     calculo_possivel: !!lead.calculo_possivel,
     idioma: typeof lead.idioma === "string" ? lead.idioma : "pt",
-  });
+  }, urlCompraRelatorio({ relatorio_url: relatorioUrl, relatorio_slug: slug, relatorio_token: linha["relatorio_token"], idioma: lead.idioma }));
   await notificarEquipaNovoLead(inserido.id, lead as Record<string, unknown>, relatorioAdminUrl, pdfAdminUrl);
 
   await registarEvento(supabaseAdmin, "submission_created", {
