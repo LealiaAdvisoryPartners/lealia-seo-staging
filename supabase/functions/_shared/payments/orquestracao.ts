@@ -126,22 +126,57 @@ export async function confirmarPagamento(
 
   const { data: lead } = await admin.from("leads").select("*").eq("id", pagamento.submission_id).maybeSingle();
   if (lead) {
-    const url = urlRelatorioCompleto(lead as Record<string, unknown>);
-    const enviado = await enviarRelatorioCompleto(
-      admin,
-      lead as Record<string, unknown>,
-      url,
-      pagamento as Record<string, unknown>,
-    );
-    if (enviado) {
-      await registarEvento(admin, "full_report_sent", {
-        submissionId: pagamento.submission_id,
-        paymentId: pagamento.id,
-        detalhes: { url },
-      });
+    const linha = lead as Record<string, unknown>;
+    const libertacao = linha["email_relatorio_agendado_para"] as string | null;
+    // Pago antes da hora de libertação (n+2 às 08:53 Lisboa): entrega fica para o job.
+    if (!libertacao || new Date(libertacao) <= new Date()) {
+      await entregarRelatorioCompleto(admin, linha, pagamento as Record<string, unknown>);
     }
-    await notificarEquipaPagamento(lead as Record<string, unknown>, pagamento as Record<string, unknown>, url);
+    await notificarEquipaPagamento(linha, pagamento as Record<string, unknown>, urlRelatorioCompleto(linha));
   }
 
   return { ok: true, jaProcessado: false };
+}
+
+/**
+ * Entrega o relatório completo uma única vez (reserva atómica em
+ * `full_report_enviado_em`). Usado no pagamento tardio e no job diário.
+ */
+export async function entregarRelatorioCompleto(
+  admin: SupabaseClient,
+  lead: Record<string, unknown>,
+  pagamento?: Record<string, unknown> | null,
+): Promise<boolean> {
+  const id = lead["id"] as string;
+  const { data: reservado } = await admin
+    .from("leads")
+    .update({ full_report_enviado_em: new Date().toISOString() })
+    .eq("id", id)
+    .eq("status", "full_paid")
+    .is("full_report_enviado_em", null)
+    .select("id")
+    .maybeSingle();
+  if (!reservado) return false;
+
+  let pago = pagamento ?? null;
+  if (!pago) {
+    const { data } = await admin
+      .from("payments").select("*").eq("submission_id", id).eq("status", "paid")
+      .order("paid_at", { ascending: false }).limit(1).maybeSingle();
+    pago = (data as Record<string, unknown> | null) ?? null;
+  }
+
+  const url = urlRelatorioCompleto(lead);
+  const enviado = await enviarRelatorioCompleto(admin, lead, url, pago);
+  if (enviado) {
+    await registarEvento(admin, "full_report_sent", {
+      submissionId: id,
+      paymentId: (pago?.["id"] as string | undefined) ?? null,
+      detalhes: { url },
+    });
+  } else {
+    // Liberta a reserva para nova tentativa no próximo job.
+    await admin.from("leads").update({ full_report_enviado_em: null }).eq("id", id);
+  }
+  return enviado;
 }
