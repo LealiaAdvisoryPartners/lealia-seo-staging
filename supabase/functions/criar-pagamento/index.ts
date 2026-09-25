@@ -116,14 +116,18 @@ Deno.serve(async (req: Request) => {
       return json({ ok: true, metodo, orderId, paymentId: pagamento.id });
     }
 
-    const retorno = base ? `${base}/${String(lead.relatorio_slug ?? lead.relatorio_token)}` : "https://lealiaap.com";
+    // O retorno da gateway devolve sempre o cliente ao checkout, nunca
+    // diretamente ao relatório (que só é libertado no seu horário próprio).
+    const raiz = base || "https://lealiaap.com";
+    const refPublica = String(lead.relatorio_slug ?? lead.relatorio_token ?? "");
+    const checkout = `${raiz}/${idioma}/upgrade?ref=${encodeURIComponent(refPublica)}`;
     const resposta = await iniciarCartao({
       orderId,
       montante: PRECO_RELATORIO_COMPLETO,
       idioma,
-      successUrl: `${retorno}?pagamento=sucesso`,
-      errorUrl: `${retorno}?pagamento=erro`,
-      cancelUrl: `${retorno}?pagamento=cancelado`,
+      successUrl: `${checkout}&pagamento=sucesso`,
+      errorUrl: `${checkout}&pagamento=erro`,
+      cancelUrl: `${checkout}&pagamento=cancelado`,
       descricao,
     });
 
