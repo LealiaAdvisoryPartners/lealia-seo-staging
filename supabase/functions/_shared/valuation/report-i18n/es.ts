@@ -539,8 +539,8 @@ export const es: typeof pt = {
       p13: "Proceso de M&A",
     },
     conteudoReservado: "Contenido reservado",
-    lockedTexto: "Esta sección forma parte del informe completo. Agende una reunión de 20 minutos con el equipo de Lealia para ver el análisis íntegro y comentar los resultados.",
-    lockedCta: "Agendar una reunión para ver el informe completo",
+    lockedTexto: "Esta sección forma parte del informe completo. Desbloquee el análisis íntegro mediante el botón en la parte superior de la página para acceder a esta y a las demás secciones reservadas.",
+    lockedCta: "Hablar con el equipo",
 
     cover: {
       titulo: "Valoración preliminar",

@@ -539,8 +539,8 @@ export const en: typeof pt = {
       p13: "M&A process",
     },
     conteudoReservado: "Reserved content",
-    lockedTexto: "This section is part of the full report. Schedule a 20-minute meeting with the Lealia team to view the full analysis and discuss the results.",
-    lockedCta: "Schedule a meeting to view the full report",
+    lockedTexto: "This section is part of the full report. Unlock the complete analysis using the button at the top of the page to access this and the remaining reserved sections.",
+    lockedCta: "Speak with our team",
 
     cover: {
       titulo: "Preliminary Valuation",

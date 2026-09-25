@@ -152,7 +152,7 @@ export const formCopy: Record<Language, FormCopy> = {
       anoReferencia: "Qual foi o ano mais recente com dados financeiros fechados?",
       tipoPeriodo: "Tipo de período de referência",
       valoresEurosNote: (ano) =>
-        `Indique valores em euros. O ano ${ano} é obrigatório; os anos anteriores são opcionais e servem para aferir a tendência de crescimento.`,
+        `Indique valores anuais totais em euros, sem abreviar (ex.: 500 000 e não 500). O ano ${ano} é obrigatório; os anos anteriores são opcionais e servem para aferir a tendência de crescimento. A ferramenta está calibrada para empresas com faturação anual superior a 50 000 €.`,
       faturacao: "Faturação",
       ebitda: "EBITDA",
       despesasExtraordinarias: "Desp. extraordinárias",
@@ -373,7 +373,7 @@ export const formCopy: Record<Language, FormCopy> = {
       anoReferencia: "What was the most recent year with closed financial data?",
       tipoPeriodo: "Reference period type",
       valoresEurosNote: (ano) =>
-        `State figures in euros. Year ${ano} is mandatory; prior years are optional and help gauge the growth trend.`,
+        `State total annual figures in euros, in full (e.g. 500 000, not 500). Year ${ano} is mandatory; prior years are optional and help gauge the growth trend. The tool is calibrated for companies with annual revenue above €50,000.`,
       faturacao: "Revenue",
       ebitda: "EBITDA",
       despesasExtraordinarias: "Extraordinary exp.",
@@ -594,7 +594,7 @@ export const formCopy: Record<Language, FormCopy> = {
       anoReferencia: "¿Cuál fue el año más reciente con datos financieros cerrados?",
       tipoPeriodo: "Tipo de periodo de referencia",
       valoresEurosNote: (ano) =>
-        `Indique los valores en euros. El año ${ano} es obligatorio; los años anteriores son opcionales y sirven para valorar la tendencia de crecimiento.`,
+        `Indique valores anuales totales en euros, sin abreviar (p. ej.: 500 000 y no 500). El año ${ano} es obligatorio; los años anteriores son opcionales y sirven para valorar la tendencia de crecimiento. La herramienta está calibrada para empresas con facturación anual superior a 50 000 €.`,
       faturacao: "Facturación",
       ebitda: "EBITDA",
       despesasExtraordinarias: "Gastos extraordinarios",

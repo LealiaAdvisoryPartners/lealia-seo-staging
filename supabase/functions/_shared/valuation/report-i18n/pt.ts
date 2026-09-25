@@ -542,8 +542,8 @@ export const pt = {
       p13: "Processo de M&A",
     },
     conteudoReservado: "Conteúdo reservado",
-    lockedTexto: "Esta secção faz parte do relatório completo. Agende uma reunião de 20 minutos com a equipa da Lealia para visualizar a análise integral e a discussão dos resultados.",
-    lockedCta: "Agendar reunião para ver o relatório completo",
+    lockedTexto: "Esta secção faz parte do relatório completo. Desbloqueie a análise integral através do botão no topo da página para aceder a esta e às restantes secções reservadas.",
+    lockedCta: "Falar com a equipa",
 
     cover: {
       titulo: "Avaliação preliminar",
