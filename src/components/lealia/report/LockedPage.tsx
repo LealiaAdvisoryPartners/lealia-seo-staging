@@ -2,18 +2,16 @@ import { t, type ReportLang } from "@core/report-i18n";
 import { Page } from "./primitives";
 
 export function lockedPages(lang: ReportLang): { numero: number; titulo: string }[] {
-  const lp = t(lang).doc.lockedPages;
+  const doc = t(lang).doc;
+  const lp = doc.lockedPages;
   return [
-    { numero: 4, titulo: lp.p4 },
-    { numero: 5, titulo: lp.p5 },
-    { numero: 6, titulo: lp.p6 },
+    { numero: 2, titulo: doc.p2.titulo },
     { numero: 7, titulo: lp.p7 },
     { numero: 8, titulo: lp.p8 },
     { numero: 9, titulo: lp.p9 },
     { numero: 10, titulo: lp.p10 },
     { numero: 11, titulo: lp.p11 },
     { numero: 12, titulo: lp.p12 },
-    { numero: 13, titulo: lp.p13 },
   ];
 }
 
