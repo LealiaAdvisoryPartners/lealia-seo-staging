@@ -99,12 +99,12 @@ export const pageCopy: Record<Language, PageCopy> = {
         {
           n: "02",
           t: "Receba o relatório preliminar",
-          d: "A nossa equipa valida e analisa os dados, monta a equity bridge da sua empresa\ne envia o relatório para o seu e-mail em menos de 3 dias úteis.",
+          d: "A nossa equipa valida e analisa os dados, monta o relatório da sua empresa\ne envia para o seu e-mail uma antevisão do mesmo em menos de 3 dias úteis.",
         },
         {
           n: "03",
-          t: "Discuta a estratégia connosco",
-          d: "Agende uma reunião de 20 minutos para enquadrar o valor no mercado atual e explorar as suas opções de transação.",
+          t: "Adquira o relatório completo e discuta a estratégia connosco",
+          d: "Receba a análise detalhada completa, e agende uma reunião de 20 minutos com a nossa equipa para discutir os resultados.",
         },
       ],
     },
@@ -127,7 +127,7 @@ export const pageCopy: Record<Language, PageCopy> = {
           ". A nossa equipa vai agora trabalhar a informação submetida e enviamos-lhe o relatório de avaliação indicativa, por email, em menos de 3 dias úteis.",
         p2Prefix: "Para qualquer questão entretanto, pode contactar-nos através de",
         email: "valuations@lealiaap.com",
-        nextStepEyebrow: "Próximo passo — reunião de 20 minutos",
+        nextStepEyebrow: "Próximo passo - reunião de 20 minutos",
         nextStepText: "Discussão estratégica e enquadramento de mercado com um Managing Partner.",
         cta: "Agendar reunião",
       },
@@ -137,7 +137,7 @@ export const pageCopy: Record<Language, PageCopy> = {
         p1Suffix:
           ". A informação indicada não permite, nesta fase, uma estimativa automática fiável pelo método de múltiplo de EBITDA.",
         p2: "Isto não significa que não tenha valor: fale connosco para analisarmos a situação específica e ajudarmos com um processo de avaliação personalizado.",
-        nextStepEyebrow: "Próximo passo — reunião de 20 minutos",
+        nextStepEyebrow: "Próximo passo - reunião de 20 minutos",
         nextStepText: "Vamos analisar o perfil da sua empresa e apresentar as opções de avaliação mais adequadas.",
         cta: "Falar com a equipa",
       },
@@ -178,7 +178,7 @@ export const pageCopy: Record<Language, PageCopy> = {
           numero: "06",
           titulo: "Equity Bridge e contexto da transação",
           texto:
-            "Passagem de Enterprise Value a Equity Value — dívida, caixa e imóvel no perímetro — e leitura e enquadramento da estrutura de transação pretendida.",
+            "Passagem de Enterprise Value a Equity Value - dívida, caixa e imóvel no perímetro - e leitura e enquadramento da estrutura de transação pretendida.",
         },
         {
           numero: "07",
@@ -228,7 +228,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     timeline: {
       phasePrefix: "Fase",
       footer:
-        "Um processo de M&A típico demora entre 6 a 7 meses, do mandato ao closing — razão pela qual vale a pena ter a primeira conversa cedo.",
+        "Um processo de M&A típico demora entre 6 a 7 meses, do mandato ao closing - razão pela qual vale a pena ter a primeira conversa cedo.",
     },
   },
   en: {
@@ -251,12 +251,12 @@ export const pageCopy: Record<Language, PageCopy> = {
         {
           n: "02",
           t: "Receive the preliminary report",
-          d: "Our team validates and analyses the data, builds your company's equity bridge\nand sends the report to your inbox in under 3 business days.",
+          d: "Our team validates and analyses the data, builds your company's report\nand sends you a preview by email in under 3 business days..",
         },
         {
           n: "03",
-          t: "Discuss the strategy with us",
-          d: "Schedule a 20-minute meeting to frame the value against current market appetite and explore your transaction options.",
+          t: "Get the full report and discuss strategy with us",
+          d: "Receive the complete, detailed analysis, and schedule a 20-minute meeting with our team to discuss the results.",
         },
       ],
     },
@@ -279,7 +279,7 @@ export const pageCopy: Record<Language, PageCopy> = {
           ". Our team will now review the information submitted and will send you the indicative valuation report by email in under 3 business days.",
         p2Prefix: "In the meantime, for any questions you can reach us at",
         email: "valuations@lealiaap.com",
-        nextStepEyebrow: "Next step — 20-minute meeting",
+        nextStepEyebrow: "Next step - 20-minute meeting",
         nextStepText: "Strategic discussion and market context with a Managing Partner.",
         cta: "Schedule a meeting",
       },
@@ -289,7 +289,7 @@ export const pageCopy: Record<Language, PageCopy> = {
         p1Suffix:
           ". Based on the information provided, we are unable at this stage to produce a reliable automated estimate using the EBITDA multiple method.",
         p2: "This does not mean your company has no value: speak with us so we can review your specific situation and support you with a tailored valuation process.",
-        nextStepEyebrow: "Next step — 20-minute meeting",
+        nextStepEyebrow: "Next step - 20-minute meeting",
         nextStepText: "We will review your company's profile and present the most suitable valuation options.",
         cta: "Speak with our team",
       },
@@ -330,7 +330,7 @@ export const pageCopy: Record<Language, PageCopy> = {
           numero: "06",
           titulo: "Equity bridge and transaction context",
           texto:
-            "Bridge from Enterprise Value to Equity Value — debt, cash and real estate within the perimeter — together with an assessment of the intended transaction structure.",
+            "Bridge from Enterprise Value to Equity Value - debt, cash and real estate within the perimeter - together with an assessment of the intended transaction structure.",
         },
         {
           numero: "07",
@@ -380,7 +380,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     timeline: {
       phasePrefix: "Phase",
       footer:
-        "A typical M&A process takes between 6 and 7 months, from mandate to closing — which is why it is worth having the first conversation early.",
+        "A typical M&A process takes between 6 and 7 months, from mandate to closing - which is why it is worth having the first conversation early.",
     },
   },
   es: {
@@ -403,12 +403,12 @@ export const pageCopy: Record<Language, PageCopy> = {
         {
           n: "02",
           t: "Reciba el informe preliminar",
-          d: "Nuestro equipo valida y analiza los datos, construye el equity bridge de su empresa\ny le envía el informe a su correo en menos de 3 días hábiles.",
+          d: "Nuestro equipo valida y analiza los datos, elabora el informe de su empresa\ny le envía un adelanto del mismo por correo electrónico en menos de 3 días hábiles.",
         },
         {
           n: "03",
-          t: "Comente la estrategia con nosotros",
-          d: "Programe una reunión de 20 minutos para enmarcar el valor en el apetito actual del mercado y explorar sus opciones de transacción.",
+          t: "Adquiera el informe completo y comente la estrategia con nosotros",
+          d: "Reciba el análisis detallado completo y programe una reunión de 20 minutos con nuestro equipo para comentar los resultados.",
         },
       ],
     },
@@ -431,7 +431,7 @@ export const pageCopy: Record<Language, PageCopy> = {
           ". Nuestro equipo trabajará ahora la información enviada y le remitiremos el informe de valoración indicativa por correo electrónico en menos de 3 días hábiles.",
         p2Prefix: "Para cualquier duda mientras tanto, puede contactarnos en",
         email: "valuations@lealiaap.com",
-        nextStepEyebrow: "Próximo paso — reunión de 20 minutos",
+        nextStepEyebrow: "Próximo paso - reunión de 20 minutos",
         nextStepText: "Discusión estratégica y contexto de mercado con un Managing Partner.",
         cta: "Programar reunión",
       },
@@ -441,8 +441,9 @@ export const pageCopy: Record<Language, PageCopy> = {
         p1Suffix:
           ". La información indicada no permite, en esta fase, obtener una estimación automática fiable mediante el método del múltiplo de EBITDA.",
         p2: "Esto no significa que su empresa no tenga valor: hable con nosotros para analizar su situación concreta y ayudarle con un proceso de valoración personalizado.",
-        nextStepEyebrow: "Próximo paso — reunión de 20 minutos",
-        nextStepText: "Analizaremos el perfil de su empresa y le presentaremos las opciones de valoración más adecuadas.",
+        nextStepEyebrow: "Próximo paso - reunión de 20 minutos",
+        nextStepText:
+          "Analizaremos el perfil de su empresa y le presentaremos las opciones de valoración más adecuadas.",
         cta: "Hablar con el equipo",
       },
     },
@@ -482,7 +483,7 @@ export const pageCopy: Record<Language, PageCopy> = {
           numero: "06",
           titulo: "Equity bridge y contexto de la transacción",
           texto:
-            "Paso de Enterprise Value a Equity Value —deuda, caja e inmueble dentro del perímetro— y análisis de la estructura de transacción prevista.",
+            "Paso de Enterprise Value a Equity Value -deuda, caja e inmueble dentro del perímetro- y análisis de la estructura de transacción prevista.",
         },
         {
           numero: "07",
