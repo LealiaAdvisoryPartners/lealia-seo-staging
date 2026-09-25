@@ -51,6 +51,12 @@ Deno.serve(async (req: Request) => {
     chave === (linha["full_report_token"] as string | null) && linha["status"] === "full_paid";
   const completo = !!chave && (chaveAdmin || chaveComprador);
 
+  // Maturação: antes da libertação (D+2 às 08:53) o link público não revela
+  // nada. Só a equipa (chave admin) ou o comprador com relatório já entregue.
+  if (!completo && !linha["email_relatorio_enviado_em"]) {
+    return json({ ok: false, motivo: "em_preparacao" });
+  }
+
   const expiraEm = linha["relatorio_expira_em"] as string | null;
   if (!completo && expiraEm && new Date(expiraEm).getTime() < Date.now()) {
     return json({ ok: false, motivo: "expirado" });

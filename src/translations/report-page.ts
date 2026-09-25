@@ -7,6 +7,9 @@ export const reportPageCopy = {
     seoDescription:
       "Relatório personalizado de avaliação indicativa da sua empresa, com metodologia, drivers de valor e recomendações de preparação.",
     loading: "A carregar relatório…",
+    preparingTitle: "Análise em preparação",
+    preparingText:
+      "A nossa equipa está a validar e a trabalhar os dados da sua submissão. Receberá o relatório por e-mail em menos de 3 dias úteis.",
     expiredTitle: "Este relatório expirou",
     missingTitle: "Relatório não encontrado",
     expiredText:
@@ -26,6 +29,9 @@ export const reportPageCopy = {
     seoDescription:
       "Tailored indicative valuation report for your company, with methodology, value drivers and preparation recommendations.",
     loading: "Loading report…",
+    preparingTitle: "Analysis in preparation",
+    preparingText:
+      "Our team is validating and working through the data you submitted. You will receive the report by e-mail in under 3 business days.",
     expiredTitle: "This report has expired",
     missingTitle: "Report not found",
     expiredText:
@@ -44,6 +50,9 @@ export const reportPageCopy = {
     seoDescription:
       "Informe personalizado de valoración indicativa de su empresa, con metodología, drivers de valor y recomendaciones de preparación.",
     loading: "Cargando informe…",
+    preparingTitle: "Análisis en preparación",
+    preparingText:
+      "Nuestro equipo está validando y trabajando los datos de su envío. Recibirá el informe por correo en menos de 3 días hábiles.",
     expiredTitle: "Este informe ha caducado",
     missingTitle: "Informe no encontrado",
     expiredText:
