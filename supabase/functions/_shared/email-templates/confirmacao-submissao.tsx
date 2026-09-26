@@ -5,6 +5,8 @@ import {
   Body,
   Container,
   CtaCard,
+  EditorialBlock,
+  SupportNote,
   EmailHeader,
   FooterContact,
   Head,
@@ -80,20 +82,26 @@ const Email = ({
           </Text>
 
           {calculoPossivel && upgradeUrl && (
-            <CtaCard
+            <EditorialBlock
               eyebrowText={t.upgradeEyebrow}
               title={t.upgradeTitle}
+              body={t.upgradeBody}
+              items={t.upgradeItems}
               href={upgradeUrl}
-              buttonLabel={t.upgradeButton}
+              linkLabel={t.upgradeButton}
             />
           )}
 
-          <CtaCard
-            eyebrowText={t.ctaEyebrow}
-            title={calculoPossivel ? t.ctaTitlePossivel : t.ctaTitleImpossivel}
-            href={calendlyUrl}
-            buttonLabel={calculoPossivel ? t.ctaButtonPossivel : t.ctaButtonImpossivel}
-          />
+          {calculoPossivel ? (
+            <SupportNote text={t.meetingNote} href={calendlyUrl} linkLabel={t.meetingLink} />
+          ) : (
+            <CtaCard
+              eyebrowText={t.ctaEyebrow}
+              title={t.ctaTitleImpossivel}
+              href={calendlyUrl}
+              buttonLabel={t.ctaButtonImpossivel}
+            />
+          )}
 
           {/* Footer */}
           <Hr style={hr} />
@@ -122,6 +130,7 @@ export const template = {
     nome: "Duarte Pereira",
     empresa: "Empresa Exemplo, Lda.",
     calculoPossivel: true,
+    upgradeUrl: "https://www.lealiaap.com/pt/upgrade?ref=empresa-exemplo-abcd",
     lang: "pt",
   },
 } satisfies TemplateEntry;

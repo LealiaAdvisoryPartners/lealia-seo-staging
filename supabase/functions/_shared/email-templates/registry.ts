@@ -4,6 +4,7 @@ import { template as notificacaoLeadTemplate } from "./notificacao-lead.tsx";
 import { template as confirmacaoSubmissaoTemplate } from "./confirmacao-submissao.tsx";
 import { template as relatorioCompletoTemplate } from "./relatorio-completo.tsx";
 import { template as notificacaoPagamentoTemplate } from "./notificacao-pagamento.tsx";
+import { template as pagamentoConfirmadoTemplate } from "./pagamento-confirmado.tsx";
 
 export interface TemplateEntry {
   // deno-lint-ignore no-explicit-any
@@ -23,4 +24,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "notificacao-lead": notificacaoLeadTemplate,
   "relatorio-completo": relatorioCompletoTemplate,
   "notificacao-pagamento": notificacaoPagamentoTemplate,
+  "pagamento-confirmado": pagamentoConfirmadoTemplate,
 };
