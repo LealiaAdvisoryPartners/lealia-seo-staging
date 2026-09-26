@@ -52,6 +52,7 @@ export type PageCopy = {
   sampleReport: {
     sections: { numero: string; titulo: string; texto: string }[];
     cta: string;
+    viewer: { title: string; note: string; close: string };
   };
   resultCard: {
     needCloserLook: string;
@@ -207,7 +208,12 @@ export const pageCopy: Record<Language, PageCopy> = {
             "Fatores que expandem ou comprimem o valor, riscos identificados com mitigantes e plano de ação imediato para maximizar o negócio antes de ir a mercado.",
         },
       ],
-      cta: "Quero o relatório completo e uma análise personalizada",
+      cta: "Veja aqui um exemplo do relatório completo",
+      viewer: {
+        title: "Exemplo do relatório completo",
+        note: "Documento de demonstração. Visualização apenas.",
+        close: "Fechar",
+      },
     },
     resultCard: {
       needCloserLook: "Precisamos de olhar mais de perto",
@@ -363,7 +369,12 @@ export const pageCopy: Record<Language, PageCopy> = {
             "Factors that expand or compress value, identified risks with mitigants, and an immediate action plan to maximise the business before going to market.",
         },
       ],
-      cta: "I want the full report and a tailored analysis",
+      cta: "View a sample of the full report",
+      viewer: {
+        title: "Sample of the full report",
+        note: "Demonstration document. Viewing only.",
+        close: "Close",
+      },
     },
     resultCard: {
       needCloserLook: "We need to take a closer look",
@@ -520,7 +531,12 @@ export const pageCopy: Record<Language, PageCopy> = {
             "Factores que amplían o reducen el valor, riesgos identificados con mitigantes y plan de acción inmediato para maximizar el negocio antes de salir al mercado.",
         },
       ],
-      cta: "Quiero el informe completo y un análisis personalizado",
+      cta: "Vea aquí un ejemplo del informe completo",
+      viewer: {
+        title: "Ejemplo del informe completo",
+        note: "Documento de demostración. Solo visualización.",
+        close: "Cerrar",
+      },
     },
     resultCard: {
       needCloserLook: "Necesitamos analizarlo más de cerca",

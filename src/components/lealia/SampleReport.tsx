@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
-import { calendlyLinkProps } from "@/lib/calendly";
+import { SampleReportViewer } from "@/components/lealia/SampleReportViewer";
 
 export function SampleReport() {
   const { language } = useLanguage();
   const c = pageCopy[language].sampleReport;
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
@@ -19,10 +21,12 @@ export function SampleReport() {
       </div>
 
       <div className="mt-10">
-        <a className="btn-primary inline-block" {...calendlyLinkProps}>
+        <button className="btn-primary" onClick={() => setOpen(true)}>
           {c.cta}
-        </a>
+        </button>
       </div>
+
+      <SampleReportViewer open={open} onClose={() => setOpen(false)} />
     </div>
   );
 }
