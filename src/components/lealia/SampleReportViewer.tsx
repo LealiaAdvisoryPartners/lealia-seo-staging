@@ -50,9 +50,9 @@ export function SampleReportViewer({ open, onClose }: Props) {
             {(Object.keys(PDFS) as Language[]).map((l) => (
               <button
                 key={l}
-                onClick={() => setLanguage(l)}
+                onClick={() => setDocLang(l)}
                 className={`rounded-full px-4 py-1.5 text-xs tracking-widest transition-colors ${
-                  l === language
+                  l === docLang
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
@@ -76,9 +76,9 @@ export function SampleReportViewer({ open, onClose }: Props) {
         onContextMenu={(e) => e.preventDefault()}
       >
         <iframe
-          key={language}
+          key={docLang}
           title={c.title}
-          src={`${PDFS[language]}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+          src={`${PDFS[docLang]}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
           className="h-full w-full"
         />
       </div>
