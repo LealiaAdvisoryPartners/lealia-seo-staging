@@ -192,6 +192,39 @@ export async function enviarRelatorioCompleto(
   }
 }
 
+const METODOS: Record<IdiomaLead, Record<string, string>> = {
+  pt: { mbway: "MB WAY", ccard: "Cartão" },
+  en: { mbway: "MB WAY", ccard: "Card" },
+  es: { mbway: "MB WAY", ccard: "Tarjeta" },
+};
+const LOCALE: Record<IdiomaLead, string> = { pt: "pt-PT", en: "en-GB", es: "es-ES" };
+
+/** Confirma o pagamento feito antes da data de entrega e indica quando chega o dossiê. */
+export async function enviarPagamentoConfirmado(lead: Lead, pagamento: Lead, entrega: Date): Promise<boolean> {
+  const idioma = idiomaDe(lead.idioma);
+  const fmt = (d: Date, o: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat(LOCALE[idioma], { timeZone: "Europe/Lisbon", ...o }).format(d);
+  try {
+    const result = await sendTemplateEmail("pagamento-confirmado", lead.email, {
+      idempotencyKey: `pagamento-confirmado-${pagamento.id}`,
+      templateData: {
+        nome: lead.nome,
+        empresa: lead.empresa,
+        dataEntrega: fmt(entrega, { weekday: "long", day: "numeric", month: "long", year: "numeric" }),
+        valor: formatarEuros(Number(pagamento.amount ?? 0), idioma),
+        metodo: METODOS[idioma][String(pagamento.method)] ?? pagamento.method,
+        referencia: pagamento.ifthenpay_order_id,
+        pagoEm: fmt(new Date(pagamento.paid_at ?? Date.now()), { dateStyle: "short", timeStyle: "short" }),
+        lang: idioma,
+      },
+    });
+    return result.sent;
+  } catch (error) {
+    console.error(`Falha ao enviar confirmação de pagamento ${pagamento.id}:`, error instanceof Error ? error.message : error);
+    return false;
+  }
+}
+
 /** Avisa a equipa de que uma submissão foi paga. */
 export async function notificarEquipaPagamento(
   lead: Lead,
