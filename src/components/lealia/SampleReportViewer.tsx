@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
@@ -15,8 +15,11 @@ const LABELS: Record<Language, string> = { pt: "PT", en: "EN", es: "ES" };
 type Props = { open: boolean; onClose: () => void };
 
 export function SampleReportViewer({ open, onClose }: Props) {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
+  const [docLang, setDocLang] = useState<Language>(language);
   const c = pageCopy[language].sampleReport.viewer;
+
+  useEffect(() => setDocLang(language), [language]);
 
   useEffect(() => {
     if (!open) return;
