@@ -4,22 +4,21 @@ import { dict, type Lang } from "./resumo-avaliacao.copy.ts";
 import {
   Body,
   Container,
-  CtaCard,
+  EditorialBlock,
+  PrimaryAction,
+  SupportNote,
   EmailHeader,
   FooterContact,
   Head,
   Hr,
   Html,
-  Link,
   Preview,
   Text,
   bodyText,
   container,
   footerDisclaimer,
   hr,
-  linkBlock,
   main,
-  reportLink,
 } from "./ui.tsx";
 
 interface Props {
@@ -68,24 +67,20 @@ const Email = ({
           {/* Corpo */}
           <Text style={bodyText}>{t.bodyIntro}</Text>
 
-          {reportUrl && (
-            <Text style={linkBlock}>
-              <Link href={reportUrl} style={reportLink}>
-                {t.reportLinkLabel}
-              </Link>
-            </Text>
-          )}
+          {reportUrl && <PrimaryAction href={reportUrl} label={t.reportLinkLabel} />}
 
           {upgradeUrl && (
-            <CtaCard
+            <EditorialBlock
               eyebrowText={t.upgradeEyebrow}
               title={t.upgradeTitle}
+              body={t.upgradeBody}
+              items={t.upgradeItems}
               href={upgradeUrl}
-              buttonLabel={t.upgradeButton}
+              linkLabel={t.upgradeButton}
             />
           )}
 
-          <CtaCard eyebrowText={t.ctaEyebrow} title={t.ctaTitle} href={calendlyUrl} buttonLabel={t.ctaButton} />
+          <SupportNote text={t.meetingNote} href={calendlyUrl} linkLabel={t.meetingLink} />
 
           {/* Footer */}
           <Hr style={hr} />
@@ -108,13 +103,14 @@ export const template = {
     return data["empresa"] ? t.subjectWithCompany(data["empresa"]) : t.subjectWithoutCompany;
   },
 
-  displayName: "Relatório pronto",
+  displayName: "Relatório indicativo (D+2)",
 
   previewData: {
     nome: "Duarte Pereira",
     empresa: "Empresa Exemplo, Lda.",
     relatorioUrl: "https://exemplo.lealiaap.com/relatorio/token",
     pdfUrl: "https://exemplo.lealiaap.com/relatorio/token.pdf",
+    upgradeUrl: "https://www.lealiaap.com/pt/upgrade?ref=empresa-exemplo-abcd",
     lang: "pt",
   },
 } satisfies TemplateEntry;

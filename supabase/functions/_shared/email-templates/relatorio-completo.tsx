@@ -10,7 +10,7 @@ import {
   Head,
   Hr,
   Html,
-  Link,
+  PrimaryAction,
   Preview,
   Text,
   bodyText,
@@ -18,9 +18,7 @@ import {
   footerDisclaimer,
   headerDescription,
   hr,
-  linkBlock,
   main,
-  reportLink,
   text,
 } from "./ui.tsx";
 
@@ -69,13 +67,7 @@ const Email = ({
 
           <Text style={bodyText}>{t.bodyIntro}</Text>
 
-          {relatorioUrl && (
-            <Text style={linkBlock}>
-              <Link href={relatorioUrl} style={reportLink}>
-                {t.reportLinkLabel}
-              </Link>
-            </Text>
-          )}
+          {relatorioUrl && <PrimaryAction href={relatorioUrl} label={t.reportLinkLabel} />}
 
           <CtaCard eyebrowText={t.ctaEyebrow} title={t.ctaTitle} href={calendlyUrl} buttonLabel={t.ctaButton} />
 

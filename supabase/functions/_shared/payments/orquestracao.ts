@@ -7,7 +7,7 @@
  * exato do envio — nunca com base num estado lido antes.
  */
 import type { SupabaseClient } from "npm:@supabase/supabase-js@2";
-import { enviarRelatorioCompleto, notificarEquipaPagamento } from "../valuation/valuation-email.ts";
+import { enviarPagamentoConfirmado, enviarRelatorioCompleto, notificarEquipaPagamento } from "../valuation/valuation-email.ts";
 
 export type EstadoSubmissao = "pending" | "sample_sent" | "full_paid";
 
@@ -131,6 +131,9 @@ export async function confirmarPagamento(
     // Pago antes da hora de libertação (n+2 às 08:53 Lisboa): entrega fica para o job.
     if (!libertacao || new Date(libertacao) <= new Date()) {
       await entregarRelatorioCompleto(admin, linha, pagamento as Record<string, unknown>);
+    } else {
+      const pago = { ...pagamento, paid_at: new Date().toISOString() } as Record<string, unknown>;
+      await enviarPagamentoConfirmado(linha, pago, new Date(libertacao));
     }
     await notificarEquipaPagamento(linha, pagamento as Record<string, unknown>, urlRelatorioCompleto(linha));
   }

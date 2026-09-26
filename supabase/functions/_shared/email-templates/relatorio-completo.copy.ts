@@ -5,16 +5,15 @@ export type Lang = "pt" | "en" | "es";
 // deno-lint-ignore no-explicit-any
 export const dict = {
   pt: {
-    preview: (nome: string) => `Olá ${nome}! O seu relatório completo de avaliação já está disponível.`,
+    preview: (nome: string) => `${nome}, o dossiê integral de avaliação está disponível.`,
     eyebrow: "LEALIA ADVISORY PARTNERS",
-    heading: "Pagamento confirmado — relatório completo disponível 🎉",
+    heading: "Dossiê integral de avaliação",
     greeting: (nome: string) => `Olá ${nome}`,
     concludedFrom: ", o relatório completo de ",
-    bodyIntro:
-      "Recebemos o seu pagamento e o relatório completo já se encontra disponível, sem secções bloqueadas, através do link abaixo. O link é pessoal e não expira.",
-    reportLinkLabel: "Abrir o relatório completo →",
-    ctaEyebrow: "PRÓXIMO PASSO — REUNIÃO DE 20 MINUTOS",
-    ctaTitle: "Apresentação e discussão do relatório completo.",
+    bodyIntro: "O dossiê integral (14 páginas) está disponível, sem secções reservadas, através do seu link pessoal. O link não expira e pode ser partilhado com quem entender.",
+    reportLinkLabel: "Abrir o dossiê integral",
+    ctaEyebrow: "PRÓXIMO PASSO — CONVERSA COM OS SÓCIOS",
+    ctaTitle: "Discussão estratégica do enquadramento de M&A: opções de transação, timing e preparação do processo.",
     ctaButton: "Agendar reunião",
     recibo: (valor: string, referencia: string) => `Pagamento de ${valor} — referência ${referencia}.`,
     disclaimer:
@@ -23,16 +22,15 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Relatório Completo de Avaliação",
   },
   en: {
-    preview: (nome: string) => `Hello ${nome}! Your full valuation report is now available.`,
+    preview: (nome: string) => `${nome}, your full valuation dossier is available.`,
     eyebrow: "LEALIA ADVISORY PARTNERS",
-    heading: "Payment confirmed — your full report is available 🎉",
+    heading: "Full valuation dossier",
     greeting: (nome: string) => `Hello ${nome}`,
     concludedFrom: ", the full report for ",
-    bodyIntro:
-      "We have received your payment and the full report is now available, with no locked sections, through the link below. The link is personal and does not expire.",
-    reportLinkLabel: "Open the full report →",
-    ctaEyebrow: "NEXT STEP — 20-MINUTE MEETING",
-    ctaTitle: "Presentation and discussion of the full report.",
+    bodyIntro: "The full dossier (14 pages) is available, with no reserved sections, through your personal link. The link does not expire and may be shared as you see fit.",
+    reportLinkLabel: "Open the full dossier",
+    ctaEyebrow: "NEXT STEP — CONVERSATION WITH THE PARTNERS",
+    ctaTitle: "Strategic discussion of the M&A context: transaction options, timing and process preparation.",
     ctaButton: "Schedule a meeting",
     recibo: (valor: string, referencia: string) => `Payment of ${valor} — reference ${referencia}.`,
     disclaimer:
@@ -41,16 +39,15 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Full Valuation Report",
   },
   es: {
-    preview: (nome: string) => `¡Hola ${nome}! Su informe completo de valoración ya está disponible.`,
+    preview: (nome: string) => `${nome}, el dossier integral de valoración está disponible.`,
     eyebrow: "LEALIA ADVISORY PARTNERS",
-    heading: "Pago confirmado — su informe completo está disponible 🎉",
+    heading: "Dossier integral de valoración",
     greeting: (nome: string) => `Hola ${nome}`,
     concludedFrom: ", el informe completo de ",
-    bodyIntro:
-      "Hemos recibido su pago y el informe completo ya está disponible, sin secciones bloqueadas, a través del siguiente enlace. El enlace es personal y no caduca.",
-    reportLinkLabel: "Abrir el informe completo →",
-    ctaEyebrow: "PRÓXIMO PASO — REUNIÓN DE 20 MINUTOS",
-    ctaTitle: "Presentación y discusión del informe completo.",
+    bodyIntro: "El dossier integral (14 páginas) está disponible, sin secciones reservadas, a través de su enlace personal. El enlace no caduca y puede compartirlo con quien considere.",
+    reportLinkLabel: "Abrir el dossier integral",
+    ctaEyebrow: "PRÓXIMO PASO — CONVERSACIÓN CON LOS SOCIOS",
+    ctaTitle: "Discusión estratégica del contexto de M&A: opciones de transacción, timing y preparación del proceso.",
     ctaButton: "Agendar reunión",
     recibo: (valor: string, referencia: string) => `Pago de ${valor} — referencia ${referencia}.`,
     disclaimer:

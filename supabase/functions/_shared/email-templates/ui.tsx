@@ -481,6 +481,60 @@ export const Metric = ({ label, value }: { label: string; value: string }) => (
   </Column>
 );
 
+/** Botão principal centrado (ação nº 1 do e-mail). */
+export const PrimaryAction = ({ href, label }: { href: string; label: React.ReactNode }) => (
+  <Section style={{ padding: "24px 32px 4px 32px", textAlign: "center" as const }}>
+    <Link href={href} style={button}>{label}</Link>
+  </Section>
+);
+
+/** Bloco editorial sóbrio: filete dourado à esquerda, lista opcional e link discreto. */
+export const EditorialBlock = ({
+  eyebrowText,
+  title,
+  body,
+  items,
+  href,
+  linkLabel,
+}: {
+  eyebrowText: string;
+  title: React.ReactNode;
+  body?: React.ReactNode;
+  items?: string[];
+  href?: string | null;
+  linkLabel?: React.ReactNode;
+}) => (
+  <Section style={{ padding: "28px 32px 8px 32px" }}>
+    <Row>
+      <Column style={{ borderLeft: `2px solid ${GOLD}`, padding: "2px 0 2px 18px" }}>
+        <Text style={{ ...ctaEyebrow, margin: "0 0 6px 0" }}>{eyebrowText}</Text>
+        <Text style={{ margin: "0 0 10px 0", color: NAVY, fontSize: "16px", lineHeight: "24px", fontWeight: 600, fontFamily: FONT }}>
+          {title}
+        </Text>
+        {body && <Text style={{ margin: "0 0 10px 0", color: "#3f3f46", fontSize: "14px", lineHeight: "22px", fontFamily: FONT }}>{body}</Text>}
+        {items?.map((it) => (
+          <Text key={it} style={{ margin: "0 0 4px 0", color: "#3f3f46", fontSize: "14px", lineHeight: "22px", fontFamily: FONT }}>
+            — {it}
+          </Text>
+        ))}
+        {href && linkLabel && (
+          <Text style={{ margin: "12px 0 0 0", fontSize: "14px", lineHeight: "22px", fontFamily: FONT }}>
+            <Link href={href} style={reportLink}>{linkLabel}</Link>
+          </Text>
+        )}
+      </Column>
+    </Row>
+  </Section>
+);
+
+/** Nota discreta de apoio (ex.: reunião), sem competir com a ação principal. */
+export const SupportNote = ({ text, href, linkLabel }: { text: React.ReactNode; href: string; linkLabel: React.ReactNode }) => (
+  <Text style={{ margin: "20px 32px 24px 32px", color: MUTED, fontSize: "13px", lineHeight: "21px", fontFamily: FONT }}>
+    {text}{" "}
+    <Link href={href} style={{ ...reportLink, fontWeight: 500 }}>{linkLabel}</Link>
+  </Text>
+);
+
 export {
   Body,
   Column,
