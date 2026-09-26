@@ -52,6 +52,7 @@ export type PageCopy = {
   sampleReport: {
     sections: { numero: string; titulo: string; texto: string }[];
     cta: string;
+    viewer: { title: string; note: string; close: string };
   };
   resultCard: {
     needCloserLook: string;
