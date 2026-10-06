@@ -93,20 +93,6 @@ Deno.serve(async (req: Request) => {
   const relatorioUrl = base ? `${base}/${identificador}` : null;
   const relatorioAdminUrl = relatorioUrl ? `${relatorioUrl}?k=${linha["relatorio_token_admin"] as string}` : null;
 
-  // Geração opcional do PDF (só quando existe serviço de conversão configurado).
-  let pdfUrl: string | null = null;
-  let pdfAdminUrl: string | null = null;
-  if (relatorioUrl && relatorioAdminUrl) {
-    pdfUrl = await gerarPdfRelatorio(inserido.id, relatorioUrl);
-    pdfAdminUrl = await gerarPdfRelatorio(inserido.id, relatorioAdminUrl, "admin");
-    if (pdfUrl || pdfAdminUrl) {
-      await supabaseAdmin
-        .from("leads")
-        .update({ relatorio_estado: "gerado", relatorio_gerado_em: new Date().toISOString() })
-        .eq("id", inserido.id);
-    }
-  }
-
   // Libertação no dia n+2 às 08:53 (Lisboa): sample, ou relatório completo se pago antes.
   const agendadoPara = calcularEnvioRelatorio(new Date());
 
@@ -115,19 +101,38 @@ Deno.serve(async (req: Request) => {
     .update({ relatorio_url: relatorioUrl, email_relatorio_agendado_para: agendadoPara.toISOString() })
     .eq("id", inserido.id);
 
-  const emailEnviado = await enviarConfirmacaoSubmissao(inserido.id, {
-    nome: String(lead.nome ?? ""),
-    email: String(lead.email ?? ""),
-    empresa: String(lead.empresa ?? ""),
-    calculo_possivel: !!lead.calculo_possivel,
-    idioma: typeof lead.idioma === "string" ? lead.idioma : "pt",
-  }, urlCompraRelatorio({ relatorio_url: relatorioUrl, relatorio_slug: slug, relatorio_token: linha["relatorio_token"], idioma: lead.idioma }));
-  await notificarEquipaNovoLead(inserido.id, lead as Record<string, unknown>, relatorioAdminUrl, pdfAdminUrl);
+  // PDFs e e-mails correm em segundo plano: o cliente recebe a referência de imediato
+  // (a caixa de compra depende dela e não deve esperar por estas tarefas lentas).
+  const tarefasLentas = async () => {
+    let pdfAdminUrl: string | null = null;
+    if (relatorioUrl && relatorioAdminUrl) {
+      const pdfUrl = await gerarPdfRelatorio(inserido.id, relatorioUrl);
+      pdfAdminUrl = await gerarPdfRelatorio(inserido.id, relatorioAdminUrl, "admin");
+      if (pdfUrl || pdfAdminUrl) {
+        await supabaseAdmin
+          .from("leads")
+          .update({ relatorio_estado: "gerado", relatorio_gerado_em: new Date().toISOString() })
+          .eq("id", inserido.id);
+      }
+    }
+    await enviarConfirmacaoSubmissao(inserido.id, {
+      nome: String(lead.nome ?? ""),
+      email: String(lead.email ?? ""),
+      empresa: String(lead.empresa ?? ""),
+      calculo_possivel: !!lead.calculo_possivel,
+      idioma: typeof lead.idioma === "string" ? lead.idioma : "pt",
+    }, urlCompraRelatorio({ relatorio_url: relatorioUrl, relatorio_slug: slug, relatorio_token: linha["relatorio_token"], idioma: lead.idioma }));
+    await notificarEquipaNovoLead(inserido.id, lead as Record<string, unknown>, relatorioAdminUrl, pdfAdminUrl);
+    await registarEvento(supabaseAdmin, "submission_created", {
+      submissionId: inserido.id as string,
+      detalhes: { empresa: lead.empresa ?? null, idioma: lead.idioma ?? "pt" },
+    });
+  };
+  const emCurso = tarefasLentas().catch((e) => console.error("Falha nas tarefas pós-submissão", e));
+  // deno-lint-ignore no-explicit-any
+  const runtime = (globalThis as any).EdgeRuntime;
+  if (runtime?.waitUntil) runtime.waitUntil(emCurso);
+  else await emCurso;
 
-  await registarEvento(supabaseAdmin, "submission_created", {
-    submissionId: inserido.id as string,
-    detalhes: { empresa: lead.empresa ?? null, idioma: lead.idioma ?? "pt" },
-  });
-
-  return json({ ok: true, emailEnviado, relatorioUrl, pdfUrl, ref: identificador });
+  return json({ ok: true, emailEnviado: true, relatorioUrl, ref: identificador });
 });
