@@ -53,6 +53,7 @@ export const dadosFinanceiros: StepDef = {
               <Field label={copy.fields.ebitda} error={err(`ebitda_ano${ano}` as keyof FormState)} htmlFor={`ebi${ano}`}>
                 <MoneyInput
                   id={`ebi${ano}`}
+                  allowNegative
                   value={form[`ebitda_ano${ano}` as "ebitda_ano1"]}
                   onChange={(v) => set(`ebitda_ano${ano}` as "ebitda_ano1", v)}
                 />

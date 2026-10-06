@@ -39,7 +39,18 @@ export function Field({
   );
 }
 
-export function MoneyInput({ id, value, onChange }: { id: string; value: string; onChange: (v: string) => void }) {
+export function MoneyInput({
+  id,
+  value,
+  onChange,
+  allowNegative = false,
+}: {
+  id: string;
+  value: string;
+  onChange: (v: string) => void;
+  /** Só o EBITDA pode ser negativo. */
+  allowNegative?: boolean;
+}) {
   return (
     <div className="relative">
       <input
@@ -49,7 +60,10 @@ export function MoneyInput({ id, value, onChange }: { id: string; value: string;
         autoComplete="off"
         placeholder="0"
         value={formatThousands(value)}
-        onChange={(e) => onChange(digitsOnly(e.target.value))}
+        onChange={(e) => {
+          const v = digitsOnly(e.target.value);
+          onChange(allowNegative ? v : v.replace("-", ""));
+        }}
       />
       <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-muted-foreground">
         €
