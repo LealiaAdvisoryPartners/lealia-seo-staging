@@ -1,21 +1,12 @@
 /**
- * Inicia o pagamento do relatório completo (299€) para uma submissão.
- *
- * Aceita a submissão por `ref`: o slug legível do relatório ou o token público.
- * Cria sempre um registo em `payments` com estado "pending", ligado ao
- * `submission_id`, e envia essa referência curta à ifthenpay como `orderId`.
+ * Inicia o pagamento do relatório completo (299€) via Stripe Checkout
+ * (cartão, Apple Pay, Google Pay). Aceita a submissão por `ref`: o slug do
+ * relatório ou o token público. Cria um registo `payments` "pending" ligado ao
+ * `submission_id`, com uma referência curta enviada à Stripe.
  */
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/valuation/cors.ts";
-import {
-  MOEDA,
-  PRECO_RELATORIO_COMPLETO,
-  gerarOrderId,
-  iniciarCartao,
-  iniciarMbway,
-  normalizarTelemovel,
-  type MetodoPagamento,
-} from "../_shared/payments/ifthenpay.ts";
+import { MOEDA, PRECO_RELATORIO_COMPLETO, criarSessaoCheckout, gerarOrderId } from "../_shared/payments/stripe.ts";
 import { registarEvento } from "../_shared/payments/orquestracao.ts";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -39,45 +30,34 @@ Deno.serve(async (req: Request) => {
   }
 
   const ref = String(body.ref ?? "").trim();
-  const metodo = String(body.metodo ?? "") as MetodoPagamento;
   if (!ref || (!UUID.test(ref) && !SLUG.test(ref))) return json({ ok: false, erro: "referencia_invalida" }, 400);
-  if (metodo !== "mbway" && metodo !== "credit_card") return json({ ok: false, erro: "metodo_invalido" }, 400);
 
-  const supabaseAdmin = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  );
+  const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
   const coluna = UUID.test(ref) ? "relatorio_token" : "relatorio_slug";
-  const { data: lead, error } = await supabaseAdmin.from("leads").select("*").eq(coluna, ref).maybeSingle();
+  const { data: lead, error } = await admin.from("leads").select("*").eq(coluna, ref).maybeSingle();
   if (error || !lead) return json({ ok: false, erro: "submissao_inexistente" }, 404);
-
-  if (lead.status === "full_paid") {
-    return json({ ok: false, erro: "ja_pago" }, 409);
-  }
+  if (lead.status === "full_paid") return json({ ok: false, erro: "ja_pago" }, 409);
 
   const idioma = IDIOMAS.has(String(body.idioma)) ? (String(body.idioma) as "pt" | "en" | "es") : (lead.idioma ?? "pt");
-  const origin = texto(body.origin, 200) ?? req.headers.get("origin") ?? "";
-  const base = origin.replace(/\/$/, "");
+  const base = (texto(body.origin, 200) ?? req.headers.get("origin") ?? "https://lealiaap.com").replace(/\/$/, "");
   const orderId = gerarOrderId();
-  const descricao = `Relatorio completo de avaliacao${lead.empresa ? ` - ${String(lead.empresa).slice(0, 60)}` : ""}`;
+  const nif = texto(body.nif, 20);
 
-  const registo = {
-    submission_id: lead.id as string,
-    ifthenpay_order_id: orderId,
-    method: metodo,
-    status: "pending",
-    amount: PRECO_RELATORIO_COMPLETO,
-    currency: MOEDA,
-    nif: texto(body.nif, 20),
-    nome_fiscal: texto(body.nome_fiscal, 160),
-    morada_fiscal: texto(body.morada_fiscal, 300),
-    fatura_estado: texto(body.nif, 20) ? "pendente" : "nao_aplicavel",
-  };
-
-  const { data: pagamento, error: erroPagamento } = await supabaseAdmin
+  const { data: pagamento, error: erroPagamento } = await admin
     .from("payments")
-    .insert(registo)
+    .insert({
+      submission_id: lead.id as string,
+      ifthenpay_order_id: orderId,
+      method: "credit_card",
+      status: "pending",
+      amount: PRECO_RELATORIO_COMPLETO,
+      currency: MOEDA,
+      nif,
+      nome_fiscal: texto(body.nome_fiscal, 160),
+      morada_fiscal: texto(body.morada_fiscal, 300),
+      fatura_estado: nif ? "pendente" : "nao_aplicavel",
+    })
     .select("*")
     .single();
 
@@ -86,74 +66,41 @@ Deno.serve(async (req: Request) => {
     return json({ ok: false, erro: "falha_registo" }, 500);
   }
 
+  // O retorno devolve sempre o cliente ao checkout, nunca ao relatório
+  // (que só é libertado no seu horário próprio).
+  const refPublica = String(lead.relatorio_slug ?? lead.relatorio_token ?? "");
+  const checkout = `${base}/${idioma}/upgrade?ref=${encodeURIComponent(refPublica)}`;
+
   try {
-    if (metodo === "mbway") {
-      const telemovel = normalizarTelemovel(String(body.telemovel ?? lead.telefone ?? ""));
-      if (!telemovel) {
-        await supabaseAdmin.from("payments").update({ status: "failed" }).eq("id", pagamento.id);
-        return json({ ok: false, erro: "telemovel_invalido" }, 400);
-      }
-
-      const resposta = await iniciarMbway({
-        orderId,
-        montante: PRECO_RELATORIO_COMPLETO,
-        telemovel,
-        email: String(lead.email ?? ""),
-        descricao,
-      });
-
-      await supabaseAdmin
-        .from("payments")
-        .update({ request_id: resposta.requestId, payment_details: { inicio: resposta.detalhes } })
-        .eq("id", pagamento.id);
-
-      await registarEvento(supabaseAdmin, "payment_initiated", {
-        submissionId: lead.id as string,
-        paymentId: pagamento.id,
-        detalhes: { orderId, metodo, telemovel },
-      });
-
-      return json({ ok: true, metodo, orderId, paymentId: pagamento.id });
-    }
-
-    // O retorno da gateway devolve sempre o cliente ao checkout, nunca
-    // diretamente ao relatório (que só é libertado no seu horário próprio).
-    const raiz = base || "https://lealiaap.com";
-    const refPublica = String(lead.relatorio_slug ?? lead.relatorio_token ?? "");
-    const checkout = `${raiz}/${idioma}/upgrade?ref=${encodeURIComponent(refPublica)}`;
-    const resposta = await iniciarCartao({
+    const sessao = await criarSessaoCheckout({
       orderId,
-      montante: PRECO_RELATORIO_COMPLETO,
+      submissionId: lead.id as string,
+      email: String(lead.email ?? ""),
       idioma,
-      successUrl: `${checkout}&pagamento=sucesso`,
-      errorUrl: `${checkout}&pagamento=erro`,
+      descricao: `Relatório completo de avaliação${lead.empresa ? ` — ${String(lead.empresa).slice(0, 60)}` : ""}`,
+      successUrl: `${checkout}&pagamento=sucesso&pedido=${orderId}`,
       cancelUrl: `${checkout}&pagamento=cancelado`,
-      descricao,
     });
 
-    await supabaseAdmin
-      .from("payments")
-      .update({ request_id: resposta.requestId, payment_details: { inicio: resposta.detalhes } })
-      .eq("id", pagamento.id);
-
-    await registarEvento(supabaseAdmin, "payment_initiated", {
+    await admin.from("payments").update({ request_id: sessao.id }).eq("id", pagamento.id);
+    await registarEvento(admin, "payment_initiated", {
       submissionId: lead.id as string,
       paymentId: pagamento.id,
-      detalhes: { orderId, metodo },
+      detalhes: { orderId, sessao: sessao.id },
     });
 
-    return json({ ok: true, metodo, orderId, paymentId: pagamento.id, paymentUrl: resposta.paymentUrl });
+    return json({ ok: true, orderId, paymentId: pagamento.id, paymentUrl: sessao.url });
   } catch (e) {
     const motivo = e instanceof Error ? e.message : String(e);
     console.error(`Falha a iniciar pagamento ${orderId}`, motivo);
-    await supabaseAdmin
+    await admin
       .from("payments")
       .update({ status: "failed", payment_details: { erro: motivo.slice(0, 500) } })
       .eq("id", pagamento.id);
-    await registarEvento(supabaseAdmin, "payment_failed", {
+    await registarEvento(admin, "payment_failed", {
       submissionId: lead.id as string,
       paymentId: pagamento.id,
-      detalhes: { orderId, metodo, motivo: motivo.slice(0, 500) },
+      detalhes: { orderId, motivo: motivo.slice(0, 500) },
     });
     return json({ ok: false, erro: "falha_gateway" }, 502);
   }
