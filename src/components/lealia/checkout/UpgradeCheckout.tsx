@@ -21,7 +21,7 @@ const textos = (lang: "pt" | "en" | "es") => checkoutCopy[lang];
 
 export function UpgradeCheckout({
   referencia,
-  telefone,
+  telefone: _telefone,
   reportUrl,
   onPago,
   layout = "wide",

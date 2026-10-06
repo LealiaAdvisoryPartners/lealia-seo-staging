@@ -193,9 +193,9 @@ export async function enviarRelatorioCompleto(
 }
 
 const METODOS: Record<IdiomaLead, Record<string, string>> = {
-  pt: { mbway: "MB WAY", ccard: "Cartão" },
-  en: { mbway: "MB WAY", ccard: "Card" },
-  es: { mbway: "MB WAY", ccard: "Tarjeta" },
+  pt: { credit_card: "Cartão", mbway: "MB WAY", ccard: "Cartão" },
+  en: { credit_card: "Cartão", mbway: "MB WAY", ccard: "Card" },
+  es: { credit_card: "Cartão", mbway: "MB WAY", ccard: "Tarjeta" },
 };
 const LOCALE: Record<IdiomaLead, string> = { pt: "pt-PT", en: "en-GB", es: "es-ES" };
 
