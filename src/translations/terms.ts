@@ -49,7 +49,7 @@ const pt: TermsContent = {
       title: "Preço e Pagamento",
       paragraphs: [
         "4.1. Os preços de cada serviço são os apresentados no site no momento da contratação e incluem IVA à taxa legal em vigor, quando aplicável.",
-        "4.2. O pagamento é processado através da ifthenpay, Instituição de Pagamento portuguesa autorizada e supervisionada pelo Banco de Portugal, através dos meios de pagamento disponibilizados no site (por exemplo, Multibanco, MB WAY, cartão de crédito/débito).",
+        "4.2. O pagamento é processado de forma segura pela Stripe Payments Europe, Ltd., instituição de moeda eletrónica autorizada e supervisionada pelo Banco Central da Irlanda, através de cartão de crédito/débito e carteiras digitais compatíveis (Apple Pay, Google Pay).",
         "4.3. O Serviço só é iniciado após confirmação do pagamento.",
         "4.4. Será emitida fatura ou fatura-recibo eletrónica, enviada para o email indicado pelo Cliente.",
       ],
@@ -178,7 +178,7 @@ const en: TermsContent = {
       title: "Price and Payment",
       paragraphs: [
         "4.1. The price of each service is the price displayed on the website at the time of purchase and includes VAT at the statutory rate in force, where applicable.",
-        "4.2. Payment is processed by ifthenpay, a Portuguese Payment Institution authorised and supervised by Banco de Portugal, using the payment methods available on the website (for example, Multibanco, MB WAY and credit/debit card).",
+        "4.2. Payment is securely processed by Stripe Payments Europe, Ltd., an electronic money institution authorised and supervised by the Central Bank of Ireland, by credit/debit card and supported digital wallets (Apple Pay, Google Pay).",
         "4.3. The Service only begins after payment has been confirmed.",
         "4.4. An electronic invoice or invoice-receipt will be issued and sent to the email address supplied by the Client.",
       ],
@@ -307,7 +307,7 @@ const es: TermsContent = {
       title: "Precio y Pago",
       paragraphs: [
         "4.1. Los precios de cada servicio son los mostrados en el sitio web en el momento de la contratación e incluyen el IVA al tipo legal vigente, cuando sea aplicable.",
-        "4.2. El pago es procesado a través de ifthenpay, Institución de Pago portuguesa autorizada y supervisada por el Banco de Portugal, mediante los métodos de pago disponibles en el sitio web (por ejemplo, Multibanco, MB WAY y tarjeta de crédito/débito).",
+        "4.2. El pago es procesado de forma segura por Stripe Payments Europe, Ltd., entidad de dinero electrónico autorizada y supervisada por el Banco Central de Irlanda, mediante tarjeta de crédito/débito y carteras digitales compatibles (Apple Pay, Google Pay).",
         "4.3. El Servicio solo se inicia tras la confirmación del pago.",
         "4.4. Se emitirá una factura o factura-recibo electrónica, que se enviará al email indicado por el Cliente.",
       ],

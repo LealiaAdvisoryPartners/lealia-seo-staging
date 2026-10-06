@@ -144,15 +144,15 @@ export const en = {
   "privacy.section4.p2": "After that period, the data is securely deleted or anonymised.",
   "privacy.section5.title": "Payments",
   "privacy.section5.p1":
-    "When you make a payment through our website, processing is carried out by ifthenpay, a Portuguese Payment Institution authorised and supervised by Banco de Portugal (licence no. 8707), which acts as an intermediary in processing payments via Multibanco Reference, MB WAY, credit/debit card, among other available methods.",
+    "When you make a payment through our website, processing is carried out by Stripe Payments Europe, Ltd., an electronic money institution authorised and supervised by the Central Bank of Ireland, which processes payments by credit/debit card and digital wallets (Apple Pay, Google Pay).",
   "privacy.section5.item1":
-    "We do not store full credit/debit card numbers on our own systems - that data is managed directly by ifthenpay, in compliance with the PCI-DSS standard and the regulation applicable to Payment Institutions in Portugal",
+    "We do not store full credit/debit card numbers on our own systems - that data is managed directly by Stripe, in compliance with the PCI-DSS Level 1 standard",
   "privacy.section5.item2":
-    "We share with ifthenpay only the data strictly necessary to process the transaction (e.g. amount, service reference, contact details for payment confirmation)",
+    "We share with Stripe only the data strictly necessary to process the transaction (e.g. amount, service reference, contact details for payment confirmation)",
   "privacy.section5.item3":
     "We keep records of transactions (amount, date, service purchased, payment status) for billing, accounting and customer support purposes",
   "privacy.section5.item4":
-    "For more information on how ifthenpay processes data during payment processing, please see ifthenpay's privacy policy at ifthenpay.com",
+    "For more information on how Stripe processes data during payment processing, please see Stripe's privacy policy at stripe.com/privacy",
   "privacy.section6.title": "Information Sharing",
   "privacy.section6.p1":
     "We do not sell, trade or rent your personal data to third parties. We may share your data with:",
@@ -161,7 +161,7 @@ export const en = {
   "privacy.section6.item2": "Competent authorities, when required by law",
   "privacy.section7.title": "Cookies and Similar Technologies",
   "privacy.section7.p1":
-    "Our website uses only cookies that are strictly necessary for its operation and for the security of the payment process - namely session cookies and cookies required by our payment service provider (ifthenpay) to process the transaction securely.",
+    "Our website uses only cookies that are strictly necessary for its operation and for the security of the payment process - namely session cookies and cookies required by our payment service provider (Stripe) to process the transaction securely.",
   "privacy.section7.p2":
     "We do not use third-party analytics, advertising or marketing cookies. For that reason, and under the applicable legislation (Law no. 41/2004 and the GDPR), these cookies do not require your prior consent, as they are indispensable for the operation of the website and the provision of the requested service. Should we use analytics or marketing cookies in the future, this policy will be updated and an appropriate consent mechanism will be presented.",
   "privacy.section7.p3":

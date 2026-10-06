@@ -146,15 +146,15 @@ export const es = {
   "privacy.section4.p2": "Transcurrido ese período, los datos se eliminan o se anonimizan de forma segura.",
   "privacy.section5.title": "Pagos",
   "privacy.section5.p1":
-    "Al realizar un pago a través de nuestro sitio web, el procesamiento es llevado a cabo por ifthenpay, una Institución de Pago portuguesa autorizada y supervisada por el Banco de Portugal (licencia n.º 8707), que actúa como intermediaria en el procesamiento de pagos por Referencia Multibanco, MB WAY, tarjeta de crédito/débito, entre otros métodos disponibles.",
+    "Al realizar un pago a través de nuestro sitio web, el procesamiento es llevado a cabo por Stripe Payments Europe, Ltd., entidad de dinero electrónico autorizada y supervisada por el Banco Central de Irlanda, que procesa pagos con tarjeta de crédito/débito y carteras digitales (Apple Pay, Google Pay).",
   "privacy.section5.item1":
-    "No almacenamos números completos de tarjetas de crédito/débito en nuestros propios sistemas - esos datos son gestionados directamente por ifthenpay, en conformidad con la norma PCI-DSS y la normativa aplicable a las Instituciones de Pago en Portugal",
+    "No almacenamos números completos de tarjetas de crédito/débito en nuestros propios sistemas - esos datos son gestionados directamente por Stripe, en conformidad con la norma PCI-DSS de nivel 1",
   "privacy.section5.item2":
-    "Compartimos con ifthenpay únicamente los datos estrictamente necesarios para procesar la transacción (p. ej.: importe, referencia del servicio, datos de contacto para la confirmación del pago)",
+    "Compartimos con Stripe únicamente los datos estrictamente necesarios para procesar la transacción (p. ej.: importe, referencia del servicio, datos de contacto para la confirmación del pago)",
   "privacy.section5.item3":
     "Mantenemos registros de las transacciones (importe, fecha, servicio adquirido, estado del pago) a efectos de facturación, contabilidad y atención al cliente",
   "privacy.section5.item4":
-    "Para más información sobre cómo ifthenpay trata los datos durante el procesamiento del pago, consulte la política de privacidad de ifthenpay en ifthenpay.com",
+    "Para más información sobre cómo Stripe trata los datos durante el procesamiento del pago, consulte la política de privacidad de Stripe en stripe.com/es/privacy",
   "privacy.section6.title": "Cesión de Información",
   "privacy.section6.p1":
     "No vendemos, intercambiamos ni alquilamos sus datos personales a terceros. Podemos compartir sus datos con:",
@@ -163,7 +163,7 @@ export const es = {
   "privacy.section6.item2": "Autoridades competentes, cuando así lo exija la ley",
   "privacy.section7.title": "Cookies y Tecnologías Similares",
   "privacy.section7.p1":
-    "Nuestro sitio web utiliza únicamente cookies estrictamente necesarias para su funcionamiento y para la seguridad del proceso de pago - en concreto, cookies de sesión y cookies exigidas por nuestro proveedor de servicios de pago (ifthenpay) para procesar la transacción de forma segura.",
+    "Nuestro sitio web utiliza únicamente cookies estrictamente necesarias para su funcionamiento y para la seguridad del proceso de pago - en concreto, cookies de sesión y cookies exigidas por nuestro proveedor de servicios de pago (Stripe) para procesar la transacción de forma segura.",
   "privacy.section7.p2":
     "No utilizamos cookies de análisis (analytics), publicidad ni marketing de terceros. Por ese motivo, y en los términos de la legislación aplicable (Ley n.º 41/2004 y RGPD), estas cookies no requieren su consentimiento previo, ya que son indispensables para el funcionamiento del sitio web y para la prestación del servicio solicitado. Si en el futuro llegáramos a utilizar cookies de análisis o marketing, esta política se actualizará y se presentará un mecanismo de consentimiento adecuado.",
   "privacy.section7.p3":
