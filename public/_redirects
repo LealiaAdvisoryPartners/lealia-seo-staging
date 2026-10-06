@@ -15,8 +15,8 @@ https://www.lealia-ap.pt/* https://www.lealiaap.com/pt/:splat 301!
 https://lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 
-# Callback de pagamentos ifthenpay (tem de vir ANTES de qualquer redirect de idioma)
-/api/ifthenpay-webhook  https://bayjhgwdkqxgnhfqclyq.supabase.co/functions/v1/ifthenpay-webhook  200
+# Webhook da Stripe (tem de vir ANTES de qualquer redirect de idioma)
+/api/stripe-webhook  https://bayjhgwdkqxgnhfqclyq.supabase.co/functions/v1/stripe-webhook  200
 
 # Country-based language redirects for .com domain (and other domains not listed above)
 # Exclude static assets and API routes from language redirects (must come BEFORE language redirects)

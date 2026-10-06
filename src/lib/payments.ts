@@ -3,7 +3,7 @@ import type { Language } from "@/lib/routing";
 
 export const PRECO_RELATORIO_COMPLETO = 299;
 
-export type MetodoPagamento = "mbway" | "credit_card";
+export type MetodoPagamento = "credit_card";
 
 export type EstadoPagamento = "pending" | "paid" | "expired" | "failed";
 

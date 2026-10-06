@@ -21,7 +21,7 @@ const textos = (lang: "pt" | "en" | "es") => checkoutCopy[lang];
 
 export function UpgradeCheckout({
   referencia,
-  telefone,
+  telefone: _telefone,
   reportUrl,
   onPago,
   layout = "wide",
@@ -37,15 +37,17 @@ export function UpgradeCheckout({
   const { language } = useLanguage();
   const c = checkoutCopy[language];
 
-  const [metodo, setMetodo] = useState<MetodoPagamento>("mbway");
-  const [telemovel, setTelemovel] = useState(telefone ?? "");
+  const metodo: MetodoPagamento = "credit_card";
   const [comFatura, setComFatura] = useState(false);
   const [nif, setNif] = useState("");
   const [nomeFiscal, setNomeFiscal] = useState("");
   const [morada, setMorada] = useState("");
-  const [fase, setFase] = useState<Fase>("form");
+  // Regresso da Stripe: ?pagamento=sucesso&pedido=LP… → confirmar o estado.
+  const retorno = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const pedidoRetorno = retorno?.get("pagamento") === "sucesso" ? retorno.get("pedido") : null;
+  const [fase, setFase] = useState<Fase>(pedidoRetorno ? "aguardar" : "form");
   const [erro, setErro] = useState<string | null>(null);
-  const [orderId, setOrderId] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(pedidoRetorno);
   const [urlCompleto, setUrlCompleto] = useState<string | null>(null);
   const sondagem = useRef<number | null>(null);
 
@@ -56,7 +58,7 @@ export function UpgradeCheckout({
       if (sondagem.current) window.clearInterval(sondagem.current);
       sondagem.current = null;
     };
-    sondagem.current = window.setInterval(async () => {
+    const verificar = async () => {
       const estado: EstadoPagamento | null = await consultarPagamento(orderId);
       if (estado === "paid") {
         parar();
@@ -67,22 +69,22 @@ export function UpgradeCheckout({
         setFase("form");
         setErro(c.errors.declined);
       }
-    }, 4000);
+    };
+    void verificar();
+    sondagem.current = window.setInterval(verificar, 3000);
     return parar;
   }, [fase, orderId, c.errors.declined, onPago]);
 
   const pagar = async () => {
     if (!referencia) return setErro(c.errors.missingRef);
-    if (metodo === "mbway" && telemovel.replace(/\D/g, "").length < 9) return setErro(c.errors.phone);
 
     setErro(null);
-    setFase(metodo === "mbway" ? "aguardar" : "encaminhar");
+    setFase("encaminhar");
 
     const resposta = await criarPagamento({
       ref: referencia,
       metodo,
       idioma: language,
-      telemovel: metodo === "mbway" ? telemovel : null,
       nif: comFatura ? nif : null,
       nome_fiscal: comFatura ? nomeFiscal : null,
       morada_fiscal: comFatura ? morada : null,
@@ -101,7 +103,7 @@ export function UpgradeCheckout({
     }
 
     setOrderId(resposta.orderId ?? null);
-    if (metodo === "credit_card" && resposta.paymentUrl) {
+    if (resposta.paymentUrl) {
       window.location.href = resposta.paymentUrl;
       return;
     }
@@ -162,40 +164,8 @@ export function UpgradeCheckout({
           </div>
         ) : (
           <div className="mt-8">
-            <p className="eyebrow">{c.methodTitle}</p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {(
-                [
-                  { id: "mbway" as const, label: c.methods.mbway, nota: null },
-                  { id: "credit_card" as const, label: c.methods.card, nota: c.methods.cardNote },
-                ]
-              ).map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => setMetodo(m.id)}
-                  className={`border p-4 text-left transition-colors ${
-                    metodo === m.id ? "border-accent bg-accent/5" : "border-border hover:border-accent/50"
-                  }`}
-                >
-                  <span className="block text-sm">{m.label}</span>
-                  {m.nota && <span className="mt-1 block text-xs font-light text-muted-foreground">{m.nota}</span>}
-                </button>
-              ))}
-            </div>
-
-            {metodo === "mbway" && (
-              <label className="mt-6 block">
-                <span className="text-xs tracking-wide uppercase text-muted-foreground">{c.phoneLabel}</span>
-                <input
-                  type="tel"
-                  value={telemovel}
-                  onChange={(e) => setTelemovel(e.target.value)}
-                  placeholder={c.phonePlaceholder}
-                  className="mt-2 w-full border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-accent"
-                />
-              </label>
-            )}
+            <p className="text-sm">{c.methods.card}</p>
+            <p className="mt-1 text-xs font-light text-muted-foreground">{c.methods.cardNote}</p>
 
             <label className="mt-6 flex items-start gap-3 text-sm font-light text-muted-foreground">
               <input
