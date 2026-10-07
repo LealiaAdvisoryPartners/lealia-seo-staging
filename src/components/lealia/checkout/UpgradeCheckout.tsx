@@ -201,7 +201,12 @@ export function UpgradeCheckout({
 
             {erro && <p className="mt-6 text-sm text-destructive">{erro}</p>}
 
-            <button type="button" className="btn-primary mt-8 w-full" onClick={pagar}>
+            <button
+              type="button"
+              className="btn-primary mt-8 w-full disabled:cursor-wait disabled:opacity-60"
+              onClick={pagar}
+              disabled={!referencia}
+            >
               {c.submit}
             </button>
 

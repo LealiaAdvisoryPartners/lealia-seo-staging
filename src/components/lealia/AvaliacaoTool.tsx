@@ -106,14 +106,14 @@ export function AvaliacaoTool() {
               <p className="serif-accent text-center text-2xl text-muted-foreground">{copy.loading}</p>
             ) : (
               result &&
-              (result.ok && referencia ? (
+              (result.ok ? (
                 <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
                   <ThankYouCard empresa={empresa} calculoPossivel />
                   <div className="lg:border-l lg:border-border lg:pl-16">
                     <UpgradeCheckout
                       referencia={referencia}
                       telefone={telefone}
-                      reportUrl={`/${referencia}`}
+                      reportUrl={referencia ? `/${referencia}` : null}
                       layout="stacked"
                     />
                   </div>
