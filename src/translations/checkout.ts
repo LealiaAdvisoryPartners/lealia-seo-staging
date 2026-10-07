@@ -5,8 +5,6 @@ export type CheckoutCopy = {
   heading: string;
   lead: string;
   priceNote: string;
-  includesTitle: string;
-  includes: string[];
   methodTitle: string;
   methods: { mbway: string; card: string; cardNote: string };
   phoneLabel: string;
@@ -43,15 +41,6 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     heading: "Desbloqueie a avaliação integral da sua empresa",
     lead: "O relatório completo entrega a análise sem secções bloqueadas, com avaliação por múltiplos e por fluxos de caixa descontados, análises de sensibilidade e um plano concreto de preparação para o mercado.",
     priceNote: "Pagamento único · IVA incluído",
-    includesTitle: "O que recebe",
-    includes: [
-      "Avaliação por múltiplos de mercado e por fluxos de caixa descontados",
-      "Ponte do valor da empresa para o valor das ações, com ajustamentos detalhados",
-      "Análises de sensibilidade ao crescimento, à margem e ao custo do capital",
-      "Drivers de valor, riscos identificados e respetivos mitigantes",
-      "Plano priorizado de preparação para o mercado e contexto de transação",
-      "Acesso permanente ao relatório, sem prazo de validade",
-    ],
     methodTitle: "Como quer pagar?",
     methods: {
       mbway: "MB WAY",
@@ -90,15 +79,6 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     heading: "Unlock the complete valuation of your company",
     lead: "The full report delivers the analysis with no locked sections: market multiples and discounted cash flow valuation, sensitivity analyses and a concrete market-readiness plan.",
     priceNote: "One-off payment · VAT included",
-    includesTitle: "What you get",
-    includes: [
-      "Valuation by market multiples and by discounted cash flows",
-      "Bridge from enterprise value to equity value, with detailed adjustments",
-      "Sensitivity analyses on growth, margin and cost of capital",
-      "Value drivers, identified risks and their mitigants",
-      "Prioritised market-readiness plan and transaction context",
-      "Permanent access to the report, with no expiry date",
-    ],
     methodTitle: "How would you like to pay?",
     methods: {
       mbway: "MB WAY",
@@ -137,15 +117,6 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     heading: "Desbloquee la valoración integral de su empresa",
     lead: "El informe completo entrega el análisis sin secciones bloqueadas, con valoración por múltiplos y por flujos de caja descontados, análisis de sensibilidad y un plan concreto de preparación para el mercado.",
     priceNote: "Pago único · IVA incluido",
-    includesTitle: "Qué recibe",
-    includes: [
-      "Valoración por múltiplos de mercado y por flujos de caja descontados",
-      "Puente del valor de empresa al valor de las acciones, con ajustes detallados",
-      "Análisis de sensibilidad al crecimiento, al margen y al coste del capital",
-      "Drivers de valor, riesgos identificados y sus mitigantes",
-      "Plan priorizado de preparación para el mercado y contexto de la transacción",
-      "Acceso permanente al informe, sin fecha de caducidad",
-    ],
     methodTitle: "¿Cómo desea pagar?",
     methods: {
       mbway: "MB WAY",

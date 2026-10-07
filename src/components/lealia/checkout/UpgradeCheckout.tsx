@@ -133,18 +133,6 @@ export function UpgradeCheckout({
         <p className="body-justified mt-6 text-sm leading-relaxed font-light text-muted-foreground md:text-base">
           {c.lead}
         </p>
-
-        <div className="mt-10">
-          <p className="eyebrow">{c.includesTitle}</p>
-          <ul className="mt-5 space-y-3">
-            {c.includes.map((item) => (
-              <li key={item} className="flex gap-3 text-sm leading-relaxed font-light text-muted-foreground">
-                <span aria-hidden className="mt-[0.45rem] h-1 w-4 shrink-0 bg-accent" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
 
       {/* Pagamento */}
