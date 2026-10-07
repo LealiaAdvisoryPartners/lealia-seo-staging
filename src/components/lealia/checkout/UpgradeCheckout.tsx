@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { CreditCard, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { checkoutCopy } from "@/translations/checkout";
 import {
@@ -124,84 +125,142 @@ export function UpgradeCheckout({
     );
   }
 
-  return (
-    <div className={layout === "stacked" ? "grid gap-8" : "grid gap-10 lg:grid-cols-[1.1fr_1fr]"}>
-      {/* Valor */}
-      <div>
-        <p className="eyebrow">{c.eyebrow}</p>
-        <h2 className="section-title mt-5 text-3xl md:text-5xl">{c.heading}</h2>
-        <p className="body-justified mt-6 text-sm leading-relaxed font-light text-muted-foreground md:text-base">
-          {c.lead}
-        </p>
-      </div>
+  const s = c.summary;
+  const compacto = layout === "stacked";
 
-      {/* Pagamento */}
-      <div className="card-elegant p-8 sm:p-10">
-        <p className="serif-accent text-3xl text-accent">299 €</p>
-        <p className="mt-2 text-xs tracking-wide uppercase text-muted-foreground">{c.priceNote}</p>
+  const resumo = (
+    <div className={compacto ? "" : "lg:sticky lg:top-28"}>
+      <p className="text-[10px] tracking-[0.28em] text-accent">{s.brand}</p>
+      {!compacto && (
+        <>
+          <h1 className="section-title mt-5 text-3xl md:text-4xl">{c.heading}</h1>
+          <p className="mt-5 text-sm leading-relaxed font-light text-muted-foreground">{c.lead}</p>
+        </>
+      )}
+      {compacto && <h3 className="section-title mt-4 text-2xl">{c.heading}</h3>}
 
-        {fase === "encaminhar" ? (
-          <p className="mt-10 text-sm font-light text-muted-foreground">{c.redirectText}</p>
-        ) : fase === "aguardar" ? (
-          <div className="mt-10">
-            <h3 className="text-xl">{c.waitingTitle}</h3>
-            <p className="mt-3 text-sm leading-relaxed font-light text-muted-foreground">{c.waitingText}</p>
-            <div className="mt-6 h-[2px] w-full overflow-hidden bg-border">
-              <div className="h-full w-1/3 animate-[pulse_1.6s_ease-in-out_infinite] bg-accent" />
-            </div>
-          </div>
-        ) : (
-          <div className="mt-8">
-            <p className="text-sm">{c.methods.card}</p>
-            <p className="mt-1 text-xs font-light text-muted-foreground">{c.methods.cardNote}</p>
-
-            <label className="mt-6 flex items-start gap-3 text-sm font-light text-muted-foreground">
-              <input
-                type="checkbox"
-                checked={comFatura}
-                onChange={(e) => setComFatura(e.target.checked)}
-                className="mt-1 accent-[hsl(var(--accent))]"
-              />
-              <span>
-                {c.invoiceToggle}
-                <span className="mt-1 block text-xs">{c.invoiceNote}</span>
-              </span>
-            </label>
-
-            {comFatura && (
-              <div className="mt-5 space-y-4">
-                {[
-                  { label: c.nifLabel, value: nif, set: setNif },
-                  { label: c.fiscalNameLabel, value: nomeFiscal, set: setNomeFiscal },
-                  { label: c.addressLabel, value: morada, set: setMorada },
-                ].map((campo) => (
-                  <label key={campo.label} className="block">
-                    <span className="text-xs tracking-wide uppercase text-muted-foreground">{campo.label}</span>
-                    <input
-                      value={campo.value}
-                      onChange={(e) => campo.set(e.target.value)}
-                      className="mt-2 w-full border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-accent"
-                    />
-                  </label>
-                ))}
-              </div>
+      <div className="mt-8 border border-border bg-background/60 p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-sm">{s.product}</p>
+            {referencia && (
+              <p className="mt-1 text-xs font-light text-muted-foreground">
+                {s.reference}: <span className="font-mono text-foreground/80">{referencia}</span>
+              </p>
             )}
-
-            {erro && <p className="mt-6 text-sm text-destructive">{erro}</p>}
-
-            <button
-              type="button"
-              className="btn-primary mt-8 w-full disabled:cursor-wait disabled:opacity-60"
-              onClick={pagar}
-              disabled={!referencia}
-            >
-              {c.submit}
-            </button>
-
-            <p className="mt-4 text-xs leading-relaxed font-light text-muted-foreground">{c.terms}</p>
           </div>
-        )}
+          <p className="serif-accent text-2xl text-accent">299 €</p>
+        </div>
+        <dl className="mt-6 space-y-2 border-t border-border pt-5 text-sm font-light">
+          <div className="flex justify-between text-muted-foreground"><dt>{s.subtotal}</dt><dd>243,09 €</dd></div>
+          <div className="flex justify-between text-muted-foreground"><dt>{s.vat}</dt><dd>55,91 €</dd></div>
+          <div className="flex justify-between border-t border-border pt-3 text-base text-foreground"><dt>{s.total}</dt><dd>299,00 €</dd></div>
+        </dl>
+        <p className="mt-3 text-[11px] tracking-wide uppercase text-muted-foreground">{c.priceNote}</p>
       </div>
+
+      {!compacto && (
+        <ul className="mt-8 space-y-3 text-xs font-light text-muted-foreground">
+          <li className="flex items-center gap-3"><Lock className="h-4 w-4 text-accent" />{s.secure}</li>
+          <li className="flex items-center gap-3"><ShieldCheck className="h-4 w-4 text-accent" />{s.confidential}</li>
+          <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-accent" />{s.support}</li>
+        </ul>
+      )}
     </div>
+  );
+
+  const painel = (
+    <div className="card-elegant p-6 shadow-[0_30px_60px_-30px_hsl(var(--primary)/0.35)] sm:p-8">
+      <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground">{s.paymentTitle}</p>
+
+      {fase === "encaminhar" ? (
+        <div className="mt-8 flex items-center gap-3 text-sm font-light text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin text-accent" />{c.redirectText}
+        </div>
+      ) : fase === "aguardar" ? (
+        <div className="mt-8">
+          <h3 className="text-xl">{c.waitingTitle}</h3>
+          <p className="mt-3 text-sm leading-relaxed font-light text-muted-foreground">{c.waitingText}</p>
+          <div className="mt-6 h-[2px] w-full overflow-hidden bg-border">
+            <div className="h-full w-1/3 animate-[pulse_1.6s_ease-in-out_infinite] bg-accent" />
+          </div>
+        </div>
+      ) : (
+        <div className="mt-5">
+          <div className="flex items-center justify-between gap-3 border border-accent/60 bg-accent/5 px-4 py-4">
+            <div className="flex items-center gap-3">
+              <CreditCard className="h-5 w-5 text-accent" />
+              <div>
+                <p className="text-sm">{c.methods.card}</p>
+                <p className="text-xs font-light text-muted-foreground">{c.methods.cardNote}</p>
+              </div>
+            </div>
+            <span className="h-3 w-3 rounded-full border-[3px] border-accent" />
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {["VISA", "Mastercard", "Amex", "Apple Pay", "Google Pay"].map((m) => (
+              <span key={m} className="border border-border px-2 py-1 text-[10px] tracking-wide text-muted-foreground">{m}</span>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setComFatura(!comFatura)}
+            className="mt-6 flex w-full items-center justify-between gap-4 border-t border-border pt-5 text-left"
+            aria-pressed={comFatura}
+          >
+            <span>
+              <span className="block text-sm">{c.invoiceToggle}</span>
+              <span className="mt-1 block text-xs font-light text-muted-foreground">{c.invoiceNote}</span>
+            </span>
+            <span className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${comFatura ? "bg-accent" : "bg-border"}`}>
+              <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-background transition-all ${comFatura ? "left-[18px]" : "left-0.5"}`} />
+            </span>
+          </button>
+
+          {comFatura && (
+            <div className="mt-5 space-y-3 animate-fade-in">
+              {[
+                { label: c.nifLabel, value: nif, set: setNif },
+                { label: c.fiscalNameLabel, value: nomeFiscal, set: setNomeFiscal },
+                { label: c.addressLabel, value: morada, set: setMorada },
+              ].map((campo) => (
+                <label key={campo.label} className="block">
+                  <span className="text-[11px] tracking-wide uppercase text-muted-foreground">{campo.label}</span>
+                  <input
+                    value={campo.value}
+                    onChange={(e) => campo.set(e.target.value)}
+                    className="mt-1.5 w-full border border-border bg-background px-3 py-2.5 text-sm outline-none transition-colors focus:border-accent"
+                  />
+                </label>
+              ))}
+            </div>
+          )}
+
+          {erro && <p className="mt-5 text-sm text-destructive">{erro}</p>}
+
+          <button
+            type="button"
+            className="btn-primary mt-7 flex w-full items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60"
+            onClick={pagar}
+            disabled={!referencia}
+          >
+            <Lock className="h-4 w-4" />{s.cta}
+          </button>
+
+          <p className="mt-4 text-center text-[11px] leading-relaxed font-light text-muted-foreground">{c.terms}</p>
+          <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
+            <ShieldCheck className="h-3.5 w-3.5" />Stripe
+          </p>
+        </div>
+      )}
+    </div>
+  );
+
+  return compacto ? (
+    <div className="grid gap-6">{resumo}{painel}</div>
+  ) : (
+    <div className="grid items-start gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">{resumo}{painel}</div>
   );
 }
