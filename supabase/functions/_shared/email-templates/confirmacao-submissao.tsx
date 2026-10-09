@@ -86,7 +86,6 @@ const Email = ({
               eyebrowText={t.upgradeEyebrow}
               title={t.upgradeTitle}
               body={t.upgradeBody}
-              items={t.upgradeItems}
               href={upgradeUrl}
               linkLabel={t.upgradeButton}
             />
