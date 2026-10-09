@@ -104,7 +104,10 @@ export async function enviarConfirmacaoSubmissao(
     });
     return result.sent;
   } catch (error) {
-    console.error(`Falha ao enviar confirmação de submissão do lead ${leadId}:`, error instanceof Error ? error.message : error);
+    console.error(
+      `Falha ao enviar confirmação de submissão do lead ${leadId}:`,
+      error instanceof Error ? error.message : error,
+    );
     return false;
   }
 }
@@ -139,7 +142,10 @@ export async function enviarResumoAvaliacao(
   } catch (error) {
     const motivo = error instanceof Error ? error.message : String(error);
     console.error(`Falha ao enviar resumo do lead ${leadId}: ${motivo}`);
-    await admin.from("leads").update({ email_enviado: false, email_erro: motivo.slice(0, 500) }).eq("id", leadId);
+    await admin
+      .from("leads")
+      .update({ email_enviado: false, email_erro: motivo.slice(0, 500) })
+      .eq("id", leadId);
     return false;
   }
 }
@@ -163,7 +169,10 @@ export async function notificarEquipaNovoLead(
         },
       });
     } catch (error) {
-      console.error(`Falha ao enviar notificação interna do lead ${leadId}:`, error instanceof Error ? error.message : error);
+      console.error(
+        `Falha ao enviar notificação interna do lead ${leadId}:`,
+        error instanceof Error ? error.message : error,
+      );
     }
   }
 }
@@ -216,7 +225,7 @@ const METODOS: Record<IdiomaLead, Record<string, string>> = {
 };
 const LOCALE: Record<IdiomaLead, string> = { pt: "pt-PT", en: "en-GB", es: "es-ES" };
 
-/** Confirma o pagamento feito antes da data de entrega e indica quando chega o dossiê. */
+/** Confirma o pagamento feito antes da data de entrega e indica quando chega o relatório. */
 export async function enviarPagamentoConfirmado(lead: Lead, pagamento: Lead, entrega: Date): Promise<boolean> {
   const idioma = idiomaDe(lead.idioma);
   const fmt = (d: Date, o: Intl.DateTimeFormatOptions) =>
@@ -237,7 +246,10 @@ export async function enviarPagamentoConfirmado(lead: Lead, pagamento: Lead, ent
     });
     return result.sent;
   } catch (error) {
-    console.error(`Falha ao enviar confirmação de pagamento ${pagamento.id}:`, error instanceof Error ? error.message : error);
+    console.error(
+      `Falha ao enviar confirmação de pagamento ${pagamento.id}:`,
+      error instanceof Error ? error.message : error,
+    );
     return false;
   }
 }

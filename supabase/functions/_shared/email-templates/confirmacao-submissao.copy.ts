@@ -5,12 +5,13 @@ export type Lang = "pt" | "en" | "es";
 // deno-lint-ignore no-explicit-any
 export const dict = {
   pt: {
-    upgradeBody: "O dossiê integral (14 páginas) é entregue na mesma data, em substituição do relatório indicativo.",
-    meetingNote: "Se preferir enquadrar desde já o contexto estratégico da empresa, pode marcar uma conversa de 20 minutos com os sócios:",
+    upgradeBody: "O relatório completo (14 páginas) é entregue na mesma data, em substituição do relatório indicativo.",
+    meetingNote:
+      "Se preferir enquadrar desde já o contexto estratégico da empresa, pode marcar uma conversa de 20 minutos com os sócios:",
     meetingLink: "agendar reunião",
-    upgradeEyebrow: "DOSSIÊ INTEGRAL DE AVALIAÇÃO — 299 €",
+    upgradeEyebrow: "RELATÓRIO COMPLETO DE AVALIAÇÃO — 299 €",
     upgradeTitle: "Para decisões de gestão ou conversas com investidores, pode solicitar desde já a versão integral.",
-    upgradeButton: "Solicitar o dossiê integral →",
+    upgradeButton: "Solicitar o relatório completo →",
     preview: "Recebemos a sua submissão. Enviamos o relatório assim que estiver finalizado.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Obrigado pela sua submissão",
@@ -36,7 +37,8 @@ export const dict = {
   },
   en: {
     upgradeBody: "The full dossier (14 pages) is delivered on the same date, in place of the indicative report.",
-    meetingNote: "Should you wish to discuss the strategic context of your company in the meantime, you can book a 20-minute conversation with the partners:",
+    meetingNote:
+      "Should you wish to discuss the strategic context of your company in the meantime, you can book a 20-minute conversation with the partners:",
     meetingLink: "schedule a meeting",
     upgradeEyebrow: "FULL VALUATION DOSSIER — €299",
     upgradeTitle: "For management decisions or investor conversations, you can request the full version right away.",
@@ -65,8 +67,10 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Submission confirmed",
   },
   es: {
-    upgradeBody: "El dossier integral (14 páginas) se entrega en la misma fecha, en sustitución del informe indicativo.",
-    meetingNote: "Si prefiere comentar ya el contexto estratégico de su empresa, puede agendar una conversación de 20 minutos con los socios:",
+    upgradeBody:
+      "El dossier integral (14 páginas) se entrega en la misma fecha, en sustitución del informe indicativo.",
+    meetingNote:
+      "Si prefiere comentar ya el contexto estratégico de su empresa, puede agendar una conversación de 20 minutos con los socios:",
     meetingLink: "agendar reunión",
     upgradeEyebrow: "DOSSIER INTEGRAL DE VALORACIÓN — 299 €",
     upgradeTitle: "Para decisiones de gestión o conversaciones con inversores, puede solicitar ya la versión integral.",

@@ -26,9 +26,9 @@ export const dict = {
     ctaEyebrow: "PRÓXIMO PASSO — REUNIÃO DE 20 MINUTOS",
     ctaTitle: "Discussão estratégica e enquadramento de mercado com os sócios.",
     ctaButton: "Agendar reunião",
-    upgradeEyebrow: "DOSSIÊ INTEGRAL DE AVALIAÇÃO — 299 €",
-    upgradeTitle: "As secções reservadas do relatório integram o dossiê integral (14 páginas).",
-    upgradeButton: "Solicitar o dossiê integral →",
+    upgradeEyebrow: "RELATÓRIO COMPLETO DE AVALIAÇÃO — 299 €",
+    upgradeTitle: "As secções reservadas do relatório integram o relatório completo (14 páginas).",
+    upgradeButton: "Solicitar o relatório completo →",
     disclaimer:
       "O relatório preparado constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores nele apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração do documento.",
     subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Relatório de Avaliação Indicativa`,

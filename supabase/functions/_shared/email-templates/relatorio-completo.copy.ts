@@ -5,13 +5,14 @@ export type Lang = "pt" | "en" | "es";
 // deno-lint-ignore no-explicit-any
 export const dict = {
   pt: {
-    preview: (nome: string) => `${nome}, o dossiê integral de avaliação está disponível.`,
+    preview: (nome: string) => `${nome}, o relatório completo de avaliação está disponível.`,
     eyebrow: "LEALIA ADVISORY PARTNERS",
-    heading: "Dossiê integral de avaliação",
+    heading: "Relatório completo de avaliação",
     greeting: (nome: string) => `Olá ${nome}`,
     concludedFrom: ", o relatório completo de ",
-    bodyIntro: "O dossiê integral (14 páginas) está disponível, sem secções reservadas, através do seu link pessoal. O link não expira e pode ser partilhado com quem entender.",
-    reportLinkLabel: "Abrir o dossiê integral",
+    bodyIntro:
+      "O relatório completo (14 páginas) está disponível, sem secções reservadas, através do seu link pessoal. O link não expira e pode ser partilhado com quem entender.",
+    reportLinkLabel: "Abrir o relatório completo",
     ctaEyebrow: "PRÓXIMO PASSO — CONVERSA COM OS SÓCIOS",
     ctaTitle: "Discussão estratégica do enquadramento de M&A: opções de transação, timing e preparação do processo.",
     ctaButton: "Agendar reunião",
@@ -27,7 +28,8 @@ export const dict = {
     heading: "Full valuation dossier",
     greeting: (nome: string) => `Hello ${nome}`,
     concludedFrom: ", the full report for ",
-    bodyIntro: "The full dossier (14 pages) is available, with no reserved sections, through your personal link. The link does not expire and may be shared as you see fit.",
+    bodyIntro:
+      "The full dossier (14 pages) is available, with no reserved sections, through your personal link. The link does not expire and may be shared as you see fit.",
     reportLinkLabel: "Open the full dossier",
     ctaEyebrow: "NEXT STEP — CONVERSATION WITH THE PARTNERS",
     ctaTitle: "Strategic discussion of the M&A context: transaction options, timing and process preparation.",
@@ -44,7 +46,8 @@ export const dict = {
     heading: "Dossier integral de valoración",
     greeting: (nome: string) => `Hola ${nome}`,
     concludedFrom: ", el informe completo de ",
-    bodyIntro: "El dossier integral (14 páginas) está disponible, sin secciones reservadas, a través de su enlace personal. El enlace no caduca y puede compartirlo con quien considere.",
+    bodyIntro:
+      "El dossier integral (14 páginas) está disponible, sin secciones reservadas, a través de su enlace personal. El enlace no caduca y puede compartirlo con quien considere.",
     reportLinkLabel: "Abrir el dossier integral",
     ctaEyebrow: "PRÓXIMO PASO — CONVERSACIÓN CON LOS SOCIOS",
     ctaTitle: "Discusión estratégica del contexto de M&A: opciones de transacción, timing y preparación del proceso.",
