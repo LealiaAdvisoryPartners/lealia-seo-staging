@@ -5,7 +5,7 @@ export const pt = {
     "Assessoria M&A independente para vender ou comprar empresas em Portugal e Espanha. Sell-side, buy-side, corporate finance e melhoria de performance para PMEs.",
   "seo.about.title": "Sobre Nós | Lealia Advisory Partners",
   "seo.about.description":
-    "Conheça a Lealia Advisory Partners: assessoria financeira independente, especializada em M&A e corporate finance para PMEs e lower mid-market no mercado ibérico.",
+    "Conheça a Lealia Advisory Partners: assessoria financeira independente, especializada em M&A e corporate finance para PMEs e lower mid-market na Ibéria.",
   "seo.services.title": "Serviços de M&A e Corporate Finance | Lealia Advisory",
   "seo.services.description":
     "Assessoria M&A buy-side e sell-side, melhoria de performance, modelação financeira e avaliações para PMEs e empresas do lower mid-market na Península Ibérica.",
@@ -14,16 +14,16 @@ export const pt = {
     "Conheça os Managing Partners da Lealia Advisory Partners, profissionais com experiência em M&A e mais de 30 transações concluídas em Portugal, Espanha e Europa.",
   "seo.valuation.title": "Avaliação Gratuita de Empresas | Lealia Advisory Partners",
   "seo.valuation.description":
-    "Quanto vale a minha empresa? Peça uma avaliação indicativa gratuita da sua empresa, com valuation por múltiplos de mercado, preparada pela equipa de M&A da Lealia.",
+    "Quanto vale a minha empresa? Peça uma avaliação indicativa gratuita, com valuation por múltiplos de mercado, preparada pela equipa de M&A da Lealia.",
   "seo.privacy.title": "Política de Privacidade | Lealia Advisory Partners",
   "seo.privacy.description":
-    "Política de privacidade da Lealia Advisory Partners: como recolhemos, utilizamos, conservamos e protegemos os seus dados pessoais, e como pode exercer os seus direitos.",
+    "Política de privacidade da Lealia Advisory Partners: como recolhemos, utilizamos e protegemos os seus dados pessoais, e como pode exercer os seus direitos.",
   "seo.upgrade.title": "Relatório Completo de Avaliação | Lealia Advisory Partners",
   "seo.upgrade.description":
     "Desbloqueie o relatório completo da avaliação da sua empresa por 299 €: avaliação por múltiplos e DCF, sensibilidades, drivers de valor e plano de preparação para o mercado.",
   "seo.terms.title": "Termos e Condições | Lealia Advisory Partners",
   "seo.terms.description":
-    "Termos e Condições aplicáveis aos serviços de avaliação de empresas da Lealia Advisory Partners, incluindo o relatório indicativo, o relatório completo e o pagamento.",
+    "Termos e Condições aplicáveis aos serviços de avaliação de empresas da Lealia, incluindo o relatório indicativo, o relatório completo e o pagamento.",
 
   // Navegação
   "nav.home": "Início",

@@ -5,10 +5,10 @@ export const es = {
     "Asesoramiento M&A independiente para vender o comprar empresas en España y Portugal. Sell-side, buy-side, corporate finance y mejora del desempeño para pymes.",
   "seo.about.title": "Sobre Nosotros | Lealia Advisory Partners",
   "seo.about.description":
-    "Conozca Lealia Advisory Partners: asesoramiento financiero independiente especializado en M&A y corporate finance para pymes y lower mid-market en el mercado ibérico.",
+    "Conozca Lealia Advisory Partners: asesoramiento financiero independiente especializado en M&A y corporate finance para pymes y lower mid-market en Iberia.",
   "seo.services.title": "Servicios de M&A y Corporate Finance | Lealia Advisory",
   "seo.services.description":
-    "Asesoramiento M&A buy-side y sell-side, mejora del desempeño, modelización financiera y valoraciones para pymes y empresas del lower mid-market en la Península Ibérica.",
+    "Asesoramiento M&A buy-side y sell-side, mejora del desempeño, modelización financiera y valoraciones para pymes y lower mid-market en la Península Ibérica.",
   "seo.team.title": "Equipo | Lealia Advisory Partners",
   "seo.team.description":
     "Conozca a los Managing Partners de Lealia Advisory Partners, profesionales con amplia experiencia en M&A y más de 30 transacciones en España, Portugal y Europa.",
@@ -23,7 +23,7 @@ export const es = {
     "Desbloquee el informe completo de valoración de su empresa por 299 €: valoración por múltiplos y DCF, sensibilidades, drivers de valor y plan de preparación para el mercado.",
   "seo.terms.title": "Términos y Condiciones | Lealia Advisory Partners",
   "seo.terms.description":
-    "Términos y Condiciones aplicables a los servicios de valoración de empresas de Lealia Advisory Partners, incluido el informe indicativo, el informe completo y el pago.",
+    "Términos y Condiciones aplicables a los servicios de valoración de empresas de Lealia, incluido el informe indicativo, el informe completo y el pago.",
 
   // Navigation
   "nav.home": "Inicio",

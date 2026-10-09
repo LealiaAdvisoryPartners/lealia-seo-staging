@@ -5,16 +5,16 @@ export const en = {
     "Independent M&A advisory to sell or buy a company in Portugal and Spain. Sell-side and buy-side advisory, corporate finance and performance improvement for SMEs.",
   "seo.about.title": "About Us | Lealia Advisory Partners",
   "seo.about.description":
-    "Learn about Lealia Advisory Partners, an independent financial advisory firm focused on M&A and corporate finance for SMEs and lower mid-market companies in Iberia.",
+    "Learn about Lealia Advisory Partners, an independent financial advisory firm focused on M&A and corporate finance for SMEs and lower mid-market firms in Iberia.",
   "seo.services.title": "M&A & Corporate Finance Services | Lealia Advisory",
   "seo.services.description":
-    "Buy-side and sell-side M&A advisory, performance improvement, financial modeling and valuations for SMEs and lower mid-market companies across Portugal and Spain.",
+    "Buy-side and sell-side M&A advisory, performance improvement, financial modeling and valuations for SMEs and lower mid-market companies across Portugal & Spain.",
   "seo.team.title": "Our Team | Lealia Advisory Partners",
   "seo.team.description":
     "Meet the Managing Partners of Lealia Advisory Partners, experienced M&A professionals who have completed more than 30 transactions in Portugal, Spain and Europe.",
   "seo.valuation.title": "Free Business Valuation | Lealia Advisory Partners",
   "seo.valuation.description":
-    "How much is my company worth? Request a free indicative valuation of your business, based on market multiples and prepared by the Lealia Advisory M&A team in Iberia.",
+    "How much is my company worth? Request a free indicative valuation, based on market multiples and prepared by the Lealia Advisory M&A team in Iberia.",
   "seo.privacy.title": "Privacy Policy | Lealia Advisory Partners",
   "seo.privacy.description":
     "Lealia Advisory Partners privacy policy: how we collect, use, retain and protect your personal information, and how you can exercise your data protection rights.",
@@ -187,7 +187,7 @@ export const en = {
   // About Page
   "about.title": "About Lealia",
   "about.intro":
-    "Lealia Advisory Partners is an independent financial advisory firm focused on SMEs and lower mid-market companies in Iberia. We specialize in M&A and complementary corporate finance services across industries. With deep industry expertise and a client-centric approach, we deliver exceptional results that create lasting value for our clients.",
+    "Lealia Advisory Partners is an independent financial advisory firm focused on SMEs and lower mid-market firms in Iberia. We specialize in M&A and complementary corporate finance services across industries. With deep industry expertise and a client-centric approach, we deliver exceptional results that create lasting value for our clients.",
   "about.whyus.title": "Why Choose Us?",
   "about.whyus.expertise": "Tailored Solutions",
   "about.whyus.expertise.desc":
