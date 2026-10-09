@@ -59,7 +59,7 @@ export async function criarSessaoCheckout(opcoes: {
     ? `${r.fat}: NIF ${opcoes.nif}${opcoes.nomeFiscal ? ` — ${opcoes.nomeFiscal}` : ""}`
     : `${r.fat}: ${r.cf}`;
   const moeda = MOEDA.toLowerCase();
-  const taxa = await obterTaxaIva(opcoes.idioma === "en" ? "VAT" : "IVA");
+  // Duas linhas — preço base + IVA — e a Stripe mostra só estas duas mais o total.
   const sessao = await stripe("/checkout/sessions", {
     mode: "payment",
     client_reference_id: opcoes.orderId,
@@ -72,7 +72,10 @@ export async function criarSessaoCheckout(opcoes: {
     "line_items[0][price_data][unit_amount]": String(BASE_CENT),
     "line_items[0][price_data][product_data][name]": opcoes.descricao.slice(0, 200),
     "line_items[0][price_data][product_data][description]": faturacao.slice(0, 300),
-    "line_items[0][tax_rates][0]": taxa,
+    "line_items[1][quantity]": "1",
+    "line_items[1][price_data][currency]": moeda,
+    "line_items[1][price_data][unit_amount]": String(IVA_CENT),
+    "line_items[1][price_data][product_data][name]": r.iva,
     "custom_text[submit][message]": faturacao.slice(0, 1000),
     "metadata[order_id]": opcoes.orderId,
     "metadata[submission_id]": opcoes.submissionId,
