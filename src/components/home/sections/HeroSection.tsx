@@ -26,7 +26,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
         >
-          <img src={logo} alt="Lealia Advisory Partners" className="w-full max-w-2xl mx-auto" />
+          <img src={logo} alt="Lealia Advisory Partners" width={936} height={253} fetchPriority="high" className="w-full max-w-2xl mx-auto" />
         </motion.div>
 
         <motion.p

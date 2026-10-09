@@ -16,6 +16,9 @@ interface SchemaContext {
   url: string;
 }
 
+/** Páginas transaccionais (dependem de uma referência): não indexar. */
+const NOINDEX = new Set(["upgrade"]);
+
 /** Schema.org específico por página; as restantes usam `WebPage`. */
 const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>> = {
   services: ({ description, url }) => ({
@@ -32,6 +35,17 @@ const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>>
       "Financial Modeling",
       "Valuation",
     ],
+    description,
+    url,
+  }),
+  valuation: ({ description, url }) => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Company valuation",
+    serviceType: "Company valuation",
+    provider: { "@type": "ProfessionalService", name: ORG.name, url: BASE_URL },
+    areaServed: ["Portugal", "Spain"],
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description,
     url,
   }),
@@ -103,7 +117,7 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+      { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/${language}` },
       ...(slug
         ? [{ "@type": "ListItem", position: 2, name: title.split("|")[0].trim(), item: url }]
         : []),
@@ -115,7 +129,7 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
       <html lang={language} />
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      <meta name="robots" content={NOINDEX.has(key) ? "noindex, follow" : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"} />
       <link rel="canonical" href={url} />
 
       {LANGUAGES.map((l) => (
