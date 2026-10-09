@@ -70,7 +70,7 @@ export const dict = {
       "Si desea compartir mientras tanto información adicional sobre el negocio, puede responder a este correo o escribir a",
     disclaimer:
       "El presente informe constituye una estimación indicativa de la valoración de la empresa, generada a partir de la información facilitada por el usuario, y no constituye asesoramiento financiero, propuesta contractual, recomendación de inversión ni valoración formal a efectos legales, fiscales o contables.",
-    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Pago confirmado — dossier en elaboración`,
-    subjectWithoutCompany: "Lealia | Pago confirmado — dossier en elaboración",
+    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Pago confirmado — informe en elaboración`,
+    subjectWithoutCompany: "Lealia | Pago confirmado — informe en elaboración",
   },
 } satisfies Record<Lang, Record<string, any>>;
