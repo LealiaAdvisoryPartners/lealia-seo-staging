@@ -122,7 +122,7 @@ Deno.serve(async (req: Request) => {
       calculo_possivel: !!lead.calculo_possivel,
       idioma: typeof lead.idioma === "string" ? lead.idioma : "pt",
     }, urlCompraRelatorio({ relatorio_url: relatorioUrl, relatorio_slug: slug, relatorio_token: linha["relatorio_token"], idioma: lead.idioma }));
-    await notificarEquipaNovoLead(inserido.id, lead as Record<string, unknown>, relatorioAdminUrl, pdfAdminUrl);
+    await notificarEquipaNovoLead(inserido.id, lead as Record<string, unknown>, relatorioAdminUrl, pdfAdminUrl, relatorioUrl);
     await registarEvento(supabaseAdmin, "submission_created", {
       submissionId: inserido.id as string,
       detalhes: { empresa: lead.empresa ?? null, idioma: lead.idioma ?? "pt" },

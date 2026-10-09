@@ -104,7 +104,31 @@ interface Props {
 
   relatorioUrl?: string | null;
   pdfUrl?: string | null;
+  preliminarUrl?: string | null;
+
+  idioma?: string | null;
+  atividadePrincipal?: string | null;
+  numClientesAtivos?: string | null;
+  tipoPeriodo?: string | null;
+  depreciacoesAmortizacoes?: number | null;
+  pctTop1Clientes?: number | null;
+  backlogContratado?: number | null;
+  metodoAvaliacaoImovel?: string | null;
+  anoAvaliacaoImovel?: number | null;
+  permanenciaPosVenda?: string | null;
+  tipoInvestidor?: string | null;
 }
+
+const LinkBloco = ({ label, url }: { label: string; url?: string | null }) =>
+  url ? (
+    <Text style={internalLinkBlock}>
+      <span style={internalLinkLabel}>{label}</span>
+      <br />
+      <Link href={url} style={internalLink}>
+        {url}
+      </Link>
+    </Text>
+  ) : null;
 
 const eur = (value?: number | null) =>
   typeof value === "number"
@@ -216,7 +240,17 @@ const Email = (p: Props) => {
 
             <RowValue label="Idade da empresa" value={p.idadeEmpresa != null ? `${p.idadeEmpresa} anos` : "—"} />
 
+            <RowValue label="Atividade principal" value={txt(p.atividadePrincipal)} />
+
+            <RowValue label="Número de colaboradores" value={txt(p.numColaboradores)} />
+
+            <RowValue label="Unidades / estabelecimentos" value={txt(p.unidades)} />
+
             <RowValue label="Ano de referência" value={txt(p.anoReferencia)} />
+
+            <RowValue label="Tipo de período" value={txt(p.tipoPeriodo)} />
+
+            <RowValue label="Idioma do formulário" value={txt(p.idioma?.toUpperCase())} />
           </Section>
 
           {/* Dados financeiros */}
@@ -254,7 +288,7 @@ const Email = (p: Props) => {
 
             <RowValue label="CAPEX anual recorrente" value={eur(p.capexAnualRecorrente)} />
 
-            <RowValue label="Número de colaboradores" value={txt(p.numColaboradores)} />
+            <RowValue label="Depreciações e amortizações" value={eur(p.depreciacoesAmortizacoes)} />
           </Section>
 
           {/* Risco */}
@@ -262,6 +296,12 @@ const Email = (p: Props) => {
             <SectionTitle>Risco e concentração</SectionTitle>
 
             <RowValue label="% top 5 clientes" value={pct(p.pctTop5Clientes)} />
+
+            <RowValue label="% maior cliente" value={pct(p.pctTop1Clientes)} />
+
+            <RowValue label="Número de clientes ativos" value={txt(p.numClientesAtivos)} />
+
+            <RowValue label="Backlog contratado" value={eur(p.backlogContratado)} />
 
             <RowValue label="Geografia dos clientes" value={txt(p.geografiaClientes)} />
 
@@ -283,6 +323,10 @@ const Email = (p: Props) => {
             <RowValue label="Imóvel incluído no perímetro" value={txt(p.incluirImovelPerimetro)} />
 
             <RowValue label="Valorização do imóvel" value={eur(p.valorizacaoImovel)} />
+
+            <RowValue label="Método de avaliação do imóvel" value={txt(p.metodoAvaliacaoImovel)} />
+
+            <RowValue label="Ano da avaliação do imóvel" value={txt(p.anoAvaliacaoImovel)} />
           </Section>
 
           {/* Motivação */}
@@ -296,32 +340,20 @@ const Email = (p: Props) => {
             <RowValue label="Motivo do interesse" value={txt(p.motivoInteresse)} />
 
             <RowValue label="Horizonte temporal" value={txt(p.horizonteTemporal)} />
+
+            <RowValue label="Permanência pós-venda" value={txt(p.permanenciaPosVenda)} />
+
+            <RowValue label="Tipo de investidor pretendido" value={txt(p.tipoInvestidor)} />
           </Section>
 
           {/* Links internos */}
-          {(reportUrl || pdfUrl) && (
+          {(p.preliminarUrl || reportUrl || pdfUrl) && (
             <Section style={cardSection}>
-              <SectionTitle>Relatório completo — uso interno</SectionTitle>
+              <SectionTitle>Relatórios — uso interno</SectionTitle>
 
-              {reportUrl && (
-                <Text style={internalLinkBlock}>
-                  <span style={internalLinkLabel}>Relatório online</span>
-                  <br />
-                  <Link href={reportUrl} style={internalLink}>
-                    {reportUrl}
-                  </Link>
-                </Text>
-              )}
-
-              {pdfUrl && (
-                <Text style={internalLinkBlock}>
-                  <span style={internalLinkLabel}>PDF</span>
-                  <br />
-                  <Link href={pdfUrl} style={internalLink}>
-                    {pdfUrl}
-                  </Link>
-                </Text>
-              )}
+              <LinkBloco label="Relatório preliminar (visão do cliente)" url={p.preliminarUrl} />
+              <LinkBloco label="Relatório completo (acesso interno)" url={reportUrl} />
+              <LinkBloco label="PDF do relatório completo" url={pdfUrl} />
             </Section>
           )}
 
