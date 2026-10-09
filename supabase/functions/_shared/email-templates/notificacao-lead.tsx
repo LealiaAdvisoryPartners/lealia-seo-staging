@@ -104,7 +104,31 @@ interface Props {
 
   relatorioUrl?: string | null;
   pdfUrl?: string | null;
+  preliminarUrl?: string | null;
+
+  idioma?: string | null;
+  atividadePrincipal?: string | null;
+  numClientesAtivos?: string | null;
+  tipoPeriodo?: string | null;
+  depreciacoesAmortizacoes?: number | null;
+  pctTop1Clientes?: number | null;
+  backlogContratado?: number | null;
+  metodoAvaliacaoImovel?: string | null;
+  anoAvaliacaoImovel?: number | null;
+  permanenciaPosVenda?: string | null;
+  tipoInvestidor?: string | null;
 }
+
+const LinkBloco = ({ label, url }: { label: string; url?: string | null }) =>
+  url ? (
+    <Text style={internalLinkBlock}>
+      <span style={internalLinkLabel}>{label}</span>
+      <br />
+      <Link href={url} style={internalLink}>
+        {url}
+      </Link>
+    </Text>
+  ) : null;
 
 const eur = (value?: number | null) =>
   typeof value === "number"

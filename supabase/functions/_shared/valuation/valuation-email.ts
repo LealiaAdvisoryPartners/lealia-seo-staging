@@ -55,6 +55,17 @@ const dadosNotificacao = (lead: Lead) => ({
   multiploMin: lead.multiplo_ajustado_min,
   multiploMax: lead.multiplo_ajustado_max,
   confianca: lead.confianca,
+  idioma: lead.idioma,
+  atividadePrincipal: lead.atividade_principal,
+  numClientesAtivos: lead.num_clientes_ativos,
+  tipoPeriodo: lead.tipo_periodo,
+  depreciacoesAmortizacoes: lead.depreciacoes_amortizacoes,
+  pctTop1Clientes: lead.pct_top1_clientes,
+  backlogContratado: lead.backlog_contratado,
+  metodoAvaliacaoImovel: lead.metodo_avaliacao_imovel,
+  anoAvaliacaoImovel: lead.ano_avaliacao_imovel,
+  permanenciaPosVenda: lead.permanencia_pos_venda,
+  tipoInvestidor: lead.tipo_investidor,
 });
 
 export type IdiomaLead = "pt" | "en" | "es";
@@ -138,12 +149,18 @@ export async function notificarEquipaNovoLead(
   lead: Lead,
   relatorioUrl?: string | null,
   pdfUrl?: string | null,
+  preliminarUrl?: string | null,
 ): Promise<void> {
   for (const destinatario of NOTIFICACAO_INTERNA) {
     try {
       await sendTemplateEmail("notificacao-lead", destinatario, {
         idempotencyKey: `notificacao-lead-${leadId}-${destinatario}`,
-        templateData: { ...dadosNotificacao(lead), relatorioUrl: relatorioUrl ?? null, pdfUrl: pdfUrl ?? null },
+        templateData: {
+          ...dadosNotificacao(lead),
+          relatorioUrl: relatorioUrl ?? null,
+          pdfUrl: pdfUrl ?? null,
+          preliminarUrl: preliminarUrl ?? null,
+        },
       });
     } catch (error) {
       console.error(`Falha ao enviar notificação interna do lead ${leadId}:`, error instanceof Error ? error.message : error);
