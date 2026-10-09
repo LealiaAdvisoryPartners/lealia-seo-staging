@@ -25,7 +25,7 @@ export type CheckoutCopy = {
   backToReport: string;
   alreadyPaid: string;
   terms: string;
-  summary: { brand: string; product: string; reference: string; subtotal: string; billing: string; consumer: string; vat: string; total: string; secure: string; confidential: string; support: string; paymentTitle: string; cta: string };
+  summary: { brand: string; product: string; reference: string; subtotal: string; billing: string; consumer: string; vat: string; total: string; secure: string; confidential: string; support: string; invoiceInfo: string; paymentTitle: string; cta: string };
   errors: {
     generic: string;
     phone: string;
@@ -65,7 +65,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     openReport: "Abrir o relatório completo",
     backToReport: "Voltar ao relatório",
     alreadyPaid: "Esta avaliação já tem o relatório completo pago. Verifique o email que lhe enviámos.",
-    summary: { brand: "LEALIA ADVISORY · AVALIAÇÃO DE EMPRESAS", product: "Dossiê integral de avaliação", reference: "Avaliação associada", subtotal: "Subtotal", vat: "IVA (23%)", total: "Total a pagar", billing: "Faturação", consumer: "Consumidor final (sem NIF)", secure: "Pagamento encriptado e processado pela Stripe", confidential: "Sigilo profissional e confidencialidade estrita", support: "Dúvidas? geral@lealiaap.com", paymentTitle: "Pagamento", cta: "Prosseguir para pagamento seguro · 299 €" },
+    summary: { brand: "LEALIA ADVISORY · AVALIAÇÃO DE EMPRESAS", product: "Dossiê integral de avaliação", reference: "Avaliação associada", subtotal: "Subtotal", vat: "IVA (23%)", total: "Total a pagar", billing: "Faturação", consumer: "Consumidor final (sem NIF)", secure: "Pagamento encriptado e processado pela Stripe", confidential: "Sigilo profissional e confidencialidade estrita", support: "Dúvidas? geral@lealiaap.com", invoiceInfo: "A fatura será enviada para o e-mail indicado no prazo máximo de 3 dias úteis. Caso beneficie de alguma isenção de IVA, contacte-nos diretamente para a analisarmos e aplicarmos ao montante pago.", paymentTitle: "Pagamento", cta: "Prosseguir para pagamento seguro · 299 €" },
     terms: "Ao pagar, aceita os Termos e Condições e a Política de Privacidade.",
     errors: {
       generic: "Não foi possível concluir o pagamento. Tente novamente dentro de instantes.",
@@ -104,7 +104,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     openReport: "Open the full report",
     backToReport: "Back to the report",
     alreadyPaid: "The full report for this valuation has already been paid. Please check the email we sent you.",
-    summary: { brand: "LEALIA ADVISORY · BUSINESS VALUATION", product: "Full valuation dossier", reference: "Linked valuation", subtotal: "Subtotal", vat: "VAT (23%)", total: "Total due", billing: "Invoicing", consumer: "Final consumer (no VAT number)", secure: "Encrypted payment processed by Stripe", confidential: "Professional secrecy and strict confidentiality", support: "Questions? geral@lealiaap.com", paymentTitle: "Payment", cta: "Continue to secure payment · €299" },
+    summary: { brand: "LEALIA ADVISORY · BUSINESS VALUATION", product: "Full valuation dossier", reference: "Linked valuation", subtotal: "Subtotal", vat: "VAT (23%)", total: "Total due", billing: "Invoicing", consumer: "Final consumer (no VAT number)", secure: "Encrypted payment processed by Stripe", confidential: "Professional secrecy and strict confidentiality", support: "Questions? geral@lealiaap.com", invoiceInfo: "The invoice will be sent to the email provided within 3 business days at most. If any VAT exemption applies to you, contact us directly so we can review it and apply it to the amount paid.", paymentTitle: "Payment", cta: "Continue to secure payment · €299" },
     terms: "By paying, you accept the Terms and Conditions and the Privacy Policy.",
     errors: {
       generic: "We could not complete the payment. Please try again shortly.",
@@ -143,7 +143,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     openReport: "Abrir el informe completo",
     backToReport: "Volver al informe",
     alreadyPaid: "Esta valoración ya tiene el informe completo pagado. Consulte el email que le enviamos.",
-    summary: { brand: "LEALIA ADVISORY · VALORACIÓN DE EMPRESAS", product: "Dossier integral de valoración", reference: "Valoración asociada", subtotal: "Subtotal", vat: "IVA (23%)", total: "Total a pagar", billing: "Facturación", consumer: "Consumidor final (sin NIF)", secure: "Pago cifrado y procesado por Stripe", confidential: "Secreto profesional y confidencialidad estricta", support: "¿Dudas? geral@lealiaap.com", paymentTitle: "Pago", cta: "Continuar al pago seguro · 299 €" },
+    summary: { brand: "LEALIA ADVISORY · VALORACIÓN DE EMPRESAS", product: "Dossier integral de valoración", reference: "Valoración asociada", subtotal: "Subtotal", vat: "IVA (23%)", total: "Total a pagar", billing: "Facturación", consumer: "Consumidor final (sin NIF)", secure: "Pago cifrado y procesado por Stripe", confidential: "Secreto profesional y confidencialidad estricta", support: "¿Dudas? geral@lealiaap.com", invoiceInfo: "La factura se enviará al correo electrónico indicado en un plazo máximo de 3 días hábiles. Si le corresponde alguna exención de IVA, contáctenos directamente para analizarla y aplicarla al importe pagado.", paymentTitle: "Pago", cta: "Continuar al pago seguro · 299 €" },
     terms: "Al pagar, acepta los Términos y Condiciones y la Política de Privacidad.",
     errors: {
       generic: "No ha sido posible completar el pago. Inténtelo de nuevo en unos instantes.",
