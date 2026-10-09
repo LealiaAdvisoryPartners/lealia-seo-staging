@@ -42,26 +42,6 @@ const ROTULOS = {
   es: { base: "Importe base (sin IVA)", iva: "IVA (23%)", fat: "Facturación", cf: "Consumidor final (sin NIF)" },
 } as const;
 
-/**
- * Taxa de IVA 23% (exclusiva) na Stripe: com ela o Checkout mostra
- * Subtotal → IVA (23%) → Total. Reutiliza a existente ou cria-a uma vez.
- */
-async function obterTaxaIva(nome: string): Promise<string> {
-  const lista = await stripe("/tax_rates?active=true&limit=100");
-  const existente = (lista.data as Array<Record<string, unknown>>).find(
-    (t) => t.display_name === nome && Number(t.percentage) === TAXA_IVA * 100 && t.inclusive === false,
-  );
-  if (existente) return String(existente.id);
-  const nova = await stripe("/tax_rates", {
-    display_name: nome,
-    percentage: String(TAXA_IVA * 100),
-    inclusive: "false",
-    country: "PT",
-    jurisdiction: "PT",
-  });
-  return String(nova.id);
-}
-
 /** Cria a sessão de Checkout e devolve o endereço de pagamento. */
 export async function criarSessaoCheckout(opcoes: {
   orderId: string;
