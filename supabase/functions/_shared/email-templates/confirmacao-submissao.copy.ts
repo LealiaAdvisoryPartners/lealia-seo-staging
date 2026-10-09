@@ -5,8 +5,7 @@ export type Lang = "pt" | "en" | "es";
 // deno-lint-ignore no-explicit-any
 export const dict = {
   pt: {
-    upgradeBody: "O dossiê integral (14 páginas) é entregue na mesma data, em substituição do relatório indicativo, e inclui:",
-    upgradeItems: ["Avaliação por DCF, com projeções e WACC detalhado", "Matriz de sensibilidades WACC vs. crescimento terminal", "Ajustamentos ao EBITDA e equity bridge linha a linha", "Drivers de valor, riscos e plano de preparação para o mercado"],
+    upgradeBody: "O dossiê integral (14 páginas) é entregue na mesma data, em substituição do relatório indicativo.",
     meetingNote: "Se preferir enquadrar desde já o contexto estratégico da empresa, pode marcar uma conversa de 20 minutos com os sócios:",
     meetingLink: "agendar reunião",
     upgradeEyebrow: "DOSSIÊ INTEGRAL DE AVALIAÇÃO — 299 €",
@@ -36,8 +35,7 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Confirmação de submissão",
   },
   en: {
-    upgradeBody: "The full dossier (14 pages) is delivered on the same date, in place of the indicative report, and includes:",
-    upgradeItems: ["DCF valuation, with projections and a detailed WACC", "Sensitivity matrix: WACC vs. terminal growth", "EBITDA adjustments and a line-by-line equity bridge", "Value drivers, risks and a market-readiness plan"],
+    upgradeBody: "The full dossier (14 pages) is delivered on the same date, in place of the indicative report.",
     meetingNote: "Should you wish to discuss the strategic context of your company in the meantime, you can book a 20-minute conversation with the partners:",
     meetingLink: "schedule a meeting",
     upgradeEyebrow: "FULL VALUATION DOSSIER — €299",
@@ -67,8 +65,7 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Submission confirmed",
   },
   es: {
-    upgradeBody: "El dossier integral (14 páginas) se entrega en la misma fecha, en sustitución del informe indicativo, e incluye:",
-    upgradeItems: ["Valoración por DCF, con proyecciones y WACC detallado", "Matriz de sensibilidades WACC vs. crecimiento terminal", "Ajustes al EBITDA y equity bridge línea a línea", "Drivers de valor, riesgos y plan de preparación para el mercado"],
+    upgradeBody: "El dossier integral (14 páginas) se entrega en la misma fecha, en sustitución del informe indicativo.",
     meetingNote: "Si prefiere comentar ya el contexto estratégico de su empresa, puede agendar una conversación de 20 minutos con los socios:",
     meetingLink: "agendar reunión",
     upgradeEyebrow: "DOSSIER INTEGRAL DE VALORACIÓN — 299 €",
