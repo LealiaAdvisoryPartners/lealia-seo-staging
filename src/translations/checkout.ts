@@ -54,7 +54,7 @@ export type CheckoutCopy = {
 export const checkoutCopy: Record<Language, CheckoutCopy> = {
   pt: {
     eyebrow: "RELATÓRIO COMPLETO",
-    heading: "Desbloqueie a avaliação integral da sua empresa",
+    heading: "Desbloqueie o relatório completo",
     lead: "O relatório completo entrega a análise sem secções bloqueadas, com avaliação por múltiplos e por fluxos de caixa descontados, análises de sensibilidade e um plano concreto de preparação para o mercado.",
     priceNote: "Pagamento único · IVA incluído",
     methodTitle: "Como quer pagar?",
@@ -109,7 +109,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
   },
   en: {
     eyebrow: "FULL REPORT",
-    heading: "Unlock the complete valuation of your company",
+    heading: "Unlock the complete report",
     lead: "The full report delivers the analysis with no locked sections: market multiples and discounted cash flow valuation, sensitivity analyses and a concrete market-readiness plan.",
     priceNote: "One-off payment · VAT included",
     methodTitle: "How would you like to pay?",
@@ -164,7 +164,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
   },
   es: {
     eyebrow: "INFORME COMPLETO",
-    heading: "Desbloquee la valoración integral de su empresa",
+    heading: "Desbloquee el informe completo",
     lead: "El informe completo entrega el análisis sin secciones bloqueadas, con valoración por múltiplos y por flujos de caja descontados, análisis de sensibilidad y un plan concreto de preparación para el mercado.",
     priceNote: "Pago único · IVA incluido",
     methodTitle: "¿Cómo desea pagar?",
