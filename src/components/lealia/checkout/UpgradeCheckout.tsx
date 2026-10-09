@@ -255,7 +255,8 @@ export function UpgradeCheckout({
             <Lock className="h-4 w-4" />{s.cta}
           </button>
 
-          <p className="mt-4 text-center text-[11px] leading-relaxed font-light text-muted-foreground">{c.terms}</p>
+          <p className="mt-4 text-center text-[11px] leading-relaxed font-light text-muted-foreground">{s.invoiceInfo}</p>
+          <p className="mt-2 text-center text-[11px] leading-relaxed font-light text-muted-foreground">{c.terms}</p>
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
             <ShieldCheck className="h-3.5 w-3.5" />Stripe
           </p>
