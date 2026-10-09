@@ -306,4 +306,7 @@ export const pt = {
   "valuation.soon.desc":
     "Estará disponível nesta página em breve. Entretanto, contacte-nos e prepararemos uma avaliação indicativa para si.",
   "valuation.openNewTab": "Abrir a ferramenta de avaliação num novo separador",
+  "footer.faq": "FAQ",
+  "seo.faq.title": "Perguntas Frequentes sobre M&A e Avaliação | Lealia",
+  "seo.faq.description": "Respostas sobre como vender ou comprar uma empresa, avaliação de empresas, due diligence e o relatório de avaliação da Lealia em Portugal e Espanha.",
 };

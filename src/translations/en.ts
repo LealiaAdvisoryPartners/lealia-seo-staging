@@ -305,4 +305,7 @@ export const en = {
   "valuation.soon.desc":
     "It will be available on this page shortly. In the meantime, reach out and we will prepare an indicative valuation for you directly.",
   "valuation.openNewTab": "Open the valuation tool in a new tab",
+  "footer.faq": "FAQ",
+  "seo.faq.title": "M&A and Valuation FAQ | Lealia Advisory Partners",
+  "seo.faq.description": "Answers on how to sell or buy a company, company valuation, due diligence and the Lealia valuation report for businesses in Portugal and Spain.",
 };

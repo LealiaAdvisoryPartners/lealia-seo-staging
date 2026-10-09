@@ -309,4 +309,7 @@ export const es = {
   "valuation.soon.desc":
     "Estará disponible en esta página muy pronto. Mientras tanto, contáctenos y prepararemos una valoración indicativa para usted.",
   "valuation.openNewTab": "Abrir la herramienta de valoración en una pestaña nueva",
+  "footer.faq": "FAQ",
+  "seo.faq.title": "Preguntas Frecuentes sobre M&A y Valoración | Lealia",
+  "seo.faq.description": "Respuestas sobre cómo vender o comprar una empresa, valoración de empresas, due diligence y el informe de valoración de Lealia en Portugal y España.",
 };

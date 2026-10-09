@@ -15,6 +15,7 @@ import Valuation from "./Valuation";
 import Privacy from "./Privacy";
 import Terms from "./Terms";
 import Upgrade from "./Upgrade";
+import FAQ from "./FAQ";
 
 export interface SitePage {
   /** Segmento do URL; vazio na página inicial. */
@@ -32,6 +33,7 @@ export const SITE_PAGES: SitePage[] = [
   { slug: "valuation", Component: Valuation, navKey: "nav.valuation" },
   { slug: "privacy", Component: Privacy },
   { slug: "terms", Component: Terms },
+  { slug: "faq", Component: FAQ },
   { slug: "upgrade", Component: Upgrade },
 ];
 

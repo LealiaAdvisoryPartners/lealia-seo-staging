@@ -49,6 +49,9 @@ const Footer = () => {
             <Link to={buildPath(language, "/privacy")} className="text-primary-foreground/60 hover:text-accent transition-colors">
               {t("footer.privacy")}
             </Link>
+            <Link to={buildPath(language, "/faq")} className="text-primary-foreground/60 hover:text-accent transition-colors">
+              {t("footer.faq")}
+            </Link>
             <Link to={buildPath(language, "/terms")} className="text-primary-foreground/60 hover:text-accent transition-colors">
               {t("footer.terms")}
             </Link>
