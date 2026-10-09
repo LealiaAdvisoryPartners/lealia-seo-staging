@@ -570,8 +570,8 @@ export const en: typeof pt = {
     },
     conteudoReservado: "Reserved content",
     lockedTexto:
-      "This section is part of the full report. Unlock the complete analysis using the button at the top of the page to access this and the remaining reserved sections.",
-    lockedCta: "Speak with our team",
+      "This section is reserved for Full Report subscribers. Unlock the complete analysis to access this section, detailed DCF projections, the sensitivity matrix and the market preparation plan.",
+    lockedCta: "Get the Full Report · €299",
 
     cover: {
       titulo: "Preliminary Valuation",

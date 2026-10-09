@@ -139,7 +139,11 @@ const Relatorio = () => {
             </button>
           </div>
         </div>
-        <ReportDocument d={dados.relatorio} modo={dados.modo} />
+        <ReportDocument
+          d={dados.relatorio}
+          modo={dados.modo}
+          upgradeUrl={`/${lang}/upgrade?ref=${encodeURIComponent(dados.ref ?? token ?? "")}`}
+        />
       </div>
     </>
   );

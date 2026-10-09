@@ -19,12 +19,20 @@ import { lockedPages, LockedPage } from "./LockedPage";
 
 export type ReportModo = "completo" | "teaser";
 
-export function ReportDocument({ d, modo = "completo" }: { d: ReportData; modo?: ReportModo }) {
+export function ReportDocument({
+  d,
+  modo = "completo",
+  upgradeUrl,
+}: {
+  d: ReportData;
+  modo?: ReportModo;
+  upgradeUrl?: string;
+}) {
   const lang: ReportLang = (d as { lang?: ReportLang }).lang ?? "pt";
   const bloqueadas = new Map(lockedPages(lang).map((pagina) => [pagina.numero, pagina.titulo]));
   const paginaBloqueada = (numero: number) => {
     const titulo = bloqueadas.get(numero);
-    return titulo ? <LockedPage numero={numero} titulo={titulo} lang={lang} /> : null;
+    return titulo ? <LockedPage numero={numero} titulo={titulo} lang={lang} upgradeUrl={upgradeUrl} /> : null;
   };
 
   return (

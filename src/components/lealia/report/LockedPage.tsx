@@ -15,9 +15,9 @@ export function lockedPages(lang: ReportLang): { numero: number; titulo: string 
   ];
 }
 
-export const irParaAgendamento = () => {
-  if (typeof document === "undefined") return;
-  document.getElementById("agendar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+export const irParaUpgrade = (upgradeUrl?: string) => {
+  if (typeof window === "undefined" || !upgradeUrl) return;
+  window.location.href = upgradeUrl;
 };
 
 export function LockedSkeleton() {
@@ -41,7 +41,17 @@ export function LockedSkeleton() {
   );
 }
 
-export function LockedPage({ numero, titulo, lang }: { numero: number; titulo: string; lang: ReportLang }) {
+export function LockedPage({
+  numero,
+  titulo,
+  lang,
+  upgradeUrl,
+}: {
+  numero: number;
+  titulo: string;
+  lang: ReportLang;
+  upgradeUrl?: string;
+}) {
   const dictDoc = t(lang).doc;
   return (
     <Page numero={numero} titulo={titulo} lang={lang}>
@@ -51,7 +61,7 @@ export function LockedPage({ numero, titulo, lang }: { numero: number; titulo: s
           <span className="report-locked-eyebrow">{dictDoc.conteudoReservado}</span>
           <h2 className="report-locked-h">{titulo}</h2>
           <p className="report-locked-p">{dictDoc.lockedTexto}</p>
-          <button type="button" className="report-locked-cta" onClick={irParaAgendamento}>
+          <button type="button" className="report-locked-cta" onClick={() => irParaUpgrade(upgradeUrl)}>
             {dictDoc.lockedCta}
           </button>
         </div>
