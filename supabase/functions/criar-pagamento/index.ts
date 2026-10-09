@@ -80,6 +80,8 @@ Deno.serve(async (req: Request) => {
       descricao: `Relatório completo de avaliação${lead.empresa ? ` — ${String(lead.empresa).slice(0, 60)}` : ""}`,
       successUrl: `${checkout}&pagamento=sucesso&pedido=${orderId}`,
       cancelUrl: `${checkout}&pagamento=cancelado`,
+      nif,
+      nomeFiscal: texto(body.nome_fiscal, 160),
     });
 
     await admin.from("payments").update({ request_id: sessao.id }).eq("id", pagamento.id);
