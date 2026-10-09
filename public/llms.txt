@@ -20,6 +20,7 @@ Lealia Advisory Partners is a boutique financial advisory firm founded by experi
 - [Valuation](https://www.lealiaap.com/en/valuation): Free indicative company valuation — answer a short form about your business and receive an indicative valuation report, with the option of a full report.
 - [Privacy Policy](https://www.lealiaap.com/en/privacy): How the firm collects, uses, and protects personal data.
 - [Terms and Conditions](https://www.lealiaap.com/en/terms): Terms governing the business valuation services.
+- [FAQ](https://www.lealiaap.com/en/faq): Frequently asked questions on selling and buying a company, company valuation, due diligence and the Lealia valuation report.
 
 ## Services
 
@@ -33,5 +34,9 @@ Lealia Advisory Partners is a boutique financial advisory firm founded by experi
 - English: https://www.lealiaap.com/en
 - Português (PT): https://www.lealiaap.com/pt
 - Español (ES): https://www.lealiaap.com/es
+- FAQ (PT): https://www.lealiaap.com/pt/faq
+- FAQ (ES): https://www.lealiaap.com/es/faq
 
-- [FAQ](https://www.lealiaap.com/pt/faq): Perguntas frequentes sobre venda, compra e avaliação de empresas, e sobre o relatório de avaliação online.
+## Optional
+
+- [Full FAQ text](https://www.lealiaap.com/llms-full.txt): All FAQ questions and answers in English, Portuguese and Spanish, as plain text.
