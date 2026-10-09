@@ -2,12 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { CreditCard, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { checkoutCopy } from "@/translations/checkout";
-import {
-  consultarPagamento,
-  criarPagamento,
-  type EstadoPagamento,
-  type MetodoPagamento,
-} from "@/lib/payments";
+import { consultarPagamento, criarPagamento, type EstadoPagamento, type MetodoPagamento } from "@/lib/payments";
 
 type Fase = "form" | "aguardar" | "pago" | "encaminhar";
 
@@ -128,20 +123,6 @@ export function UpgradeCheckout({
   const s = c.summary;
   const compacto = layout === "stacked";
 
-  const detalhePreco = (
-    <dl className="space-y-2 text-sm font-light">
-      <div className="flex justify-between text-muted-foreground"><dt>{s.subtotal}</dt><dd>243,09 €</dd></div>
-      <div className="flex justify-between text-muted-foreground"><dt>{s.vat}</dt><dd>55,91 €</dd></div>
-      <div className="flex justify-between border-t border-border pt-3 text-base text-foreground"><dt>{s.total}</dt><dd>299,00 €</dd></div>
-      <div className="flex justify-between gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
-        <dt>{s.billing}</dt>
-        <dd className="text-right text-foreground/80">
-          {comFatura && nif.trim() ? `NIF ${nif.trim()}${nomeFiscal.trim() ? ` · ${nomeFiscal.trim()}` : ""}` : s.consumer}
-        </dd>
-      </div>
-    </dl>
-  );
-
   const resumo = compacto ? (
     <div className="w-full">
       <p className="flex">
@@ -167,14 +148,22 @@ export function UpgradeCheckout({
           </div>
           <p className="serif-accent text-2xl text-accent">299 €</p>
         </div>
-        <div className="mt-6 border-t border-border pt-5">{detalhePreco}</div>
         <p className="mt-3 text-[11px] tracking-wide uppercase text-muted-foreground">{c.priceNote}</p>
       </div>
 
       <ul className="mt-8 space-y-3 text-xs font-light text-muted-foreground">
-        <li className="flex items-center gap-3"><Lock className="h-4 w-4 text-accent" />{s.secure}</li>
-        <li className="flex items-center gap-3"><ShieldCheck className="h-4 w-4 text-accent" />{s.confidential}</li>
-        <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-accent" />{s.support}</li>
+        <li className="flex items-center gap-3">
+          <Lock className="h-4 w-4 text-accent" />
+          {s.secure}
+        </li>
+        <li className="flex items-center gap-3">
+          <ShieldCheck className="h-4 w-4 text-accent" />
+          {s.confidential}
+        </li>
+        <li className="flex items-center gap-3">
+          <Mail className="h-4 w-4 text-accent" />
+          {s.support}
+        </li>
       </ul>
     </div>
   );
@@ -194,14 +183,14 @@ export function UpgradeCheckout({
             </div>
             <p className="serif-accent text-2xl text-accent">299 €</p>
           </div>
-          <div className="mt-5">{detalhePreco}</div>
         </div>
       )}
       <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground">{s.paymentTitle}</p>
 
       {fase === "encaminhar" ? (
         <div className="mt-8 flex items-center gap-3 text-sm font-light text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin text-accent" />{c.redirectText}
+          <Loader2 className="h-4 w-4 animate-spin text-accent" />
+          {c.redirectText}
         </div>
       ) : fase === "aguardar" ? (
         <div className="mt-8">
@@ -226,7 +215,9 @@ export function UpgradeCheckout({
 
           <div className="mt-4 flex flex-wrap gap-2">
             {["VISA", "Mastercard", "Amex", "Apple Pay", "Google Pay"].map((m) => (
-              <span key={m} className="border border-border px-2 py-1 text-[10px] tracking-wide text-muted-foreground">{m}</span>
+              <span key={m} className="border border-border px-2 py-1 text-[10px] tracking-wide text-muted-foreground">
+                {m}
+              </span>
             ))}
           </div>
 
@@ -240,8 +231,12 @@ export function UpgradeCheckout({
               <span className="block text-sm">{c.invoiceToggle}</span>
               <span className="mt-1 block text-xs font-light text-muted-foreground">{c.invoiceNote}</span>
             </span>
-            <span className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${comFatura ? "bg-accent" : "bg-border"}`}>
-              <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-background transition-all ${comFatura ? "left-[18px]" : "left-0.5"}`} />
+            <span
+              className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${comFatura ? "bg-accent" : "bg-border"}`}
+            >
+              <span
+                className={`absolute top-0.5 h-4 w-4 rounded-full bg-background transition-all ${comFatura ? "left-[18px]" : "left-0.5"}`}
+              />
             </span>
           </button>
 
@@ -272,13 +267,17 @@ export function UpgradeCheckout({
             onClick={pagar}
             disabled={!referencia}
           >
-            <Lock className="h-4 w-4" />{s.cta}
+            <Lock className="h-4 w-4" />
+            {s.cta}
           </button>
 
-          <p className="mt-4 text-center text-[11px] leading-relaxed font-light text-muted-foreground">{s.invoiceInfo}</p>
+          <p className="mt-4 text-center text-[11px] leading-relaxed font-light text-muted-foreground">
+            {s.invoiceInfo}
+          </p>
           <p className="mt-2 text-center text-[11px] leading-relaxed font-light text-muted-foreground">{c.terms}</p>
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
-            <ShieldCheck className="h-3.5 w-3.5" />Stripe
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Stripe
           </p>
         </div>
       )}
@@ -286,8 +285,14 @@ export function UpgradeCheckout({
   );
 
   return compacto ? (
-    <div className="grid gap-6">{resumo}{painel}</div>
+    <div className="grid gap-6">
+      {resumo}
+      {painel}
+    </div>
   ) : (
-    <div className="grid items-start gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">{resumo}{painel}</div>
+    <div className="grid items-start gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
+      {resumo}
+      {painel}
+    </div>
   );
 }
