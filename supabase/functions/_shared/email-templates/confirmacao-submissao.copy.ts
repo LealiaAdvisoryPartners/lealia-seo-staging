@@ -36,13 +36,13 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Confirmação de submissão",
   },
   en: {
-    upgradeBody: "The full dossier (14 pages) is delivered on the same date, in place of the indicative report.",
+    upgradeBody: "The full report (14 pages) is delivered on the same date, in place of the indicative report.",
     meetingNote:
       "Should you wish to discuss the strategic context of your company in the meantime, you can book a 20-minute conversation with the partners:",
     meetingLink: "schedule a meeting",
-    upgradeEyebrow: "FULL VALUATION DOSSIER — €299",
+    upgradeEyebrow: "FULL VALUATION REPORT — €299",
     upgradeTitle: "For management decisions or investor conversations, you can request the full version right away.",
-    upgradeButton: "Request the full dossier →",
+    upgradeButton: "Request the full report →",
     preview: "We have received your submission. We will send you the report as soon as it is ready.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Thank you for your submission",
@@ -68,13 +68,13 @@ export const dict = {
   },
   es: {
     upgradeBody:
-      "El dossier integral (14 páginas) se entrega en la misma fecha, en sustitución del informe indicativo.",
+      "El informe completo (14 páginas) se entrega en la misma fecha, en sustitución del informe indicativo.",
     meetingNote:
       "Si prefiere comentar ya el contexto estratégico de su empresa, puede agendar una conversación de 20 minutos con los socios:",
     meetingLink: "agendar reunión",
-    upgradeEyebrow: "DOSSIER INTEGRAL DE VALORACIÓN — 299 €",
+    upgradeEyebrow: "INFORME COMPLETO DE VALORACIÓN — 299 €",
     upgradeTitle: "Para decisiones de gestión o conversaciones con inversores, puede solicitar ya la versión integral.",
-    upgradeButton: "Solicitar el dossier integral →",
+    upgradeButton: "Solicitar el informe completo →",
     preview: "Hemos recibido su solicitud. Le enviaremos el informe en cuanto esté finalizado.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Gracias por su solicitud",

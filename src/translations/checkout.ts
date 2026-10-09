@@ -137,7 +137,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     alreadyPaid: "The full report for this valuation has already been paid. Please check the email we sent you.",
     summary: {
       brand: "LEALIA ADVISORY · BUSINESS VALUATION",
-      product: "Full valuation dossier",
+      product: "Full valuation report",
       reference: "Linked valuation",
       subtotal: "Subtotal",
       vat: "VAT (23%)",
@@ -192,7 +192,7 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     alreadyPaid: "Esta valoración ya tiene el informe completo pagado. Consulte el email que le enviamos.",
     summary: {
       brand: "LEALIA ADVISORY · VALORACIÓN DE EMPRESAS",
-      product: "Dossier integral de valoración",
+      product: "Informe completo de valoración",
       reference: "Valoración asociada",
       subtotal: "Subtotal",
       vat: "IVA (23%)",
