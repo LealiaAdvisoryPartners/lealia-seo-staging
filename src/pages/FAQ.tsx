@@ -7,15 +7,25 @@ const FAQ = () => {
   const { language } = useLanguage();
   const copy = faqCopy[language];
 
+  const url = `https://www.lealiaap.com/${language}/faq`;
+  const org = { "@type": "ProfessionalService", name: "Lealia Advisory Partners", url: "https://www.lealiaap.com" };
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    url,
+    name: copy.heading,
+    description: copy.lead,
     inLanguage: language,
+    isPartOf: { "@type": "WebSite", name: org.name, url: org.url },
+    publisher: org,
+    about: ["Mergers and acquisitions", "Company valuation", "Selling a business", "Buying a business"],
     mainEntity: copy.categorias.flatMap((c) =>
       c.itens.map((i) => ({
         "@type": "Question",
         name: i.q,
-        acceptedAnswer: { "@type": "Answer", text: i.a },
+        inLanguage: language,
+        acceptedAnswer: { "@type": "Answer", text: i.a, author: org },
       })),
     ),
   };
