@@ -27,7 +27,7 @@ import {
 interface Props {
   nome: string;
   empresa?: string;
-  dataEntrega: string;
+  dataEntrega?: string;
   valor?: string;
   metodo?: string;
   referencia?: string;
@@ -47,7 +47,7 @@ const Email = ({ nome, empresa, dataEntrega, valor, metodo, referencia, pagoEm, 
   return (
     <Html lang={lang} dir="ltr">
       <Head />
-      <Preview>{t.preview(dataEntrega)}</Preview>
+      <Preview>{t.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
           <EmailHeader
@@ -65,7 +65,7 @@ const Email = ({ nome, empresa, dataEntrega, valor, metodo, referencia, pagoEm, 
 
           <Text style={bodyText}>{t.body}</Text>
 
-          <EditorialBlock eyebrowText={t.deliveryEyebrow} title={t.deliveryTitle(dataEntrega)} body={t.deliveryBody} />
+          <EditorialBlock eyebrowText={t.deliveryEyebrow} title={t.deliveryTitle} body={t.deliveryBody} />
 
           <Section style={{ padding: "20px 32px 8px 32px" }}>
             <Text style={{ ...ctaEyebrow, margin: "0 0 8px 0" }}>{t.receiptEyebrow}</Text>
