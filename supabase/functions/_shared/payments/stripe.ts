@@ -37,9 +37,9 @@ const BASE_CENT = Math.round(TOTAL_CENT / (1 + TAXA_IVA));
 const IVA_CENT = TOTAL_CENT - BASE_CENT;
 
 const ROTULOS = {
-  pt: { base: "Valor base (sem IVA)", iva: "IVA (23%)", fat: "Faturação", cf: "Consumidor final (sem NIF)" },
-  en: { base: "Net amount (excl. VAT)", iva: "VAT (23%)", fat: "Invoicing", cf: "Final consumer (no VAT number)" },
-  es: { base: "Importe base (sin IVA)", iva: "IVA (23%)", fat: "Facturación", cf: "Consumidor final (sin NIF)" },
+  pt: { base: "Preço base (sem IVA)", iva: "IVA (23%)", fat: "Faturação", cf: "Consumidor final (sem NIF)" },
+  en: { base: "Base price (excl. VAT)", iva: "VAT (23%)", fat: "Invoicing", cf: "Final consumer (no VAT number)" },
+  es: { base: "Precio base (sin IVA)", iva: "IVA (23%)", fat: "Facturación", cf: "Consumidor final (sin NIF)" },
 } as const;
 
 /** Cria a sessão de Checkout e devolve o endereço de pagamento. */
