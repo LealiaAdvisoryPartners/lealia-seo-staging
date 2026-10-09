@@ -118,14 +118,20 @@ export const pt = {
   recomendacoes: {
     reforcarGestao:
       "Reforçar a equipa de gestão e documentar processos e relações comerciais, reduzindo a dependência do acionista.",
-    diversificarClientes: "Diversificar a base de clientes e formalizar contratos plurianuais com os principais clientes.",
-    avaliarReplicabilidade: "Avaliar a replicabilidade do modelo noutras localizações, demonstrando potencial de escala ao investidor.",
-    documentarCapex: "Documentar as necessidades de investimento, distinguindo capex de manutenção de capex de expansão.",
-    prepararHistorico: "Preparar o histórico financeiro dos últimos três exercícios e a respetiva documentação de suporte.",
-    definirImovel: "Definir antecipadamente se o imóvel deve integrar o perímetro da transação e obter uma avaliação independente.",
+    diversificarClientes:
+      "Diversificar a base de clientes e formalizar contratos plurianuais com os principais clientes.",
+    avaliarReplicabilidade:
+      "Avaliar a replicabilidade do modelo noutras localizações, demonstrando potencial de escala ao investidor.",
+    documentarCapex:
+      "Documentar as necessidades de investimento, distinguindo capex de manutenção de capex de expansão.",
+    prepararHistorico:
+      "Preparar o histórico financeiro dos últimos três exercícios e a respetiva documentação de suporte.",
+    definirImovel:
+      "Definir antecipadamente se o imóvel deve integrar o perímetro da transação e obter uma avaliação independente.",
     validarMargem: "Validar a margem EBITDA e a classificação dos itens considerados extraordinários.",
     explicarContracao: "Preparar uma explicação sustentada da contração de faturação e do plano de recuperação.",
-    validarComLealia: "Validar esta avaliação indicativa com a equipa da Lealia Advisory Partners antes de qualquer decisão de mercado.",
+    validarComLealia:
+      "Validar esta avaliação indicativa com a equipa da Lealia Advisory Partners antes de qualquer decisão de mercado.",
   },
 
   resumo: {
@@ -266,20 +272,27 @@ export const pt = {
   },
 
   limitacoes: {
-    infoDeclarada: "A estimativa assenta exclusivamente na informação declarada, sem verificação documental ou auditoria.",
+    infoDeclarada:
+      "A estimativa assenta exclusivamente na informação declarada, sem verificação documental ou auditoria.",
     fundoManeio: "Não foi realizada análise de fundo de maneio normativo nem de sazonalidade do negócio.",
-    transacoesComparaveis: "Não foram analisadas transações comparáveis específicas nem o apetite atual de investidores para o ativo.",
+    transacoesComparaveis:
+      "Não foram analisadas transações comparáveis específicas nem o apetite atual de investidores para o ativo.",
     historicoInferior: "O histórico financeiro disponível é inferior a três exercícios.",
-    setorGenerico: "O setor indicado não tem múltiplos específicos disponíveis; foi usada uma referência genérica de mercado.",
-    periodoNaoEncerrado: "O período de referência não corresponde a contas encerradas, o que aumenta a incerteza da estimativa.",
+    setorGenerico:
+      "O setor indicado não tem múltiplos específicos disponíveis; foi usada uma referência genérica de mercado.",
+    periodoNaoEncerrado:
+      "O período de referência não corresponde a contas encerradas, o que aumenta a incerteza da estimativa.",
   },
 
   qualidade: {
     notaUmAno:
       "Com apenas um período financeiro, não é possível avaliar com robustez o crescimento, a estabilidade de margens, a conversão de resultados em caixa ou a sustentabilidade do EBITDA. Esta limitação reduz a confiança da avaliação e pode condicionar o múltiplo aplicável.",
-    margensEstaveis: "As margens EBITDA mantiveram-se estáveis no período analisado, o que sustenta a leitura de recorrência dos resultados.",
-    margensModeradas: "As margens EBITDA apresentam variação moderada no período analisado, justificando a validação dos fatores que explicam a oscilação.",
-    margensRelevantes: "As margens EBITDA apresentam variação relevante no período analisado, o que exige explicação documentada em due diligence.",
+    margensEstaveis:
+      "As margens EBITDA mantiveram-se estáveis no período analisado, o que sustenta a leitura de recorrência dos resultados.",
+    margensModeradas:
+      "As margens EBITDA apresentam variação moderada no período analisado, justificando a validação dos fatores que explicam a oscilação.",
+    margensRelevantes:
+      "As margens EBITDA apresentam variação relevante no período analisado, o que exige explicação documentada em due diligence.",
     conversaoCaixaComCapex: (capex: string, pct: string) =>
       `Após CAPEX recorrente de ${capex}, a conversão indicativa de EBITDA em caixa operacional é de ${pct}, antes de fundo de maneio, juros e impostos. Limitação: sem a desagregação entre CAPEX de manutenção e de crescimento, o fluxo de caixa livre subjacente à avaliação fica sujeito a correção em due diligence.`,
     conversaoCaixaSemCapex:
@@ -288,9 +301,11 @@ export const pt = {
       "O fundo de maneio não foi analisado nesta fase. Limitação: sem a normalização do fundo de maneio não é possível fixar com precisão a ponte entre Enterprise Value e Equity Value, podendo originar ajustamentos de closing euro-a-euro no preço final.",
     backlog: (valor: string) =>
       `Foi indicado backlog contratado de ${valor}. Limitação: sem detalhe das margens, prazos de execução e condições de cancelamento, a visibilidade de receita não foi incorporada quantitativamente na avaliação — apenas considerada de forma qualitativa.`,
-    concentracaoTop5: (top5: number) => `Concentração comercial: os cinco maiores clientes representam ${top5}% da faturação`,
+    concentracaoTop5: (top5: number) =>
+      `Concentração comercial: os cinco maiores clientes representam ${top5}% da faturação`,
     concentracaoTop1: (top1: number) => ` e o maior cliente ${top1}%`,
-    concentracaoFim: ". Limitação: a dependência de poucos clientes aumenta o risco percebido da receita e condiciona diretamente o múltiplo aplicável na avaliação.",
+    concentracaoFim:
+      ". Limitação: a dependência de poucos clientes aumenta o risco percebido da receita e condiciona diretamente o múltiplo aplicável na avaliação.",
     ajustamentosDeclarados: (valor: string) =>
       `Foram declarados ajustamentos não recorrentes de ${valor}. Limitação: até serem validados documentalmente, o EBITDA ajustado — e, por consequência, o intervalo de avaliação apresentado — fica sujeito a revisão.`,
     ajustamentosNaoDeclarados:
@@ -298,26 +313,38 @@ export const pt = {
   },
 
   alertas: {
-    umPeriodo: "Apenas foi disponibilizado um período financeiro. A análise de crescimento e estabilidade de margens não é conclusiva.",
-    ajustamentosSemSuporte: 'Existem ajustamentos ao EBITDA sem suporte documental. Devem ser classificados como "a validar em due diligence".',
-    fundoManeioNaoAnalisado: "Não foi analisado o fundo de maneio. O Equity Value poderá ser afetado por ajustamentos de closing.",
-    imovelSemAvaliacao: "O valor do imóvel foi introduzido sem avaliação independente. O Equity Value poderá sofrer alteração material.",
+    umPeriodo:
+      "Apenas foi disponibilizado um período financeiro. A análise de crescimento e estabilidade de margens não é conclusiva.",
+    ajustamentosSemSuporte:
+      'Existem ajustamentos ao EBITDA sem suporte documental. Devem ser classificados como "a validar em due diligence".',
+    fundoManeioNaoAnalisado:
+      "Não foi analisado o fundo de maneio. O Equity Value poderá ser afetado por ajustamentos de closing.",
+    imovelSemAvaliacao:
+      "O valor do imóvel foi introduzido sem avaliação independente. O Equity Value poderá sofrer alteração material.",
     imovelSemValor: "O imóvel foi incluído no perímetro sem valor indicado, pelo que não foi somado ao Equity Value.",
-    periodoNaoClassificado: "O período financeiro de referência não foi classificado (contas encerradas, estimativa ou orçamento).",
-    concentracaoInconsistente: "O peso dos cinco maiores clientes é inferior ao do maior cliente. Os dados devem ser revistos.",
-    minoritariaAtencao: "O valor de uma participação minoritária não corresponde a uma proporção simples do Equity Value de 100%.",
+    periodoNaoClassificado:
+      "O período financeiro de referência não foi classificado (contas encerradas, estimativa ou orçamento).",
+    concentracaoInconsistente:
+      "O peso dos cinco maiores clientes é inferior ao do maior cliente. Os dados devem ser revistos.",
+    minoritariaAtencao:
+      "O valor de uma participação minoritária não corresponde a uma proporção simples do Equity Value de 100%.",
   },
 
   implicacoesEstrutura: {
     venda50: { estrutura: "Venda de 50%–51%", implicacao: "Exige regras claras de governação e acordo de acionistas" },
     venda60: { estrutura: "Venda de 60%–80%", implicacao: "Comprador obtém controlo; pode existir rollover relevante" },
     venda90: { estrutura: "Venda de 90%", implicacao: "Participação residual exige proteção e regras de saída" },
-    venda100: { estrutura: "Venda de 100%", implicacao: "Estrutura mais simples; continuidade de gestão torna-se crítica" },
+    venda100: {
+      estrutura: "Venda de 100%",
+      implicacao: "Estrutura mais simples; continuidade de gestão torna-se crítica",
+    },
   },
 
   notas: {
-    equity: "O Equity Value apresentado é indicativo e calculado antes de ajustamentos de closing, normalização de fundo de maneio, contingências, impostos aplicáveis e validação em due diligence.",
-    minoria: "O valor de uma participação minoritária não deve ser assumido como uma simples proporção do Equity Value de 100%. O valor pode variar em função de controlo, direitos de governação, liquidez e estrutura da transação.",
+    equity:
+      "O Equity Value apresentado é indicativo e calculado antes de ajustamentos de closing, normalização de fundo de maneio, contingências, impostos aplicáveis e validação em due diligence.",
+    minoria:
+      "O valor de uma participação minoritária não deve ser assumido como uma simples proporção do Equity Value de 100%. O valor pode variar em função de controlo, direitos de governação, liquidez e estrutura da transação.",
   },
 
   engine: {
@@ -389,9 +416,11 @@ export const pt = {
       },
     },
     cenarios: {
-      conservador: "Comprador financeiro, ausência de prémio estratégico; múltiplo no limite inferior do intervalo ajustado.",
+      conservador:
+        "Comprador financeiro, ausência de prémio estratégico; múltiplo no limite inferior do intervalo ajustado.",
       base: "Processo normal, informação financeira preparada e continuidade operacional assegurada.",
-      otimista: "Comprador estratégico com sinergias identificadas, com vários interessados e preparação prévia do negócio.",
+      otimista:
+        "Comprador estratégico com sinergias identificadas, com vários interessados e preparação prévia do negócio.",
     },
     linhasEbitda: {
       reportado: (ano: number) => `EBITDA reportado ${ano}`,
@@ -443,7 +472,8 @@ export const pt = {
   doc: {
     disclaimer:
       "O presente relatório constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração deste documento.",
-    footer: (empresa: string) => `Lealia Advisory Partners · Relatório de avaliação indicativa${empresa ? ` para ${empresa}` : ""}`,
+    footer: (empresa: string) =>
+      `Lealia Advisory Partners · Relatório de avaliação indicativa${empresa ? ` para ${empresa}` : ""}`,
     efeito: { neutro: "Neutro", positivo: "Positivo", negativo: "Negativo" },
 
     waterfall: {
@@ -459,7 +489,8 @@ export const pt = {
     dcf: {
       titulo: "DCF Valuation",
       hTitulo: "Avaliação por fluxos de caixa descontados",
-      semDados: "Não é possível apresentar uma análise DCF com a informação disponibilizada. Em particular, o custo de capital estimado tem de ser superior à taxa de crescimento na perpetuidade.",
+      semDados:
+        "Não é possível apresentar uma análise DCF com a informação disponibilizada. Em particular, o custo de capital estimado tem de ser superior à taxa de crescimento na perpetuidade.",
       mapaFluxos: "Mapa de fluxos de caixa",
       unidadeMilhares: "milhares de €",
       linha: "Linha",
@@ -476,7 +507,8 @@ export const pt = {
       fcff: "= FCFF unlevered",
       fatorDesconto: "Fator de desconto",
       pvFcff: "= PV do FCFF",
-      legenda: "A = exercício histórico · F = ano projetado · TV = valor terminal. Fluxo unlevered: o financiamento é refletido no custo de capital e na dívida líquida. TV por perpetuidade sobre o FCFF do ano 8.",
+      legenda:
+        "A = exercício histórico · F = ano projetado · TV = valor terminal. Fluxo unlevered: o financiamento é refletido no custo de capital e na dívida líquida. TV por perpetuidade sobre o FCFF do ano 8.",
       pressupostosForecast: "Pressupostos do forecast",
       crescimentoInicial: "Crescimento inicial",
       anoEstabilizacao: "Ano de estabilização",
@@ -521,9 +553,11 @@ export const pt = {
       hTitulo: "Análise de sensibilidade",
       semDados: "Sem análise DCF disponível, não é possível apresentar as matrizes de sensibilidade.",
       sensibilidadeEv: "Sensibilidade do Enterprise Value",
-      notaMatriz: "A célula destacada corresponde ao cenário base apresentado no slide anterior. As matrizes isolam o efeito de cada variável, mantendo constantes os restantes pressupostos.",
+      notaMatriz:
+        "A célula destacada corresponde ao cenário base apresentado no slide anterior. As matrizes isolam o efeito de cada variável, mantendo constantes os restantes pressupostos.",
       transparenciaPressupostos: "Transparência de pressupostos",
-      introTransparencia: "Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de mercado, seguindo um critério conservador - na dúvida, adota-se o valor que resulta numa avaliação mais prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou método de derivação.",
+      introTransparencia:
+        "Os pressupostos do modelo combinam a informação introduzida no formulário com referências setoriais de mercado, seguindo um critério conservador - na dúvida, adota-se o valor que resulta numa avaliação mais prudente. A tabela seguinte consolida os pressupostos estruturantes da avaliação e a respetiva fonte ou método de derivação.",
       parametro: "Parâmetro",
       valor: "Valor",
       metodoFonte: "Método / fonte",
@@ -542,7 +576,8 @@ export const pt = {
       p13: "Processo de M&A",
     },
     conteudoReservado: "Conteúdo reservado",
-    lockedTexto: "Esta secção faz parte do relatório completo. Desbloqueie a análise integral através do botão no topo da página para aceder a esta e às restantes secções reservadas.",
+    lockedTexto:
+      "Esta secção faz parte do relatório completo. Desbloqueie a análise integral através do botão no topo da página para aceder a esta e às restantes secções reservadas.",
     lockedCta: "Falar com a equipa",
 
     cover: {
@@ -567,11 +602,14 @@ export const pt = {
       metodo1: (ebitda: string) =>
         `EBITDA reportado último exercício de referência, excluindo o impacto de despesas extraordinárias não recorrentes e, se aplicável, considerando o impacto de uma correção teórica sobre a renda do imóvel ao mercado. O EBITDA normalizado é de ${ebitda}.`,
       metodo2Titulo: "Múltiplo setorial de base",
-      metodo2: "Definido com referência aos múltiplos praticados em transações recentes e comparáveis no setor e na região.",
+      metodo2:
+        "Definido com referência aos múltiplos praticados em transações recentes e comparáveis no setor e na região.",
       metodo3Titulo: "Ajustes de perfil e risco",
-      metodo3: "Dimensão, maturidade, crescimento, recorrência de receita, concentração de clientes, geografia, dependência do acionista e intensidade de investimento, com um limite global aplicado ao conjunto dos ajustes.",
+      metodo3:
+        "Dimensão, maturidade, crescimento, recorrência de receita, concentração de clientes, geografia, dependência do acionista e intensidade de investimento, com um limite global aplicado ao conjunto dos ajustes.",
       metodo4Titulo: "Equity Bridge",
-      metodo4: "Ao Enterprise Value soma-se a caixa, depósitos e outros equivalentes, deduz-se a dívida total, e, se aplicável, soma-se o imóvel incluído no perímetro da transação e o impacto pro-forma em caixa resultante da alienação de ativos não operacionais, obtendo-se o Equity Value antes de ajustamentos de closing.",
+      metodo4:
+        "Ao Enterprise Value soma-se a caixa, depósitos e outros equivalentes, deduz-se a dívida total, e, se aplicável, soma-se o imóvel incluído no perímetro da transação e o impacto pro-forma em caixa resultante da alienação de ativos não operacionais, obtendo-se o Equity Value antes de ajustamentos de closing.",
     },
 
     p3: {
@@ -590,7 +628,8 @@ export const pt = {
       semInfoSuficiente: "Sem informação suficiente",
       normalizacaoEbitda: "Normalização do EBITDA",
       linha: "Linha",
-      notaNormalizacao: "Os ajustamentos de normalização aproximam o resultado operacional recorrente num cenário pós-transação.",
+      notaNormalizacao:
+        "Os ajustamentos de normalização aproximam o resultado operacional recorrente num cenário pós-transação.",
       outrosIndicadores: "Outros Indicadores",
       caixaDepositos: "Caixa, depósitos e outros equivalentes",
       dividaTotal: "Dívida total",
@@ -605,18 +644,28 @@ export const pt = {
       titulo: "Âmbito e limitações",
       hTitulo: "Âmbito e limitações deste relatório",
       naturezaDocumento: "Natureza do documento",
-      natureza1: "Trata-se de uma avaliação indicativa preliminar, elaborada exclusivamente a partir da informação fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.",
-      natureza2: "Não constitui aconselhamento financeiro, fiscal, contabilístico ou jurídico, nem uma recomendação de investimento ou desinvestimento.",
-      natureza3: "Não configura uma avaliação formal (fairness opinion) para efeitos legais, fiscais, contabilísticos ou regulatórios, nem uma proposta contratual ou oferta vinculativa.",
-      natureza4: "O documento destina-se ao uso exclusivo do destinatário identificado na capa e não deve ser divulgado a terceiros sem autorização escrita da Lealia Advisory Partners.",
+      natureza1:
+        "Trata-se de uma avaliação indicativa preliminar, elaborada exclusivamente a partir da informação fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.",
+      natureza2:
+        "Não constitui aconselhamento financeiro, fiscal, contabilístico ou jurídico, nem uma recomendação de investimento ou desinvestimento.",
+      natureza3:
+        "Não configura uma avaliação formal (fairness opinion) para efeitos legais, fiscais, contabilísticos ou regulatórios, nem uma proposta contratual ou oferta vinculativa.",
+      natureza4:
+        "O documento destina-se ao uso exclusivo do destinatário identificado na capa e não deve ser divulgado a terceiros sem autorização escrita da Lealia Advisory Partners.",
       limitacoesFatores: "Limitações e fatores de variação",
-      limitacao1: "Os valores apresentados dependem da qualidade, exatidão e completude dos dados introduzidos. Dados incompletos ou incorretos alteram materialmente o resultado.",
-      limitacao2: "As referências de mercado utilizadas refletem condições vigentes à data de elaboração e podem variar rapidamente com o contexto macroeconómico, setorial e de financiamento.",
-      limitacao3: "O preço efetivo de uma transação depende do perfil do comprador, da estrutura do negócio, das garantias, dos ajustamentos de closing e do processo negocial.",
-      limitacao4: "Uma avaliação definitiva exige due diligence financeira, fiscal, legal e operacional, bem como a validação documental dos ajustamentos ao EBITDA.",
-      semResponsabilidade: "A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva neste documento.",
+      limitacao1:
+        "Os valores apresentados dependem da qualidade, exatidão e completude dos dados introduzidos. Dados incompletos ou incorretos alteram materialmente o resultado.",
+      limitacao2:
+        "As referências de mercado utilizadas refletem condições vigentes à data de elaboração e podem variar rapidamente com o contexto macroeconómico, setorial e de financiamento.",
+      limitacao3:
+        "O preço efetivo de uma transação depende do perfil do comprador, da estrutura do negócio, das garantias, dos ajustamentos de closing e do processo negocial.",
+      limitacao4:
+        "Uma avaliação definitiva exige due diligence financeira, fiscal, legal e operacional, bem como a validação documental dos ajustamentos ao EBITDA.",
+      semResponsabilidade:
+        "A Lealia Advisory Partners não assume responsabilidade por decisões tomadas com base exclusiva neste documento.",
       leituraComplementar: "Leitura complementar",
-      leituraFinal: "O perfil de sazonalidade e a distribuição mensal da atividade não foram analisados nesta fase. Limitação: sem esta leitura não é possível aferir a recorrência intra-anual dos resultados, pelo que o valor calculado não reflete eventuais picos de atividade nem necessidades estacionais de tesouraria ao longo do ano.",
+      leituraFinal:
+        "O perfil de sazonalidade e a distribuição mensal da atividade não foram analisados nesta fase. Limitação: sem esta leitura não é possível aferir a recorrência intra-anual dos resultados, pelo que o valor calculado não reflete eventuais picos de atividade nem necessidades estacionais de tesouraria ao longo do ano.",
     },
 
     p5: {
@@ -630,13 +679,17 @@ export const pt = {
       metodosAlternativos: "Métodos alternativos",
       dcfTitulo: "DCF - fluxos de caixa descontados",
       dcfNota: "(ver slides 10 & 11)",
-      dcfDesc: "Projeta os fluxos de caixa futuros e desconta-os a uma taxa que reflete o custo do capital (WACC). É o método mais rigoroso quando existe um plano de negócios credível, mas é muito sensível aos pressupostos.",
+      dcfDesc:
+        "Projeta os fluxos de caixa futuros e desconta-os a uma taxa que reflete o custo do capital (WACC). É o método mais rigoroso quando existe um plano de negócios credível, mas é muito sensível aos pressupostos.",
       outrosMultiplosTitulo: "Outros múltiplos de transação",
-      outrosMultiplosDesc: "Para além do EV/EBITDA, podem ser utilizados múltiplos como EV/Receitas, EV/EBIT ou P/E, dependendo do setor, da maturidade e da rentabilidade da empresa. A sua relevância depende da comparabilidade das empresas e da qualidade da informação disponível.",
+      outrosMultiplosDesc:
+        "Para além do EV/EBITDA, podem ser utilizados múltiplos como EV/Receitas, EV/EBIT ou P/E, dependendo do setor, da maturidade e da rentabilidade da empresa. A sua relevância depende da comparabilidade das empresas e da qualidade da informação disponível.",
       metricasSetorTitulo: "Métricas específicas do setor",
-      metricasSetorDesc: "Complementa os múltiplos financeiros através de métricas operacionais relevantes para cada negócio, como valor por unidade, cliente, cama, subscritor ou metro quadrado. É particularmente útil em setores onde estes indicadores explicam de forma mais direta o potencial económico da empresa.",
+      metricasSetorDesc:
+        "Complementa os múltiplos financeiros através de métricas operacionais relevantes para cada negócio, como valor por unidade, cliente, cama, subscritor ou metro quadrado. É particularmente útil em setores onde estes indicadores explicam de forma mais direta o potencial económico da empresa.",
       valorPatrimonialTitulo: "Valor patrimonial / liquidação",
-      valorPatrimonialDesc: "Avalia os ativos líquidos ao seu valor de mercado. Relevante em negócios intensivos em ativos, funcionando como valor mínimo de referência.",
+      valorPatrimonialDesc:
+        "Avalia os ativos líquidos ao seu valor de mercado. Relevante em negócios intensivos em ativos, funcionando como valor mínimo de referência.",
     },
 
     p6: {
@@ -661,7 +714,8 @@ export const pt = {
       sensibilidadeEv: "Sensibilidade do Enterprise Value",
       variacaoEbitda: "Variação do EBITDA",
       ebitda: "EBITDA",
-      notaSensibilidade: "A tabela mostra como o Enterprise Value reage a variações do EBITDA normalizado e do múltiplo aplicado. O Equity Value acompanha estas variações, ajustado pela dívida total, caixa, depósitos e outros equivalentes, e o imóvel indicado na equity bridge.",
+      notaSensibilidade:
+        "A tabela mostra como o Enterprise Value reage a variações do EBITDA normalizado e do múltiplo aplicado. O Equity Value acompanha estas variações, ajustado pela dívida total, caixa, depósitos e outros equivalentes, e o imóvel indicado na equity bridge.",
       semSensibilidade: "Sem análise de sensibilidade disponível.",
     },
 
@@ -701,7 +755,8 @@ export const pt = {
     p12: {
       titulo: "Preparação para o mercado",
       planoPreparacao: "Plano de preparação priorizado",
-      notaSecao: "Esta secção destina-se a quem está a considerar avançar com um processo de M&A. A nossa equipa pode ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial sem compromisso.",
+      notaSecao:
+        "Esta secção destina-se a quem está a considerar avançar com um processo de M&A. A nossa equipa pode ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial sem compromisso.",
       prioridade: "Prioridade",
       priorityHigh: "Alta",
       priorityMedium: "Média",
@@ -714,7 +769,8 @@ export const pt = {
     p13: {
       titulo: "Processo de M&A",
       hTitulo: "Como decorre um processo de M&A",
-      notaSecao: "Esta secção destina-se a quem está a considerar avançar com um processo de M&A. A nossa equipa pode ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial sem compromisso.",
+      notaSecao:
+        "Esta secção destina-se a quem está a considerar avançar com um processo de M&A. A nossa equipa pode ajudá-lo a preparar o negócio para maximizar o valor na venda. Contacte-nos para uma conversa inicial sem compromisso.",
     },
 
     p14: {
@@ -722,7 +778,8 @@ export const pt = {
       obrigado: "Obrigado.",
       lead: "Obrigado pelo seu tempo. Este relatório é um ponto de partida: a conversão de uma estimativa indicativa numa avaliação sustentada exige a validação dos números, a análise de transações comparáveis recentes e a leitura do apetite atual de investidores financeiros e estratégicos para o seu setor.",
       proximoPassoTitulo: "Próximo passo · Reunião de 20 minutos",
-      proximoPassoDesc: "Revisão conjunta dos pressupostos deste relatório com a equipa da Lealia e apresentação do relatório completo.",
+      proximoPassoDesc:
+        "Discussão conjunta dos pressupostos, enquadramento estratégico e opções de mercado com a equipa da Lealia.",
       agendarReuniao: "Agendar reunião",
       contactos: "Contactos",
       managingPartner: "Managing Partner",
