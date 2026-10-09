@@ -582,8 +582,8 @@ export const es: typeof pt = {
     },
     conteudoReservado: "Contenido reservado",
     lockedTexto:
-      "Esta sección forma parte del informe completo. Desbloquee el análisis íntegro mediante el botón en la parte superior de la página para acceder a esta y a las demás secciones reservadas.",
-    lockedCta: "Hablar con el equipo",
+      "Esta sección está reservada a los suscriptores del Informe Completo. Desbloquee el análisis íntegro para acceder a esta sección, a las proyecciones DCF detalladas, a la matriz de sensibilidades y al plan de preparación para el mercado.",
+    lockedCta: "Adquirir Informe Completo · 299 €",
 
     cover: {
       titulo: "Valoración preliminar",

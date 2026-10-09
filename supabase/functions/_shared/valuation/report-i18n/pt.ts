@@ -577,8 +577,8 @@ export const pt = {
     },
     conteudoReservado: "Conteúdo reservado",
     lockedTexto:
-      "Esta secção faz parte do relatório completo. Desbloqueie a análise integral através do botão no topo da página para aceder a esta e às restantes secções reservadas.",
-    lockedCta: "Falar com a equipa",
+      "Esta secção está reservada aos subscritores do Relatório Completo. Desbloqueie a análise integral para aceder a esta secção, às projeções DCF detalhadas, à matriz de sensibilidades e ao plano de preparação para o mercado.",
+    lockedCta: "Adquirir Relatório Completo · 299 €",
 
     cover: {
       titulo: "Avaliação preliminar",
