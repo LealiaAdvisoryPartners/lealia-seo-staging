@@ -5,16 +5,23 @@ export type Lang = "pt" | "en" | "es";
 // deno-lint-ignore no-explicit-any
 export const dict = {
   pt: {
-    upgradeItems: ["Avaliação por DCF, com projeções e WACC detalhado", "Matriz de sensibilidades WACC vs. crescimento terminal", "Ajustamentos ao EBITDA e equity bridge linha a linha", "Drivers de valor, riscos e plano de preparação para o mercado"],
-    upgradeBody: "Entrega imediata após confirmação do pagamento, com link pessoal sem expiração.",
-    meetingNote: "Para discutir o enquadramento estratégico e as opções de mercado, pode marcar uma conversa de 20 minutos com os sócios:",
+    upgradeItems: [
+      "Avaliação por DCF, com projeções e WACC detalhado",
+      "Matriz de sensibilidades WACC vs. crescimento terminal",
+      "Ajustamentos ao EBITDA e equity bridge linha a linha",
+      "Drivers de valor, riscos e plano de preparação para o mercado",
+    ],
+    upgradeBody: "Entrega imediata após confirmação do pagamento.",
+    meetingNote:
+      "Para discutir o enquadramento estratégico e as opções de mercado, pode marcar uma conversa de 20 minutos com os sócios:",
     meetingLink: "agendar reunião",
     preview: (nome: string) => `${nome}, o relatório de avaliação indicativa está disponível.`,
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Relatório de avaliação indicativa",
     greeting: (nome: string) => `Olá ${nome}`,
     concludedFrom: ", concluímos a avaliação indicativa da ",
-    bodyIntro: "O relatório preparado pela nossa equipa está disponível para consulta através do seu link pessoal, válido durante 7 dias.",
+    bodyIntro:
+      "O relatório preparado pela nossa equipa está disponível para consulta através do seu link pessoal, válido durante 7 dias.",
     reportLinkLabel: "Consultar relatório indicativo",
     ctaEyebrow: "PRÓXIMO PASSO — REUNIÃO DE 20 MINUTOS",
     ctaTitle: "Discussão estratégica e enquadramento de mercado com os sócios.",
@@ -28,9 +35,15 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Relatório de Avaliação Indicativa",
   },
   en: {
-    upgradeItems: ["DCF valuation, with projections and a detailed WACC", "Sensitivity matrix: WACC vs. terminal growth", "EBITDA adjustments and a line-by-line equity bridge", "Value drivers, risks and a market-readiness plan"],
-    upgradeBody: "Delivered immediately once payment is confirmed, via a personal link that does not expire.",
-    meetingNote: "To discuss the strategic context and market options, you can book a 20-minute conversation with the partners:",
+    upgradeItems: [
+      "DCF valuation, with projections and a detailed WACC",
+      "Sensitivity matrix: WACC vs. terminal growth",
+      "EBITDA adjustments and a line-by-line equity bridge",
+      "Value drivers, risks and a market-readiness plan",
+    ],
+    upgradeBody: "Delivered immediately once payment is confirmed.",
+    meetingNote:
+      "To discuss the strategic context and market options, you can book a 20-minute conversation with the partners:",
     meetingLink: "schedule a meeting",
     preview: (nome: string) => `${nome}, your indicative valuation report is available.`,
     eyebrow: "LEALIA ADVISORY PARTNERS",
@@ -51,16 +64,23 @@ export const dict = {
     subjectWithoutCompany: "Lealia | Indicative Valuation Report",
   },
   es: {
-    upgradeItems: ["Valoración por DCF, con proyecciones y WACC detallado", "Matriz de sensibilidades WACC vs. crecimiento terminal", "Ajustes al EBITDA y equity bridge línea a línea", "Drivers de valor, riesgos y plan de preparación para el mercado"],
+    upgradeItems: [
+      "Valoración por DCF, con proyecciones y WACC detallado",
+      "Matriz de sensibilidades WACC vs. crecimiento terminal",
+      "Ajustes al EBITDA y equity bridge línea a línea",
+      "Drivers de valor, riesgos y plan de preparación para el mercado",
+    ],
     upgradeBody: "Entrega inmediata tras la confirmación del pago, con enlace personal sin caducidad.",
-    meetingNote: "Para comentar el contexto estratégico y las opciones de mercado, puede agendar una conversación de 20 minutos con los socios:",
+    meetingNote:
+      "Para comentar el contexto estratégico y las opciones de mercado, puede agendar una conversación de 20 minutos con los socios:",
     meetingLink: "agendar reunión",
     preview: (nome: string) => `${nome}, el informe de valoración indicativa está disponible.`,
     eyebrow: "LEALIA ADVISORY PARTNERS",
     heading: "Informe de valoración indicativa",
     greeting: (nome: string) => `Hola ${nome}`,
     concludedFrom: ", hemos finalizado la valoración indicativa de ",
-    bodyIntro: "El informe preparado por nuestro equipo está disponible a través de su enlace personal, válido durante 7 días.",
+    bodyIntro:
+      "El informe preparado por nuestro equipo está disponible a través de su enlace personal, válido durante 7 días.",
     reportLinkLabel: "Consultar informe indicativo",
     ctaEyebrow: "PRÓXIMO PASO — REUNIÓN DE 20 MINUTOS",
     ctaTitle: "Discusión estratégica y contexto de mercado con los socios.",
