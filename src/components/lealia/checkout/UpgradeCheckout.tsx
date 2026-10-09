@@ -181,6 +181,22 @@ export function UpgradeCheckout({
 
   const painel = (
     <div className="card-elegant p-6 shadow-[0_30px_60px_-30px_hsl(var(--primary)/0.35)] sm:p-8">
+      {compacto && (
+        <div className="mb-6 border-b border-border pb-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm">{s.product}</p>
+              {referencia && (
+                <p className="mt-1 text-xs font-light text-muted-foreground">
+                  {s.reference}: <span className="font-mono text-foreground/80">{referencia}</span>
+                </p>
+              )}
+            </div>
+            <p className="serif-accent text-2xl text-accent">299 €</p>
+          </div>
+          <div className="mt-5">{detalhePreco}</div>
+        </div>
+      )}
       <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground">{s.paymentTitle}</p>
 
       {fase === "encaminhar" ? (
