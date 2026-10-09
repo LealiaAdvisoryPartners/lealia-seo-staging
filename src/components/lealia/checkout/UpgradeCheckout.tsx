@@ -128,16 +128,32 @@ export function UpgradeCheckout({
   const s = c.summary;
   const compacto = layout === "stacked";
 
-  const resumo = (
-    <div className={compacto ? "" : "lg:sticky lg:top-28"}>
+  const detalhePreco = (
+    <dl className="space-y-2 text-sm font-light">
+      <div className="flex justify-between text-muted-foreground"><dt>{s.subtotal}</dt><dd>243,09 €</dd></div>
+      <div className="flex justify-between text-muted-foreground"><dt>{s.vat}</dt><dd>55,91 €</dd></div>
+      <div className="flex justify-between border-t border-border pt-3 text-base text-foreground"><dt>{s.total}</dt><dd>299,00 €</dd></div>
+      <div className="flex justify-between gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
+        <dt>{s.billing}</dt>
+        <dd className="text-right text-foreground/80">
+          {comFatura && nif.trim() ? `NIF ${nif.trim()}${nomeFiscal.trim() ? ` · ${nomeFiscal.trim()}` : ""}` : s.consumer}
+        </dd>
+      </div>
+    </dl>
+  );
+
+  const resumo = compacto ? (
+    <div className="w-full">
+      <p className="flex">
+        <span className="eyebrow">{c.eyebrow}</span>
+      </p>
+      <h2 className="section-title mt-4 text-3xl md:text-5xl">{c.heading}</h2>
+    </div>
+  ) : (
+    <div className="lg:sticky lg:top-28">
       <p className="text-[10px] tracking-[0.28em] text-accent">{s.brand}</p>
-      {!compacto && (
-        <>
-          <h1 className="section-title mt-5 text-3xl md:text-4xl">{c.heading}</h1>
-          <p className="mt-5 text-sm leading-relaxed font-light text-muted-foreground">{c.lead}</p>
-        </>
-      )}
-      {compacto && <h3 className="section-title mt-4 text-2xl">{c.heading}</h3>}
+      <h1 className="section-title mt-5 text-3xl md:text-4xl">{c.heading}</h1>
+      <p className="mt-5 text-sm leading-relaxed font-light text-muted-foreground">{c.lead}</p>
 
       <div className="mt-8 border border-border bg-background/60 p-6">
         <div className="flex items-start justify-between gap-4">
@@ -151,27 +167,15 @@ export function UpgradeCheckout({
           </div>
           <p className="serif-accent text-2xl text-accent">299 €</p>
         </div>
-        <dl className="mt-6 space-y-2 border-t border-border pt-5 text-sm font-light">
-          <div className="flex justify-between text-muted-foreground"><dt>{s.subtotal}</dt><dd>243,09 €</dd></div>
-          <div className="flex justify-between text-muted-foreground"><dt>{s.vat}</dt><dd>55,91 €</dd></div>
-          <div className="flex justify-between border-t border-border pt-3 text-base text-foreground"><dt>{s.total}</dt><dd>299,00 €</dd></div>
-          <div className="flex justify-between gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
-            <dt>{s.billing}</dt>
-            <dd className="text-right text-foreground/80">
-              {comFatura && nif.trim() ? `NIF ${nif.trim()}${nomeFiscal.trim() ? ` · ${nomeFiscal.trim()}` : ""}` : s.consumer}
-            </dd>
-          </div>
-        </dl>
+        <div className="mt-6 border-t border-border pt-5">{detalhePreco}</div>
         <p className="mt-3 text-[11px] tracking-wide uppercase text-muted-foreground">{c.priceNote}</p>
       </div>
 
-      {!compacto && (
-        <ul className="mt-8 space-y-3 text-xs font-light text-muted-foreground">
-          <li className="flex items-center gap-3"><Lock className="h-4 w-4 text-accent" />{s.secure}</li>
-          <li className="flex items-center gap-3"><ShieldCheck className="h-4 w-4 text-accent" />{s.confidential}</li>
-          <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-accent" />{s.support}</li>
-        </ul>
-      )}
+      <ul className="mt-8 space-y-3 text-xs font-light text-muted-foreground">
+        <li className="flex items-center gap-3"><Lock className="h-4 w-4 text-accent" />{s.secure}</li>
+        <li className="flex items-center gap-3"><ShieldCheck className="h-4 w-4 text-accent" />{s.confidential}</li>
+        <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-accent" />{s.support}</li>
+      </ul>
     </div>
   );
 
