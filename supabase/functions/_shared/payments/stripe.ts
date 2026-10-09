@@ -31,6 +31,17 @@ async function stripe(caminho: string, corpo?: Record<string, string>): Promise<
   return dados;
 }
 
+export const TAXA_IVA = 0.23;
+const TOTAL_CENT = Math.round(PRECO_RELATORIO_COMPLETO * 100);
+const BASE_CENT = Math.round(TOTAL_CENT / (1 + TAXA_IVA));
+const IVA_CENT = TOTAL_CENT - BASE_CENT;
+
+const ROTULOS = {
+  pt: { base: "Valor base (sem IVA)", iva: "IVA (23%)", fat: "Faturação", cf: "Consumidor final (sem NIF)" },
+  en: { base: "Net amount (excl. VAT)", iva: "VAT (23%)", fat: "Invoicing", cf: "Final consumer (no VAT number)" },
+  es: { base: "Importe base (sin IVA)", iva: "IVA (23%)", fat: "Facturación", cf: "Consumidor final (sin NIF)" },
+} as const;
+
 /** Cria a sessão de Checkout e devolve o endereço de pagamento. */
 export async function criarSessaoCheckout(opcoes: {
   orderId: string;
@@ -40,7 +51,14 @@ export async function criarSessaoCheckout(opcoes: {
   descricao: string;
   successUrl: string;
   cancelUrl: string;
+  nif?: string | null;
+  nomeFiscal?: string | null;
 }): Promise<{ id: string; url: string }> {
+  const r = ROTULOS[opcoes.idioma] ?? ROTULOS.pt;
+  const faturacao = opcoes.nif
+    ? `${r.fat}: NIF ${opcoes.nif}${opcoes.nomeFiscal ? ` — ${opcoes.nomeFiscal}` : ""}`
+    : `${r.fat}: ${r.cf}`;
+  const moeda = MOEDA.toLowerCase();
   const sessao = await stripe("/checkout/sessions", {
     mode: "payment",
     client_reference_id: opcoes.orderId,
@@ -49,11 +67,18 @@ export async function criarSessaoCheckout(opcoes: {
     success_url: opcoes.successUrl,
     cancel_url: opcoes.cancelUrl,
     "line_items[0][quantity]": "1",
-    "line_items[0][price_data][currency]": MOEDA.toLowerCase(),
-    "line_items[0][price_data][unit_amount]": String(Math.round(PRECO_RELATORIO_COMPLETO * 100)),
-    "line_items[0][price_data][product_data][name]": opcoes.descricao.slice(0, 200),
+    "line_items[0][price_data][currency]": moeda,
+    "line_items[0][price_data][unit_amount]": String(BASE_CENT),
+    "line_items[0][price_data][product_data][name]": `${opcoes.descricao} · ${r.base}`.slice(0, 200),
+    "line_items[0][price_data][product_data][description]": faturacao.slice(0, 300),
+    "line_items[1][quantity]": "1",
+    "line_items[1][price_data][currency]": moeda,
+    "line_items[1][price_data][unit_amount]": String(IVA_CENT),
+    "line_items[1][price_data][product_data][name]": r.iva,
+    "custom_text[submit][message]": faturacao.slice(0, 1000),
     "metadata[order_id]": opcoes.orderId,
     "metadata[submission_id]": opcoes.submissionId,
+    "metadata[nif]": opcoes.nif ?? "",
     "payment_intent_data[metadata][order_id]": opcoes.orderId,
   });
   return { id: String(sessao.id), url: String(sessao.url) };
