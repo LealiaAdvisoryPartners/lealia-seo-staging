@@ -1,29 +1,29 @@
 export const es = {
   // SEO
-  "seo.home.title": "Lealia Advisory Partners | Asesoramiento M&A y Consultoría Estratégica",
+  "seo.home.title": "Asesoramiento M&A y Venta de Empresas | Lealia Advisory",
   "seo.home.description":
-    "Firma independiente de asesoramiento M&A para pymes y lower mid-market en la Península Ibérica. Asesoramiento buy-side y sell-side, mejora del desempeño y corporate finance.",
+    "Asesoramiento M&A independiente para vender o comprar empresas en España y Portugal. Sell-side, buy-side, corporate finance y mejora del desempeño para pymes.",
   "seo.about.title": "Sobre Nosotros | Lealia Advisory Partners",
   "seo.about.description":
-    "Conozca Lealia Advisory Partners - asesoramiento financiero independiente especializado en M&A y corporate finance para pymes en el mercado ibérico.",
-  "seo.services.title": "Servicios | Lealia Advisory Partners",
+    "Conozca Lealia Advisory Partners: asesoramiento financiero independiente especializado en M&A y corporate finance para pymes y lower mid-market en Iberia.",
+  "seo.services.title": "Servicios de M&A y Corporate Finance | Lealia Advisory",
   "seo.services.description":
-    "Asesoramiento M&A buy-side y sell-side, mejora del desempeño y corporate finance para pymes y empresas del lower mid-market en la Península Ibérica.",
+    "Asesoramiento M&A buy-side y sell-side, mejora del desempeño, modelización financiera y valoraciones para pymes y lower mid-market en la Península Ibérica.",
   "seo.team.title": "Equipo | Lealia Advisory Partners",
   "seo.team.description":
-    "Conozca a los Managing Partners de Lealia Advisory Partners - profesionales con amplia experiencia en M&A y más de 30 transacciones en Europa.",
-  "seo.valuation.title": "Valoración de Empresa Gratuita | Lealia Advisory Partners",
+    "Conozca a los Managing Partners de Lealia Advisory Partners, profesionales con amplia experiencia en M&A y más de 30 transacciones en España, Portugal y Europa.",
+  "seo.valuation.title": "Valoración Gratuita de Empresas | Lealia Advisory Partners",
   "seo.valuation.description":
-    "Obtenga una valoración indicativa de su empresa en minutos. Herramienta gratuita y confidencial de Lealia Advisory Partners, asesores de M&A en Iberia.",
+    "¿Cuánto vale mi empresa? Solicite una valoración indicativa gratuita de su empresa, basada en múltiplos de mercado y preparada por el equipo de M&A de Lealia.",
   "seo.privacy.title": "Política de Privacidad | Lealia Advisory Partners",
   "seo.privacy.description":
-    "Política de privacidad de Lealia Advisory Partners - cómo recopilamos, utilizamos y protegemos su información personal.",
+    "Política de privacidad de Lealia Advisory Partners: cómo recopilamos, utilizamos, conservamos y protegemos su información personal, y cómo ejercer sus derechos.",
   "seo.upgrade.title": "Informe Completo de Valoración | Lealia Advisory Partners",
   "seo.upgrade.description":
     "Desbloquee el informe completo de valoración de su empresa por 299 €: valoración por múltiplos y DCF, sensibilidades, drivers de valor y plan de preparación para el mercado.",
   "seo.terms.title": "Términos y Condiciones | Lealia Advisory Partners",
   "seo.terms.description":
-    "Términos y Condiciones aplicables a los servicios de valoración de empresas prestados por Lealia Advisory Partners.",
+    "Términos y Condiciones aplicables a los servicios de valoración de empresas de Lealia, incluido el informe indicativo, el informe completo y el pago.",
 
   // Navigation
   "nav.home": "Inicio",

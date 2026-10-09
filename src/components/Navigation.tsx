@@ -34,7 +34,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to={buildPath(language, "/")} className="flex items-center transition-opacity hover:opacity-80">
-            <img src={logoHeader} alt="Lealia Advisory Partners" className="h-8 w-auto" />
+            <img src={logoHeader} alt="Lealia Advisory Partners" width={1348} height={236} decoding="async" className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

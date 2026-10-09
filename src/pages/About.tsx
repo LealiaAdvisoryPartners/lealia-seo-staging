@@ -142,6 +142,10 @@ const About = () => {
               <img
                 src={aboutStory}
                 alt="Lealia Advisory Partners Team"
+                width={1200}
+                height={800}
+                loading="lazy"
+                decoding="async"
                 className="relative rounded-2xl shadow-[var(--shadow-elegant)] w-full"
               />
             </motion.div>

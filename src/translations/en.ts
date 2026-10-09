@@ -1,29 +1,29 @@
 export const en = {
   // SEO
-  "seo.home.title": "Lealia Advisory Partners | M&A Advisory & Strategic Consulting",
+  "seo.home.title": "M&A Advisory & Selling a Business in Iberia | Lealia",
   "seo.home.description":
-    "Independent M&A advisory firm specializing in SMEs and lower mid-market transactions in Iberia. Buy-side & sell-side advisory, performance improvement, and corporate finance.",
+    "Independent M&A advisory to sell or buy a company in Portugal and Spain. Sell-side and buy-side advisory, corporate finance and performance improvement for SMEs.",
   "seo.about.title": "About Us | Lealia Advisory Partners",
   "seo.about.description":
-    "Learn about Lealia Advisory Partners - an independent financial advisory firm focused on M&A and corporate finance for SMEs in the Iberian market.",
-  "seo.services.title": "Our Services | Lealia Advisory Partners",
+    "Learn about Lealia Advisory Partners, an independent financial advisory firm focused on M&A and corporate finance for SMEs and lower mid-market firms in Iberia.",
+  "seo.services.title": "M&A & Corporate Finance Services | Lealia Advisory",
   "seo.services.description":
-    "M&A buy-side & sell-side advisory, performance improvement, and corporate finance services for SMEs and lower mid-market companies in Iberia.",
+    "Buy-side and sell-side M&A advisory, performance improvement, financial modeling and valuations for SMEs and lower mid-market companies across Portugal & Spain.",
   "seo.team.title": "Our Team | Lealia Advisory Partners",
   "seo.team.description":
-    "Meet the Managing Partners of Lealia Advisory Partners - experienced M&A professionals with 30+ transactions across Europe.",
+    "Meet the Managing Partners of Lealia Advisory Partners, experienced M&A professionals who have completed more than 30 transactions in Portugal, Spain and Europe.",
   "seo.valuation.title": "Free Business Valuation | Lealia Advisory Partners",
   "seo.valuation.description":
-    "Get an indicative valuation of your company in minutes. A free, confidential valuation tool built by Lealia Advisory Partners, M&A advisors in Iberia.",
+    "How much is my company worth? Request a free indicative valuation, based on market multiples and prepared by the Lealia Advisory M&A team in Iberia.",
   "seo.privacy.title": "Privacy Policy | Lealia Advisory Partners",
   "seo.privacy.description":
-    "Lealia Advisory Partners privacy policy - how we collect, use, and protect your personal information.",
+    "Lealia Advisory Partners privacy policy: how we collect, use, retain and protect your personal information, and how you can exercise your data protection rights.",
   "seo.upgrade.title": "Full Valuation Report | Lealia Advisory Partners",
   "seo.upgrade.description":
     "Unlock the full valuation report for your company for \u20AC299: market multiples and DCF valuation, sensitivities, value drivers and a market-readiness plan.",
   "seo.terms.title": "Terms and Conditions | Lealia Advisory Partners",
   "seo.terms.description":
-    "Terms and Conditions governing the business valuation services provided by Lealia Advisory Partners.",
+    "Terms and Conditions governing the business valuation services of Lealia Advisory Partners, including the indicative report, the full report and online payment.",
 
   // Navigation
   "nav.home": "Home",
@@ -187,7 +187,7 @@ export const en = {
   // About Page
   "about.title": "About Lealia",
   "about.intro":
-    "Lealia Advisory Partners is an independent financial advisory firm focused on SMEs and lower mid-market companies in Iberia. We specialize in M&A and complementary corporate finance services across industries. With deep industry expertise and a client-centric approach, we deliver exceptional results that create lasting value for our clients.",
+    "Lealia Advisory Partners is an independent financial advisory firm focused on SMEs and lower mid-market firms in Iberia. We specialize in M&A and complementary corporate finance services across industries. With deep industry expertise and a client-centric approach, we deliver exceptional results that create lasting value for our clients.",
   "about.whyus.title": "Why Choose Us?",
   "about.whyus.expertise": "Tailored Solutions",
   "about.whyus.expertise.desc":

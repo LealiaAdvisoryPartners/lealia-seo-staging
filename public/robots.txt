@@ -4,6 +4,27 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
 User-agent: Twitterbot
 Allow: /
 
@@ -12,5 +33,12 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /relatorio/
+Disallow: /en/relatorio/
+Disallow: /pt/relatorio/
+Disallow: /es/relatorio/
+Disallow: /en/upgrade
+Disallow: /pt/upgrade
+Disallow: /es/upgrade
 
 Sitemap: https://www.lealiaap.com/sitemap.xml

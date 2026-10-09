@@ -97,6 +97,10 @@ const Team = () => {
                   <img
                     src={member.image}
                     alt={member.name}
+                    width={1206}
+                    height={1206}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full aspect-[4/5] object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent" />
