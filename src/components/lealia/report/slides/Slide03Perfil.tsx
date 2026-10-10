@@ -9,7 +9,7 @@ export function Slide03Perfil({ d, lang }: { d: ReportData; lang: ReportLang }) 
       <div className="report-two">
         <div>
           <H>{dict.p3.perfilEmpresa}</H>
-          <table className="report-table report-table-compact">
+          <table className="report-table report-table-compact report-table-perfil">
             <thead>
               <tr>
                 <th>{dict.p3.indicador}</th>
