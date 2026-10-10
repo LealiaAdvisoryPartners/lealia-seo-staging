@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -46,9 +46,10 @@
     --radius: 0.875rem;
 
     /* Gradients */
-    --gradient-hero: radial-gradient(1200px 600px at 80% -10%, hsl(36 55% 52% / 0.10), transparent 60%),
-                     radial-gradient(900px 500px at -10% 20%, hsl(220 50% 11% / 0.06), transparent 60%),
-                     linear-gradient(180deg, hsl(30 20% 99%), hsl(30 20% 96%));
+    --gradient-hero:
+      radial-gradient(1200px 600px at 80% -10%, hsl(36 55% 52% / 0.1), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, hsl(220 50% 11% / 0.06), transparent 60%),
+      linear-gradient(180deg, hsl(30 20% 99%), hsl(30 20% 96%));
     --gradient-dark: linear-gradient(135deg, hsl(220 55% 10%) 0%, hsl(220 45% 16%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(36 55% 52%) 0%, hsl(40 70% 65%) 100%);
     --gradient-border: linear-gradient(135deg, hsl(36 55% 52% / 0.45), hsl(220 50% 11% / 0.05));
@@ -56,7 +57,7 @@
     /* Shadows */
     --shadow-soft: 0 1px 2px hsl(220 30% 12% / 0.04), 0 8px 30px hsl(220 30% 12% / 0.06);
     --shadow-elegant: 0 4px 14px hsl(220 30% 12% / 0.06), 0 24px 60px -20px hsl(220 30% 12% / 0.18);
-    --shadow-hover: 0 10px 30px hsl(220 30% 12% / 0.10), 0 30px 80px -20px hsl(220 30% 12% / 0.25);
+    --shadow-hover: 0 10px 30px hsl(220 30% 12% / 0.1), 0 30px 80px -20px hsl(220 30% 12% / 0.25);
     --shadow-gold: 0 10px 40px -10px hsl(36 55% 52% / 0.45);
 
     /* Motion */
@@ -114,7 +115,12 @@
   }
 
   /* Modern type scale — Raleway driven */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading tracking-tight;
     font-weight: 300;
   }
@@ -157,9 +163,11 @@
     padding: 1px;
     border-radius: inherit;
     background: var(--gradient-border);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
+    mask-composite: exclude;
     pointer-events: none;
   }
 
@@ -216,7 +224,7 @@
 
   .serif-accent {
     @apply font-heading italic;
-    font-family: 'Playfair Display', serif;
+    font-family: "Playfair Display", serif;
   }
 
   /* Animated grain overlay */
@@ -232,14 +240,25 @@
 
   /* Floating animation */
   @keyframes float-slow {
-    0%, 100% { transform: translateY(0) translateX(0); }
-    50% { transform: translateY(-18px) translateX(6px); }
+    0%,
+    100% {
+      transform: translateY(0) translateX(0);
+    }
+    50% {
+      transform: translateY(-18px) translateX(6px);
+    }
   }
-  .float-slow { animation: float-slow 11s ease-in-out infinite; }
+  .float-slow {
+    animation: float-slow 11s ease-in-out infinite;
+  }
 
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
   .shimmer-text {
     background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
@@ -257,7 +276,8 @@
   .link-underline::after {
     content: "";
     position: absolute;
-    left: 0; bottom: -2px;
+    left: 0;
+    bottom: -2px;
     width: 100%;
     height: 1px;
     background: currentColor;
@@ -272,18 +292,30 @@
 
   /* Marquee */
   @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
   }
   @keyframes marquee-reverse {
-    0% { transform: translateX(-50%); }
-    100% { transform: translateX(0); }
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
   }
 
   /* Mask reveal — used for image curtain effect */
   @keyframes curtain-in {
-    0% { transform: scaleY(1); }
-    100% { transform: scaleY(0); }
+    0% {
+      transform: scaleY(1);
+    }
+    100% {
+      transform: scaleY(0);
+    }
   }
   .mask-reveal {
     position: relative;
@@ -318,8 +350,13 @@
 
   /* Animated gradient text */
   @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
   .text-gradient-gold {
     background: linear-gradient(120deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
@@ -332,8 +369,15 @@
 
   /* Soft pulsing dot */
   @keyframes ping-soft {
-    0% { transform: scale(1); opacity: 0.6; }
-    80%, 100% { transform: scale(2.4); opacity: 0; }
+    0% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    80%,
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
   }
   .ping-soft::after {
     content: "";
@@ -346,8 +390,12 @@
 
   /* Process path draw */
   @keyframes draw-line {
-    from { stroke-dashoffset: 1000; }
-    to { stroke-dashoffset: 0; }
+    from {
+      stroke-dashoffset: 1000;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
   }
   .animate-draw {
     stroke-dasharray: 1000;
@@ -357,7 +405,9 @@
 
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
@@ -402,7 +452,7 @@
   }
 
   .num-index {
-    font-family: 'Cinzel', serif;
+    font-family: "Cinzel", serif;
     font-size: 0.8125rem;
     letter-spacing: 0.18em;
     @apply text-accent;
@@ -414,7 +464,6 @@
     hyphens: auto;
   }
 }
-
 
 /* ---------------------------------------------------------------
  * Tokens locais do relatório (cores completas, como no projeto de origem)
@@ -484,8 +533,6 @@
     flex-direction: column;
   }
 }
-
-
 
 .report-head {
   display: flex;
@@ -650,7 +697,6 @@
 .report-body > .report-h2.report-h2-tight {
   margin-top: 3mm;
 }
-
 
 .report-h3 {
   font-family: var(--font-body);
@@ -1071,7 +1117,6 @@
   margin-bottom: 1.6mm;
 }
 
-
 /* --- Slide 9: Drivers de Valor & Riscos --- */
 .report-drivers .report-body {
   padding-top: 4.5mm;
@@ -1375,7 +1420,7 @@
 
 .report-table-perfil th:first-child,
 .report-table-perfil td:first-child {
-  width: 45%;
+  width: 35%;
 }
 
 .report-list-disc {
@@ -1671,7 +1716,6 @@
   }
 }
 
-
 /* ---- Relatório: páginas bloqueadas na versão teaser ---- */
 .report-locked {
   position: relative;
@@ -1874,7 +1918,6 @@
   font-size: 5.8pt;
   letter-spacing: 0.04em;
 }
-
 
 .report-sens-base {
   font-weight: 700;
