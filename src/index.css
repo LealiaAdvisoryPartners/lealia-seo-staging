@@ -2038,3 +2038,9 @@
   width: 26mm;
   white-space: nowrap;
 }
+
+/* Sample report viewer: block printing while open */
+@media print {
+  body:has(.sample-viewer) * { visibility: hidden !important; }
+  body:has(.sample-viewer) { background: #fff !important; }
+}
