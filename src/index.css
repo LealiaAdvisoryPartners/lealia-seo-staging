@@ -1369,6 +1369,15 @@
   max-width: 100%;
 }
 
+.report-table-perfil {
+  table-layout: fixed;
+}
+
+.report-table-perfil th:first-child,
+.report-table-perfil td:first-child {
+  width: 45%;
+}
+
 .report-list-disc {
   list-style: disc;
 }
