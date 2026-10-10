@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
 import type { Language } from "@/contexts/language-context";
+import { PdfCanvasPages } from "./PdfCanvasPages";
 
 const PDFS: Record<Language, string> = {
   pt: "/sample-report/sample-pt.pdf",
@@ -39,7 +40,7 @@ export function SampleReportViewer({ open, onClose }: Props) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-background/95 backdrop-blur-sm">
+    <div className="sample-viewer fixed inset-0 z-50 flex flex-col bg-background/95 backdrop-blur-sm">
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border px-4 py-4 sm:px-8">
         <div>
           <h3 className="text-lg font-light tracking-wide">{c.title}</h3>
@@ -72,15 +73,10 @@ export function SampleReportViewer({ open, onClose }: Props) {
       </div>
 
       <div
-        className="relative flex-1 overflow-hidden bg-secondary/40"
+        className="relative flex-1 overflow-y-auto bg-secondary/40 px-4 py-6"
         onContextMenu={(e) => e.preventDefault()}
       >
-        <iframe
-          key={docLang}
-          title={c.title}
-          src={`${PDFS[docLang]}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-          className="h-full w-full"
-        />
+        <PdfCanvasPages key={docLang} src={PDFS[docLang]} />
       </div>
     </div>
   );
