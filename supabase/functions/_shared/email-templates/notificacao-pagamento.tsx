@@ -72,7 +72,7 @@ const Email = ({
           <SectionTitle>Pagamento</SectionTitle>
           <RowValue label="Valor" value={valor ?? "—"} />
           <RowValue label="Método" value={METODOS[metodo ?? ""] ?? metodo ?? "—"} />
-          <RowValue label="Referência ifthenpay" value={referencia ?? "—"} />
+          <RowValue label="Referência do pedido" value={referencia ?? "—"} />
           <RowValue label="Pago em" value={pagoEm ?? "—"} />
         </Section>
 
