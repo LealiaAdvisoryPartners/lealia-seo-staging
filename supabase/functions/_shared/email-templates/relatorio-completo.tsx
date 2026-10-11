@@ -4,7 +4,6 @@ import { dict, type Lang } from "./relatorio-completo.copy.ts";
 import {
   Body,
   Container,
-  CtaCard,
   EmailHeader,
   FooterContact,
   Head,
@@ -12,14 +11,15 @@ import {
   Html,
   PrimaryAction,
   Preview,
+  SupportNote,
   Text,
   bodyText,
   container,
   footerDisclaimer,
-  headerDescription,
   hr,
   main,
-  text,
+  MUTED,
+  FONT,
 } from "./ui.tsx";
 
 interface Props {
@@ -46,37 +46,29 @@ const Email = ({
   return (
     <Html lang={lang} dir="ltr">
       <Head />
-
       <Preview>{t.preview(nome)}</Preview>
-
       <Body style={main}>
         <Container style={container}>
-          <EmailHeader
-            eyebrowText={t.eyebrow}
-            heading={t.heading}
-            descriptionStyle={headerDescription}
-            description={
-              <>
-                {t.greeting(nome)}
-                {empresa ? t.concludedFrom : "."}
-                {empresa && <strong>{empresa}</strong>}
-                {empresa && "."}
-              </>
-            }
-          />
+          <EmailHeader eyebrowText={t.eyebrow} heading={t.heading} description={t.greeting(nome)} />
 
-          <Text style={bodyText}>{t.bodyIntro}</Text>
+          <Text style={bodyText}>
+            {t.intro}
+            {empresa && <>{t.of}<strong>{empresa}</strong></>}
+            {t.ready}
+          </Text>
 
           {relatorioUrl && <PrimaryAction href={relatorioUrl} label={t.reportLinkLabel} />}
 
-          <CtaCard eyebrowText={t.ctaEyebrow} title={t.ctaTitle} href={calendlyUrl} buttonLabel={t.ctaButton} />
+          {valor && (
+            <Text style={{ margin: "10px 32px 0 32px", textAlign: "center" as const, color: MUTED, fontSize: "12px", lineHeight: "18px", fontFamily: FONT }}>
+              {t.recibo(valor, referencia)}
+            </Text>
+          )}
+
+          <SupportNote text={t.meetingNote} href={calendlyUrl} linkLabel={t.meetingLink} />
 
           <Hr style={hr} />
-
-          {valor && referencia && <Text style={text}>{t.recibo(valor, referencia)}</Text>}
-
           <Text style={footerDisclaimer}>{t.disclaimer}</Text>
-
           <FooterContact />
         </Container>
       </Body>
@@ -86,16 +78,12 @@ const Email = ({
 
 export const template = {
   component: Email,
-
   // deno-lint-ignore no-explicit-any
   subject: (data: Record<string, any>) => {
-    const lang: Lang = data["lang"] ?? "pt";
-    const t = dict[lang] ?? dict.pt;
+    const t = dict[(data["lang"] as Lang) ?? "pt"] ?? dict.pt;
     return data["empresa"] ? t.subjectWithCompany(data["empresa"]) : t.subjectWithoutCompany;
   },
-
   displayName: "Relatório completo (pago)",
-
   previewData: {
     nome: "Duarte Pereira",
     empresa: "Empresa Exemplo, Lda.",
