@@ -4,24 +4,19 @@ import { dict, type Lang } from "./pagamento-confirmado.copy.ts";
 import {
   Body,
   Container,
-  EditorialBlock,
   EmailHeader,
   FooterContact,
   Head,
   Hr,
   Html,
-  Link,
   Preview,
-  RowValue,
-  Section,
   Text,
   bodyText,
   container,
   footerDisclaimer,
   hr,
   main,
-  reportLink,
-  ctaEyebrow,
+  MUTED,
 } from "./ui.tsx";
 
 interface Props {
@@ -35,14 +30,8 @@ interface Props {
   lang?: Lang;
 }
 
-const Email = ({ nome, empresa, dataEntrega, valor, metodo, referencia, pagoEm, lang = "pt" }: Props) => {
+const Email = ({ nome, empresa, valor = "299,00 €", referencia, lang = "pt" }: Props) => {
   const t = dict[lang] ?? dict.pt;
-  const linhas: [string, string | undefined][] = [
-    [t.valor, valor],
-    [t.metodo, metodo],
-    [t.referencia, referencia],
-    [t.data, pagoEm],
-  ];
 
   return (
     <Html lang={lang} dir="ltr">
@@ -50,31 +39,19 @@ const Email = ({ nome, empresa, dataEntrega, valor, metodo, referencia, pagoEm, 
       <Preview>{t.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
-          <EmailHeader
-            eyebrowText={t.eyebrow}
-            heading={t.heading}
-            description={
-              <>
-                {t.greeting(nome)}
-                {empresa ? t.about : "."}
-                {empresa && <strong>{empresa}</strong>}
-                {empresa && "."}
-              </>
-            }
-          />
-
-          <Text style={bodyText}>{t.body}</Text>
-
-          <EditorialBlock eyebrowText={t.deliveryEyebrow} title={t.deliveryTitle} body={t.deliveryBody} />
-
-          <Section style={{ padding: "20px 32px 8px 32px" }}>
-            <Text style={{ ...ctaEyebrow, margin: "0 0 8px 0" }}>{t.receiptEyebrow}</Text>
-            {linhas.filter(([, v]) => v).map(([l, v]) => <RowValue key={l} label={l} value={v!} />)}
-          </Section>
+          <EmailHeader eyebrowText={t.eyebrow} heading={t.heading} description={t.greeting(nome)} />
 
           <Text style={bodyText}>
-            {t.partnersNote}{" "}
-            <Link href="mailto:valuations@lealiaap.com" style={reportLink}>valuations@lealiaap.com</Link>.
+            {t.confirm(valor, referencia)}
+            {empresa ? <>{t.of}<strong>{empresa}</strong>.</> : "."}
+          </Text>
+
+          <Text style={bodyText}>{t.next}</Text>
+
+          <Text style={bodyText}>{t.invoice}</Text>
+
+          <Text style={{ ...bodyText, color: MUTED, fontSize: "13px", lineHeight: "21px", margin: "20px 32px 24px 32px" }}>
+            {t.note}
           </Text>
 
           <Hr style={hr} />
@@ -93,15 +70,12 @@ export const template = {
     const t = dict[(data["lang"] as Lang) ?? "pt"] ?? dict.pt;
     return data["empresa"] ? t.subjectWithCompany(data["empresa"]) : t.subjectWithoutCompany;
   },
-  displayName: "Pagamento confirmado (entrega agendada)",
+  displayName: "Pagamento confirmado",
   previewData: {
     nome: "Duarte Pereira",
     empresa: "Empresa Exemplo, Lda.",
-    dataEntrega: "segunda-feira, 28 de setembro de 2026",
     valor: "299,00 €",
-    metodo: "Cartão",
     referencia: "LP7KQ2M4X9AB",
-    pagoEm: "26/09/2026 14:31",
     lang: "pt",
   },
 } satisfies TemplateEntry;

@@ -1,76 +1,60 @@
-// Textos multilingues (PT/EN/ES) do e-mail de pagamento confirmado antes da data de entrega.
+// Textos multilingues (PT/EN/ES) do e-mail de pagamento confirmado antes da entrega.
 
 export type Lang = "pt" | "en" | "es";
+
+const ref = (r?: string) => (r ? ` (ref. ${r})` : "");
 
 // deno-lint-ignore no-explicit-any
 export const dict = {
   pt: {
-    preview: "Pagamento confirmado. O relatório completo será enviado assim que possível.",
+    preview: "Pagamento confirmado. O relatório completo está em elaboração.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
-    heading: "Pagamento confirmado — relatório em elaboração",
-    greeting: (nome: string) => `Olá ${nome}`,
-    about: ", confirmamos a receção do pagamento do relatório completo de avaliação da ",
-    body: "A nossa equipa está a consolidar o modelo financeiro e o relatório completo da empresa.",
-    deliveryEyebrow: "PRÓXIMOS PASSOS",
-    deliveryTitle: "A nossa equipa enviará o relatório assim que possível",
-    deliveryBody:
-      "Receberá por e-mail o link pessoal para o relatório completo (14 páginas). Não é necessária qualquer ação da sua parte.",
-    receiptEyebrow: "DETALHES DO PAGAMENTO",
-    valor: "Valor",
-    metodo: "Método",
-    referencia: "Referência",
-    data: "Data",
-    partnersNote:
-      "Caso pretenda partilhar entretanto informação adicional sobre o negócio, pode responder a este e-mail ou escrever para",
+    heading: "Pagamento confirmado",
+    greeting: (nome: string) => `Olá ${nome}.`,
+    confirm: (valor: string, referencia?: string) =>
+      `Confirmamos a receção do pagamento de ${valor}${ref(referencia)} relativo ao Relatório Completo de Avaliação`,
+    of: " da ",
+    next:
+      "A nossa equipa está a consolidar as projeções financeiras, a análise de sensibilidades e o plano de preparação para o mercado. Assim que concluído, receberá o link de acesso por esta via.",
+    invoice: "A fatura será enviada para este e-mail no prazo máximo de 3 dias úteis.",
+    note: "Caso pretenda partilhar dados ou documentação adicional entretanto, basta responder a esta mensagem.",
     disclaimer:
       "O relatório preparado constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos.",
-    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Pagamento confirmado — relatório em elaboração`,
-    subjectWithoutCompany: "Lealia | Pagamento confirmado — relatório em elaboração",
+    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Pagamento confirmado`,
+    subjectWithoutCompany: "Lealia | Pagamento confirmado",
   },
   en: {
-    preview: "Payment confirmed. Your full report will be sent as soon as possible.",
+    preview: "Payment confirmed. Your full report is in preparation.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
-    heading: "Payment confirmed — report in preparation",
-    greeting: (nome: string) => `Hello ${nome}`,
-    about: ", we confirm receipt of your payment for the full valuation report of ",
-    body: "Our team is consolidating the financial model and the full report for the company.",
-    deliveryEyebrow: "NEXT STEPS",
-    deliveryTitle: "Our team will send the report as soon as possible",
-    deliveryBody:
-      "You will receive, by email, your personal link to the full report (14 pages). No action is required on your part.",
-    receiptEyebrow: "PAYMENT DETAILS",
-    valor: "Amount",
-    metodo: "Method",
-    referencia: "Reference",
-    data: "Date",
-    partnersNote:
-      "Should you wish to share additional information about the business in the meantime, simply reply to this email or write to",
+    heading: "Payment confirmed",
+    greeting: (nome: string) => `Hello ${nome}.`,
+    confirm: (valor: string, referencia?: string) =>
+      `We confirm receipt of your payment of ${valor}${ref(referencia)} for the Full Valuation Report`,
+    of: " of ",
+    next:
+      "Our team is consolidating the financial projections, the sensitivity analysis and the market-readiness plan. Once complete, you will receive your access link by email.",
+    invoice: "The invoice will be sent to this email address within 3 business days.",
+    note: "Should you wish to share additional data or documentation in the meantime, simply reply to this message.",
     disclaimer:
       "This report constitutes an indicative estimate of the company's valuation, generated based on the information provided by the user, and does not constitute financial advice, a contractual proposal, an investment recommendation, or a formal valuation for legal, tax or accounting purposes.",
-    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Payment confirmed — report in preparation`,
-    subjectWithoutCompany: "Lealia | Payment confirmed — report in preparation",
+    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Payment confirmed`,
+    subjectWithoutCompany: "Lealia | Payment confirmed",
   },
   es: {
-    preview: "Pago confirmado. El informe completo se enviará lo antes posible.",
+    preview: "Pago confirmado. El informe completo está en elaboración.",
     eyebrow: "LEALIA ADVISORY PARTNERS",
-    heading: "Pago confirmado — informe en elaboración",
-    greeting: (nome: string) => `Hola ${nome}`,
-    about: ", confirmamos la recepción del pago del informe completo de valoración de ",
-    body: "Nuestro equipo está consolidando el modelo financiero y el informe completo de la empresa.",
-    deliveryEyebrow: "PRÓXIMOS PASOS",
-    deliveryTitle: "Nuestro equipo enviará el informe lo antes posible",
-    deliveryBody:
-      "Recibirá por correo electrónico el enlace personal al informe completo (14 páginas). No es necesaria ninguna acción por su parte.",
-    receiptEyebrow: "DETALLES DEL PAGO",
-    valor: "Importe",
-    metodo: "Método",
-    referencia: "Referencia",
-    data: "Fecha",
-    partnersNote:
-      "Si desea compartir mientras tanto información adicional sobre el negocio, puede responder a este correo o escribir a",
+    heading: "Pago confirmado",
+    greeting: (nome: string) => `Hola ${nome}.`,
+    confirm: (valor: string, referencia?: string) =>
+      `Confirmamos la recepción del pago de ${valor}${ref(referencia)} relativo al Informe Completo de Valoración`,
+    of: " de ",
+    next:
+      "Nuestro equipo está consolidando las proyecciones financieras, el análisis de sensibilidades y el plan de preparación para el mercado. Una vez concluido, recibirá el enlace de acceso por esta vía.",
+    invoice: "La factura se enviará a este correo electrónico en un plazo máximo de 3 días hábiles.",
+    note: "Si desea compartir datos o documentación adicional mientras tanto, basta con responder a este mensaje.",
     disclaimer:
       "El presente informe constituye una estimación indicativa de la valoración de la empresa, generada a partir de la información facilitada por el usuario, y no constituye asesoramiento financiero, propuesta contractual, recomendación de inversión ni valoración formal a efectos legales, fiscales o contables.",
-    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Pago confirmado — informe en elaboración`,
-    subjectWithoutCompany: "Lealia | Pago confirmado — informe en elaboración",
+    subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Pago confirmado`,
+    subjectWithoutCompany: "Lealia | Pago confirmado",
   },
 } satisfies Record<Lang, Record<string, any>>;
