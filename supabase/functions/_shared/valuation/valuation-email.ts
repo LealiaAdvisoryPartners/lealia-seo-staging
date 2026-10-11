@@ -128,7 +128,7 @@ export async function enviarResumoAvaliacao(
         relatorioUrl: relatorioUrl ?? null,
         pdfUrl: pdfUrl ?? null,
         upgradeUrl: urlCompraRelatorio(lead),
-        lang: idiomaDe(lead.idioma),
+        lang: idiomaDe(lead.relatorio_dados?.lang ?? lead.idioma),
       },
     });
 
