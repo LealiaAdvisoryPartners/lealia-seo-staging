@@ -129,12 +129,11 @@ export async function confirmarPagamento(
     const linha = lead as Record<string, unknown>;
     const libertacao = linha["email_relatorio_agendado_para"] as string | null;
     // Pago antes da hora de libertação (n+2 às 08:53 Lisboa): entrega fica para o job.
-    if (!libertacao || new Date(libertacao) <= new Date()) {
-      await entregarRelatorioCompleto(admin, linha, pagamento as Record<string, unknown>);
-    } else {
-      const pago = { ...pagamento, paid_at: new Date().toISOString() } as Record<string, unknown>;
-      await enviarPagamentoConfirmado(linha, pago, new Date(libertacao));
-    }
+    // Pago depois: comprovativo de pagamento e, logo a seguir, a entrega do relatório.
+    const pago = { ...pagamento, paid_at: agora } as Record<string, unknown>;
+    const disponivel = !libertacao || new Date(libertacao) <= new Date();
+    await enviarPagamentoConfirmado(linha, pago, libertacao ? new Date(libertacao) : new Date(), disponivel);
+    if (disponivel) await entregarRelatorioCompleto(admin, linha, pago);
     await notificarEquipaPagamento(linha, pagamento as Record<string, unknown>, urlRelatorioCompleto(linha));
   }
 
