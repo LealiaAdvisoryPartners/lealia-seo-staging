@@ -226,7 +226,12 @@ const METODOS: Record<IdiomaLead, Record<string, string>> = {
 const LOCALE: Record<IdiomaLead, string> = { pt: "pt-PT", en: "en-GB", es: "es-ES" };
 
 /** Confirma o pagamento feito antes da data de entrega e indica quando chega o relatório. */
-export async function enviarPagamentoConfirmado(lead: Lead, pagamento: Lead, entrega: Date): Promise<boolean> {
+export async function enviarPagamentoConfirmado(
+  lead: Lead,
+  pagamento: Lead,
+  entrega: Date,
+  relatorioDisponivel = false,
+): Promise<boolean> {
   const idioma = idiomaDe(lead.idioma);
   const fmt = (d: Date, o: Intl.DateTimeFormatOptions) =>
     new Intl.DateTimeFormat(LOCALE[idioma], { timeZone: "Europe/Lisbon", ...o }).format(d);
@@ -241,6 +246,7 @@ export async function enviarPagamentoConfirmado(lead: Lead, pagamento: Lead, ent
         metodo: METODOS[idioma][String(pagamento.method)] ?? pagamento.method,
         referencia: pagamento.ifthenpay_order_id,
         pagoEm: fmt(new Date(pagamento.paid_at ?? Date.now()), { dateStyle: "short", timeStyle: "short" }),
+        relatorioDisponivel,
         lang: idioma,
       },
     });

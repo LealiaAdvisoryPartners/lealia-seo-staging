@@ -27,16 +27,17 @@ interface Props {
   metodo?: string;
   referencia?: string;
   pagoEm?: string;
+  relatorioDisponivel?: boolean;
   lang?: Lang;
 }
 
-const Email = ({ nome, empresa, valor = "299,00 €", referencia, lang = "pt" }: Props) => {
+const Email = ({ nome, empresa, valor = "299,00 €", referencia, relatorioDisponivel = false, lang = "pt" }: Props) => {
   const t = dict[lang] ?? dict.pt;
 
   return (
     <Html lang={lang} dir="ltr">
       <Head />
-      <Preview>{t.preview}</Preview>
+      <Preview>{relatorioDisponivel ? t.previewReady : t.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
           <EmailHeader eyebrowText={t.eyebrow} heading={t.heading} description={t.greeting(nome)} />
@@ -46,12 +47,12 @@ const Email = ({ nome, empresa, valor = "299,00 €", referencia, lang = "pt" }:
             {empresa ? <>{t.of}<strong>{empresa}</strong>.</> : "."}
           </Text>
 
-          <Text style={bodyText}>{t.next}</Text>
+          <Text style={bodyText}>{relatorioDisponivel ? t.nextReady : t.next}</Text>
 
           <Text style={bodyText}>{t.invoice}</Text>
 
           <Text style={{ ...bodyText, color: MUTED, fontSize: "13px", lineHeight: "21px", margin: "20px 32px 24px 32px" }}>
-            {t.note}
+            {relatorioDisponivel ? t.noteReady : t.note}
           </Text>
 
           <Hr style={hr} />
