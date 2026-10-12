@@ -1966,7 +1966,7 @@
 
 .report-dcf .report-dcf-map th:first-child,
 .report-dcf .report-dcf-map td:first-child {
-  width: 24mm;
+  width: 28mm;
 }
 
 .report-dcf-head-hidden {
@@ -2043,6 +2043,10 @@
 
 /* Sample report viewer: block printing while open */
 @media print {
-  body:has(.sample-viewer) > * { display: none !important; }
-  body:has(.sample-viewer) { background: #fff !important; }
+  body:has(.sample-viewer) > * {
+    display: none !important;
+  }
+  body:has(.sample-viewer) {
+    background: #fff !important;
+  }
 }
