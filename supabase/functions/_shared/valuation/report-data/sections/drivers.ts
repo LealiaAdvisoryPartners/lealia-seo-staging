@@ -1,3 +1,4 @@
+import { traduzirValorFormulario } from "../translate.ts";
 // Drivers de valor (apenas fatores efetivamente favoráveis) e recomendações
 // derivadas deles.
 import type { Ctx, Driver } from "../types.ts";
@@ -48,11 +49,11 @@ export function buildDrivers(ctx: Ctx): { drivers: Driver[]; recomendacoes: stri
     ],
     [
       multiUnidade,
-      { driver: L.drivers.modeloReplicavel.driver, descricao: L.drivers.modeloReplicavel.descricao((lead.unidades ?? "").toLowerCase()) },
+      { driver: L.drivers.modeloReplicavel.driver, descricao: L.drivers.modeloReplicavel.descricao((traduzirValorFormulario(lead.unidades, lang) ?? "").toLowerCase()) },
     ],
     [
       geografiaInternacional,
-      { driver: L.drivers.exposicaoInternacional.driver, descricao: L.drivers.exposicaoInternacional.descricao(lead.geografia_clientes ?? "") },
+      { driver: L.drivers.exposicaoInternacional.driver, descricao: L.drivers.exposicaoInternacional.descricao(traduzirValorFormulario(lead.geografia_clientes, lang) ?? "") },
     ],
     [
       posicaoLiquida !== null && posicaoLiquida > 0,
@@ -66,7 +67,7 @@ export function buildDrivers(ctx: Ctx): { drivers: Driver[]; recomendacoes: stri
       imovelAvaliadoExternamente,
       {
         driver: L.drivers.imovelValorizado.driver,
-        descricao: L.drivers.imovelValorizado.descricao((lead.metodo_avaliacao_imovel ?? "").toLowerCase(), eur(lead.valorizacao_imovel)),
+        descricao: L.drivers.imovelValorizado.descricao((traduzirValorFormulario(lead.metodo_avaliacao_imovel, lang) ?? "").toLowerCase(), eur(lead.valorizacao_imovel)),
       },
     ],
   ];
