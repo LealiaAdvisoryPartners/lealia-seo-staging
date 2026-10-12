@@ -10,7 +10,7 @@ export function Slide12Plano({ d, lang }: { d: ReportData; lang: ReportLang }) {
   return (
     <Page numero={12} titulo={dict.p12.titulo} className="report-preparation" lang={lang}>
       <H>{dict.p12.planoPreparacao}</H>
-      <div className="report-note report-disclaimer-inline">{dict.p12.notaSecao}</div>
+      <div className="report-note report-disclaimer-inline">{(() => { const t = dict.p12.notaSecao; const i = t.lastIndexOf(". "); return i < 0 ? t : <>{t.slice(0, i + 1)} <strong>{t.slice(i + 2)}</strong></>; })()}</div>
       <table className="report-table report-table-text">
         <thead>
           <tr>

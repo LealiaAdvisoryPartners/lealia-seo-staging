@@ -81,7 +81,7 @@ export function traduzirAjuste(a: Ajuste, lang: ReportLang): { label: string; de
         "Não indicada": A.geografia.naoIndicada,
         "Equilíbrio nacional/internacional": A.geografia.equilibrio,
       };
-      return { label: A.geografia.label, detalhe: map[a.detalhe] ?? a.detalhe };
+      return { label: A.geografia.label, detalhe: map[a.detalhe] ?? traduzirValorFormulario(a.detalhe, lang) ?? a.detalhe };
     }
     case "Dependência do acionista (faturação)": {
       const map: Record<string, string> = {

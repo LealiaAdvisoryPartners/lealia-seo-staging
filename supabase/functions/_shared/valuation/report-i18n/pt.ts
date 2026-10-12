@@ -581,7 +581,7 @@ export const pt = {
     lockedCta: "Adquirir Relatório Completo · 299 €",
 
     cover: {
-      titulo: "Avaliação preliminar",
+      titulo: "Relatório de Avaliação Indicativa",
       preparadoPara: "Preparado para",
       data: "Data",
     },
@@ -596,7 +596,7 @@ export const pt = {
       multiploImplicito: "Múltiplo implícito",
       posicaoLiquida: "Posição Líquida",
       posicaoLiquidaHint: "caixa / (dívida)",
-      completudeInformacao: "Completude da informação",
+      completudeInformacao: "Valor do imóvel no perímetro",
       metodologia: "Metodologia de avaliação",
       metodo1Titulo: "Determinação do EBITDA normalizado",
       metodo1: (ebitda: string) =>

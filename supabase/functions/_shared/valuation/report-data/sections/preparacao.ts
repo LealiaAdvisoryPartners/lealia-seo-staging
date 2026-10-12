@@ -1,6 +1,7 @@
 // Plano de preparação priorizado, limitações da análise, implicações da
 // estrutura/participação, mensagem ao acionista e resumo textual.
 import { formatMultipleLang } from "../../report-i18n/index.ts";
+import { traduzirValorFormulario } from "../translate.ts";
 import type { Ctx } from "../types.ts";
 
 type Etapa = {
@@ -26,7 +27,7 @@ export function buildPreparacao(ctx: Ctx) {
         multMin: formatMultipleLang(r.multiplo_ajustado_min, lang),
         multMax: formatMultipleLang(r.multiplo_ajustado_max, lang),
         ano,
-        tipoPeriodo: lead.tipo_periodo ?? "",
+        tipoPeriodo: traduzirValorFormulario(lead.tipo_periodo, lang) ?? "",
         fat1: eur(fat1),
         margem: margem_ebitda_ajustada !== null ? pct1(margem_ebitda_ajustada) : null,
       })
