@@ -205,7 +205,7 @@ const REF_DEFAULT: RefSetor = {
 /** Taxa de imposto sobre o rendimento aplicável por país e ano de análise. */
 const CIT_PORTUGAL: Record<number, number> = { 2025: 0.2, 2026: 0.19, 2027: 0.18, 2028: 0.17 };
 
-function citRate(pais: string, ano: number): { taxa: number; nota: string } {
+function citRate(pais: string, ano: number, receita: number): { taxa: number; nota: string } {
   if (pais === "Portugal") {
     const anos = Object.keys(CIT_PORTUGAL).map(Number);
     const alvo = Math.min(Math.max(ano, Math.min(...anos)), Math.max(...anos));
@@ -215,6 +215,9 @@ function citRate(pais: string, ano: number): { taxa: number; nota: string } {
     };
   }
   if (pais === "Espanha") {
+    if (receita < 1_000_000) {
+      return { taxa: 0.23, nota: "Taxa reduzida do Impuesto sobre Sociedades em Espanha para faturação inferior a 1 M€ (art.º 29.º LIS)." };
+    }
     return { taxa: 0.25, nota: "Taxa geral do Impuesto sobre Sociedades em Espanha." };
   }
   return {
@@ -317,7 +320,7 @@ export function calcularDCF(input: DcfInput): DcfResult {
   // Sem qualquer pressuposto de fundo de maneio: o modelo não projeta Δ NWC.
   const nwc_pct_receita = 0;
 
-  const { taxa: cit, nota: cit_nota } = citRate(input.pais, input.ano_referencia);
+  const { taxa: cit, nota: cit_nota } = citRate(input.pais, input.ano_referencia, receitaBase);
 
   const gAno = (t: number) =>
     t >= ANO_ESTABILIZACAO
