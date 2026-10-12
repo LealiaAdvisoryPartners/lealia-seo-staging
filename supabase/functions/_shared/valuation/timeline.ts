@@ -99,6 +99,16 @@ const FASES_EN: Fase[] = [
   },
   {
     numero: "03",
+    titulo: "NBO/LOI Negotiation and Signing",
+    duracao: "~2-3 weeks",
+    etapas: [
+      "Benchmarking of indicative offers and selection of shortlisted investors",
+      "Negotiation of key terms (price, structure, conditions and timetable)",
+      "Signing of the NBO/LOI, including exclusivity where applicable",
+    ],
+  },
+  {
+    numero: "04",
     titulo: "Due Diligence",
     duracao: "~6-8 weeks",
     etapas: [
@@ -109,7 +119,7 @@ const FASES_EN: Fase[] = [
     ],
   },
   {
-    numero: "04",
+    numero: "05",
     titulo: "Transaction Documents",
     duracao: "~5-6 weeks",
     etapas: [
@@ -119,7 +129,7 @@ const FASES_EN: Fase[] = [
     ],
   },
   {
-    numero: "05",
+    numero: "06",
     titulo: "Closing",
     duracao: "~4-5 weeks",
     etapas: [
