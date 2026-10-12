@@ -19,7 +19,7 @@ export const dict = {
     meetingNote: "Gostaria de enquadrar as conclusões com os sócios da Lealia?",
     meetingLink: "Agendar discussão estratégica →",
     disclaimer:
-      "O relatório preparado constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos.",
+      "O relatório preparado constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos.",
     subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Relatório Completo de Avaliação`,
     subjectWithoutCompany: "Lealia | Relatório Completo de Avaliação",
   },
@@ -36,7 +36,7 @@ export const dict = {
     meetingNote: "Would you like to discuss the findings with Lealia's partners?",
     meetingLink: "Schedule a strategic discussion →",
     disclaimer:
-      "This report constitutes an indicative estimate of the company's valuation, generated based on the information provided by the user, and does not constitute financial advice, a contractual proposal, an investment recommendation, or a formal valuation for legal, tax or accounting purposes.",
+      "This report constitutes an indicative estimate of the company's valuation, generated based on the information provided, and does not constitute financial advice, a contractual proposal, an investment recommendation, or a formal valuation for legal, tax or accounting purposes.",
     subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Full Valuation Report`,
     subjectWithoutCompany: "Lealia | Full Valuation Report",
   },
@@ -53,7 +53,7 @@ export const dict = {
     meetingNote: "¿Desea analizar las conclusiones con los socios de Lealia?",
     meetingLink: "Agendar discusión estratégica →",
     disclaimer:
-      "El presente informe constituye una estimación indicativa de la valoración de la empresa, generada a partir de la información facilitada por el usuario, y no constituye asesoramiento financiero, propuesta contractual, recomendación de inversión ni valoración formal a efectos legales, fiscales o contables.",
+      "El presente informe constituye una estimación indicativa de la valoración de la empresa, generada a partir de la información facilitada, y no constituye asesoramiento financiero, propuesta contractual, recomendación de inversión ni valoración formal a efectos legales, fiscales o contables.",
     subjectWithCompany: (empresa: string) => `${empresa} <> Lealia | Informe Completo de Valoración`,
     subjectWithoutCompany: "Lealia | Informe Completo de Valoración",
   },

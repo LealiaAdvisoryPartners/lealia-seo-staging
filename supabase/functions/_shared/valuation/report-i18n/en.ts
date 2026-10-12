@@ -464,7 +464,7 @@ export const en: typeof pt = {
 
   doc: {
     disclaimer:
-      "This report constitutes an indicative estimate of the company's valuation, generated on the basis of information provided by the user. It does not constitute financial advice, a contractual proposal, an investment recommendation or a formal valuation for legal, tax or accounting purposes; the values presented depend on the quality and accuracy of the data entered and on market conditions prevailing on the date this document was prepared.",
+      "This report constitutes an indicative estimate of the company's valuation, generated on the basis of information provided. It does not constitute financial advice, a contractual proposal, an investment recommendation or a formal valuation for legal, tax or accounting purposes; the values presented depend on the quality and accuracy of the data entered and on market conditions prevailing on the date this document was prepared.",
     footer: (empresa: string) =>
       `Lealia Advisory Partners · Indicative Valuation Report${empresa ? ` for ${empresa}` : ""}`,
     efeito: { neutro: "Neutral", positivo: "Positive", negativo: "Negative" },
@@ -637,7 +637,7 @@ export const en: typeof pt = {
       hTitulo: "Scope and limitations of this report",
       naturezaDocumento: "Nature of the document",
       natureza1:
-        "This is a preliminary indicative valuation, prepared exclusively from information provided by the user, without independent verification, audit or review of the data.",
+        "This is an indicative estimate of the company's valuation, prepared exclusively from information provided, without independent verification, audit or review of the data.",
       natureza2:
         "It does not constitute financial, tax, accounting or legal advice, nor an investment or divestment recommendation.",
       natureza3:

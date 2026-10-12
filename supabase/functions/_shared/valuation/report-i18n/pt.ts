@@ -471,7 +471,7 @@ export const pt = {
 
   doc: {
     disclaimer:
-      "O presente relatório constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração deste documento.",
+      "O presente relatório constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração deste documento.",
     footer: (empresa: string) =>
       `Lealia Advisory Partners · Relatório de avaliação indicativa${empresa ? ` para ${empresa}` : ""}`,
     efeito: { neutro: "Neutro", positivo: "Positivo", negativo: "Negativo" },
@@ -645,7 +645,7 @@ export const pt = {
       hTitulo: "Âmbito e limitações deste relatório",
       naturezaDocumento: "Natureza do documento",
       natureza1:
-        "Trata-se de uma avaliação indicativa preliminar, elaborada exclusivamente a partir da informação fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.",
+        "Trata-se de uma estimativa indicativa da avaliação da empresa, elaborada exclusivamente a partir da informação fornecida pelo utilizador, sem verificação independente, auditoria ou revisão dos dados.",
       natureza2:
         "Não constitui aconselhamento financeiro, fiscal, contabilístico ou jurídico, nem uma recomendação de investimento ou desinvestimento.",
       natureza3:

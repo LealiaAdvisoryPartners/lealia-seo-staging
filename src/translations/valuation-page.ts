@@ -235,7 +235,7 @@ export const pageCopy: Record<Language, PageCopy> = {
       plusRealEstate: "Mais: imóvel no perímetro",
       estimatedEquityValue: "Equity Value estimado",
       disclaimer:
-        "O relatório preparado constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida pelo utilizador, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores nele apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração do documento.",
+        "O relatório preparado constitui uma estimativa indicativa da avaliação da empresa, gerada com base na informação fornecida, não configurando aconselhamento financeiro, proposta contratual, recomendação de investimento ou avaliação formal para efeitos legais, fiscais ou contabilísticos; os valores nele apresentados dependem da qualidade e exatidão dos dados introduzidos e das condições de mercado vigentes à data de elaboração do documento.",
       ctaSample: "Ver exemplo de relatório completo",
       ctaSchedule: "Agendar reunião",
     },
@@ -396,7 +396,7 @@ export const pageCopy: Record<Language, PageCopy> = {
       plusRealEstate: "Plus: real estate within the perimeter",
       estimatedEquityValue: "Estimated Equity Value",
       disclaimer:
-        "This report constitutes an indicative estimate of the company's valuation, generated on the basis of the information provided by the user. It does not constitute financial advice, a contractual proposal, an investment recommendation, or a formal valuation for legal, tax or accounting purposes; the figures presented depend on the quality and accuracy of the data entered and on market conditions prevailing at the time the document was prepared.",
+        "This report constitutes an indicative estimate of the company's valuation, generated on the basis of the information provided. It does not constitute financial advice, a contractual proposal, an investment recommendation, or a formal valuation for legal, tax or accounting purposes; the figures presented depend on the quality and accuracy of the data entered and on market conditions prevailing at the time the document was prepared.",
       ctaSample: "View a sample of the full report",
       ctaSchedule: "Schedule a meeting",
     },
@@ -558,7 +558,7 @@ export const pageCopy: Record<Language, PageCopy> = {
       plusRealEstate: "Más: inmueble dentro del perímetro",
       estimatedEquityValue: "Equity Value estimado",
       disclaimer:
-        "El informe elaborado constituye una estimación indicativa de la valoración de la empresa, generada a partir de la información facilitada por el usuario, y no constituye asesoramiento financiero, propuesta contractual, recomendación de inversión ni valoración formal a efectos legales, fiscales o contables; los valores presentados dependen de la calidad y exactitud de los datos introducidos y de las condiciones de mercado vigentes en la fecha de elaboración del documento.",
+        "El informe elaborado constituye una estimación indicativa de la valoración de la empresa, generada a partir de la información facilitada, y no constituye asesoramiento financiero, propuesta contractual, recomendación de inversión ni valoración formal a efectos legales, fiscales o contables; los valores presentados dependen de la calidad y exactitud de los datos introducidos y de las condiciones de mercado vigentes en la fecha de elaboración del documento.",
       ctaSample: "Ver un ejemplo del informe completo",
       ctaSchedule: "Programar reunión",
     },
