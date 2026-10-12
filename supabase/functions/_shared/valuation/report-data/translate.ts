@@ -235,10 +235,39 @@ export function traduzirDcf(dcf: Extract<DcfResult, { ok: true }>, lang: ReportL
   return {
     ...dcf,
     matrizes: dcf.matrizes.map((m) => ({ ...m, titulo: tr(m.titulo), eixo_x_label: tr(m.eixo_x_label), eixo_y_label: tr(m.eixo_y_label), colunas: m.colunas.map((c) => ({ ...c, label: lang === "en" ? c.label.replace(",", ".") : c.label })), linhas: m.linhas.map((l) => ({ ...l, label: lang === "en" ? l.label.replace(",", ".") : l.label })) })),
-    pressupostos: dcf.pressupostos.map((p) => ({ ...p, label: tr(p.label), valor: tr(p.valor).replace(lang === "en" ? " da receita" : " da receita", lang === "en" ? " of revenue" : " de los ingresos"), origem: tr(p.origem) as typeof p.origem, nota: traduzirNota(p.nota) })),
-    fontes: dcf.fontes.map((f) => ({ parametro: tr(f.parametro), fonte: tr(f.fonte) })),
-    cit_nota: tr(dcf.cit_nota),
+    pressupostos: dcf.pressupostos.map((p) => ({ ...p, label: tr(p.label), valor: tr(p.valor).replace(lang === "en" ? " da receita" : " da receita", lang === "en" ? " of revenue" : " de los ingresos"), origem: tr(p.origem) as typeof p.origem, nota: p.nota ? traduzirNotasDcf(traduzirNota(p.nota) ?? p.nota, lang) : p.nota })),
+    fontes: dcf.fontes.map((f) => ({ parametro: tr(f.parametro), fonte: traduzirNotasDcf(tr(f.fonte), lang) })),
+    cit_nota: traduzirNotasDcf(tr(dcf.cit_nota), lang),
+    ...(dcf.nota_reconciliacao ? { nota_reconciliacao: traduzirNotasDcf(dcf.nota_reconciliacao, lang) } : {}),
   };
+}
+
+
+/** Traduz notas dinâmicas do DCF (IRC/CIT e reconciliação com múltiplos). */
+export function traduzirNotasDcf(texto: string, lang: ReportLang): string {
+  if (lang === "pt" || !texto) return texto;
+  const en = lang === "en";
+  return texto
+    .replace(/Taxa geral de IRC em Portugal para (\d{4}) \(redução programada até 17% em 2028\)\./g, (_m, a) =>
+      en ? `Standard corporate income tax (IRC) rate in Portugal for ${a} (scheduled reduction to 17% by 2028).` : `Tipo general del IRC en Portugal para ${a} (reducción programada hasta el 17% en 2028).`)
+    .replace("Taxa geral do Impuesto sobre Sociedades em Espanha.", en ? "Standard Corporate Income Tax (Impuesto sobre Sociedades) rate in Spain." : "Tipo general del Impuesto sobre Sociedades en España.")
+    .replace("País não especificado: aplicada uma taxa média de referência da União Europeia. Assumption — deve ser substituída pela taxa efetiva da jurisdição.",
+      en ? "Country not specified: an average European Union reference rate has been applied. Assumption — should be replaced by the jurisdiction's effective rate." : "País no especificado: se aplica un tipo medio de referencia de la Unión Europea. Assumption — debe sustituirse por el tipo efectivo de la jurisdicción.")
+    .replace(/^Taxa geral aplicável em ([^.]+)\. /, (_m, p) => (en ? `Standard rate applicable in ${paisNome(p, lang)}. ` : `Tipo general aplicable en ${paisNome(p, lang)}. `))
+    .replace(/^(Portugal|Espanha|[^·]+) · /, (_m, p) => `${paisNome(p.trim(), lang)} · `)
+    .replace(/O Enterprise Value por DCF situa-se ([\d.,]+ ?%) (acima|abaixo) do valor central obtido por múltiplos de mercado\. A divergência decorre sobretudo dos pressupostos de crescimento e de margem projetados; num contexto transacional, o intervalo relevante é a interseção dos dois métodos\./, (_m, v, d) =>
+      en
+        ? `The DCF Enterprise Value is ${v.replace(",", ".")} ${d === "acima" ? "above" : "below"} the central value obtained from market multiples. The divergence stems mainly from the projected growth and margin assumptions; in a transaction context, the relevant range is the intersection of both methods.`
+        : `El Enterprise Value por DCF se sitúa un ${v} ${d === "acima" ? "por encima" : "por debajo"} del valor central obtenido por múltiplos de mercado. La divergencia se debe principalmente a los supuestos de crecimiento y margen proyectados; en un contexto transaccional, el rango relevante es la intersección de ambos métodos.`)
+    .replace(/O Enterprise Value por DCF é consistente com o valor central obtido por múltiplos de mercado \(desvio de ([\d.,]+ ?%)\)\./, (_m, v) =>
+      en
+        ? `The DCF Enterprise Value is consistent with the central value obtained from market multiples (deviation of ${v.replace(",", ".")}).`
+        : `El Enterprise Value por DCF es coherente con el valor central obtenido por múltiplos de mercado (desviación del ${v}).`);
+}
+
+function paisNome(p: string, lang: ReportLang): string {
+  if (p === "Espanha") return lang === "en" ? "Spain" : "España";
+  return p;
 }
 
 export const DIMENSAO_MAP: Record<string, keyof ReturnType<typeof t>["engine"]["dimensoes"]> = {
