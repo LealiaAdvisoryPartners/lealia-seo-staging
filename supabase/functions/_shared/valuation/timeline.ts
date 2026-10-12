@@ -53,7 +53,7 @@ const FASES_PT: Fase[] = [
     ],
   },
   {
-    numero: "04",
+    numero: "05",
     titulo: "Transaction Documents",
     duracao: "~5-6 semanas",
     etapas: [
@@ -63,7 +63,7 @@ const FASES_PT: Fase[] = [
     ],
   },
   {
-    numero: "05",
+    numero: "06",
     titulo: "Closing",
     duracao: "~4-5 semanas",
     etapas: [
