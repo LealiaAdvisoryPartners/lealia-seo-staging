@@ -6,7 +6,7 @@ import type { Ctx, Driver } from "../types.ts";
 export function buildDrivers(ctx: Ctx): { drivers: Driver[]; recomendacoes: string[] } {
   const { L, r, fmt, fat1, margem_ebitda_ajustada, capexRacio, top5, top1, ebitdaBase, depFat, backlog,
     backlogRacio, geografiaInternacional, multiUnidade, imovelAvaliadoExternamente, posicaoLiquida,
-    lead, flags, historico, aviso_margem_r } = { ...ctx, aviso_margem_r: ctx.r?.aviso_margem };
+    lead, flags, historico, aviso_margem_r, lang } = { ...ctx, aviso_margem_r: ctx.r?.aviso_margem };
   const { eur, pct1 } = fmt;
   const margemFmt = margem_ebitda_ajustada !== null ? pct1(margem_ebitda_ajustada) : null;
 
