@@ -19,7 +19,9 @@ export function gerarOrderId(): string {
 }
 
 async function stripe(caminho: string, corpo?: Record<string, string>): Promise<Record<string, unknown>> {
-  const chave = Deno.env.get("STRIPE_SECRET_KEY");
+  // Modo de teste temporário: se existir uma chave secreta de teste válida, tem prioridade.
+  const teste = Deno.env.get("STRIPE_TEST_API_KEY")?.trim();
+  const chave = teste && /^(sk|rk)_test_/.test(teste) ? teste : Deno.env.get("STRIPE_SECRET_KEY");
   if (!chave) throw new Error("STRIPE_SECRET_KEY não configurada");
   const resposta = await fetch(`${BASE}${caminho}`, {
     method: corpo ? "POST" : "GET",
