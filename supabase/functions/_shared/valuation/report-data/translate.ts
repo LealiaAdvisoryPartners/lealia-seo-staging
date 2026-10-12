@@ -250,6 +250,7 @@ export function traduzirNotasDcf(texto: string, lang: ReportLang): string {
   return texto
     .replace(/Taxa geral de IRC em Portugal para (\d{4}) \(redução programada até 17% em 2028\)\./g, (_m, a) =>
       en ? `Standard corporate income tax (IRC) rate in Portugal for ${a} (scheduled reduction to 17% by 2028).` : `Tipo general del IRC en Portugal para ${a} (reducción programada hasta el 17% en 2028).`)
+    .replace("Taxa reduzida do Impuesto sobre Sociedades em Espanha para faturação inferior a 1 M€ (art.º 29.º LIS).", en ? "Reduced Corporate Income Tax (Impuesto sobre Sociedades) rate in Spain for revenue below €1M (art. 29 LIS)." : "Tipo reducido del Impuesto sobre Sociedades en España para cifra de negocios inferior a 1 M€ (art. 29 LIS).")
     .replace("Taxa geral do Impuesto sobre Sociedades em Espanha.", en ? "Standard Corporate Income Tax (Impuesto sobre Sociedades) rate in Spain." : "Tipo general del Impuesto sobre Sociedades en España.")
     .replace("País não especificado: aplicada uma taxa média de referência da União Europeia. Assumption — deve ser substituída pela taxa efetiva da jurisdição.",
       en ? "Country not specified: an average European Union reference rate has been applied. Assumption — should be replaced by the jurisdiction's effective rate." : "País no especificado: se aplica un tipo medio de referencia de la Unión Europea. Assumption — debe sustituirse por el tipo efectivo de la jurisdicción.")
