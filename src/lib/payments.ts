@@ -42,10 +42,12 @@ export async function criarPagamento(pedido: PedidoPagamento): Promise<RespostaP
   return data as RespostaPagamento;
 }
 
-/** Consulta o estado de um pagamento já iniciado. */
-export async function consultarPagamento(orderId: string): Promise<EstadoPagamento | null> {
+/** Consulta o estado de um pagamento já iniciado e se o relatório completo já está disponível. */
+export async function consultarPagamento(
+  orderId: string,
+): Promise<{ estado: EstadoPagamento; disponivel: boolean } | null> {
   const { data, error } = await supabase.functions.invoke("estado-pagamento", { body: { orderId } });
   if (error) return null;
-  const resposta = data as { ok?: boolean; estado?: EstadoPagamento };
-  return resposta?.estado ?? null;
+  const resposta = data as { ok?: boolean; estado?: EstadoPagamento; disponivel?: boolean };
+  return resposta?.estado ? { estado: resposta.estado, disponivel: !!resposta.disponivel } : null;
 }
