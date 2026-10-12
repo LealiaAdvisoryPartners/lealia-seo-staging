@@ -239,7 +239,7 @@ export const pt = {
     consolidarHistorico: "Consolidar três exercícios de informação financeira reconciliada",
     reconciliarEbitda: "Reconciliar EBITDA reportado e normalizado e documentar os ajustamentos",
     confirmarDivida: "Confirmar dívida total e caixa, depósitos e outros equivalentes disponíveis à data de referência",
-    analisarFundoManeio: "Analisar o fundo de maneio normativo e a sazonalidade do negócio",
+    analisarFundoManeio: "Analisar o fundo de maneio normalisado e a sazonalidade do negócio",
     reduzirDependencia: "Reduzir a dependência do acionista e criar plano de sucessão",
     mapearConcentracao: "Mapear a concentração de clientes e formalizar contratos relevantes",
     separarCapex: "Separar CAPEX de manutenção e de crescimento",
@@ -274,7 +274,7 @@ export const pt = {
   limitacoes: {
     infoDeclarada:
       "A estimativa assenta exclusivamente na informação declarada, sem verificação documental ou auditoria.",
-    fundoManeio: "Não foi realizada análise de fundo de maneio normativo nem de sazonalidade do negócio.",
+    fundoManeio: "Não foi realizada análise de fundo de maneio normalisado nem de sazonalidade do negócio.",
     transacoesComparaveis:
       "Não foram analisadas transações comparáveis específicas nem o apetite atual de investidores para o ativo.",
     historicoInferior: "O histórico financeiro disponível é inferior a três exercícios.",

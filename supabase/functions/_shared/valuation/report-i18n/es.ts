@@ -242,7 +242,7 @@ export const es: typeof pt = {
     reconciliarEbitda: "Conciliar el EBITDA reportado y normalizado y documentar los ajustes",
     confirmarDivida:
       "Confirmar la deuda total y la caja, depósitos y otros equivalentes disponibles en la fecha de referencia",
-    analisarFundoManeio: "Analizar el fondo de maniobra normativo y la estacionalidad del negocio",
+    analisarFundoManeio: "Analizar el capital circulante normalizado y la estacionalidad del negocio",
     reduzirDependencia: "Reducir la dependencia del accionista y crear un plan de sucesión",
     mapearConcentracao: "Mapear la concentración de clientes y formalizar los contratos relevantes",
     separarCapex: "Separar el capex de mantenimiento del de crecimiento",
@@ -277,7 +277,7 @@ export const es: typeof pt = {
   limitacoes: {
     infoDeclarada:
       "La estimación se basa exclusivamente en la información declarada, sin verificación documental ni auditoría.",
-    fundoManeio: "No se realizó un análisis del fondo de maniobra normativo ni de la estacionalidad del negocio.",
+    fundoManeio: "No se realizó un análisis del capital circulante normalizado ni de la estacionalidad del negocio.",
     transacoesComparaveis:
       "No se analizaron transacciones comparables específicas ni el apetito actual de los inversores por el activo.",
     historicoInferior: "El histórico financiero disponible es inferior a tres ejercicios.",
@@ -297,11 +297,11 @@ export const es: typeof pt = {
     margensRelevantes:
       "Los márgenes EBITDA presentan una variación relevante en el periodo analizado, lo que exige una explicación documentada en la due diligence.",
     conversaoCaixaComCapex: (capex: string, pct: string) =>
-      `Tras un capex recurrente de ${capex}, la conversión indicativa de EBITDA en caja operativa es del ${pct}, antes de fondo de maniobra, intereses e impuestos. Limitación: sin la desagregación entre capex de mantenimiento y de crecimiento, el flujo de caja libre subyacente a la valoración queda sujeto a corrección en la due diligence.`,
+      `Tras un capex recurrente de ${capex}, la conversión indicativa de EBITDA en caja operativa es del ${pct}, antes de capital circulante, intereses e impuestos. Limitación: sin la desagregación entre capex de mantenimiento y de crecimiento, el flujo de caja libre subyacente a la valoración queda sujeto a corrección en la due diligence.`,
     conversaoCaixaSemCapex:
       "No se indicó capex recurrente. Limitación: sin este dato no es posible estimar la conversión de EBITDA en caja, lo que reduce la fiabilidad del valor calculado y suele traducirse en un descuento por parte del comprador.",
     fundoManeio:
-      "El fondo de maniobra no ha sido analizado en esta fase. Limitación: sin la normalización del fondo de maniobra no es posible fijar con precisión el puente entre el Enterprise Value y el Equity Value, lo que puede originar ajustes de cierre euro a euro en el precio final.",
+      "El capital circulante no ha sido analizado en esta fase. Limitación: sin la normalización del capital circulante no es posible fijar con precisión el puente entre el Enterprise Value y el Equity Value, lo que puede originar ajustes de cierre euro a euro en el precio final.",
     backlog: (valor: string) =>
       `Se indicó un backlog contratado de ${valor}. Limitación: sin el detalle de los márgenes, los plazos de ejecución y las condiciones de cancelación, la visibilidad de ingresos no se incorporó cuantitativamente a la valoración, solo se consideró de forma cualitativa.`,
     concentracaoTop5: (top5: number) =>
@@ -321,7 +321,7 @@ export const es: typeof pt = {
     ajustamentosSemSuporte:
       'Existen ajustes al EBITDA sin soporte documental. Deben clasificarse como "a validar en due diligence".',
     fundoManeioNaoAnalisado:
-      "No se ha analizado el fondo de maniobra. El Equity Value podría verse afectado por ajustes de cierre.",
+      "No se ha analizado el capital circulante. El Equity Value podría verse afectado por ajustes de cierre.",
     imovelSemAvaliacao:
       "El valor del inmueble se introdujo sin valoración independiente. El Equity Value podría sufrir una alteración material.",
     imovelSemValor: "El inmueble se incluyó en el perímetro sin valor indicado, por lo que no se sumó al Equity Value.",
@@ -351,7 +351,7 @@ export const es: typeof pt = {
 
   notas: {
     equity:
-      "El Equity Value presentado es indicativo y se calcula antes de los ajustes de cierre, la normalización del fondo de maniobra, las contingencias, los impuestos aplicables y la validación en la due diligence.",
+      "El Equity Value presentado es indicativo y se calcula antes de los ajustes de cierre, la normalización del capital circulante, las contingencias, los impuestos aplicables y la validación en la due diligence.",
     minoria:
       "El valor de una participación minoritaria no debe asumirse como una simple proporción del Equity Value al 100%. El valor puede variar en función del control, los derechos de gobernanza, la liquidez y la estructura de la transacción.",
   },
@@ -523,7 +523,7 @@ export const es: typeof pt = {
       margemEbitdaProjetada: "Margen EBITDA proyectado",
       capexPctReceita: "Capex (% de ingresos)",
       daPctReceita: "D&A (% de ingresos)",
-      fundoManeio: "Fondo de maniobra",
+      fundoManeio: "Capital circulante",
       naoProjetado: "No proyectado",
       taxaImposto: "Tipo impositivo (CIT)",
       indicadoresAvaliacao: "Indicadores de valoración",

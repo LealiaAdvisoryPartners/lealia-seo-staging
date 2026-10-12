@@ -238,7 +238,7 @@ export const en: typeof pt = {
     consolidarHistorico: "Consolidate three years of reconciled financial information",
     reconciliarEbitda: "Reconcile reported and normalised EBITDA and document the adjustments",
     confirmarDivida: "Confirm total debt and cash, deposits and other equivalents available at the reference date",
-    analisarFundoManeio: "Analyse normative working capital and the seasonality of the business",
+    analisarFundoManeio: "Analyse normalised working capital and the seasonality of the business",
     reduzirDependencia: "Reduce reliance on the shareholder and create a succession plan",
     mapearConcentracao: "Map client concentration and formalise relevant contracts",
     separarCapex: "Separate maintenance capex from growth capex",
@@ -273,7 +273,7 @@ export const en: typeof pt = {
   limitacoes: {
     infoDeclarada:
       "The estimate relies exclusively on the information declared, without documentary verification or audit.",
-    fundoManeio: "No analysis of normative working capital or business seasonality was performed.",
+    fundoManeio: "No analysis of normalised working capital or business seasonality was performed.",
     transacoesComparaveis:
       "No specific comparable transactions or current investor appetite for the asset were analysed.",
     historicoInferior: "The financial history available covers fewer than three financial years.",

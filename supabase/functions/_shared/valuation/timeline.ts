@@ -64,19 +64,115 @@ const FASES_PT: Fase[] = [
 ];
 
 const FASES_EN: Fase[] = [
-  { numero: "01", titulo: "Kick-Off", duracao: "~2-3 weeks", etapas: ["Signing the engagement letter & NDA — Formalising the mandate and aligning objectives, expectations and ways of working.", "Initial information request — Sending the information list needed to understand the business and structure the transaction.", "Information delivery & clarification meeting — Sharing key data and resolving initial questions.", "Information analysis and preparation of marketing materials — Building the equity story and preparing the teaser and information memorandum."] },
-  { numero: "02", titulo: "Initial Outreach and First Offer", duracao: "~8-10 weeks", etapas: ["Initial outreach to selected financial and strategic investors — Discreet approach and distribution of anonymised materials.", "Introductory meetings with interested investors — Presenting the business and assessing their level of interest.", "Responses to investors' additional information requests.", "Receipt and analysis of indicative offers — Comparing valuation and key terms.", "Selection of preferred investor(s) & negotiation of the binding offer — Negotiating price mechanics and adjustments."] },
-  { numero: "03", titulo: "Due Diligence", duracao: "~6-8 weeks", etapas: ["Financial, tax and commercial due diligence — Detailed review of financial statements, tax, operational performance and the business plan.", "Legal and documentary due diligence — Review of contracts, corporate structure, compliance and legal contingencies.", "Management of Q&A and due-diligence follow-up meetings.", "Consolidation of due-diligence findings & alignment on adjustments."] },
-  { numero: "04", titulo: "Transaction Documents", duracao: "~5-6 weeks", etapas: ["Confirmation and renegotiation of price mechanisms and adjustments (net debt, working capital, earn-out).", "Drafting and negotiation of the SPA and ancillary documents.", "Signing of the definitive documentation."] },
-  { numero: "05", titulo: "Closing", duracao: "~4-5 weeks", etapas: ["Satisfaction of conditions precedent and closing preparation (regulatory approvals and third-party consents).", "Closing & transaction announcement — Transfer of ownership/shares and communication to relevant stakeholders."] },
+  {
+    numero: "01",
+    titulo: "Kick-Off",
+    duracao: "~2-3 weeks",
+    etapas: [
+      "Signing the engagement letter & NDA — Formalising the mandate and aligning objectives, expectations and ways of working.",
+      "Initial information request — Sending the information list needed to understand the business and structure the transaction.",
+      "Information delivery & clarification meeting — Sharing key data and resolving initial questions.",
+      "Information analysis and preparation of marketing materials — Building the equity story and preparing the teaser and information memorandum.",
+    ],
+  },
+  {
+    numero: "02",
+    titulo: "Initial Outreach and First Offer",
+    duracao: "~8-10 weeks",
+    etapas: [
+      "Initial outreach to selected financial and strategic investors — Discreet approach and distribution of anonymised materials.",
+      "Introductory meetings with interested investors — Presenting the business and assessing their level of interest.",
+      "Responses to investors' additional information requests.",
+      "Receipt and analysis of indicative offers — Comparing valuation and key terms.",
+      "Selection of preferred investor(s) & negotiation of the binding offer — Negotiating price mechanics and adjustments.",
+    ],
+  },
+  {
+    numero: "03",
+    titulo: "Due Diligence",
+    duracao: "~6-8 weeks",
+    etapas: [
+      "Financial, tax and commercial due diligence — Detailed review of financial statements, tax, operational performance and the business plan.",
+      "Legal and documentary due diligence — Review of contracts, corporate structure, compliance and legal contingencies.",
+      "Management of Q&A and due-diligence follow-up meetings.",
+      "Consolidation of due-diligence findings & alignment on adjustments.",
+    ],
+  },
+  {
+    numero: "04",
+    titulo: "Transaction Documents",
+    duracao: "~5-6 weeks",
+    etapas: [
+      "Confirmation and renegotiation of price mechanisms and adjustments (net debt, working capital, earn-out).",
+      "Drafting and negotiation of the SPA and ancillary documents.",
+      "Signing of the definitive documentation.",
+    ],
+  },
+  {
+    numero: "05",
+    titulo: "Closing",
+    duracao: "~4-5 weeks",
+    etapas: [
+      "Satisfaction of conditions precedent and closing preparation (regulatory approvals and third-party consents).",
+      "Closing & transaction announcement — Transfer of ownership/shares and communication to relevant stakeholders.",
+    ],
+  },
 ];
 
 const FASES_ES: Fase[] = [
-  { numero: "01", titulo: "Kick-Off", duracao: "~2-3 semanas", etapas: ["Firma del contrato y NDA — Formalización del mandato y alineación de objetivos, expectativas y forma de trabajo.", "Solicitud inicial de información — Envío de la lista necesaria para comprender el negocio y estructurar la transacción.", "Entrega de información y reunión de aclaración — Puesta en común de los datos clave y resolución de dudas iniciales.", "Análisis de la información y preparación de materiales comerciales — Desarrollo de la equity story y preparación del teaser y del cuaderno de venta."] },
-  { numero: "02", titulo: "Contactos iniciales y primera oferta", duracao: "~8-10 semanas", etapas: ["Contacto inicial con inversores financieros y estratégicos seleccionados — Aproximación discreta y envío de materiales anonimizados.", "Reuniones introductorias con inversores interesados — Presentación del negocio y evaluación del grado de interés.", "Respuesta a solicitudes de información adicional de los inversores.", "Recepción y análisis de ofertas indicativas — Comparación de valoración y condiciones.", "Selección de inversor(es) preferente(s) y negociación de la oferta vinculante — Negociación del precio, mecanismos y ajustes."] },
-  { numero: "03", titulo: "Due Diligence", duracao: "~6-8 semanas", etapas: ["Due diligence financiera, fiscal y de negocio — Revisión detallada de estados financieros, fiscalidad, desempeño operativo y plan de negocio.", "Due diligence legal y documental — Revisión de contratos, estructura societaria, cumplimiento y contingencias legales.", "Gestión de Q&A y reuniones de seguimiento de due diligence.", "Consolidación de conclusiones de due diligence y alineación de ajustes."] },
-  { numero: "04", titulo: "Documentación de la transacción", duracao: "~5-6 semanas", etapas: ["Confirmación y renegociación de mecanismos de precio y ajustes (deuda neta, fondo de maniobra, earn-out).", "Redacción y negociación del SPA y de los documentos accesorios.", "Firma de la documentación definitiva."] },
-  { numero: "05", titulo: "Cierre", duracao: "~4-5 semanas", etapas: ["Cumplimiento de condiciones precedentes y preparación del cierre (autorizaciones regulatorias y consentimientos de terceros).", "Cierre y anuncio de la transacción — Transmisión del capital/acciones y comunicación a las partes relevantes."] },
+  {
+    numero: "01",
+    titulo: "Kick-Off",
+    duracao: "~2-3 semanas",
+    etapas: [
+      "Firma del contrato y NDA — Formalización del mandato y alineación de objetivos, expectativas y forma de trabajo.",
+      "Solicitud inicial de información — Envío de la lista necesaria para comprender el negocio y estructurar la transacción.",
+      "Entrega de información y reunión de aclaración — Puesta en común de los datos clave y resolución de dudas iniciales.",
+      "Análisis de la información y preparación de materiales comerciales — Desarrollo de la equity story y preparación del teaser y del cuaderno de venta.",
+    ],
+  },
+  {
+    numero: "02",
+    titulo: "Contactos iniciales y primera oferta",
+    duracao: "~8-10 semanas",
+    etapas: [
+      "Contacto inicial con inversores financieros y estratégicos seleccionados — Aproximación discreta y envío de materiales anonimizados.",
+      "Reuniones introductorias con inversores interesados — Presentación del negocio y evaluación del grado de interés.",
+      "Respuesta a solicitudes de información adicional de los inversores.",
+      "Recepción y análisis de ofertas indicativas — Comparación de valoración y condiciones.",
+      "Selección de inversor(es) preferente(s) y negociación de la oferta vinculante — Negociación del precio, mecanismos y ajustes.",
+    ],
+  },
+  {
+    numero: "03",
+    titulo: "Due Diligence",
+    duracao: "~6-8 semanas",
+    etapas: [
+      "Due diligence financiera, fiscal y de negocio — Revisión detallada de estados financieros, fiscalidad, desempeño operativo y plan de negocio.",
+      "Due diligence legal y documental — Revisión de contratos, estructura societaria, cumplimiento y contingencias legales.",
+      "Gestión de Q&A y reuniones de seguimiento de due diligence.",
+      "Consolidación de conclusiones de due diligence y alineación de ajustes.",
+    ],
+  },
+  {
+    numero: "04",
+    titulo: "Documentación de la transacción",
+    duracao: "~5-6 semanas",
+    etapas: [
+      "Confirmación y renegociación de mecanismos de precio y ajustes (deuda neta, capital circulante, earn-out).",
+      "Redacción y negociación del SPA y de los documentos accesorios.",
+      "Firma de la documentación definitiva.",
+    ],
+  },
+  {
+    numero: "05",
+    titulo: "Cierre",
+    duracao: "~4-5 semanas",
+    etapas: [
+      "Cumplimiento de condiciones precedentes y preparación del cierre (autorizaciones regulatorias y consentimientos de terceros).",
+      "Cierre y anuncio de la transacción — Transmisión del capital/acciones y comunicación a las partes relevantes.",
+    ],
+  },
 ];
 
 export function getFases(lang: ReportLang): Fase[] {
