@@ -7,7 +7,7 @@ export function Slide13Processo({ lang }: { lang: ReportLang }) {
   return (
     <Page numero={13} titulo={dict.p13.titulo} lang={lang}>
       <H>{dict.p13.hTitulo}</H>
-      <div className="report-note report-disclaimer-inline">{dict.p13.notaSecao}</div>
+      <div className="report-note report-disclaimer-inline">{(() => { const t = dict.p13.notaSecao; const i = t.lastIndexOf(". "); return i < 0 ? t : <>{t.slice(0, i + 1)} <strong>{t.slice(i + 2)}</strong></>; })()}</div>
       <div className="report-phases report-phases-2 report-phases-tall">
         {getFases(lang).map((f) => (
           <div key={f.numero} className="report-phase">

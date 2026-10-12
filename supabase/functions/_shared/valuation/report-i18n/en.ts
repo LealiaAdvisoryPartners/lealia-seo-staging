@@ -574,7 +574,7 @@ export const en: typeof pt = {
     lockedCta: "Get the Full Report · €299",
 
     cover: {
-      titulo: "Preliminary Valuation",
+      titulo: "Indicative Valuation Report",
       preparadoPara: "Prepared for",
       data: "Date",
     },
@@ -589,7 +589,7 @@ export const en: typeof pt = {
       multiploImplicito: "Implied multiple",
       posicaoLiquida: "Net Position",
       posicaoLiquidaHint: "cash / (debt)",
-      completudeInformacao: "Information completeness",
+      completudeInformacao: "Property value in perimeter",
       metodologia: "Valuation methodology",
       metodo1Titulo: "Determining normalised EBITDA",
       metodo1: (ebitda: string) =>

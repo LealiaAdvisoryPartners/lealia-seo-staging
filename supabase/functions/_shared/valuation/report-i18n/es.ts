@@ -586,7 +586,7 @@ export const es: typeof pt = {
     lockedCta: "Adquirir Informe Completo · 299 €",
 
     cover: {
-      titulo: "Valoración preliminar",
+      titulo: "Informe de Valoración Indicativa",
       preparadoPara: "Preparado para",
       data: "Fecha",
     },
@@ -601,7 +601,7 @@ export const es: typeof pt = {
       multiploImplicito: "Múltiplo implícito",
       posicaoLiquida: "Posición neta",
       posicaoLiquidaHint: "caja / (deuda)",
-      completudeInformacao: "Completitud de la información",
+      completudeInformacao: "Valor del inmueble en el perímetro",
       metodologia: "Metodología de valoración",
       metodo1Titulo: "Determinación del EBITDA normalizado",
       metodo1: (ebitda: string) =>

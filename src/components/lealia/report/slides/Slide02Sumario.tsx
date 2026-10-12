@@ -54,7 +54,7 @@ export function Slide02Sumario({ d, lang }: { d: ReportData; lang: ReportLang })
             </span>
           }
         />
-        <Kv label={dict.p2.completudeInformacao} value={d.confianca ?? "—"} />
+        <Kv label={dict.p2.completudeInformacao} value={d.valor_imovel_perimetro_formatado ?? "n/a"} />
       </div>
 
       <H>{dict.p2.metodologia}</H>
