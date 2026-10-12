@@ -53,7 +53,7 @@ export function buildReportData(
     ...perfil,
 
     ebitda_normalizado_formatado: r ? eur(r.ebitda_base) : NAO_INDICADO,
-    valor_imovel_perimetro_formatado: ctx.imovel_no_perimetro && lead.valorizacao_imovel ? eur(lead.valorizacao_imovel) : "n/a",
+    valor_imovel_perimetro_formatado: ctx.imovelNoPerimetro && lead.valorizacao_imovel ? eur(lead.valorizacao_imovel) : "n/a",
     ajuste_imovel_formatado: r && r.ajuste_ebitda_imovel !== 0 ? eur(Math.abs(r.ajuste_ebitda_imovel)) : null,
     margem_ebitda_ajustada,
     margem_ebitda_ajustada_formatada: margem_ebitda_ajustada !== null ? pct1(margem_ebitda_ajustada) : L.common.tracoLongo,
