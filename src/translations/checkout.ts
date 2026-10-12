@@ -21,6 +21,8 @@ export type CheckoutCopy = {
   redirectText: string;
   paidTitle: string;
   paidText: string;
+  paidPendingText: string;
+  paidPendingInvoice: string;
   openReport: string;
   backToReport: string;
   alreadyPaid: string;
@@ -77,6 +79,9 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     redirectText: "A encaminhar para o pagamento seguro…",
     paidTitle: "Pagamento confirmado",
     paidText: "O relatório completo está disponível e seguiu também para o seu email.",
+    paidPendingText:
+      "O pagamento foi confirmado com sucesso. A nossa equipa está a consolidar as projeções financeiras, a análise de sensibilidades e o plano de preparação para o mercado. Receberá o relatório completo no seu e-mail assim que possível.",
+    paidPendingInvoice: "A fatura será enviada para o seu e-mail no prazo máximo de 3 dias úteis.",
     openReport: "Abrir o relatório completo",
     backToReport: "Voltar ao relatório",
     alreadyPaid: "Esta avaliação já tem o relatório completo pago. Verifique o email que lhe enviámos.",
@@ -132,6 +137,9 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     redirectText: "Taking you to the secure payment page…",
     paidTitle: "Payment confirmed",
     paidText: "The full report is available and has also been sent to your email.",
+    paidPendingText:
+      "Your payment has been successfully confirmed. Our team is consolidating the financial projections, the sensitivity analysis and the market-readiness plan. You will receive the full report by email as soon as possible.",
+    paidPendingInvoice: "The invoice will be sent to your email within 3 business days.",
     openReport: "Open the full report",
     backToReport: "Back to the report",
     alreadyPaid: "The full report for this valuation has already been paid. Please check the email we sent you.",
@@ -187,6 +195,9 @@ export const checkoutCopy: Record<Language, CheckoutCopy> = {
     redirectText: "Redirigiendo al pago seguro…",
     paidTitle: "Pago confirmado",
     paidText: "El informe completo está disponible y también se ha enviado a su email.",
+    paidPendingText:
+      "El pago se ha confirmado correctamente. Nuestro equipo está consolidando las proyecciones financieras, el análisis de sensibilidades y el plan de preparación para el mercado. Recibirá el informe completo en su correo electrónico lo antes posible.",
+    paidPendingInvoice: "La factura se enviará a su correo electrónico en un plazo máximo de 3 días hábiles.",
     openReport: "Abrir el informe completo",
     backToReport: "Volver al informe",
     alreadyPaid: "Esta valoración ya tiene el informe completo pagado. Consulte el email que le enviamos.",
