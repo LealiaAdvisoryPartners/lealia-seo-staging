@@ -28,10 +28,23 @@ Deno.serve(async (req: Request) => {
 
   const { data: pagamento } = await admin
     .from("payments")
-    .select("id, status, request_id")
+    .select("id, status, request_id, submission_id")
     .eq("ifthenpay_order_id", orderId)
     .maybeSingle();
   if (!pagamento) return json({ ok: false, erro: "inexistente" }, 404);
+
+  // O relatório completo só está disponível depois da libertação (mesma regra dos e-mails).
+  const disponibilidade = async () => {
+    const { data: lead } = await admin
+      .from("leads")
+      .select("email_relatorio_agendado_para, full_report_enviado_em")
+      .eq("id", pagamento.submission_id)
+      .maybeSingle();
+    if (!lead) return false;
+    if (lead.full_report_enviado_em) return true;
+    const libertacao = lead.email_relatorio_agendado_para as string | null;
+    return !libertacao || new Date(libertacao) <= new Date();
+  };
 
   if (pagamento.status === "pending" && pagamento.request_id?.startsWith("cs_")) {
     try {
@@ -43,7 +56,7 @@ Deno.serve(async (req: Request) => {
           origem: "sondagem",
           detalhes: { paymentIntent: sessao.paymentIntent },
         });
-        return json({ ok: true, estado: "paid" });
+        return json({ ok: true, estado: "paid", disponivel: await disponibilidade() });
       }
       if (sessao.expirada) {
         await admin.from("payments").update({ status: "expired" }).eq("id", pagamento.id).eq("status", "pending");
@@ -54,5 +67,6 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  return json({ ok: true, estado: pagamento.status });
+  const disponivel = pagamento.status === "paid" ? await disponibilidade() : false;
+  return json({ ok: true, estado: pagamento.status, disponivel });
 });

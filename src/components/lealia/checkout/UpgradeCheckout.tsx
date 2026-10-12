@@ -45,6 +45,8 @@ export function UpgradeCheckout({
   const [erro, setErro] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(pedidoRetorno);
   const [urlCompleto, setUrlCompleto] = useState<string | null>(null);
+  // Pago antes da libertação: o relatório ainda está em elaboração (mesma regra dos e-mails).
+  const [disponivel, setDisponivel] = useState(true);
   const sondagem = useRef<number | null>(null);
 
   // Enquanto o cliente autoriza no telemóvel, vamos perguntando pelo estado.
@@ -55,9 +57,11 @@ export function UpgradeCheckout({
       sondagem.current = null;
     };
     const verificar = async () => {
-      const estado: EstadoPagamento | null = await consultarPagamento(orderId);
+      const resposta = await consultarPagamento(orderId);
+      const estado: EstadoPagamento | null = resposta?.estado ?? null;
       if (estado === "paid") {
         parar();
+        setDisponivel(!!resposta?.disponivel);
         setFase("pago");
         onPago?.();
       } else if (estado === "failed" || estado === "expired") {
@@ -110,8 +114,13 @@ export function UpgradeCheckout({
       <div className="card-elegant p-8 text-center sm:p-12">
         <p className="eyebrow">{c.eyebrow}</p>
         <h3 className="section-title mt-4 text-2xl md:text-3xl">{c.paidTitle}</h3>
-        <p className="mt-4 text-sm leading-relaxed font-light text-muted-foreground">{c.paidText}</p>
-        {(urlCompleto ?? reportUrl) && (
+        <p className="mt-4 text-sm leading-relaxed font-light text-muted-foreground">
+          {disponivel ? c.paidText : c.paidPendingText}
+        </p>
+        {!disponivel && (
+          <p className="mt-3 text-xs leading-relaxed font-light text-muted-foreground">{c.paidPendingInvoice}</p>
+        )}
+        {disponivel && (urlCompleto ?? reportUrl) && (
           <a className="btn-primary mt-8 inline-block" href={(urlCompleto ?? reportUrl) as string}>
             {c.openReport}
           </a>
