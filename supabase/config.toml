@@ -1,7 +1,1 @@
-project_id = "bayjhgwdkqxgnhfqclyq"
-
-[functions.enviar-relatorios]
-verify_jwt = false
-
-[functions.stripe-webhook]
-verify_jwt = false
+project_id = "gleaapmifejdcoqmxrka"

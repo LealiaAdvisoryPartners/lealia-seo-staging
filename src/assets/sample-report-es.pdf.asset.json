@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "61908ac6-0eb7-4180-bb12-447036f61d03",
-  "project_id": "efa405ff-a8e0-42ff-a4e1-c12df6c34950",
-  "url": "/__l5e/assets-v1/61908ac6-0eb7-4180-bb12-447036f61d03/sample-report-es.pdf",
-  "r2_key": "a/v1/efa405ff-a8e0-42ff-a4e1-c12df6c34950/61908ac6-0eb7-4180-bb12-447036f61d03/sample-report-es.pdf",
-  "original_filename": "sample-report-es.pdf",
-  "size": 5637112,
   "content_type": "application/pdf",
-  "created_at": "2026-10-12T14:27:33Z"
+  "created_at": "2026-10-12T14:27:33Z",
+  "original_filename": "sample-report-es.pdf",
+  "project_id": "288c97de-f0cb-4ea1-9962-e1eba0693cf9",
+  "r2_key": "a/v1/288c97de-f0cb-4ea1-9962-e1eba0693cf9/61908ac6-0eb7-4180-bb12-447036f61d03/sample-report-es.pdf",
+  "size": 5637112,
+  "url": "/__l5e/assets-v1/61908ac6-0eb7-4180-bb12-447036f61d03/sample-report-es.pdf",
+  "version": 1
 }

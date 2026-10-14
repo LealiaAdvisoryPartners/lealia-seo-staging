@@ -1,2 +1,0 @@
-ALTER TABLE public.leads ADD COLUMN IF NOT EXISTS full_report_enviado_em timestamptz;
-UPDATE public.leads SET full_report_enviado_em = full_report_pago_em WHERE status = 'full_paid' AND full_report_enviado_em IS NULL;

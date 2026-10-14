@@ -1,1 +1,0 @@
-ALTER TABLE public.leads ADD COLUMN IF NOT EXISTS idioma text NOT NULL DEFAULT 'pt';

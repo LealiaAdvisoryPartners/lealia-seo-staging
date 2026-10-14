@@ -1,1 +1,0 @@
-ALTER TABLE public.leads ADD COLUMN IF NOT EXISTS depreciacoes_amortizacoes numeric;
