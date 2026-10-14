@@ -29,7 +29,7 @@ export const RESULT_BG = "#f8f7f1";
 
 export const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
-export const LOGO_URL = "https://www.lealiaap.com/assets/Logo_text_biggerfont_samesize_2-D3_brI8L.png";
+export const LOGO_URL = "https://www.lealiaap.com/email-logo.png";
 
 // -----------------------------------------------------------------------------
 // Estilos partilhados
