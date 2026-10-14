@@ -13,14 +13,22 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json({ ok: false, error: "Method not allowed" }, 405);
 
-  // Só o agendador (pg_cron) pode disparar este lote.
+  // Agendador (pg_cron) autentica-se com a chave publicável; RELATORIOS_CRON_KEY
+  // é a chave privilegiada (única que permite forçar fora da hora).
+  // O lote é idempotente e só envia relatórios cuja hora já chegou.
   const chave = Deno.env.get("RELATORIOS_CRON_KEY");
   const auth = req.headers.get("authorization") ?? "";
-  if (!chave || auth !== `Bearer ${chave}`) return json({ ok: false, error: "Unauthorized" }, 401);
+  const apikey = req.headers.get("apikey") ?? "";
+  const publicas = [Deno.env.get("SUPABASE_ANON_KEY"), ...(() => {
+    try { return Object.values(JSON.parse(Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") ?? "{}")) as string[]; } catch { return []; }
+  })()].filter(Boolean) as string[];
+  const privilegiado = !!chave && auth === `Bearer ${chave}`;
+  const agendador = publicas.some((k) => auth === `Bearer ${k}` || apikey === k);
+  if (!privilegiado && !agendador) return json({ ok: false, error: "Unauthorized" }, 401);
 
   // O agendador corre às 07:53 e 08:53 UTC; só a execução das 8h de Lisboa atua
   // (cobre horário de verão e de inverno).
-  const forcar = new URL(req.url).searchParams.get("forcar") === "1";
+  const forcar = privilegiado && new URL(req.url).searchParams.get("forcar") === "1";
   if (!forcar && horaLisboa() !== HORA_ENVIO_LISBOA) {
     return json({ ok: true, ignorado: "fora_da_hora_lisboa" });
   }
