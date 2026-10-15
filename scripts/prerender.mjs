@@ -54,6 +54,8 @@ fs.writeFileSync(
 );
 
 // 404 real: HTML pré-gerado da página "não encontrada" (servido com status 404 pela Netlify).
-fs.writeFileSync(path.join(dist, "404.html"), fill("/en/__not-found__"));
+// Um por idioma, para a hidratação coincidir com o idioma do endereço.
+for (const l of ["en", "pt", "es"]) fs.writeFileSync(path.join(dist, l, "404.html"), fill(`/${l}/__not-found__`));
+fs.copyFileSync(path.join(dist, "en", "404.html"), path.join(dist, "404.html"));
 console.log("prerendered app.html, 404.html");
 fs.rmSync(path.resolve("dist-ssr"), { recursive: true, force: true });

@@ -55,9 +55,9 @@ https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 /es/upgrade      /app.html  200
 # As páginas públicas existem como HTML pré-gerado (dist/<idioma>/<página>/index.html)
 # e são servidas antes destas regras. Qualquer outro caminho com prefixo → 404 real.
-/en/*    /404.html   404
-/pt/*    /404.html   404
-/es/*    /404.html   404
+/en/*    /en/404.html   404
+/pt/*    /pt/404.html   404
+/es/*    /es/404.html   404
 
 # Portuguese: PT, BR, CV (Cabo Verde), AO (Angola), MZ (Mozambique)
 /*   /pt/:splat   302!   Country=PT,BR,CV,AO,MZ
