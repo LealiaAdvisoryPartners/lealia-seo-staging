@@ -107,7 +107,7 @@ export function saveConsent(choice: ConsentChoice) {
     /* ignorar */
   }
   gtag("consent", "update", toGoogleConsent(choice));
-  (window as W).dataLayer!.push({ event: "consent_update", consent_analytics: choice.analytics, consent_marketing: choice.marketing, consent_experience: choice.experience });
+  if (hasAnyOptionalConsent(choice)) (window as W).dataLayer!.push({ event: "consent_update", consent_analytics: choice.analytics, consent_marketing: choice.marketing, consent_experience: choice.experience });
   apagarCookiesOpcionais(choice);
   window.dispatchEvent(new CustomEvent(CONSENT_CHANGED_EVENT, { detail: stored }));
 }
