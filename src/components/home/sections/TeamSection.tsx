@@ -47,6 +47,10 @@ const TeamCard = ({ member, index, role, href }: { member: TeamMember; index: nu
           <motion.img
             src={member.image}
             alt={member.name}
+            width={1206}
+            height={1206}
+            loading="lazy"
+            decoding="async"
             style={{ y }}
             className="absolute inset-0 w-full h-[120%] object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.05]"
           />
