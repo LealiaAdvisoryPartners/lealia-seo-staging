@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
 import type { Language } from "@/contexts/language-context";
-import { PdfCanvasPages } from "./PdfCanvasPages";
+// pdf.js só é descarregado quando o visualizador abre.
+const PdfCanvasPages = lazy(() => import("./PdfCanvasPages").then((m) => ({ default: m.PdfCanvasPages })));
 
 const PDFS: Record<Language, string> = {
   pt: "/sample-report/sample-report-pt.pdf",
@@ -76,7 +77,7 @@ export function SampleReportViewer({ open, onClose }: Props) {
         className="relative flex-1 overflow-y-auto bg-secondary/40 px-4 py-6"
         onContextMenu={(e) => e.preventDefault()}
       >
-        <PdfCanvasPages key={docLang} src={PDFS[docLang]} />
+        <Suspense fallback={null}><PdfCanvasPages key={docLang} src={PDFS[docLang]} /></Suspense>
       </div>
     </div>
   );
