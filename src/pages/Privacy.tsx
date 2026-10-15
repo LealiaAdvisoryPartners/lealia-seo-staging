@@ -5,7 +5,7 @@ import SEOHead from "@/components/SEOHead";
 const Privacy = () => {
   const { t } = useLanguage();
 
-  const sections = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const sections = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   // Render a paragraph only if the translation key exists (t() returns the
   // key itself when missing).
