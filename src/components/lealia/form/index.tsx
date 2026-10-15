@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { pushEvent } from "@/lib/tracking/datalayer";
 import { subindustriasDe } from "@core/valuation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formCopy, type FormCopy } from "@/translations/valuation-form";
@@ -65,8 +66,13 @@ export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => voi
     }
   }, [form]);
 
+  const iniciado = useRef(false);
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     if (key === "idioma") setIdiomaTocado(true);
+    if (!iniciado.current) {
+      iniciado.current = true;
+      pushEvent("valuation_start", { form_name: "valuation", valuation_step: step + 1 });
+    }
     setForm((f) => ({ ...f, [key]: value }));
   };
 
