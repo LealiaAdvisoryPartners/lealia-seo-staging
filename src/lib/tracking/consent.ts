@@ -21,7 +21,7 @@ type GoogleConsent = Record<
   "granted" | "denied"
 >;
 
-const g = (v: boolean) => (v ? "granted" : "denied") as const;
+const g = (v: boolean): "granted" | "denied" => (v ? "granted" : "denied");
 
 export function toGoogleConsent(c: ConsentChoice): GoogleConsent {
   return {

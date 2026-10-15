@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { sanitizeAttribution } from "../../../supabase/functions/_shared/valuation/attribution";
+import { sanitizeAttribution } from "../supabase/functions/_shared/valuation/attribution";
 
 describe("atribuição", () => {
   test("rejeita propriedades não autorizadas", () => {
