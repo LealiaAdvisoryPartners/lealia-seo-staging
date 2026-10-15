@@ -63,6 +63,10 @@ export function getStoredConsent(): StoredConsent | null {
 
 export const hasAnalyticsConsent = () => !!getStoredConsent()?.analytics;
 
+/** Pelo menos uma categoria opcional aceite (condição para carregar o GTM e enviar eventos). */
+export const hasAnyOptionalConsent = (c: ConsentChoice | null | undefined) =>
+  !!c && (c.analytics || c.marketing || c.experience);
+
 /** Tem de correr antes do GTM: estado inicial recusado e, se existir, a escolha guardada. */
 export function initConsentDefaults() {
   const w = window as W;
@@ -103,7 +107,7 @@ export function saveConsent(choice: ConsentChoice) {
     /* ignorar */
   }
   gtag("consent", "update", toGoogleConsent(choice));
-  (window as W).dataLayer!.push({ event: "consent_update", consent_analytics: choice.analytics, consent_marketing: choice.marketing, consent_experience: choice.experience });
+  if (hasAnyOptionalConsent(choice)) (window as W).dataLayer!.push({ event: "consent_update", consent_analytics: choice.analytics, consent_marketing: choice.marketing, consent_experience: choice.experience });
   apagarCookiesOpcionais(choice);
   window.dispatchEvent(new CustomEvent(CONSENT_CHANGED_EVENT, { detail: stored }));
 }
