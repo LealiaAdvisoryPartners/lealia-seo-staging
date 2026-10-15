@@ -9,6 +9,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  // Build de pré-geração: empacotar dependências (vários pacotes são CommonJS no Node).
+  ssr: { noExternal: true },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {

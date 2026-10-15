@@ -3,7 +3,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
 
 import { LanguageProvider } from "./contexts/LanguageContext";
 import Navigation from "./components/Navigation";
@@ -13,7 +14,8 @@ import LanguageRedirect from "./components/LanguageRedirect";
 import { ScrollProgress } from "./components/motion/ScrollProgress";
 import { LANGUAGES } from "./lib/routing";
 import { SITE_PAGES } from "./pages";
-import Relatorio from "./pages/Relatorio";
+// Relatório e checkout carregam à parte: levam os bundles pesados (PDF, gráficos, pagamentos).
+const Relatorio = lazy(() => import("./pages/Relatorio"));
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,13 +26,16 @@ const queryClient = new QueryClient();
  */
 const pagePaths = (slug: string) => [...LANGUAGES.map((l) => `/${l}${slug && `/${slug}`}`), `/${slug}`];
 
-const App = () => (
-  <HelmetProvider>
+/**
+ * O router é dado por quem monta a app: BrowserRouter no browser (main.tsx) e
+ * StaticRouter na pré-geração (entry-server.tsx).
+ */
+const App = ({ helmetContext }: { helmetContext?: object }) => (
+  <HelmetProvider context={helmetContext}>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
           <LanguageProvider>
             <ScrollToTop />
             <LanguageRedirect />
@@ -39,6 +44,7 @@ const App = () => (
             <div className="min-h-screen flex flex-col">
               <Navigation />
               <main className="flex-1 pt-16">
+                <Suspense fallback={null}>
                 <Routes>
                   {SITE_PAGES.flatMap(({ slug, Component }) =>
                     pagePaths(slug).map((path) => <Route key={path} path={path} element={<Component />} />),
@@ -52,11 +58,11 @@ const App = () => (
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>
+                </Suspense>
               </main>
               <Footer />
             </div>
           </LanguageProvider>
-        </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>

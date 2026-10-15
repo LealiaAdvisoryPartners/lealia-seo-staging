@@ -50,12 +50,18 @@ const LanguageToggle = () => {
 
       <DropdownMenuContent align="end" className="min-w-fit w-auto">
         {otherLangs.map((lang) => (
-          <DropdownMenuItem
-            key={lang.code}
-            onClick={() => changeLanguage(lang.code as "en" | "pt" | "es")}
-            className="hover:bg-transparent hover:text-accent focus:bg-transparent focus:text-accent cursor-pointer"
-          >
-            {lang.label}
+          <DropdownMenuItem key={lang.code} asChild className="hover:bg-transparent hover:text-accent focus:bg-transparent focus:text-accent cursor-pointer">
+            {/* Link real para a página equivalente; o clique mantém a navegação sem recarregar. */}
+            <a
+              href={buildPath(lang.code as "en" | "pt" | "es", stripLanguage(location.pathname))}
+              hrefLang={lang.code === "en" ? "en" : lang.code === "pt" ? "pt-PT" : "es-ES"}
+              onClick={(e) => {
+                e.preventDefault();
+                changeLanguage(lang.code as "en" | "pt" | "es");
+              }}
+            >
+              {lang.label}
+            </a>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

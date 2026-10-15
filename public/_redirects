@@ -47,9 +47,17 @@ https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 /*.woff2      /:splat         200
 # Pass-through for already language-prefixed paths (must come BEFORE geo-redirects)
 # This prevents redirect loops like /es -> /es/es
-/en/*    /index.html   200
-/pt/*    /index.html   200
-/es/*    /index.html   200
+/en/relatorio/*  /app.html  200
+/en/upgrade      /app.html  200
+/pt/relatorio/*  /app.html  200
+/pt/upgrade      /app.html  200
+/es/relatorio/*  /app.html  200
+/es/upgrade      /app.html  200
+# As páginas públicas existem como HTML pré-gerado (dist/<idioma>/<página>/index.html)
+# e são servidas antes destas regras. Qualquer outro caminho com prefixo → 404 real.
+/en/*    /404.html   404
+/pt/*    /404.html   404
+/es/*    /404.html   404
 
 # Portuguese: PT, BR, CV (Cabo Verde), AO (Angola), MZ (Mozambique)
 /*   /pt/:splat   302!   Country=PT,BR,CV,AO,MZ
@@ -60,5 +68,5 @@ https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 # Fallback: everywhere else → English
 /*   /en/:splat   302!
 
-# SPA fallback - must be last: serve index.html for all other routes
-/*        /index.html   200
+# Fallback (links curtos de relatório /empresa-abcd): shell noindex
+/*        /app.html   200

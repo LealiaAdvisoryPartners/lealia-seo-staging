@@ -29,7 +29,7 @@ const HeroSection = () => {
           <img src={logo} alt="Lealia Advisory Partners" width={936} height={253} {...{ fetchpriority: "high" }} className="w-full max-w-2xl mx-auto" />
         </motion.div>
 
-        <motion.p
+        <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -37,7 +37,7 @@ const HeroSection = () => {
           style={{ letterSpacing: "0.4em", fontWeight: 300 }}
         >
           {t("hero.services")}
-        </motion.p>
+        </motion.h1>
 
         <motion.div
           initial={{ scaleX: 0 }}
