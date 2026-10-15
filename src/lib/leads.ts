@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { Attribution } from "@core/attribution";
 
 export type LeadPayload = {
   nome: string;
@@ -61,6 +62,8 @@ export type LeadPayload = {
   confianca?: string | null;
   hp?: string;
   idioma?: "pt" | "en" | "es" | null;
+  /** Origem da visita (first/last touch); validada de novo no servidor. */
+  atribuicao?: Attribution | null;
   /** Origem do browser, usada para construir o link do relatório. */
   origin?: string;
 };

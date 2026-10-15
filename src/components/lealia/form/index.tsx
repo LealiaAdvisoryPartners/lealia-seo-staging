@@ -89,6 +89,7 @@ export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => voi
   const next = () => {
     if (!valid) {
       setTouched(true);
+      pushEvent("form_error", { form_name: "valuation", valuation_step: step + 1 });
       return;
     }
     setTouched(false);
@@ -100,7 +101,10 @@ export function ValuationForm({ onSubmit }: { onSubmit: (data: FormState) => voi
       } catch {
         /* ignorar */
       }
-    } else setStep((s) => s + 1);
+    } else {
+      pushEvent("valuation_step", { form_name: "valuation", valuation_step: step + 2 });
+      setStep((s) => s + 1);
+    }
   };
 
   const { Component } = current;

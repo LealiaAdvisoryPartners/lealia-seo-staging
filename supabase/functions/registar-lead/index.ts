@@ -47,9 +47,11 @@ Deno.serve(async (req: Request) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
-  const { hp: _hp, origin: origemBruta, ...lead } = data as Record<string, unknown> & { origin?: string };
+  const { hp: _hp, origin: origemBruta, atribuicao: atribuicaoBruta, ...lead } = data as Record<string, unknown> & { origin?: string };
+  // Atribuição: só campos autorizados, sem dados pessoais, com limite de tamanho.
+  const atribuicao = sanitizeAttribution(atribuicaoBruta);
 
-  const { data: inserido, error } = await supabaseAdmin.from("leads").insert(lead).select("*").single();
+  const { data: inserido, error } = await supabaseAdmin.from("leads").insert({ ...lead, atribuicao }).select("*").single();
   if (error) {
     console.error("Falha ao gravar lead", error.message);
     return json({ ok: false, emailEnviado: false }, 500);

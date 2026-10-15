@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { CreditCard, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { checkoutCopy } from "@/translations/checkout";
-import { consultarPagamento, criarPagamento, type EstadoPagamento, type MetodoPagamento } from "@/lib/payments";
+import { consultarPagamento, criarPagamento, PRECO_RELATORIO_COMPLETO, type EstadoPagamento, type MetodoPagamento } from "@/lib/payments";
+import { pushEvent, pushPurchaseOnce } from "@/lib/tracking/datalayer";
 
 type Fase = "form" | "aguardar" | "pago" | "encaminhar";
 
@@ -61,6 +62,8 @@ export function UpgradeCheckout({
       const estado: EstadoPagamento | null = resposta?.estado ?? null;
       if (estado === "paid") {
         parar();
+        // Só aqui: estado "paid" confirmado pelo servidor; uma vez por pedido.
+        pushPurchaseOnce(orderId, PRECO_RELATORIO_COMPLETO, "EUR");
         setDisponivel(!!resposta?.disponivel);
         setFase("pago");
         onPago?.();
@@ -80,6 +83,7 @@ export function UpgradeCheckout({
 
     setErro(null);
     setFase("encaminhar");
+    pushEvent("checkout_start", { value: PRECO_RELATORIO_COMPLETO, currency: "EUR" });
 
     const resposta = await criarPagamento({
       ref: referencia,
