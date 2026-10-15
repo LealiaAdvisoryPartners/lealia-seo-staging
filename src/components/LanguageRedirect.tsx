@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { buildPath, getLanguageFromPath, stripLanguage } from "@/lib/routing";
+import { buildPath, getLanguageFromPath } from "@/lib/routing";
 import { PAGE_SLUGS } from "@/pages";
 
 /** Um único segmento que não é uma página do site é um link de relatório. */
