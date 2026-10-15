@@ -114,13 +114,16 @@ export function pushEvent(event: TrackEvent, params: EventParams = {}) {
 }
 
 /** page_view com URL seguro (no GTM, o GA4 deve usar page_location = {{page_location_safe}}). */
+let ultimoPageView = "";
 export function pushPageContext(pathname: string) {
-  if (typeof window === "undefined") return false;
-  return push({
+  if (typeof window === "undefined" || pathname === ultimoPageView) return false;
+  const ok = push({
     event: "page_context",
     ...safePageFields(pathname, window.location.origin, document.referrer),
     page_language: getLanguageFromPath(pathname) ?? "en",
   });
+  if (ok) ultimoPageView = pathname;
+  return ok;
 }
 
 const PRODUCTION_HOST = /(^|\.)lealiaap\.(com|pt|es)$/;
