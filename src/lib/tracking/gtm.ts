@@ -1,17 +1,25 @@
 /**
- * Carrega o Google Tag Manager só quando existe um ID real em
- * VITE_GTM_CONTAINER_ID. Ambientes GTM (staging) via VITE_GTM_ENV_AUTH +
- * VITE_GTM_ENV_PREVIEW. Nunca corre na pré-geração (só no browser).
+ * Google Tag Manager: a única tag instalada no código. Só carrega quando
+ * (1) existe um ID real em VITE_GTM_CONTAINER_ID e (2) a pessoa aceitou pelo
+ * menos uma categoria opcional. Sem consentimento não há pedido a
+ * googletagmanager.com. Nunca corre na pré-geração (só no browser).
  */
+import { CONSENT_CHANGED_EVENT, getStoredConsent, hasAnyOptionalConsent, type StoredConsent } from "./consent";
+
 const GTM_ID_RE = /^GTM-[A-Z0-9]{5,10}$/;
+const LOADED_EVENT = "lealia:gtm-loaded";
 
 export function validGtmId(id: unknown): id is string {
   return typeof id === "string" && GTM_ID_RE.test(id) && !/X{4,}/.test(id);
 }
 
+export const isGtmLoaded = () =>
+  typeof document !== "undefined" && !!document.querySelector("script[data-lealia-gtm]");
+
 export function loadGtm(id: unknown = import.meta.env.VITE_GTM_CONTAINER_ID) {
   if (typeof window === "undefined" || !validGtmId(id)) return false;
-  if (document.querySelector('script[data-lealia-gtm]')) return false;
+  if (!hasAnyOptionalConsent(getStoredConsent())) return false;
+  if (isGtmLoaded()) return false;
 
   const w = window as Window & { dataLayer?: unknown[] };
   w.dataLayer = w.dataLayer || [];
@@ -29,5 +37,16 @@ export function loadGtm(id: unknown = import.meta.env.VITE_GTM_CONTAINER_ID) {
   s.src = `https://www.googletagmanager.com/gtm.js?id=${id}${env}`;
   s.setAttribute("data-lealia-gtm", id);
   document.head.appendChild(s);
+  window.dispatchEvent(new Event(LOADED_EVENT));
   return true;
+}
+
+/** Carrega já se houver consentimento guardado; senão, espera pela escolha. */
+export function initGtm(onLoaded?: () => void) {
+  if (typeof window === "undefined") return;
+  if (loadGtm()) onLoaded?.();
+  window.addEventListener(CONSENT_CHANGED_EVENT, (e) => {
+    const detail = (e as CustomEvent<StoredConsent>).detail;
+    if (hasAnyOptionalConsent(detail) && loadGtm()) onLoaded?.();
+  });
 }

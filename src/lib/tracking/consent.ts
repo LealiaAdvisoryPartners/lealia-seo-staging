@@ -63,6 +63,10 @@ export function getStoredConsent(): StoredConsent | null {
 
 export const hasAnalyticsConsent = () => !!getStoredConsent()?.analytics;
 
+/** Pelo menos uma categoria opcional aceite (condição para carregar o GTM e enviar eventos). */
+export const hasAnyOptionalConsent = (c: ConsentChoice | null | undefined) =>
+  !!c && (c.analytics || c.marketing || c.experience);
+
 /** Tem de correr antes do GTM: estado inicial recusado e, se existir, a escolha guardada. */
 export function initConsentDefaults() {
   const w = window as W;
