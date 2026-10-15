@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { CreditCard, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { checkoutCopy } from "@/translations/checkout";
-import { consultarPagamento, criarPagamento, PRECO_RELATORIO_COMPLETO, type EstadoPagamento, type MetodoPagamento } from "@/lib/payments";
+import { consultarPagamento, criarPagamento, type EstadoPagamento, type MetodoPagamento } from "@/lib/payments";
 import { pushEvent, pushPurchaseOnce } from "@/lib/tracking/datalayer";
 
 type Fase = "form" | "aguardar" | "pago" | "encaminhar";
