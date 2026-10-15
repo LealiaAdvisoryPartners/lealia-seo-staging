@@ -3,7 +3,13 @@ import { safePagePath, safeReferrer, validPurchase, isProductionHost } from "../
 
 describe("URLs seguros", () => {
   test("relatório normalizado para /report", () => expect(safePagePath("/pt/ABC123xyz")).toBe("/pt/report"));
-  test("checkout normalizado para /report", () => expect(safePagePath("/en/upgrade")).toBe("/en/report"));
+  test("checkout en", () => expect(safePagePath("/en/upgrade")).toBe("/en/checkout"));
+  test("checkout pt com query da Stripe", () => expect(safePagePath("/pt/upgrade?pagamento=sucesso&pedido=LP1")).toBe("/pt/checkout"));
+  test("checkout es", () => expect(safePagePath("/es/upgrade")).toBe("/es/checkout"));
+  test("token na raiz → /report", () => expect(safePagePath("/ABC123xyz")).toBe("/report"));
+  test("/relatorio/{token} → /report", () => expect(safePagePath("/relatorio/ABC123xyz")).toBe("/report"));
+  test("/es/relatorio/{token} → /es/report", () => expect(safePagePath("/es/relatorio/ABC123xyz")).toBe("/es/report"));
+  test("/en/relatorio/{token}?k=x → /en/report", () => expect(safePagePath("/en/relatorio/ABC?key=1")).toBe("/en/report"));
   test("página pública mantém-se", () => expect(safePagePath("/es/services/")).toBe("/es/services"));
   test("referrer interno sem token", () =>
     expect(safeReferrer("https://lealiaap.com/pt/TOKEN99?pedido=LP1", "https://lealiaap.com")).toBe("https://lealiaap.com/pt/report"));

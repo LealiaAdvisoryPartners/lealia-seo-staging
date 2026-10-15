@@ -10,6 +10,7 @@
 import { getLanguageFromPath, stripLanguage } from "@/lib/routing";
 import { campaignParameters } from "./attribution";
 import { isGtmLoaded } from "./gtm";
+import { hasAnalyticsConsent } from "./consent";
 
 export const EVENTS = [
   "form_start",
@@ -39,6 +40,7 @@ export type EventParams = {
 };
 
 const PUBLIC_SLUGS = new Set(["", "about", "services", "team", "valuation", "privacy", "terms", "faq"]);
+const CHECKOUT_SLUGS = new Set(["upgrade"]);
 
 /** Caminho sem identificadores nem query: relatórios, checkout e links curtos ficam "/report". */
 export function safePagePath(pathname: string): string {
@@ -47,6 +49,9 @@ export function safePagePath(pathname: string): string {
   const lang = getLanguageFromPath(limpo);
   const slug = semIdioma.replace(/^\//, "");
   if (PUBLIC_SLUGS.has(slug)) return limpo.replace(/\/+$/, "") || "/";
+  // Checkout (inclui o regresso da Stripe, que usa a mesma rota com query).
+  if (CHECKOUT_SLUGS.has(slug)) return lang ? `/${lang}/checkout` : "/checkout";
+  // Tudo o resto: /{token}, /relatorio/{token}, /{idioma}/relatorio/{token}.
   return lang ? `/${lang}/report` : "/report";
 }
 
@@ -116,7 +121,7 @@ export function pushEvent(event: TrackEvent, params: EventParams = {}) {
 /** page_view com URL seguro (no GTM, o GA4 deve usar page_location = {{page_location_safe}}). */
 let ultimoPageView = "";
 export function pushPageContext(pathname: string) {
-  if (typeof window === "undefined" || pathname === ultimoPageView) return false;
+  if (typeof window === "undefined" || pathname === ultimoPageView || !hasAnalyticsConsent()) return false;
   const ok = push({
     event: "page_context",
     ...safePageFields(pathname, window.location.origin, document.referrer),
