@@ -194,7 +194,7 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
       <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/en${suffix}`} />
 
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content={ORG.name} />
+      <meta property="og:site_name" content="Lealia Advisory Partners" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
