@@ -45,7 +45,6 @@ const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>>
     serviceType: "Company valuation",
     provider: { "@type": "ProfessionalService", name: ORG.name, url: BASE_URL },
     areaServed: ["Portugal", "Spain"],
-    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     description,
     url,
   }),

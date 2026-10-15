@@ -1,3 +1,3 @@
 # Architecture rules
 
-- Reference uploaded sample-report PDFs through Lovable Assets JSON pointers in the viewer, keeping binary uploads out of the repository.
+- Serve sample-report PDFs as static files from public/sample-report/ so Netlify hosts them natively without proxying external CDNs.

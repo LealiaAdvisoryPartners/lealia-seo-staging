@@ -26,6 +26,8 @@ https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 # Country-based language redirects for .com domain (and other domains not listed above)
 # Exclude static assets and API routes from language redirects (must come BEFORE language redirects)
 /favicon.ico  /favicon.ico  200
+/email-logo.png /email-logo.png 200
+/sample-report/*  /sample-report/:splat  200
 /robots.txt   /robots.txt   200
 /sitemap.xml  /sitemap.xml  200
 /llms.txt     /llms.txt     200

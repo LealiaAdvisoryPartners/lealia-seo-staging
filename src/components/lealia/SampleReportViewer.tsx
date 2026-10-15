@@ -4,14 +4,11 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
 import type { Language } from "@/contexts/language-context";
 import { PdfCanvasPages } from "./PdfCanvasPages";
-import samplePt from "@/assets/sample-report-pt.pdf.asset.json";
-import sampleEn from "@/assets/sample-report-en.pdf.asset.json";
-import sampleEs from "@/assets/sample-report-es.pdf.asset.json";
 
 const PDFS: Record<Language, string> = {
-  pt: samplePt.url,
-  en: sampleEn.url,
-  es: sampleEs.url,
+  pt: "/sample-report/sample-report-pt.pdf",
+  en: "/sample-report/sample-report-en.pdf",
+  es: "/sample-report/sample-report-es.pdf",
 };
 
 const LABELS: Record<Language, string> = { pt: "PT", en: "EN", es: "ES" };
