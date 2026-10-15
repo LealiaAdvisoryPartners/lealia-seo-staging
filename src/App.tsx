@@ -13,6 +13,8 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import LanguageRedirect from "./components/LanguageRedirect";
 import { ScrollProgress } from "./components/motion/ScrollProgress";
+import CookieConsent from "./components/CookieConsent";
+import PageContextTracker from "./components/PageContextTracker";
 import { LANGUAGES } from "./lib/routing";
 import { SITE_PAGES } from "./pages";
 // Relatório e checkout carregam à parte: levam os bundles pesados (PDF, gráficos, pagamentos).
@@ -65,6 +67,8 @@ const App = ({ helmetContext }: { helmetContext?: object }) => (
               </main>
               <Footer />
             </div>
+            <PageContextTracker />
+            <CookieConsent />
           </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>

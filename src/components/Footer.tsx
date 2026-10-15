@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { buildPath } from "@/lib/routing";
 import { Mail, Linkedin, Phone } from "lucide-react";
+import { openCookieSettings } from "@/lib/tracking/consent";
+import { cookieCopy } from "@/translations/cookie-consent";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -55,6 +57,9 @@ const Footer = () => {
             <Link to={buildPath(language, "/terms")} className="text-primary-foreground/60 hover:text-accent transition-colors">
               {t("footer.terms")}
             </Link>
+            <button type="button" onClick={openCookieSettings} className="text-primary-foreground/60 hover:text-accent transition-colors">
+              {cookieCopy[language].footerLink}
+            </button>
             <a href="https://www.livroreclamacoes.pt/Inicio/" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/60 hover:text-accent transition-colors">
               {t("footer.complaints")}
             </a>
