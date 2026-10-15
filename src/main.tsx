@@ -5,13 +5,15 @@ import "./index.css";
 import { initAnalytics } from "./lib/analytics";
 import { initConsentDefaults } from "./lib/tracking/consent";
 import { captureAttribution } from "./lib/tracking/attribution";
-import { loadGtm } from "./lib/tracking/gtm";
+import { initGtm } from "./lib/tracking/gtm";
+import { pushPageContext } from "./lib/tracking/datalayer";
 
-// Ordem obrigatória: consentimento recusado por defeito → dataLayer → GTM (só com ID real).
+// Ordem obrigatória: dataLayer + consentimento recusado → escolha guardada →
+// GTM só com ID real e consentimento opcional → page_view da página atual.
 initConsentDefaults();
 captureAttribution();
 initAnalytics();
-loadGtm();
+initGtm(() => pushPageContext(window.location.pathname));
 
 const root = document.getElementById("root")!;
 const app = (

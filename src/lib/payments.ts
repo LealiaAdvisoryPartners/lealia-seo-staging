@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Language } from "@/lib/routing";
+import type { CompraConfirmada } from "@/lib/tracking/datalayer";
 
 export const PRECO_RELATORIO_COMPLETO = 299;
 
@@ -45,9 +46,9 @@ export async function criarPagamento(pedido: PedidoPagamento): Promise<RespostaP
 /** Consulta o estado de um pagamento já iniciado e se o relatório completo já está disponível. */
 export async function consultarPagamento(
   orderId: string,
-): Promise<{ estado: EstadoPagamento; disponivel: boolean } | null> {
+): Promise<{ estado: EstadoPagamento; disponivel: boolean; compra?: CompraConfirmada } | null> {
   const { data, error } = await supabase.functions.invoke("estado-pagamento", { body: { orderId } });
   if (error) return null;
-  const resposta = data as { ok?: boolean; estado?: EstadoPagamento; disponivel?: boolean };
-  return resposta?.estado ? { estado: resposta.estado, disponivel: !!resposta.disponivel } : null;
+  const resposta = data as { ok?: boolean; estado?: EstadoPagamento; disponivel?: boolean; compra?: CompraConfirmada };
+  return resposta?.estado ? { estado: resposta.estado, disponivel: !!resposta.disponivel, compra: resposta.compra } : null;
 }

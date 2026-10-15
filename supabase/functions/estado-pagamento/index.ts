@@ -28,10 +28,19 @@ Deno.serve(async (req: Request) => {
 
   const { data: pagamento } = await admin
     .from("payments")
-    .select("id, status, request_id, submission_id")
+    .select("id, status, request_id, submission_id, amount, currency")
     .eq("ifthenpay_order_id", orderId)
     .maybeSingle();
   if (!pagamento) return json({ ok: false, erro: "inexistente" }, 404);
+
+  // Dados reais da compra confirmada (para o evento purchase); sem dados pessoais.
+  const compra = async () => {
+    const { data } = await admin.from("payments").select("status, amount, currency").eq("id", pagamento.id).maybeSingle();
+    const valor = Number(data?.amount);
+    const moeda = String(data?.currency ?? "").toUpperCase();
+    if (data?.status !== "paid" || !Number.isFinite(valor) || valor <= 0 || !/^[A-Z]{3}$/.test(moeda)) return undefined;
+    return { transaction_id: orderId, value: valor, currency: moeda, payment_status: "paid" as const };
+  };
 
   // O relatório completo só está disponível depois da libertação (mesma regra dos e-mails).
   const disponibilidade = async () => {
@@ -56,7 +65,7 @@ Deno.serve(async (req: Request) => {
           origem: "sondagem",
           detalhes: { paymentIntent: sessao.paymentIntent },
         });
-        return json({ ok: true, estado: "paid", disponivel: await disponibilidade() });
+        return json({ ok: true, estado: "paid", disponivel: await disponibilidade(), compra: await compra() });
       }
       if (sessao.expirada) {
         await admin.from("payments").update({ status: "expired" }).eq("id", pagamento.id).eq("status", "pending");
@@ -68,5 +77,5 @@ Deno.serve(async (req: Request) => {
   }
 
   const disponivel = pagamento.status === "paid" ? await disponibilidade() : false;
-  return json({ ok: true, estado: pagamento.status, disponivel });
+  return json({ ok: true, estado: pagamento.status, disponivel, ...(pagamento.status === "paid" ? { compra: await compra() } : {}) });
 });

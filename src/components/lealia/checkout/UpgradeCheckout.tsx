@@ -63,7 +63,7 @@ export function UpgradeCheckout({
       if (estado === "paid") {
         parar();
         // Só aqui: estado "paid" confirmado pelo servidor; uma vez por pedido.
-        pushPurchaseOnce(orderId, PRECO_RELATORIO_COMPLETO, "EUR");
+        pushPurchaseOnce(resposta?.compra);
         setDisponivel(!!resposta?.disponivel);
         setFase("pago");
         onPago?.();
@@ -83,7 +83,7 @@ export function UpgradeCheckout({
 
     setErro(null);
     setFase("encaminhar");
-    pushEvent("checkout_start", { value: PRECO_RELATORIO_COMPLETO, currency: "EUR" });
+    pushEvent("checkout_start");
 
     const resposta = await criarPagamento({
       ref: referencia,
