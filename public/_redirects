@@ -29,6 +29,8 @@ https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 /email-logo.png /email-logo.png 200
 /sample-report/*  /sample-report/:splat  200
 /robots.txt   /robots.txt   200
+# Chave IndexNow (validação na raiz)
+/8213365a2ea9773aa9e7a8eff2ece602.txt /8213365a2ea9773aa9e7a8eff2ece602.txt 200
 /sitemap.xml  /sitemap.xml  200
 /llms.txt     /llms.txt     200
 /llms-full.txt /llms-full.txt 200

@@ -20,6 +20,7 @@ export type Database = {
           ano_avaliacao_imovel: number | null
           ano_referencia: number | null
           atividade_principal: string | null
+          atribuicao: Json | null
           backlog_contratado: number | null
           caixa_e_depositos: number | null
           calculo_possivel: boolean
@@ -108,6 +109,7 @@ export type Database = {
           ano_avaliacao_imovel?: number | null
           ano_referencia?: number | null
           atividade_principal?: string | null
+          atribuicao?: Json | null
           backlog_contratado?: number | null
           caixa_e_depositos?: number | null
           calculo_possivel?: boolean
@@ -196,6 +198,7 @@ export type Database = {
           ano_avaliacao_imovel?: number | null
           ano_referencia?: number | null
           atividade_principal?: string | null
+          atribuicao?: Json | null
           backlog_contratado?: number | null
           caixa_e_depositos?: number | null
           calculo_possivel?: boolean

@@ -10,14 +10,8 @@
     <!-- Google Search Console verification -->
     <meta name="google-site-verification" content="1u_uxmwTNfqo7pB1fIox2RTSwXcHyUQuELaqupKcHMo" />
 
-    <!-- Bing Webmaster Tools: substituir PLACEHOLDER pelo código do Bing e descomentar -->
-    <!-- <meta name="msvalidate.01" content="PLACEHOLDER" /> -->
+    <!-- Tags (GA4, Ads, LinkedIn, Clarity): configuradas no GTM, carregado por src/lib/tracking/gtm.ts só com VITE_GTM_CONTAINER_ID real. -->
 
-    <!-- GA4: substituir G-XXXXXXXXXX pelo ID de medição e descomentar (os eventos já estão ligados em src/lib/analytics.ts) -->
-    <!--
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
-    -->
 
     <!-- Primary Meta -->
     <title>Lealia Advisory Partners | M&amp;A Advisory &amp; Strategic Consulting</title>
@@ -57,6 +51,7 @@
       <input type="email" name="email" />
       <input type="text" name="company" />
       <textarea name="message"></textarea>
+      <input type="hidden" name="attribution" />
     </form>
 
     <div id="root"></div>
