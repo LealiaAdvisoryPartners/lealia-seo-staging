@@ -112,7 +112,7 @@ export const pt = {
 
   // Política de Privacidade
   "privacy.title": "Política de Privacidade",
-  "privacy.lastUpdated": "Última atualização: Setembro de 2026",
+  "privacy.lastUpdated": "Última atualização: Outubro de 2026",
   "privacy.section1.title": "Introdução",
   "privacy.section1.p1":
     "A Lealia Advisory Partners, Lda. (NIF/NIPC 519187334), com sede em Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa ('nós', 'nosso', ou 'nossa'), é a responsável pelo tratamento dos seus dados pessoais e está comprometida com a proteção da sua privacidade. Esta Política de Privacidade explica como recolhemos, armazenamos, usamos, divulgamos e protegemos as suas informações quando visita o nosso site (lealiaap.com), utiliza os nossos serviços ou efetua pagamentos através da nossa plataforma.",
@@ -184,6 +184,18 @@ export const pt = {
     "Lealia Advisory Partners, Lda. - NIF/NIPC: 519187334 - Sede: Calçada da Picheleira, 40 1º Piso, 1900-371 Lisboa",
   "privacy.section10.p2":
     "Se tiver dúvidas sobre esta Política de Privacidade ou sobre as nossas práticas relacionadas com dados e pagamentos, contacte-nos através do formulário disponível no site.",
+  // Secção 11 (cookies): SUJEITA A VALIDAÇÃO JURÍDICA ANTES DE PUBLICAÇÃO.
+  "privacy.section11.title": "Cookies e tecnologias semelhantes",
+  "privacy.section11.p1": "Usamos armazenamento no navegador (cookies, localStorage e sessionStorage). Os necessários estão sempre ativos; os de analítica, marketing e experiência só são ativados com o seu consentimento e quando a respetiva ferramenta estiver ligada. Cada linha indica categoria, finalidade, fornecedor, duração e condição de ativação.",
+  "privacy.section11.item1": "Necessários — escolha de cookies (lealia_consent, localStorage): guardar a sua escolha, versão e data. Lealia. 12 meses ou até nova versão da política. Sempre ativo.",
+  "privacy.section11.item2": "Necessários — idioma (language, localStorage; nf_country, cookie da Netlify): apresentar o site no idioma escolhido. Lealia / Netlify. 12 meses. Sempre ativo.",
+  "privacy.section11.item3": "Necessários — progresso do formulário de avaliação (localStorage): não perder respostas ao recarregar. Lealia. Apagado ao submeter. Sempre ativo.",
+  "privacy.section11.item4": "Necessários — origem da visita (lealia_attribution, sessionStorage): parâmetros de campanha (utm, identificadores de clique), página de entrada e de origem, sem dados pessoais, associados ao pedido de avaliação ou contacto. Lealia. Sessão; 90 dias apenas com consentimento de analítica.",
+  "privacy.section11.item5": "Analítica — Google Analytics 4 via Google Tag Manager (_ga, _ga_*): estatísticas agregadas de visitas. Google Ireland Ltd. Até 14 meses. Só com consentimento de analítica.",
+  "privacy.section11.item6": "Marketing — Google Ads (_gcl_*) e LinkedIn Insight Tag (li_*, bcookie, lidc): medir campanhas e conversões. Google Ireland Ltd.; LinkedIn Ireland UC. Até 90 dias (Google) e até 12 meses (LinkedIn). Só com consentimento de marketing e quando ativados.",
+  "privacy.section11.item7": "Experiência — Microsoft Clarity (_clck, _clsk): mapas de utilização para melhorar o site, com campos de formulário ocultados. Microsoft Ireland Operations Ltd. Até 12 meses (_clck) e 1 dia (_clsk). Só com consentimento de experiência e quando ativado.",
+  "privacy.section11.item8": "Transferências internacionais — Google, LinkedIn e Microsoft podem tratar dados nos EUA, ao abrigo do EU-US Data Privacy Framework e/ou cláusulas contratuais-tipo.",
+  "privacy.section11.p2": "Pode rever, alterar ou retirar o consentimento a qualquer momento em “Definições de cookies”, no rodapé do site. Ao retirar, os cookies opcionais são apagados; a retirada não afeta a licitude do tratamento anterior. Voltaremos a pedir o consentimento sempre que esta secção mudar de forma relevante.",
 
   // Página Sobre
   "about.title": "Sobre a Lealia",

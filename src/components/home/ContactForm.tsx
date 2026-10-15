@@ -1,4 +1,7 @@
+import { useRef } from "react";
 import { motion } from "framer-motion";
+import { pushEvent } from "@/lib/tracking/datalayer";
+import { getAttribution } from "@/lib/tracking/attribution";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -37,12 +40,22 @@ const ContactForm = () => {
     },
   });
 
+  const iniciado = useRef(false);
+  const onStart = () => {
+    if (iniciado.current) return;
+    iniciado.current = true;
+    pushEvent("form_start", { form_name: "contact" });
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const formData = new FormData();
     formData.append('form-name', 'contact');
     Object.entries(values).forEach(([key, value]) => {
       formData.append(key, String(value));
     });
+    // Origem da visita (campo escondido, só campos autorizados, sem dados pessoais).
+    const atribuicao = getAttribution();
+    formData.append('attribution', atribuicao ? JSON.stringify(atribuicao) : '');
 
     try {
       const response = await fetch(window.location.pathname || '/', {
@@ -52,12 +65,15 @@ const ContactForm = () => {
       });
 
       if (response.ok) {
+        pushEvent("form_submit", { form_name: "contact" });
         toast({
           title: t("contact.success.title"),
           description: t("contact.success.desc"),
         });
         form.reset();
+        iniciado.current = false;
       } else {
+        pushEvent("form_error", { form_name: "contact" });
         toast({
           title: "Error",
           description: "Something went wrong. Please try again.",
@@ -65,6 +81,7 @@ const ContactForm = () => {
         });
       }
     } catch (error) {
+      pushEvent("form_error", { form_name: "contact" });
       toast({
         title: "Error",
         description: "Network error. Please try again.",
@@ -111,7 +128,11 @@ const ContactForm = () => {
 
           <div className="relative gradient-border p-8 md:p-10" style={{ boxShadow: "var(--shadow-elegant)" }}>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form
+                onSubmit={form.handleSubmit(onSubmit, () => pushEvent("form_error", { form_name: "contact" }))}
+                onFocusCapture={onStart}
+                className="space-y-6"
+              >
                 <FormField
                   control={form.control}
                   name="name"

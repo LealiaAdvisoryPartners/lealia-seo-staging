@@ -9,6 +9,8 @@ import { registarLead } from "@/lib/leads";
 import { leadDoFormulario, valuationInputDoFormulario } from "@/components/lealia/submeter-avaliacao";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
+import { pushEvent } from "@/lib/tracking/datalayer";
+import { getAttribution } from "@/lib/tracking/attribution";
 
 export { CALENDLY_URL } from "@/lib/calendly";
 
@@ -41,10 +43,17 @@ export function AvaliacaoTool() {
       const r = calcularValuation(valuationInputDoFormulario(data));
       setResult(r);
       setLoading(false);
+      pushEvent("valuation_complete", { form_name: "valuation" });
 
-      void registarLead(leadDoFormulario(data, r))
-        .then((resposta) => setReferencia(resposta?.ref ?? null))
-        .catch((e) => console.error("Falha ao registar lead", e));
+      void registarLead({ ...leadDoFormulario(data, r), atribuicao: getAttribution() })
+        .then((resposta) => {
+          setReferencia(resposta?.ref ?? null);
+          if (resposta?.ok) pushEvent("report_request", { form_name: "valuation" });
+        })
+        .catch((e) => {
+          pushEvent("form_error", { form_name: "valuation" });
+          console.error("Falha ao registar lead", e);
+        });
     }, 1400);
   };
 
