@@ -8,12 +8,48 @@ const OG_IMAGE =
 
 const OG_LOCALE: Record<string, string> = { en: "en_US", pt: "pt_PT", es: "es_ES" };
 
-const ORG = { "@type": "Organization", name: "Lealia Advisory Partners", url: BASE_URL } as const;
+/** Códigos BCP 47 para hreflang e <html lang>. */
+export const HREFLANG: Record<string, string> = { en: "en", pt: "pt-PT", es: "es-ES" };
+
+/** @id estáveis: as páginas referenciam a mesma entidade em vez de a repetir. */
+export const ORG_ID = `${BASE_URL}/#organization`;
+export const WEBSITE_ID = `${BASE_URL}/#website`;
+const ORG = { "@id": ORG_ID } as const;
+
+const ORGANIZATION = {
+  "@context": "https://schema.org",
+  "@type": ["ProfessionalService", "Organization"],
+  "@id": ORG_ID,
+  name: "Lealia Advisory Partners",
+  alternateName: "Lealia",
+  description: "Independent M&A advisory firm specializing in SMEs and lower mid-market transactions in Iberia.",
+  url: BASE_URL,
+  logo: `${BASE_URL}/email-logo.png`,
+  image: OG_IMAGE,
+  email: "geral@lealiaap.com",
+  telephone: "+351935882323",
+  address: { "@type": "PostalAddress", addressCountry: "PT", addressLocality: "Lisbon" },
+  areaServed: ["Portugal", "Spain", "Europe"],
+  sameAs: ["https://www.linkedin.com/company/lealia-ap/"],
+  founder: [{ "@id": `${BASE_URL}/#ricardo-ferreira` }, { "@id": `${BASE_URL}/#duarte-pereira` }],
+};
+
+const WEBSITE = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": WEBSITE_ID,
+  name: "Lealia Advisory Partners",
+  alternateName: "Lealia",
+  url: `${BASE_URL}/`,
+  inLanguage: ["en", "pt-PT", "es-ES"],
+  publisher: ORG,
+};
 
 interface SchemaContext {
   title: string;
   description: string;
   url: string;
+  lang: string;
 }
 
 /** Páginas transaccionais (dependem de uma referência): não indexar. */
@@ -25,7 +61,7 @@ const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>>
     "@context": "https://schema.org",
     "@type": "Service",
     name: "M&A Advisory & Corporate Finance",
-    provider: { "@type": "ProfessionalService", name: ORG.name, url: BASE_URL },
+    provider: ORG,
     areaServed: ["Portugal", "Spain", "Iberia", "Europe"],
     serviceType: [
       "Buy-Side M&A Advisory",
@@ -43,28 +79,35 @@ const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>>
     "@type": "Service",
     name: "Company valuation",
     serviceType: "Company valuation",
-    provider: { "@type": "ProfessionalService", name: ORG.name, url: BASE_URL },
+    provider: ORG,
     areaServed: ["Portugal", "Spain"],
     description,
     url,
   }),
-  about: ({ title, description, url }) => ({
+  about: ({ title, description, url, lang }) => ({
     "@context": "https://schema.org",
     "@type": "AboutPage",
+    "@id": `${url}#webpage`,
+    inLanguage: lang,
+    isPartOf: { "@id": WEBSITE_ID },
     name: title,
     description,
     url,
     mainEntity: ORG,
   }),
-  team: ({ title, description, url }) => ({
+  team: ({ title, description, url, lang }) => ({
     "@context": "https://schema.org",
     "@type": "AboutPage",
+    "@id": `${url}#webpage`,
+    inLanguage: lang,
+    isPartOf: { "@id": WEBSITE_ID },
     name: title,
     description,
     url,
     mainEntity: [
       {
         "@type": "Person",
+        "@id": `${BASE_URL}/#ricardo-ferreira`,
         name: "Ricardo Nascimento Ferreira",
         jobTitle: "Managing Partner",
         email: "ricardo.ferreira@lealiaap.com",
@@ -73,6 +116,7 @@ const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>>
       },
       {
         "@type": "Person",
+        "@id": `${BASE_URL}/#duarte-pereira`,
         name: "Duarte Rocha Pereira",
         jobTitle: "Managing Partner",
         email: "duarte.pereira@lealiaap.com",
@@ -83,14 +127,20 @@ const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>>
   }),
 };
 
-const webPageSchema = ({ title, description, url }: SchemaContext) => ({
+const webPageSchema = ({ title, description, url, lang }: SchemaContext) => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": `${url}#webpage`,
   name: title,
   description,
   url,
-  isPartOf: { "@type": "WebSite", name: ORG.name, url: BASE_URL },
+  inLanguage: lang,
+  isPartOf: { "@id": WEBSITE_ID },
+  publisher: ORG,
 });
+
+/** Páginas que publicam o seu próprio schema principal (ex.: FAQPage). */
+const OWN_SCHEMA = new Set(["faq"]);
 
 interface SEOHeadProps {
   /** Segmento da página ("" na página inicial). Define URL canónico e chaves SEO. */
@@ -110,9 +160,15 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
 
   const suffix = slug ? `/${slug}` : "";
   const url = `${BASE_URL}/${language}${suffix}`;
-  const ctx: SchemaContext = { title, description, url };
+  const lang = HREFLANG[language] ?? "en";
+  const ctx: SchemaContext = { title, description, url, lang };
+  const schemas: object[] = [];
+  if (!slug) schemas.push(ORGANIZATION, WEBSITE);
+  else schemas.push(breadcrumbFor());
+  if (!OWN_SCHEMA.has(key)) schemas.push((PAGE_SCHEMA[key] ?? webPageSchema)(ctx));
 
-  const breadcrumb = {
+  function breadcrumbFor() {
+  return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
@@ -122,17 +178,18 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
         : []),
     ],
   };
+  }
 
   return (
     <Helmet>
-      <html lang={language} />
+      <html lang={lang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="robots" content={NOINDEX.has(key) ? "noindex, follow" : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"} />
       <link rel="canonical" href={url} />
 
       {LANGUAGES.map((l) => (
-        <link key={l} rel="alternate" hrefLang={l} href={`${BASE_URL}/${l}${suffix}`} />
+        <link key={l} rel="alternate" hrefLang={HREFLANG[l]} href={`${BASE_URL}/${l}${suffix}`} />
       ))}
       <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/en${suffix}`} />
 
@@ -151,8 +208,9 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={OG_IMAGE} />
 
-      <script type="application/ld+json">{JSON.stringify(breadcrumb)}</script>
-      <script type="application/ld+json">{JSON.stringify((PAGE_SCHEMA[key] ?? webPageSchema)(ctx))}</script>
+      {schemas.map((schema, i) => (
+        <script key={i} type="application/ld+json">{JSON.stringify(schema)}</script>
+      ))}
     </Helmet>
   );
 };

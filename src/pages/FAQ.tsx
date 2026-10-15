@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import SEOHead from "@/components/SEOHead";
+import SEOHead, { HREFLANG, ORG_ID, WEBSITE_ID } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { faqCopy } from "@/translations/faq";
 
@@ -8,23 +8,23 @@ const FAQ = () => {
   const copy = faqCopy[language];
 
   const url = `https://www.lealiaap.com/${language}/faq`;
-  const org = { "@type": "ProfessionalService", name: "Lealia Advisory Partners", url: "https://www.lealiaap.com" };
+  const org = { "@id": ORG_ID };
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "@id": `${url}#faq`,
+    "@id": `${url}#webpage`,
     url,
     name: copy.heading,
     description: copy.lead,
-    inLanguage: language,
-    isPartOf: { "@type": "WebSite", name: org.name, url: org.url },
+    inLanguage: HREFLANG[language],
+    isPartOf: { "@id": WEBSITE_ID },
     publisher: org,
     about: ["Mergers and acquisitions", "Company valuation", "Selling a business", "Buying a business"],
     mainEntity: copy.categorias.flatMap((c) =>
       c.itens.map((i) => ({
         "@type": "Question",
         name: i.q,
-        inLanguage: language,
+        inLanguage: HREFLANG[language],
         acceptedAnswer: { "@type": "Answer", text: i.a, author: org },
       })),
     ),
