@@ -12,9 +12,9 @@ export const es = {
   "seo.team.title": "Equipo | Lealia Advisory Partners",
   "seo.team.description":
     "Conozca a los Managing Partners de Lealia Advisory Partners, profesionales con amplia experiencia en M&A y más de 30 transacciones en España, Portugal y Europa.",
-  "seo.valuation.title": "Valoración Gratuita de Empresas | Lealia Advisory Partners",
+  "seo.valuation.title": "Valoración Indicativa de Empresas | Lealia Advisory Partners",
   "seo.valuation.description":
-    "¿Cuánto vale mi empresa? Solicite una valoración indicativa gratuita de su empresa, basada en múltiplos de mercado y preparada por el equipo de M&A de Lealia.",
+    "¿Cuánto vale mi empresa? Solicite una valoración indicativa de su empresa, basada en múltiplos de mercado y preparada por el equipo de M&A de Lealia.",
   "seo.privacy.title": "Política de Privacidad | Lealia Advisory Partners",
   "seo.privacy.description":
     "Política de privacidad de Lealia Advisory Partners: cómo recopilamos, utilizamos, conservamos y protegemos su información personal, y cómo ejercer sus derechos.",
@@ -304,7 +304,7 @@ export const es = {
   "valuation.title": "Descubra cuánto vale su",
   "valuation.title.accent": "empresa",
   "valuation.description":
-    "Responda a unas preguntas sobre su empresa y reciba un rango de valoración indicativo, elaborado con la misma metodología que aplicamos en mandatos reales de M&A. Gratuito, confidencial y sin compromiso.",
+    "Responda a unas preguntas sobre su empresa y reciba un rango de valoración indicativo, elaborado con la misma metodología que aplicamos en mandatos reales de M&A. Confidencial y sin compromiso.",
   "valuation.soon.title": "La herramienta de valoración se está finalizando",
   "valuation.soon.desc":
     "Estará disponible en esta página muy pronto. Mientras tanto, contáctenos y prepararemos una valoración indicativa para usted.",

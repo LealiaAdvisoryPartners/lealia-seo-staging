@@ -87,7 +87,7 @@ export const pageCopy: Record<Language, PageCopy> = {
   pt: {
     hero: {
       titlePrefix: "Quanto vale a sua empresa? ",
-      titleAccent: "Peça uma análise indicativa gratuita.",
+      titleAccent: "Peça uma análise indicativa.",
       lead: "Submeta os dados da sua PME. A nossa equipa valida a informação, analisa os indicadores e prepara o relatório em menos de 3 dias úteis.",
       ctaPrimary: "Avaliar a minha empresa agora",
       ctaSecondary: "Falar com a equipa",
@@ -124,7 +124,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     },
     scheduling: {
       heading: "Fale connosco sobre a estratégia para a sua empresa",
-      lead: "Numa reunião de 20 minutos, enquadramos o valor da sua empresa no apetite atual do mercado, discutimos as opções de transação disponíveis e explicamos-lhe como se processa um processo de M&A, de A a Z. Totalmente gratuito e sem compromisso.",
+      lead: "Numa reunião de 20 minutos, enquadramos o valor da sua empresa no apetite atual do mercado, discutimos as opções de transação disponíveis e explicamos-lhe como se processa um processo de M&A, de A a Z. Sem qualquer compromisso.",
     },
     thankYou: {
       eyebrow: "Submissão recebida",
@@ -217,7 +217,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     },
     resultCard: {
       needCloserLook: "Precisamos de olhar mais de perto",
-      scheduleCta: "Agendar reunião gratuita",
+      scheduleCta: "Agendar reunião",
       eyebrow: "Resultado indicativo",
       heading: (empresa) => `A avaliação indicativa da ${empresa}`,
       enterpriseValueEyebrow: "Enterprise Value",
@@ -248,7 +248,7 @@ export const pageCopy: Record<Language, PageCopy> = {
   en: {
     hero: {
       titlePrefix: "How much is your company worth? ",
-      titleAccent: "Request a free indicative analysis.",
+      titleAccent: "Request an indicative analysis.",
       lead: "Submit your SME's data. Our team validates the information, analyses the key indicators and prepares the report in under 3 business days.",
       ctaPrimary: "Value my company now",
       ctaSecondary: "Speak with our team",
@@ -285,7 +285,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     },
     scheduling: {
       heading: "Speak with us about the strategy for your company",
-      lead: "In a 20-minute meeting, we frame your company's value against current market appetite, discuss the transaction options available and walk you through how an M&A process unfolds, from start to finish. Entirely free of charge and with no obligation.",
+      lead: "In a 20-minute meeting, we frame your company's value against current market appetite, discuss the transaction options available and walk you through how an M&A process unfolds, from start to finish. With no obligation.",
     },
     thankYou: {
       eyebrow: "Submission received",
@@ -378,7 +378,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     },
     resultCard: {
       needCloserLook: "We need to take a closer look",
-      scheduleCta: "Schedule a free meeting",
+      scheduleCta: "Schedule a meeting",
       eyebrow: "Indicative result",
       heading: (empresa) => `Indicative valuation for ${empresa}`,
       enterpriseValueEyebrow: "Enterprise Value",
@@ -409,7 +409,7 @@ export const pageCopy: Record<Language, PageCopy> = {
   es: {
     hero: {
       titlePrefix: "¿Cuánto vale su empresa? ",
-      titleAccent: "Solicite un análisis indicativo gratuito.",
+      titleAccent: "Solicite un análisis indicativo.",
       lead: "Envíe los datos de su pyme. Nuestro equipo valida la información, analiza los indicadores clave y prepara el informe en menos de 3 días hábiles.",
       ctaPrimary: "Valorar mi empresa ahora",
       ctaSecondary: "Hablar con el equipo",
@@ -446,7 +446,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     },
     scheduling: {
       heading: "Hable con nosotros sobre la estrategia para su empresa",
-      lead: "En una reunión de 20 minutos, enmarcamos el valor de su empresa en el apetito actual del mercado, comentamos las opciones de transacción disponibles y le explicamos cómo se desarrolla un proceso de M&A, de principio a fin. Totalmente gratuito y sin compromiso.",
+      lead: "En una reunión de 20 minutos, enmarcamos el valor de su empresa en el apetito actual del mercado, comentamos las opciones de transacción disponibles y le explicamos cómo se desarrolla un proceso de M&A, de principio a fin. Sin compromiso.",
     },
     thankYou: {
       eyebrow: "Envío recibido",
@@ -540,7 +540,7 @@ export const pageCopy: Record<Language, PageCopy> = {
     },
     resultCard: {
       needCloserLook: "Necesitamos analizarlo más de cerca",
-      scheduleCta: "Programar reunión gratuita",
+      scheduleCta: "Programar reunión",
       eyebrow: "Resultado indicativo",
       heading: (empresa) => `Valoración indicativa de ${empresa}`,
       enterpriseValueEyebrow: "Enterprise Value",
