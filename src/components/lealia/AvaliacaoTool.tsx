@@ -9,7 +9,7 @@ import { registarLead } from "@/lib/leads";
 import { leadDoFormulario, valuationInputDoFormulario } from "@/components/lealia/submeter-avaliacao";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { pageCopy } from "@/translations/valuation-page";
-import { pushEvent } from "@/lib/tracking/datalayer";
+import { pushEvent, pushGenerateLead } from "@/lib/tracking/datalayer";
 import { getAttribution } from "@/lib/tracking/attribution";
 
 export { CALENDLY_URL } from "@/lib/calendly";
@@ -48,7 +48,10 @@ export function AvaliacaoTool() {
       void registarLead({ ...leadDoFormulario(data, r), atribuicao: getAttribution() })
         .then((resposta) => {
           setReferencia(resposta?.ref ?? null);
-          if (resposta?.ok) pushEvent("report_request", { form_name: "valuation" });
+          if (resposta?.ok) {
+            pushEvent("report_request", { form_name: "valuation" });
+            pushGenerateLead("valuation_form");
+          }
         })
         .catch((e) => {
           pushEvent("form_error", { form_name: "valuation" });

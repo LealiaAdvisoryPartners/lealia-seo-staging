@@ -4,6 +4,8 @@ import { safePagePath, safeReferrer, validPurchase, isProductionHost, generateLe
 describe("generate_lead", () => {
   test("payload só com event e location", () =>
     expect(generateLeadPayload()).toEqual({ event: "generate_lead", location: "contact_form" }));
+  test("formulário de avaliação", () =>
+    expect(generateLeadPayload("valuation_form")).toEqual({ event: "generate_lead", location: "valuation_form" }));
 });
 
 describe("URLs seguros", () => {

@@ -118,14 +118,16 @@ export function pushEvent(event: TrackEvent, params: EventParams = {}) {
   });
 }
 
+export type LeadLocation = "contact_form" | "valuation_form";
+
 /** Payload exato do lead: só estes dois campos, nunca dados pessoais. */
-export function generateLeadPayload() {
-  return { event: "generate_lead", location: "contact_form" } as const;
+export function generateLeadPayload(location: LeadLocation = "contact_form") {
+  return { event: "generate_lead", location } as const;
 }
 
 /** Só chamar depois da confirmação real de sucesso do envio. */
-export function pushGenerateLead() {
-  return push({ ...generateLeadPayload() });
+export function pushGenerateLead(location: LeadLocation = "contact_form") {
+  return push({ ...generateLeadPayload(location) });
 }
 
 /** page_view com URL seguro (no GTM, o GA4 deve usar page_location = {{page_location_safe}}). */
