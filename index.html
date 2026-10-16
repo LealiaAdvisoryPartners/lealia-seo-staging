@@ -10,7 +10,24 @@
     <!-- Google Search Console verification -->
     <meta name="google-site-verification" content="1u_uxmwTNfqo7pB1fIox2RTSwXcHyUQuELaqupKcHMo" />
 
-    <!-- Tags (GA4, Ads, LinkedIn, Clarity): configuradas no GTM, carregado por src/lib/tracking/gtm.ts só com VITE_GTM_CONTAINER_ID real. -->
+    <!-- Consent Mode v2: tudo recusado por defeito, ANTES do GTM. A escolha guardada é aplicada por src/lib/tracking/consent.ts. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied',
+        ad_personalization: 'denied', personalization_storage: 'denied',
+        functionality_storage: 'granted', security_storage: 'granted', wait_for_update: 500
+      });
+    </script>
+    <!-- Google Tag Manager -->
+    <script data-lealia-gtm="GTM-KPB93JXG">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KPB93JXG');</script>
+    <!-- End Google Tag Manager -->
+
 
 
     <!-- Primary Meta -->
@@ -45,6 +62,10 @@
   </head>
 
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPB93JXG"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Hidden form for Netlify Forms detection -->
     <form name="contact" data-netlify="true" hidden>
       <input type="text" name="name" />
