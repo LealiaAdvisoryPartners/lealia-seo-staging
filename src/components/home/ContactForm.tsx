@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { pushEvent } from "@/lib/tracking/datalayer";
+import { pushEvent, pushGenerateLead } from "@/lib/tracking/datalayer";
 import { getAttribution } from "@/lib/tracking/attribution";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,6 +66,7 @@ const ContactForm = () => {
 
       if (response.ok) {
         pushEvent("form_submit", { form_name: "contact" });
+        pushGenerateLead();
         toast({
           title: t("contact.success.title"),
           description: t("contact.success.desc"),

@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { safePagePath, safeReferrer, validPurchase, isProductionHost } from "../src/lib/tracking/datalayer";
+import { safePagePath, safeReferrer, validPurchase, isProductionHost, generateLeadPayload } from "../src/lib/tracking/datalayer";
+
+describe("generate_lead", () => {
+  test("payload só com event e location", () =>
+    expect(generateLeadPayload()).toEqual({ event: "generate_lead", location: "contact_form" }));
+});
 
 describe("URLs seguros", () => {
   test("relatório normalizado para /report", () => expect(safePagePath("/pt/ABC123xyz")).toBe("/pt/report"));
