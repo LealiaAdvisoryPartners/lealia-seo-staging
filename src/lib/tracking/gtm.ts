@@ -41,9 +41,25 @@ export function loadGtm(id: unknown = import.meta.env.VITE_GTM_CONTAINER_ID) {
   return true;
 }
 
+/** Diagnóstico só fora de produção com ?gtm_diag=1: indica se o ID existe e começa por "GTM-". */
+function logGtmDiagnostic() {
+  const host = window.location.hostname;
+  if (/(^|\.)lealiaap\.(com|pt|es)$/.test(host)) return;
+  if (!new URLSearchParams(window.location.search).has("gtm_diag")) return;
+  const id = import.meta.env.VITE_GTM_CONTAINER_ID;
+  console.info("[gtm_diag]", {
+    configured: typeof id === "string" && id.length > 0,
+    startsWithGTM: typeof id === "string" && id.startsWith("GTM-"),
+    validFormat: validGtmId(id),
+    consentGiven: hasAnyOptionalConsent(getStoredConsent()),
+    scriptLoaded: isGtmLoaded(),
+  });
+}
+
 /** Carrega já se houver consentimento guardado; senão, espera pela escolha. */
 export function initGtm(onLoaded?: () => void) {
   if (typeof window === "undefined") return;
+  logGtmDiagnostic();
   if (loadGtm()) onLoaded?.();
   window.addEventListener(CONSENT_CHANGED_EVENT, (e) => {
     const detail = (e as CustomEvent<StoredConsent>).detail;
