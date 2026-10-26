@@ -61,6 +61,29 @@ https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 /pt/*    /pt/404.html   404
 /es/*    /es/404.html   404
 
+# Páginas sem idioma: saltar direto para o URL final com barra (evita 302 + 301)
+/about  /pt/about/  302!  Country=PT,BR,CV,AO,MZ
+/about  /es/about/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/about  /en/about/  302!
+/services  /pt/services/  302!  Country=PT,BR,CV,AO,MZ
+/services  /es/services/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/services  /en/services/  302!
+/team  /pt/team/  302!  Country=PT,BR,CV,AO,MZ
+/team  /es/team/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/team  /en/team/  302!
+/valuation  /pt/valuation/  302!  Country=PT,BR,CV,AO,MZ
+/valuation  /es/valuation/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/valuation  /en/valuation/  302!
+/faq  /pt/faq/  302!  Country=PT,BR,CV,AO,MZ
+/faq  /es/faq/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/faq  /en/faq/  302!
+/privacy  /pt/privacy/  302!  Country=PT,BR,CV,AO,MZ
+/privacy  /es/privacy/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/privacy  /en/privacy/  302!
+/terms  /pt/terms/  302!  Country=PT,BR,CV,AO,MZ
+/terms  /es/terms/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/terms  /en/terms/  302!
+
 # Portuguese: PT, BR, CV (Cabo Verde), AO (Angola), MZ (Mozambique)
 /*   /pt/:splat   302!   Country=PT,BR,CV,AO,MZ
 
