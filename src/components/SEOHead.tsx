@@ -159,7 +159,7 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
   const description = t(`seo.${key}.description`);
 
   const suffix = slug ? `/${slug}` : "";
-  const url = `${BASE_URL}/${language}${suffix}`;
+  const url = `${BASE_URL}/${language}${suffix}/`;
   const lang = HREFLANG[language] ?? "en";
   const ctx: SchemaContext = { title, description, url, lang };
   const schemas: object[] = [];
@@ -172,7 +172,7 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/${language}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/${language}/` },
       ...(slug
         ? [{ "@type": "ListItem", position: 2, name: title.split("|")[0].trim(), item: url }]
         : []),
@@ -189,9 +189,9 @@ const SEOHead = ({ slug = "" }: SEOHeadProps) => {
       <link rel="canonical" href={url} />
 
       {LANGUAGES.map((l) => (
-        <link key={l} rel="alternate" hrefLang={HREFLANG[l]} href={`${BASE_URL}/${l}${suffix}`} />
+        <link key={l} rel="alternate" hrefLang={HREFLANG[l]} href={`${BASE_URL}/${l}${suffix}/`} />
       ))}
-      <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/en${suffix}`} />
+      <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/en${suffix}/`} />
 
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Lealia Advisory Partners" />

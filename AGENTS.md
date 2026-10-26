@@ -6,3 +6,4 @@
 - Report links and /upgrade are served from dist/app.html (noindex); unknown language-prefixed paths get dist/404.html with HTTP 404 via public/_redirects.
 - Tracking goes only through src/lib/tracking (Consent Mode defaults then the official GTM snippet in index.html as the only gtm.js loader (gtm.ts never injects it, to avoid duplicates); events reach the dataLayer only with optional consent); vendor tags live in GTM, never in code, so consent and PII allowlists stay in one place.
 - Campaign attribution fields are whitelisted in supabase/functions/_shared/valuation/attribution.ts and re-validated server-side in registar-lead, so the browser and backend share one allowlist.
+- Public page URLs (canonical, hreflang, sitemap, redirects) always end with a trailing slash, because Netlify serves prerendered folders at /<lang>/<page>/ and 301s the slashless form.
