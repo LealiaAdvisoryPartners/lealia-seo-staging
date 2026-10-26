@@ -7,7 +7,7 @@ const FAQ = () => {
   const { language } = useLanguage();
   const copy = faqCopy[language];
 
-  const url = `https://www.lealiaap.com/${language}/faq`;
+  const url = `https://www.lealiaap.com/${language}/faq/`;
   const org = { "@id": ORG_ID };
   const schema = {
     "@context": "https://schema.org",
