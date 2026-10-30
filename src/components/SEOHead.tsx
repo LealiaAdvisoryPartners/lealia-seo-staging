@@ -31,7 +31,30 @@ const ORGANIZATION = {
   address: { "@type": "PostalAddress", addressCountry: "PT", addressLocality: "Lisbon" },
   areaServed: ["Portugal", "Spain", "Europe"],
   sameAs: ["https://www.linkedin.com/company/lealia-ap/"],
-  founder: [{ "@id": `${BASE_URL}/#ricardo-ferreira` }, { "@id": `${BASE_URL}/#duarte-pereira` }],
+  knowsAbout: [
+    "Mergers and Acquisitions",
+    "Sell-Side M&A",
+    "Buy-Side M&A",
+    "Company Valuation",
+    "DCF Valuation",
+    "EBITDA Multiples",
+    "Corporate Finance",
+    "SME Succession",
+  ],
+  founder: [
+    {
+      "@type": "Person",
+      "@id": `${BASE_URL}/#ricardo-ferreira`,
+      name: "Ricardo Nascimento Ferreira",
+      sameAs: "https://www.linkedin.com/in/ricardo-a-n-ferreira/",
+    },
+    {
+      "@type": "Person",
+      "@id": `${BASE_URL}/#duarte-pereira`,
+      name: "Duarte Rocha Pereira",
+      sameAs: "https://www.linkedin.com/in/duarte-rocha-pereira/",
+    },
+  ],
 };
 
 const WEBSITE = {
@@ -55,35 +78,81 @@ interface SchemaContext {
 /** Páginas transaccionais (dependem de uma referência): não indexar. */
 const NOINDEX = new Set(["upgrade"]);
 
+type L = "en" | "pt-PT" | "es-ES";
+const pick = (lang: string) => (lang === "pt-PT" || lang === "es-ES" ? lang : "en") as L;
+
+const SERVICES_I18N: Record<L, { name: string; types: string[] }> = {
+  en: {
+    name: "M&A Advisory & Corporate Finance",
+    types: ["Buy-Side M&A Advisory", "Sell-Side M&A Advisory", "Performance Improvement", "Corporate Finance", "Financial Modeling", "Valuation"],
+  },
+  "pt-PT": {
+    name: "Assessoria M&A e Corporate Finance",
+    types: ["Assessoria M&A Buy-Side", "Assessoria M&A Sell-Side", "Melhoria de Performance", "Corporate Finance", "Modelação Financeira", "Avaliação de Empresas"],
+  },
+  "es-ES": {
+    name: "Asesoramiento M&A y Finanzas Corporativas",
+    types: ["Asesoramiento M&A Buy-Side", "Asesoramiento M&A Sell-Side", "Mejora del Rendimiento", "Finanzas Corporativas", "Modelización Financiera", "Valoración de Empresas"],
+  },
+};
+
+const VALUATION_I18N: Record<L, { name: string; free: string; freeDesc: string; full: string }> = {
+  en: {
+    name: "Company Valuation",
+    free: "Preliminary Valuation Report",
+    freeDesc: "Free indicative preliminary valuation for SMEs",
+    full: "Full Valuation Report",
+  },
+  "pt-PT": {
+    name: "Avaliação de Empresas",
+    free: "Relatório Preliminar de Avaliação",
+    freeDesc: "Avaliação indicativa preliminar sem custos para PMEs",
+    full: "Relatório Completo de Avaliação",
+  },
+  "es-ES": {
+    name: "Valoración de Empresas",
+    free: "Informe Preliminar de Valoración",
+    freeDesc: "Valoración indicativa preliminar gratuita para pymes",
+    full: "Informe Completo de Valoración",
+  },
+};
+
 /** Schema.org específico por página; as restantes usam `WebPage`. */
 const PAGE_SCHEMA: Record<string, (c: SchemaContext) => Record<string, unknown>> = {
-  services: ({ description, url }) => ({
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: "M&A Advisory & Corporate Finance",
-    provider: ORG,
-    areaServed: ["Portugal", "Spain", "Iberia", "Europe"],
-    serviceType: [
-      "Buy-Side M&A Advisory",
-      "Sell-Side M&A Advisory",
-      "Performance Improvement",
-      "Corporate Finance",
-      "Financial Modeling",
-      "Valuation",
-    ],
-    description,
-    url,
-  }),
-  valuation: ({ description, url }) => ({
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: "Company valuation",
-    serviceType: "Company valuation",
-    provider: ORG,
-    areaServed: ["Portugal", "Spain"],
-    description,
-    url,
-  }),
+  services: ({ description, url, lang }) => {
+    const s = SERVICES_I18N[pick(lang)];
+    return {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: s.name,
+      provider: ORG,
+      areaServed: ["Portugal", "Spain", "Iberia", "Europe"],
+      serviceType: s.types,
+      inLanguage: lang,
+      description,
+      url,
+    };
+  },
+  valuation: ({ description, url, lang }) => {
+    const v = VALUATION_I18N[pick(lang)];
+    return {
+      "@context": "https://schema.org",
+      "@type": ["Service", "WebApplication"],
+      name: v.name,
+      serviceType: v.name,
+      applicationCategory: "BusinessApplication, FinanceApplication",
+      operatingSystem: "Web",
+      provider: ORG,
+      areaServed: ["Portugal", "Spain"],
+      inLanguage: lang,
+      description,
+      url,
+      offers: [
+        { "@type": "Offer", name: v.free, description: v.freeDesc, price: "0", priceCurrency: "EUR", url },
+        { "@type": "Offer", name: v.full, price: "299", priceCurrency: "EUR" },
+      ],
+    };
+  },
   about: ({ title, description, url, lang }) => ({
     "@context": "https://schema.org",
     "@type": "AboutPage",

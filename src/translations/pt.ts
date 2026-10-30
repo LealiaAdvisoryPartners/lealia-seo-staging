@@ -12,9 +12,9 @@ export const pt = {
   "seo.team.title": "Equipa | Lealia Advisory Partners",
   "seo.team.description":
     "Conheça os Managing Partners da Lealia Advisory Partners, profissionais com experiência em M&A e mais de 30 transações concluídas em Portugal, Espanha e Europa.",
-  "seo.valuation.title": "Avaliação Indicativa de Empresas | Lealia Advisory Partners",
+  "seo.valuation.title": "Avaliação de Empresas | Relatório Preliminar Gratuito para PMEs | Lealia",
   "seo.valuation.description":
-    "Quanto vale a minha empresa? Peça uma avaliação indicativa, com valuation por múltiplos de mercado, preparada pela equipa de M&A da Lealia.",
+    "Calcule quanto vale a sua empresa com o relatório preliminar gratuito da Lealia. Metodologia de múltiplos de mercado e DCF, confidencial e rigorosa para PMEs.",
   "seo.privacy.title": "Política de Privacidade | Lealia Advisory Partners",
   "seo.privacy.description":
     "Política de privacidade da Lealia Advisory Partners: como recolhemos, utilizamos e protegemos os seus dados pessoais, e como pode exercer os seus direitos.",
@@ -36,6 +36,7 @@ export const pt = {
   // Hero
   "hero.tagline": "Assessoria estratégica para resultados transformadores",
   "hero.services": "ASSESSORIA M&A E CONSULTORIA ESTRATÉGICA",
+  "hero.seo": "Venda de empresas e avaliação para PMEs em Portugal e Espanha",
 
   // Home - FluidHome
   "home.manifesto.eyebrow": "Uma boutique de M&A",
