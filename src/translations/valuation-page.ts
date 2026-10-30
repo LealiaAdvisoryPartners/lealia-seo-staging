@@ -87,8 +87,8 @@ export const pageCopy: Record<Language, PageCopy> = {
   pt: {
     hero: {
       titlePrefix: "Quanto vale a sua empresa? ",
-      titleAccent: "Peça uma análise indicativa.",
-      lead: "Submeta os dados da sua PME. A nossa equipa valida a informação, analisa os indicadores e prepara o relatório em menos de 3 dias úteis.",
+      titleAccent: "Receba o relatório preliminar gratuito.",
+      lead: "Submeta os dados da sua PME em 5 minutos. A nossa equipa analisa os indicadores e envia-lhe um relatório preliminar gratuito e confidencial em menos de 3 dias úteis.",
       ctaPrimary: "Avaliar a minha empresa agora",
       ctaSecondary: "Falar com a equipa",
     },
@@ -103,7 +103,7 @@ export const pageCopy: Record<Language, PageCopy> = {
         },
         {
           n: "02",
-          t: "Receba o relatório preliminar",
+          t: "Receba o relatório preliminar gratuito",
           d: "A nossa equipa valida e analisa os dados, monta o relatório da sua empresa\ne envia para o seu e-mail uma antevisão do mesmo em menos de 3 dias úteis.",
         },
         {
@@ -248,8 +248,8 @@ export const pageCopy: Record<Language, PageCopy> = {
   en: {
     hero: {
       titlePrefix: "How much is your company worth? ",
-      titleAccent: "Request an indicative analysis.",
-      lead: "Submit your SME's data. Our team validates the information, analyses the key indicators and prepares the report in under 3 business days.",
+      titleAccent: "Receive your free preliminary report.",
+      lead: "Submit your SME's data in 5 minutes. Our team analyses the key indicators and sends you a free, confidential preliminary report in under 3 business days.",
       ctaPrimary: "Value my company now",
       ctaSecondary: "Speak with our team",
     },
@@ -264,7 +264,7 @@ export const pageCopy: Record<Language, PageCopy> = {
         },
         {
           n: "02",
-          t: "Receive the preliminary report",
+          t: "Receive the free preliminary report",
           d: "Our team validates and analyses the data, builds your company's report\nand sends you a preview by email in under 3 business days..",
         },
         {
@@ -409,8 +409,8 @@ export const pageCopy: Record<Language, PageCopy> = {
   es: {
     hero: {
       titlePrefix: "¿Cuánto vale su empresa? ",
-      titleAccent: "Solicite un análisis indicativo.",
-      lead: "Envíe los datos de su pyme. Nuestro equipo valida la información, analiza los indicadores clave y prepara el informe en menos de 3 días hábiles.",
+      titleAccent: "Reciba el informe preliminar gratuito.",
+      lead: "Envíe los datos de su pyme en 5 minutos. Nuestro equipo analiza los indicadores clave y le envía un informe preliminar gratuito y confidencial en menos de 3 días hábiles.",
       ctaPrimary: "Valorar mi empresa ahora",
       ctaSecondary: "Hablar con el equipo",
     },
@@ -425,7 +425,7 @@ export const pageCopy: Record<Language, PageCopy> = {
         },
         {
           n: "02",
-          t: "Reciba el informe preliminar",
+          t: "Reciba el informe preliminar gratuito",
           d: "Nuestro equipo valida y analiza los datos, elabora el informe de su empresa\ny le envía un adelanto del mismo por correo electrónico en menos de 3 días hábiles.",
         },
         {
