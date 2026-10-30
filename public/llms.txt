@@ -13,14 +13,14 @@ Lealia Advisory Partners is a boutique financial advisory firm founded by experi
 
 ## Pages
 
-- [Home](https://www.lealiaap.com/en): Overview of Lealia Advisory Partners — independent M&A advisory for Iberian SMEs and lower mid-market.
-- [About](https://www.lealiaap.com/en/about): Firm philosophy, approach, and focus on tailored advisory for SME owners across Iberia.
-- [Services](https://www.lealiaap.com/en/services): Buy-side advisory, sell-side advisory, performance improvement, corporate finance, financial modeling, valuations, business plans, and feasibility studies.
-- [Team](https://www.lealiaap.com/en/team): Profiles of the Managing Partners Ricardo Nascimento Ferreira and Duarte Rocha Pereira.
-- [Valuation](https://www.lealiaap.com/en/valuation): Indicative company valuation — answer a short form about your business and receive an indicative valuation report, with the option of a full report.
-- [Privacy Policy](https://www.lealiaap.com/en/privacy): How the firm collects, uses, and protects personal data.
-- [Terms and Conditions](https://www.lealiaap.com/en/terms): Terms governing the business valuation services.
-- [FAQ](https://www.lealiaap.com/en/faq): Frequently asked questions on selling and buying a company, company valuation, due diligence and the Lealia valuation report.
+- [Home](https://www.lealiaap.com/en/): Overview of Lealia Advisory Partners — independent M&A advisory for Iberian SMEs and lower mid-market.
+- [About](https://www.lealiaap.com/en/about/): Firm philosophy, approach, and focus on tailored advisory for SME owners across Iberia.
+- [Services](https://www.lealiaap.com/en/services/): Buy-side advisory, sell-side advisory, performance improvement, corporate finance, financial modeling, valuations, business plans, and feasibility studies.
+- [Team](https://www.lealiaap.com/en/team/): Profiles of the Managing Partners Ricardo Nascimento Ferreira and Duarte Rocha Pereira.
+- [Valuation](https://www.lealiaap.com/en/valuation/): Indicative company valuation — answer a short form about your business and receive an indicative valuation report, with the option of a full report.
+- [Privacy Policy](https://www.lealiaap.com/en/privacy/): How the firm collects, uses, and protects personal data.
+- [Terms and Conditions](https://www.lealiaap.com/en/terms/): Terms governing the business valuation services.
+- [FAQ](https://www.lealiaap.com/en/faq/): Frequently asked questions on selling and buying a company, company valuation, due diligence and the Lealia valuation report.
 
 ## Services
 
@@ -31,11 +31,11 @@ Lealia Advisory Partners is a boutique financial advisory firm founded by experi
 
 ## Translations
 
-- English: https://www.lealiaap.com/en
-- Português (PT): https://www.lealiaap.com/pt
-- Español (ES): https://www.lealiaap.com/es
-- FAQ (PT): https://www.lealiaap.com/pt/faq
-- FAQ (ES): https://www.lealiaap.com/es/faq
+- English: https://www.lealiaap.com/en/
+- Português (PT): https://www.lealiaap.com/pt/
+- Español (ES): https://www.lealiaap.com/es/
+- FAQ (PT): https://www.lealiaap.com/pt/faq/
+- FAQ (ES): https://www.lealiaap.com/es/faq/
 
 ## Optional
 
