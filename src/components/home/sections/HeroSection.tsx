@@ -37,6 +37,7 @@ const HeroSection = () => {
           style={{ letterSpacing: "0.4em", fontWeight: 300 }}
         >
           {t("hero.services")}
+          <span className="sr-only"> — {t("hero.seo")}</span>
         </motion.h1>
 
         <motion.div
