@@ -84,6 +84,18 @@ https://www.lealiaadvisorypartners.pt/* https://www.lealiaap.com/pt/:splat 301!
 /terms  /es/terms/  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
 /terms  /en/terms/  302!
 
+# Raízes de idioma sem barra: vão para a pasta pré-gerada (antes da regra dos links curtos)
+/pt  /pt/  301!
+/en  /en/  301!
+/es  /es/  301!
+/upgrade  /pt/upgrade  302!  Country=PT,BR,CV,AO,MZ
+/upgrade  /es/upgrade  302!  Country=ES,AR,CL,CO,PE,VE,MX,BO,PY,UY,EC,CR,GT,SV,HN,NI,PA,DO
+/upgrade  /en/upgrade  302!
+
+# Links curtos de relatório (lealiaap.com/empresa-abcd?k=...): um único segmento,
+# servidos pela app SEM desvio de idioma (o desvio levava a /pt/empresa-abcd → 404).
+/:slug   /app.html   200
+
 # Portuguese: PT, BR, CV (Cabo Verde), AO (Angola), MZ (Mozambique)
 /*   /pt/:splat   302!   Country=PT,BR,CV,AO,MZ
 
