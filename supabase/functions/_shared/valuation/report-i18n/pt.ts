@@ -411,7 +411,7 @@ export const pt = {
         label: "Intensidade de investimento (capex)",
         naoIndicada: "Não indicada",
         reduzido: "Capex recorrente reduzido face à faturação",
-        relevante: "Capex recorrente relevante face à faturação",
+        relevante: "Capex recorrente moderado face à faturação",
         elevado: "Capex recorrente elevado face à faturação",
       },
     },

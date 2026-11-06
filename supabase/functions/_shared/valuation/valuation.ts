@@ -492,7 +492,8 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
   let capex_intensidade: number | null = null;
   if (capex !== null && capex >= 0) {
     capex_intensidade = capex / f;
-    ajuste_capex = capex_intensidade < 0.02 ? 1.0 : capex_intensidade <= 0.05 ? 1.0 : 0.95;
+    // Até 4%: capex reduzido (prémio); 4%–10%: moderado (neutro); acima de 10%: elevado (desconto).
+    ajuste_capex = capex_intensidade <= 0.04 ? 1.025 : capex_intensidade <= 0.1 ? 1.0 : 0.95;
   }
 
   // Cap global: o conjunto de ajustes nunca desvia o múltiplo mais de -40%/+35%.
@@ -710,13 +711,21 @@ export function calcularValuation(input: ValuationInput): ValuationResult {
       detalhe:
         capex_intensidade === null
           ? "Não indicada"
-          : capex_intensidade < 0.15
+          : capex_intensidade <= 0.04
             ? "Capex recorrente reduzido face à faturação"
-            : capex_intensidade <= 0.3
-              ? "Capex recorrente relevante face à faturação"
+            : capex_intensidade <= 0.1
+              ? "Capex recorrente moderado face à faturação"
               : "Capex recorrente elevado face à faturação",
       multiplicador: ajuste_capex,
       semDados: capex_intensidade === null,
+      efeito:
+        capex_intensidade === null
+          ? undefined
+          : capex_intensidade <= 0.04
+            ? "Positivo"
+            : capex_intensidade <= 0.1
+              ? "Neutro"
+              : "Negativo",
     },
   ];
 
