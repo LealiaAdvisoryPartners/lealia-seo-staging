@@ -2,8 +2,8 @@
 
 # Estrela-guia
 
-Os empresários sabem quanto vale realmente a sua empresa
+Empresários encontram assessoria para avaliar ou vender a sua empresa
 
 ## Métrica
 
-Empresários que abrem o seu relatório de avaliação, por mês
+Empresários que submetem um pedido de contacto ou avaliação, por mês
