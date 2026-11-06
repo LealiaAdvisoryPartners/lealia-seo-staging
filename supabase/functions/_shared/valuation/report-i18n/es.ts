@@ -420,7 +420,7 @@ export const es: typeof pt = {
         label: "Intensidad de inversión (capex)",
         naoIndicada: "No indicada",
         reduzido: "Capex recurrente reducido frente a la facturación",
-        relevante: "Capex recurrente relevante frente a la facturación",
+        relevante: "Capex recurrente moderado frente a la facturación",
         elevado: "Capex recurrente elevado frente a la facturación",
       },
     },

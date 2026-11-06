@@ -410,7 +410,7 @@ export const en: typeof pt = {
         label: "Investment intensity (capex)",
         naoIndicada: "Not indicated",
         reduzido: "Low recurring capex relative to revenue",
-        relevante: "Significant recurring capex relative to revenue",
+        relevante: "Moderate recurring capex relative to revenue",
         elevado: "High recurring capex relative to revenue",
       },
     },

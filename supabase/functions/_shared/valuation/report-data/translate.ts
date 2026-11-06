@@ -106,6 +106,7 @@ export function traduzirAjuste(a: Ajuste, lang: ReportLang): { label: string; de
         "Não indicada": A.capex.naoIndicada,
         "Capex recorrente reduzido face à faturação": A.capex.reduzido,
         "Capex recorrente relevante face à faturação": A.capex.relevante,
+        "Capex recorrente moderado face à faturação": A.capex.relevante,
         "Capex recorrente elevado face à faturação": A.capex.elevado,
       };
       return { label: A.capex.label, detalhe: map[a.detalhe] ?? a.detalhe };
